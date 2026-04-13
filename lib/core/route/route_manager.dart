@@ -4,6 +4,7 @@ import 'package:lukethompson/core/resource/constants/string_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
+import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
@@ -23,6 +24,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SingInScreen());
       case RoutesName.forgetScreen:
         return MaterialPageRoute(builder: (_) => const ForgetScreen());
+      case RoutesName.resetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
     
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;

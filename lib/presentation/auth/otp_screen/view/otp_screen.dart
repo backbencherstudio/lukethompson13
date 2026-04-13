@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -45,25 +46,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      borderRadius: BorderRadius.circular(24.r),
-                      child: Container(
-                        width: 44.w,
-                        height: 44.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.12),
-                          ),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            IconManager.arrowLeft,
-                            width: 20.w,
-                            height: 20.h,
-                          ),
-                        ),
-                      ),
+                   
+                      child: Image.asset(IconManager.arrowLeft,width: 24.w,height: 24.h,)
                     ),
                     Expanded(
                       child: Center(
@@ -129,7 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     },
                     otpPinFieldStyle: OtpPinFieldStyle(
                       showHintText: true,
-                      hintText: '|',
+                      hintText: "",
                       hintTextColor: Colors.white54,
                       textStyle: TextStyle(
                         fontSize: 22.sp,
@@ -199,7 +183,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   width: double.infinity,
                   height: 54.h,
                   child: ElevatedButton(
-                    onPressed: enteredOtp.length == 4 ? () {} : null,
+                    onPressed: enteredOtp.length == 4 ? () {
+                      Navigator.pushReplacementNamed(context, RoutesName.resetPasswordScreen);
+                    } : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF39D77A),
                       disabledBackgroundColor:

@@ -7,5 +7,6 @@ class RoutesName {
    static const String singupScreen = "/singupScreen";
    static const String singInScreen = "/singInScreen";
    static const String forgetScreen = "/forgetScreen";
+   static const String resetPasswordScreen = "/resetPasswordScreen";
  
 }
