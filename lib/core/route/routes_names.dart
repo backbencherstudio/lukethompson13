@@ -5,5 +5,7 @@ class RoutesName {
   //////////
    static const String onboardingScreen1 = "/onboardingScreen1";
    static const String singupScreen = "/singupScreen";
+   static const String singInScreen = "/singInScreen";
+   static const String forgetScreen = "/forgetScreen";
  
 }
