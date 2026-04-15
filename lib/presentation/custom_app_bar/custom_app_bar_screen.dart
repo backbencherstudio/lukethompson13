@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/image_manager.dart';
 
 class CustomAppBarScreen extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBarScreen({super.key});
@@ -17,7 +18,7 @@ class CustomAppBarScreen extends StatelessWidget implements PreferredSizeWidget 
           CircleAvatar(
             radius: 20.r,
             backgroundColor: Colors.grey.shade800,
-            backgroundImage: const AssetImage("assets/images/user_placeholder.png"), 
+            backgroundImage:  AssetImage(ImageManager.user), 
           ),
           SizedBox(width: 12.w),
           

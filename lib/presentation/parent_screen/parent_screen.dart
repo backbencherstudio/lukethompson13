@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/homeScreen.dart';
 
 
@@ -51,18 +53,18 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
         
-            _buildNavItem(0, Icons.home_filled, 'Home', selectIndex),
+            _buildNavItem(0, IconManager.home, 'Home', selectIndex),
             
     
-            _buildNavItem(1, Icons.location_on, 'Stops', selectIndex),
+            _buildNavItem(1, IconManager.stops, 'Stops', selectIndex),
             
        
             _buildAddButton(2),
 
           
-            _buildNavItem(3, Icons.assignment, 'Report', selectIndex),
+            _buildNavItem(3,IconManager.reports, 'Report', selectIndex),
             
-            _buildNavItem(4, Icons.person, 'Profile', selectIndex),
+            _buildNavItem(4, IconManager.profile, 'Profile', selectIndex),
           ],
         ),
       ),
@@ -70,7 +72,7 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
   }
 
  
-  Widget _buildNavItem(int index, IconData icon, String label, int currentIndex) {
+  Widget _buildNavItem(int index, String icon, String label, int currentIndex) {
     final isSelected = currentIndex == index;
   
     final color = isSelected ? AppColors.primaryGreen : AppColors.unselectedGrey;
@@ -80,7 +82,7 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 28),
+          Image.asset(icon, color: color, width: 24.w,height: 24.h,),
           const SizedBox(height: 4),
           Text(
             label,

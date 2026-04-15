@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/bottomNavigation/viewModel/bottom_bar_provider.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/homeScreen.dart';
 
@@ -29,11 +30,11 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         backgroundColor: ColorManager.background,
         onTap: ref.read(bottomNavBarProvider.notifier).onItemTapped,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.dangerous), label: "dangerous"),
+          BottomNavigationBarItem(icon: Image.asset(IconManager.home), label: "Home"),
+          BottomNavigationBarItem(icon: Image.asset(IconManager.stops), label: "Stops"),
          
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "search"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "settings"),
+          BottomNavigationBarItem(icon: Image.asset(IconManager.reports), label: "Reports"),
+          BottomNavigationBarItem(icon: Image.asset(IconManager.profile), label: "Profile"),
         ],
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/resource/constants/image_manager.dart';
 
 class CustomCarouselSlider extends StatefulWidget {
   @override
@@ -14,17 +16,17 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
     {
       "title": "Track wait time",
       "desc": "Track detention stops and boost your earnings.",
-      "image": "assets/truck_illustration.png" 
+      "image": ImageManager.pickUp 
     },
     {
-      "title": "Real-time Tracking",
-      "desc": "Monitor your progress easily on the map.",
-      "image": "assets/truck_illustration.png"
+       "title": "Track wait time",
+      "desc": "Track detention stops and boost your earnings.",
+      "image": ImageManager.pickUp 
     },
     {
-      "title": "Increase Earnings",
-      "desc": "Efficiency leads to better payouts every trip.",
-      "image": "assets/truck_illustration.png"
+         "title": "Track wait time",
+      "desc": "Track detention stops and boost your earnings.",
+      "image": ImageManager.pickUp 
     },
   ];
 
@@ -68,8 +70,9 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                                 Text(
                                   data['title']!,
                                   style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24.sp,
+
+                                    fontWeight: FontWeight.w700,
                                     color: Color(0xFF222222),
                                   ),
                                 ),
@@ -78,7 +81,8 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                                   data['desc']!,
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: Color(0xFF333333).withOpacity(0.8),
+                                    fontWeight: FontWeight.w200,
+                                    color:  Colors.black,
                                   ),
                                 ),
                               ],

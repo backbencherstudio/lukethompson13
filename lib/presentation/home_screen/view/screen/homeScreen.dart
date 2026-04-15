@@ -11,7 +11,7 @@ class Homescreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: CustomAppBarScreen(),
       body: Container(
@@ -24,21 +24,23 @@ class Homescreen extends StatelessWidget {
             colors: [ColorManager.secondary, ColorManager.primary],
           ),
         ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: SafeArea(
-            child: Column(
-              children: [
-            
-                CustomCarouselSlider(),
-                SizedBox(height: 10.h,),
-                CustomTabScreen()
-              ],
-            ),
+ 
+        child: SafeArea(
+          bottom: false, 
+          child: Column(
+            children: [
+              CustomCarouselSlider(),
+              
+              SizedBox(height: 10.h),
+              
+              
+              const Expanded(
+                child: CustomTabScreen(),
+              ),
+            ],
           ),
         ),
-        
-        )
+      ),
     );
   }
 }
