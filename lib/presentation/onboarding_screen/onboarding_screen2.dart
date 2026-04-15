@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 
 class OnboardingScreen2 extends StatelessWidget {
   final String? waitTime;
@@ -137,7 +138,7 @@ class OnboardingScreen2 extends StatelessWidget {
                   height: 54.h,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, RoutesName.singupScreen);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF39D77A),
