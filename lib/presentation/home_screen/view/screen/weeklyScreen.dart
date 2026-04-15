@@ -44,6 +44,34 @@ class Weeklyscreen extends StatelessWidget {
             const WroststopWidget(),
             
             SizedBox(height: 20.h),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(width: 1.w,color:  ColorManager.backgroundColorgreen1.withValues(alpha: .2),),
+                color: Color(0XFF202227),
+
+              ),
+              child: Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 16.w,vertical: 12.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(IconManager.clock,width: 24.w,height: 24.h,),
+                        SizedBox(width: 8.w,),
+                        Text("Hours Tracked",style: TextStyle(
+                          fontSize: 16.sp,color: ColorManager.textColor,fontWeight: FontWeight.w700
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: 15.h,),
+                    Text("3h",style: TextStyle(fontSize: 32.sp,color: ColorManager.primaryButton,fontWeight: FontWeight.w700),)
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 50.h,)
             
           ],
         ),
