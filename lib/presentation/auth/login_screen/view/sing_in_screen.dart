@@ -152,7 +152,9 @@ class _SingInScreenState extends State<SingInScreen> {
                     width: double.infinity,
                     height: 54.h,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, RoutesName.parentScreen);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF39D77A),
                         foregroundColor: ColorManager.whiteColor,
