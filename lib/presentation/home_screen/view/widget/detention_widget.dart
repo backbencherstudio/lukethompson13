@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 
 class DetentionWidget extends StatelessWidget {
   final String? title;
@@ -24,56 +25,65 @@ class DetentionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          width: 1,
-          color: ColorManager.backgroundColorgreen1.withValues(alpha: .2),
+    return GestureDetector(
+        onTap: () async {
+          await showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => const UnlockDialog(),
+          );
+        },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            width: 1,
+            color: ColorManager.backgroundColorgreen1.withValues(alpha: .2),
+          ),
+          color: ColorManager.boxColor,
         ),
-        color: ColorManager.boxColor,
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(12.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min, 
-          children: [
-            Row(
-              children: [
-                
-                if (imagePath != null && imagePath!.isNotEmpty) ...[
-                  Image.asset(imagePath!, width: 20.w, height: 20.h),
-                  SizedBox(width: 8.w),
-                ],
-                Text(
-                  title ?? "Detention Widget", 
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: titleColor ?? ColorManager.textColor,
-                    fontWeight: FontWeight.w500,
+        child: Padding(
+          padding: EdgeInsets.all(12.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+
+                  if (imagePath != null && imagePath!.isNotEmpty) ...[
+                    Image.asset(imagePath!, width: 20.w, height: 20.h),
+                    SizedBox(width: 8.w),
+                  ],
+                  Text(
+                    title ?? "Detention Widget",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: titleColor ?? ColorManager.textColor,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
+                ],
+              ),
+              SizedBox(height: 20.h),
+              Text(
+                price ?? "\$0",
+                style: TextStyle(
+                  fontSize: 32.sp,
+                  color: priceColor ?? ColorManager.primaryButton,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              price ?? "\$0",
-              style: TextStyle(
-                fontSize: 32.sp,
-                color: priceColor ?? ColorManager.primaryButton, 
-                fontWeight: FontWeight.bold,
               ),
-            ),
-            SizedBox(height: 2.h),
-            Text(
-              rate ?? "\$0/hr rate", 
-              style: TextStyle(
-                color: rateColor ?? ColorManager.greyText, 
-                fontSize: 12.sp,
-              ),
-            )
-          ],
+              SizedBox(height: 2.h),
+              Text(
+                rate ?? "\$0/hr rate",
+                style: TextStyle(
+                  color: rateColor ?? ColorManager.greyText,
+                  fontSize: 12.sp,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
