@@ -13,7 +13,7 @@ class Weeklyscreen extends StatelessWidget {
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: Padding(
+      child: Padding(//
         padding:  EdgeInsets.all(8.r),
         child: Column(
           children: [
@@ -42,7 +42,7 @@ class Weeklyscreen extends StatelessWidget {
             ),
             SizedBox(height: 15.h,),
             const WroststopWidget(),
-            
+            //
             SizedBox(height: 20.h),
             Container(
               decoration: BoxDecoration(
