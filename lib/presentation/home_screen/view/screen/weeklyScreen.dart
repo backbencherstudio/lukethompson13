@@ -4,6 +4,7 @@ import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/chart_widget.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_widget.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/wrostStop_widget.dart';
 
 class Weeklyscreen extends StatelessWidget {
@@ -66,7 +67,29 @@ class Weeklyscreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 15.h,),
-            ChartWidget()
+            ChartWidget(),
+            SizedBox(height: 15.h,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Recent Stops",style: TextStyle(
+                  fontSize: 20.sp,color: ColorManager.whiteColor,
+                  fontWeight: FontWeight.w700
+                ),),
+                Text("See All",style: TextStyle(
+                  fontSize: 14.sp,fontWeight: FontWeight.w700,color: ColorManager.primaryButton
+                ),)
+              ],
+            ),
+            SizedBox(height: 10.h,),
+            RecentStop(),
+              SizedBox(height: 10.h,),
+            SizedBox(height: 10.h,),
+            RecentStop(),
+              SizedBox(height: 10.h,),
+            SizedBox(height: 10.h,),
+            RecentStop(),
+              SizedBox(height: 10.h,),
             // const WroststopWidget(),
             // //
             // SizedBox(height: 20.h),
@@ -97,7 +120,7 @@ class Weeklyscreen extends StatelessWidget {
             //     ),
             //   ),
             // ),
-            ,
+            
             SizedBox(height: 50.h,)
             
           ],
