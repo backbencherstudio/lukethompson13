@@ -24,6 +24,8 @@ class ColorManager {
   // ===== textfield color=====
     static const Color fillColorTextFieldleft = Color(0xFF233632);
   static const Color fillColorTextFielright = Color(0xFF20262A);
+  static const Color hoursWaiting = Color(0xFFFFB547);
+  static const Color collectionRate = Color(0xFF00A3FF);
   // ===== Background Colors  =====
   static const Color background = Color(0xFFF5F5F5);
   static const Color backgroundColorgreen = Color(0xFFA8E06A);

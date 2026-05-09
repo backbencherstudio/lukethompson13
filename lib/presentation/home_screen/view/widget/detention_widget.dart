@@ -60,7 +60,7 @@ class DetentionWidget extends StatelessWidget {
             Text(
               price ?? "\$0",
               style: TextStyle(
-                fontSize: 32.sp,
+                fontSize: 24.sp,
                 color: priceColor ?? ColorManager.primaryButton, 
                 fontWeight: FontWeight.bold,
               ),
