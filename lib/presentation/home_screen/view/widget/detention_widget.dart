@@ -26,13 +26,13 @@ class DetentionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () async {
-          await showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => const UnlockDialog(),
-          );
-        },
+      onTap: () async {
+        await showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => const UnlockDialog(),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),
@@ -43,39 +43,41 @@ class DetentionWidget extends StatelessWidget {
           color: ColorManager.boxColor,
         ),
         child: Padding(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Header: Icon + Title
               Row(
                 children: [
-
                   if (imagePath != null && imagePath!.isNotEmpty) ...[
-                    Image.asset(imagePath!, width: 20.w, height: 20.h),
+                    Image.asset(
+                      imagePath!, 
+                      width: 20.w, 
+                      height: 20.h,
+                      // errorBuilder ব্যবহার করা ভালো যদি ইমেজ না পাওয়া যায়
+                      errorBuilder: (context, error, stackTrace) => Icon(Icons.error, size: 20.sp, color: Colors.red),
+                    ),
                     SizedBox(width: 8.w),
                   ],
-                  Text(
-                    title ?? "Detention Widget",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: titleColor ?? ColorManager.textColor,
-                      fontWeight: FontWeight.w500,
+                  Expanded(
+                    child: Text(
+                      title ?? "Detention",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: titleColor ?? ColorManager.textColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              price ?? "\$0",
-              style: TextStyle(
-                fontSize: 24.sp,
-                color: priceColor ?? ColorManager.primaryButton, 
-                fontWeight: FontWeight.bold,
                 ],
               ),
+              
               SizedBox(height: 20.h),
+
+              // Price Text
               Text(
                 price ?? "\$0",
                 style: TextStyle(
@@ -84,14 +86,17 @@ class DetentionWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
               SizedBox(height: 2.h),
+
+              // Rate Text
               Text(
                 rate ?? "\$0/hr rate",
                 style: TextStyle(
                   color: rateColor ?? ColorManager.greyText,
                   fontSize: 12.sp,
                 ),
-              )
+              ),
             ],
           ),
         ),
