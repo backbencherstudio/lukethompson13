@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/homeScreen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/stops_screen.dart';
 
 
 class AppColors {
@@ -27,7 +28,7 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
   
   final List<Widget> _screens = [
     Homescreen(),
-    const _PlaceholderScreen(title: "Stops Screen", color: Colors.indigo),
+    StopsScreen(),
     const _PlaceholderScreen(title: "Add New Item (Plus Button)", color: Colors.green),
     const _PlaceholderScreen(title: "Report Screen", color: Colors.teal),
     const _PlaceholderScreen(title: "Profile Screen", color: Colors.brown),
