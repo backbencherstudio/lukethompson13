@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/stops/view/widget/walmart_card_widget.dart';
 
@@ -91,7 +92,11 @@ Container(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        WalmartCard(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, RoutesName.claimDetails);
+                          },
+                          child: WalmartCard()),
                         SizedBox(height: 15.h),
                         WalmartCard(),
                         SizedBox(height: 15.h),

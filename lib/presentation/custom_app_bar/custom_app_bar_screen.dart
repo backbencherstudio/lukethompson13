@@ -10,11 +10,9 @@ class CustomAppBarScreen extends StatelessWidget implements PreferredSizeWidget 
   final Widget? leading;
   final double? height;
 
-
   final double? welcomeFontSize;
   final double? userNameFontSize;
 
- 
   final Color? welcomeTextColor;
   final Color? userNameColor;
   final Color? backgroundColor;
@@ -36,7 +34,7 @@ class CustomAppBarScreen extends StatelessWidget implements PreferredSizeWidget 
     this.userNameColor,
     this.backgroundColor,
     this.welcomeFontWeight,
-    this.userNameFontWeight,  
+    this.userNameFontWeight,
   });
 
   @override
@@ -46,9 +44,11 @@ class CustomAppBarScreen extends StatelessWidget implements PreferredSizeWidget 
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: leading,
+      titleSpacing: leading != null ? 0 : 16.w,
+      centerTitle: false,
       title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-    
           if (profileImage != null && profileImage!.isNotEmpty) ...[
             CircleAvatar(
               radius: 20.r,
@@ -57,34 +57,33 @@ class CustomAppBarScreen extends StatelessWidget implements PreferredSizeWidget 
             ),
             SizedBox(width: 12.w),
           ],
-
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start, 
+              mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-         
                 if (welcomeText != null)
                   Text(
                     welcomeText!,
                     style: TextStyle(
                       color: welcomeTextColor ?? ColorManager.textColor,
                       fontSize: welcomeFontSize ?? 12.sp,
-                      fontWeight: welcomeFontWeight ?? FontWeight.w400, 
+                      fontWeight: welcomeFontWeight ?? FontWeight.w400,
                     ),
                   ),
                 
+          
                 if (welcomeText != null && userName != null) 
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 2.h),
 
-                // User Name
                 if (userName != null)
                   Text(
                     userName!,
                     style: TextStyle(
                       color: userNameColor ?? Colors.white,
                       fontSize: userNameFontSize ?? 16.sp,
-                      fontWeight: userNameFontWeight ?? FontWeight.w600, 
+                      fontWeight: userNameFontWeight ?? FontWeight.w600,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),

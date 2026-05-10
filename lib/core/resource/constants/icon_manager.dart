@@ -13,5 +13,6 @@ class IconManager {
   static String profile = '$baseUrl/profile.png'; 
   static String worst = '$baseUrl/worst.png'; 
   static String clock = '$baseUrl/clock.png'; 
+  static String backArroe = '$baseUrl/back_arrow.png'; 
  
 }
