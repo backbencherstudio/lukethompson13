@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/image_manager.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/carusel_slider.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/tab_bar.dart';
@@ -35,7 +36,11 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      appBar: CustomAppBarScreen(),
+      appBar:  CustomAppBarScreen(
+  userName: "Radwan Rahman",
+  welcomeText: "Welcome Back",
+  profileImage: ImageManager.user,
+),
       body: Container(
         width: double.infinity,
         height: double.infinity,
