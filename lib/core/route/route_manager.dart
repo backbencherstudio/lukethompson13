@@ -11,6 +11,8 @@ import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_review.dart';
+import 'package:lukethompson/presentation/stops/view/widget/client_review.dart';
+import 'package:lukethompson/presentation/stops/view/widget/review_submitted_widget.dart';
 
 
 
@@ -35,6 +37,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ClaimDetialsWidget());
       case RoutesName.claimReview :
         return MaterialPageRoute(builder: (_) => const ClaimReview());
+      case RoutesName.clientReview :
+        return MaterialPageRoute(builder: (_) => const ClientReview());
+      case RoutesName.reviewSubmitted :
+        return MaterialPageRoute(builder: (_) => const ReviewSubmitted());
     
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;

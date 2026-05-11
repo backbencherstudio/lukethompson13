@@ -15,5 +15,6 @@ class IconManager {
   static String clock = '$baseUrl/clock.png'; 
   static String backArrow = '$baseUrl/arrow_left.png'; 
   static String appLogo = '$baseUrl/app_logo.png'; 
+  static String clientReviewIcon = '$baseUrl/client_review_logo.png'; 
  
 }

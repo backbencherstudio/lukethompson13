@@ -115,7 +115,11 @@ class StopsScreen extends StatelessWidget {
                           title: "FedEx Ground Port",
                         ),
                         SizedBox(height: 15.h),
-                        WalmartCard(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, RoutesName.clientReview);
+                          },
+                          child: WalmartCard()),
                         SizedBox(height: 15.h),
                         InkWell(
                           onTap: () {
