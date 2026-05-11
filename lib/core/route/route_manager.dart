@@ -5,11 +5,12 @@ import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
-import 'package:lukethompson/presentation/bottomNavigation/view/bottom_nav_bar_screen.dart';
+
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
+import 'package:lukethompson/presentation/stops/view/widget/claim_review.dart';
 
 
 
@@ -32,6 +33,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ParentScreen());
       case RoutesName.claimDetails :
         return MaterialPageRoute(builder: (_) => const ClaimDetialsWidget());
+      case RoutesName.claimReview :
+        return MaterialPageRoute(builder: (_) => const ClaimReview());
     
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;
