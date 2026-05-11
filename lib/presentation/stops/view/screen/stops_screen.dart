@@ -36,75 +36,103 @@ class StopsScreen extends StatelessWidget {
             padding: EdgeInsets.all(8.0),
             child: Column(
               children: [
-             
-Container(
-  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), 
-  decoration: BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.topRight,
-      colors: [Color(0xFF1D3D36), Color(0XFF18252A)],
-    ),
-    borderRadius: BorderRadius.circular(8),
-    border: Border.all(
-      color: Colors.white.withOpacity(0.05),
-      width: 1,
-    ),
-  ),
-  child: Row(
-    children: [
-      Icon(
-        Icons.search_outlined,
-        color: Colors.grey.withOpacity(0.7),
-        size: 26,
-      ),
-      SizedBox(width: 12),
-      Expanded(
-        child: TextField(
-          cursorColor: Colors.white,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-          decoration: InputDecoration(
-            hintText: "Search Stops or ID...",
-            hintStyle: TextStyle(
-              color: Colors.grey.withOpacity(0.6),
-              fontSize: 18,
-            ),
-         
-            filled: false, 
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            isDense: true,
-            contentPadding: EdgeInsets.zero,
-          ),
-        ),
-      ),
-    ],
-  ),
-),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.topRight,
+                      colors: [Color(0xFF1D3D36), Color(0XFF18252A)],
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.05),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.search_outlined,
+                        color: Colors.grey.withOpacity(0.7),
+                        size: 26,
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: TextField(
+                          cursorColor: Colors.white,
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                          decoration: InputDecoration(
+                            hintText: "Search Stops or ID...",
+                            hintStyle: TextStyle(
+                              color: Colors.grey.withOpacity(0.6),
+                              fontSize: 18,
+                            ),
+
+                            filled: false,
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 15.h),
 
-               
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, RoutesName.claimDetails);
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.claimDetails,
+                            );
                           },
-                          child: WalmartCard()),
+                          child: WalmartCard(
+                            buttonText: "Claim Now",
+                            buttonColor: Color(0XFF33D17A),
+                            amountColor: Color(0XFF8DA2B8),
+                            statusTextColor: Color(0XFF8DA2B8),
+                            statusText: "No Claim",
+                            title: "FedEx Ground Port",
+                          ),
+                        ),
                         SizedBox(height: 15.h),
                         WalmartCard(),
                         SizedBox(height: 15.h),
-                        WalmartCard(),
+                        WalmartCard(
+                          buttonText: "Claim Now",
+                          buttonColor: Color(0XFF33D17A),
+                          amountColor: Color(0XFF8DA2B8),
+                          statusTextColor: Color(0XFF8DA2B8),
+                          statusText: "No Claim",
+                          title: "FedEx Ground Port",
+                        ),
                         SizedBox(height: 15.h),
                         WalmartCard(),
                         SizedBox(height: 15.h),
-                        WalmartCard(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.claimReview,
+                            );
+                          },
+                          child: WalmartCard(
+                            buttonText: "Review Claim",
+                            buttonColor: Color(0XFF00A3FF),
+                            amountColor: Color(0XFFFFB547),
+                            statusTextColor: Color(0XFFFFB547),
+                            statusText: "Submitted",
+                            title: "Amazon Distribution DC",
+                          ),
+                        ),
                       ],
                     ),
                   ),

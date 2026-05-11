@@ -568,26 +568,160 @@ class ClaimDetialsWidget extends StatelessWidget {
                       child: Text("SMS", style: TextStyle(color: Colors.grey)),
                     ),
                   ),
+           
+GestureDetector(
+  onTap: () {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+          decoration: BoxDecoration(
+            color: const Color(0xFF161B22),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+        
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 32), 
                   Container(
-                    width: 100.w,
-                    height: 45.h,
+                    width: 40.w,
+                    height: 4.h,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25.r),
-                      border: Border.all(color: Colors.white24),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Share",
-                        style: TextStyle(color: Colors.grey),
-                      ),
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                   ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: EdgeInsets.all(6.r),
+                      decoration: const BoxDecoration(
+                        color: Colors.white10,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.close, color: Colors.white60, size: 18.sp),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+              Text(
+                "Share this",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 25.h),
+              
+             
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  
+                  Container(
+                    height: 50.w, width: 50.w,
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), shape: BoxShape.circle),
+                    child: Icon(Icons.whatshot_sharp, color: Colors.green, size: 28.sp),
+                  ),
+            
+                  Container(
+                    height: 50.w, width: 50.w,
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), shape: BoxShape.circle),
+                    child: Icon(Icons.email, color: Colors.redAccent, size: 28.sp),
+                  ),
+         
+                  Container(
+                    height: 50.w, width: 50.w,
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), shape: BoxShape.circle),
+                    child: Icon(Icons.messenger_outline, color: Colors.blue, size: 28.sp),
+                  ),
+               
+                  Container(
+                    height: 50.w, width: 50.w,
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), shape: BoxShape.circle),
+                    child: Icon(Icons.messenger, color: Colors.purpleAccent, size: 28.sp),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+
+              Text(
+                "Or copy link",
+                style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+              ),
+              SizedBox(height: 12.h),
+
+      
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0D1117),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "https://www.google.com/search?q=link+ge...",
+                        style: TextStyle(color: Colors.white54, fontSize: 12.sp),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Text(
+                        "Copy",
+                        style: TextStyle(
+                          color: const Color(0xFF32D779),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 25.h),
+            ],
+          ),
+        );
+      },
+    );
+  },
+  child: Container(
+    width: 100.w,
+    height: 45.h,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.r),
+      border: Border.all(color: Colors.white24),
+    ),
+    child: const Center(
+      child: Text(
+        "Share",
+        style: TextStyle(color: Colors.grey),
+      ),
+    ),
+  ),
+),
                 ],
               ),
 
               SizedBox(height: 30.h),
 
-              // Claim Now Button
+       
               SizedBox(
                 width: double.infinity,
                 height: 55.h,
