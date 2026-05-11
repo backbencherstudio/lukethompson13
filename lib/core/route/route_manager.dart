@@ -5,7 +5,7 @@ import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
-import 'package:lukethompson/presentation/bottomNavigation/view/bottom_nav_bar_screen.dart';
+
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
