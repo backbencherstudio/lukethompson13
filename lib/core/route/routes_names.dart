@@ -11,5 +11,7 @@ class RoutesName {
    static const String parentScreen = "/parentScreen ";
    static const String claimDetails = "/claimDetails ";
    static const String claimReview= "/claimReview ";
+   static const String clientReview= "/ClientReview ";
+   static const String reviewSubmitted= "/reviewSubmitted";
  
 }
