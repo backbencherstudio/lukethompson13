@@ -12,12 +12,8 @@ class CustomDateSelector extends StatefulWidget {
 }
 
 class _CustomDateSelectorState extends State<CustomDateSelector> {
-  DateTimeRange selectedRange = DateTimeRange(
-    start: DateTime(2026, 1, 1),
-    end: DateTime(2026, 12, 31),
-  );
-
-  String selectedType = "Monthly";
+  DateTimeRange? selectedRange;
+  String? selectedType;
   bool isPopupOpen = false;
 
  
@@ -43,8 +39,9 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final String formattedDate =
-        "${DateFormat('MMM dd').format(selectedRange.start)}-${DateFormat('MMM dd, yyyy').format(selectedRange.end)}";
+    final String formattedDate = selectedRange == null
+        ? "Select date range"
+        : "${DateFormat('MMM dd').format(selectedRange!.start)}-${DateFormat('MMM dd, yyyy').format(selectedRange!.end)}";
 
     return TapRegion(
       onTapOutside: (_) {
@@ -91,7 +88,7 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      selectedType,
+                      selectedType ?? "Select",
                       style: const TextStyle(
                         color: Colors.white60,
                         fontSize: 12,

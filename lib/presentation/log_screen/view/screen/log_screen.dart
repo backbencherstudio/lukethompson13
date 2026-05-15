@@ -16,11 +16,18 @@ class _LogScreenState extends State<LogScreen> {
   bool isCompletedConfirmed = false;
   bool isDepartureConfirmed = false;
   bool isGpsEnabled = true;
+  bool isDockInEdited = false;
+  bool isCompletedEdited = false;
+  bool isDepartureEdited = false;
+
+  static const String _initialDockInTime = '08:15 AM';
+  static const String _initialCompletedTime = '12:45 AM';
+  static const String _initialDepartureTime = '01:00 PM';
 
   final TextEditingController facilityController = TextEditingController(text: 'Walmart DC - Memphis, TN');
-  final TextEditingController dockInController = TextEditingController(text: '08:15 AM');
-  final TextEditingController completedController = TextEditingController(text: '12:45 AM');
-  final TextEditingController departureController = TextEditingController(text: '01:00 PM');
+  final TextEditingController dockInController = TextEditingController(text: _initialDockInTime);
+  final TextEditingController completedController = TextEditingController(text: _initialCompletedTime);
+  final TextEditingController departureController = TextEditingController(text: _initialDepartureTime);
 
   @override
   void dispose() {
@@ -55,7 +62,7 @@ class _LogScreenState extends State<LogScreen> {
                   children: [
                     CircleAvatar(
                       radius: 20.r,
-                      backgroundColor: Colors.white.withOpacity(0.1),
+                      backgroundColor: Colors.white.withValues(alpha: 0.1),
                       child: const Icon(Icons.arrow_back, color: Colors.white),
                     ),
                     SizedBox(width: 15.w),
@@ -139,7 +146,7 @@ class _LogScreenState extends State<LogScreen> {
                         decoration: BoxDecoration(
                           color: const Color(0xFF1A1217),
                           borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(color: Colors.red.withOpacity(0.3)),
+                          border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,9 +209,15 @@ class _LogScreenState extends State<LogScreen> {
                         title: 'Dock In Time',
                         controller: dockInController,
                         isConfirmed: isDockInConfirmed,
+                        isEdited: isDockInEdited,
                         isEnabled: true,
                         showConnector: true,
                         nextStepConfirmed: isCompletedConfirmed,
+                        onChanged: (value) {
+                          setState(() {
+                            isDockInEdited = value.trim().isNotEmpty && value != _initialDockInTime;
+                          });
+                        },
                         onConfirm: () {
                           if (dockInController.text.trim().isNotEmpty) {
                             setState(() => isDockInConfirmed = true);
@@ -215,9 +228,16 @@ class _LogScreenState extends State<LogScreen> {
                         title: 'Completed Time',
                         controller: completedController,
                         isConfirmed: isCompletedConfirmed,
+                        isEdited: isCompletedEdited,
                         isEnabled: isDockInConfirmed,
                         showConnector: true,
                         nextStepConfirmed: isDepartureConfirmed,
+                        onChanged: (value) {
+                          setState(() {
+                            isCompletedEdited =
+                                value.trim().isNotEmpty && value != _initialCompletedTime;
+                          });
+                        },
                         onConfirm: () {
                           if (isDockInConfirmed && completedController.text.trim().isNotEmpty) {
                             setState(() => isCompletedConfirmed = true);
@@ -228,9 +248,16 @@ class _LogScreenState extends State<LogScreen> {
                         title: 'Departure Time',
                         controller: departureController,
                         isConfirmed: isDepartureConfirmed,
+                        isEdited: isDepartureEdited,
                         isEnabled: isCompletedConfirmed,
                         showConnector: false,
                         nextStepConfirmed: false,
+                        onChanged: (value) {
+                          setState(() {
+                            isDepartureEdited =
+                                value.trim().isNotEmpty && value != _initialDepartureTime;
+                          });
+                        },
                         onConfirm: () {
                           if (isCompletedConfirmed && departureController.text.trim().isNotEmpty) {
                             setState(() => isDepartureConfirmed = true);
@@ -308,13 +335,17 @@ class _LogScreenState extends State<LogScreen> {
     required String title,
     required TextEditingController controller,
     required bool isConfirmed,
+    required bool isEdited,
     required bool isEnabled,
     required bool showConnector,
     required bool nextStepConfirmed,
+    required ValueChanged<String> onChanged,
     required VoidCallback onConfirm,
   }) {
     final Color activeColor = const Color(0xFF2ECC71);
     final Color disabledTextColor = const Color(0xFF5B6773);
+    final bool isStepConfirmed = isConfirmed;
+    final bool isInputActive = isConfirmed || isEdited;
 
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
@@ -327,13 +358,13 @@ class _LogScreenState extends State<LogScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 2.h),
-                  child: _buildTimelineDot(isActive: true),
+                  child: _buildTimelineDot(isActive: isStepConfirmed),
                 ),
                 if (showConnector)
                   Container(
                     width: 2.w,
                     height: 64.h,
-                    color: activeColor,
+                    color: isStepConfirmed ? activeColor : disabledTextColor,
                   ),
               ],
             ),
@@ -346,7 +377,9 @@ class _LogScreenState extends State<LogScreen> {
                 Text(
                   title,
                   style: TextStyle(
-                    color: isEnabled || isConfirmed ? Colors.white.withOpacity(0.88) : disabledTextColor,
+                    color: isStepConfirmed
+                        ? Colors.white.withValues(alpha: 0.88)
+                        : disabledTextColor,
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w700,
                   ),
@@ -363,9 +396,10 @@ class _LogScreenState extends State<LogScreen> {
                         ),
                         child: TextField(
                           controller: controller,
+                          onChanged: onChanged,
                           enabled: isEnabled && !isConfirmed,
                           style: TextStyle(
-                            color: isEnabled || isConfirmed ? Colors.white: disabledTextColor,
+                            color: isInputActive ? Colors.white : disabledTextColor,
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                           ),
@@ -383,7 +417,7 @@ class _LogScreenState extends State<LogScreen> {
                             suffixIcon: Icon(
                               Icons.access_time,
                               size: 16.sp,
-                              color: isEnabled || isConfirmed ? Colors.white70 : disabledTextColor,
+                              color: isInputActive ? Colors.white70 : disabledTextColor,
                             ),
                           ),
                         ),
@@ -396,14 +430,14 @@ class _LogScreenState extends State<LogScreen> {
                         height: 42.h,
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         decoration: BoxDecoration(
-                          color: isConfirmed || isEnabled ? activeColor : const Color(0xFF1A2028),
+                          color: isInputActive ? activeColor : const Color(0xFF1A2028),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         alignment: Alignment.center,
                         child: Text(
                           'Confirm',
                           style: TextStyle(
-                            color: isConfirmed || isEnabled ? Colors.white : const Color(0xFF17754B),
+                            color: isInputActive ? Colors.white : const Color(0xFF17754B),
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w700,
                           ),

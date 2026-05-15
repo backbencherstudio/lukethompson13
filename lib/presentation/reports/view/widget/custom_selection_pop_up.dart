@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomSelectionPopup extends StatelessWidget {
-  final String selectedType;
+  final String? selectedType;
   final ValueChanged<String> onSelect;
 
   const CustomSelectionPopup({
