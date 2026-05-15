@@ -1,9 +1,11 @@
-// presentation/home_screen/view/widget/custom_tab_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/presentation/home_screen/view/screen/today_screen.dart';
+
 import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
+import 'package:lukethompson/presentation/reports/view/screen/weekly_summary.dart';
+
 
 class CustomTabScreen1 extends StatefulWidget {
   const CustomTabScreen1({super.key});
@@ -65,7 +67,7 @@ class _CustomTabScreenState extends State<CustomTabScreen1> with SingleTickerPro
           child: TabBarView(
             controller: _tabController,
             children: const [
-              TodayScreen(), 
+              WeeklySummary(), 
               Weeklyscreen(),
             ],
           ),

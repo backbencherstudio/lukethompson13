@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/customTabScreen1.dart';
+
+import 'package:lukethompson/presentation/reports/view/widget/custom_rab_screen1.dart';
 
 class ReportsScreen extends StatelessWidget {
   const ReportsScreen({super.key});
