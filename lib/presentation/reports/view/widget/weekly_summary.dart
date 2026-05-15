@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WeeklySummaryWidget extends StatelessWidget {
   final String? title;
   final String? value;
   final String? subtitle;
-  final IconData? icon;
+  final String? icon;
   
  
   final Color? backgroundColor;
@@ -49,7 +50,7 @@ class WeeklySummaryWidget extends StatelessWidget {
           Row(
             children: [
               if (icon != null) ...[
-                Icon(icon, color: iconColor ?? Colors.redAccent, size: 18),
+                Image.asset(icon!, color: iconColor ?? Colors.redAccent, height: 18.h, width: 18.w),
                 const SizedBox(width: 8),
               ],
               Text(
