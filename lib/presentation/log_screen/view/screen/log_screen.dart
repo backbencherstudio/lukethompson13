@@ -86,8 +86,8 @@ class _LogScreenState extends State<LogScreen> {
                             onTap: () => setState(() => isGpsEnabled = !isGpsEnabled),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
-                              width: 26.w,
-                              height: 15.h,
+                              width: 36.w,
+                              height: 18.h,
                               padding: EdgeInsets.symmetric(horizontal: 2.w),
                               decoration: BoxDecoration(
                                 color: isGpsEnabled ? const Color(0xFF32D583) : const Color(0xFF3B4752),
@@ -95,8 +95,8 @@ class _LogScreenState extends State<LogScreen> {
                               ),
                               alignment: isGpsEnabled ? Alignment.centerRight : Alignment.centerLeft,
                               child: Container(
-                                width: 11.w,
-                                height: 11.w,
+                                width: 16.w,
+                                height: 16.w,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
@@ -172,8 +172,8 @@ class _LogScreenState extends State<LogScreen> {
                                 _buildTimelineDot(isActive: true),
                                 Container(
                                   width: 2.w,
-                                  height: 46.h,
-                                  color: isDockInConfirmed ? const Color(0xFF2ECC71) : const Color(0xFF32404C),
+                                  height: 64.h,
+                                  color: const Color(0xFF2ECC71),
                                 ),
                               ],
                             ),
@@ -321,16 +321,22 @@ class _LogScreenState extends State<LogScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              _buildTimelineDot(isActive: isConfirmed),
-              if (showConnector)
-                Container(
-                  width: 2.w,
-                  height: 46.h,
-                  color: nextStepConfirmed ? activeColor : const Color(0xFF32404C),
+          SizedBox(
+            width: 18.w,
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 2.h),
+                  child: _buildTimelineDot(isActive: true),
                 ),
-            ],
+                if (showConnector)
+                  Container(
+                    width: 2.w,
+                    height: 64.h,
+                    color: activeColor,
+                  ),
+              ],
+            ),
           ),
           SizedBox(width: 12.w),
           Expanded(

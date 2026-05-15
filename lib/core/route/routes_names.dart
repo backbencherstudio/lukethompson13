@@ -13,5 +13,6 @@ class RoutesName {
    static const String claimReview= "/claimReview ";
    static const String clientReview= "/ClientReview ";
    static const String reviewSubmitted= "/reviewSubmitted";
+   static const String reportsScreen= "/reportsScreen";
  
 }
