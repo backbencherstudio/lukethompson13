@@ -2,8 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-
-import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
+import 'package:lukethompson/presentation/reports/view/screen/tax_report.dart';
 import 'package:lukethompson/presentation/reports/view/screen/weekly_summary.dart';
 
 
@@ -68,7 +67,7 @@ class _CustomTabScreenState extends State<CustomTabScreen1> with SingleTickerPro
             controller: _tabController,
             children: const [
               WeeklySummary(), 
-              Weeklyscreen(),
+              TaxReport (),
             ],
           ),
         ),

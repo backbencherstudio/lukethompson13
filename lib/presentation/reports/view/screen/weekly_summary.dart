@@ -9,7 +9,7 @@ class WeeklySummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 12.w,vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       child: Column(
         children: [
           WeeklySummaryWidget(
@@ -18,18 +18,14 @@ class WeeklySummary extends StatelessWidget {
             subtitle: "This Week",
             valueColor: Color(0XFFFFB547),
             borderColor: Color(0xff272C36),
-            
-            
           ),
-          
+
           WeeklySummaryWidget(
             title: "Detention Captured",
             value: "\$225",
             subtitle: "Recovered revenue",
             valueColor: Color(0XFF33D17A),
             borderColor: Color(0xff272C36),
-            
-            
           ),
           WeeklySummaryWidget(
             icon: IconManager.revenueIcon,
@@ -38,21 +34,17 @@ class WeeklySummary extends StatelessWidget {
             subtitle: "Still Hurting margin",
             valueColor: Color(0XFFFF5C6C),
             borderColor: Color(0xff272C36),
-            
-            
           ),
           WeeklySummaryWidget(
             icon: IconManager.worstStop,
-             titleColor: Color(0XFFFF5C6C),
+            titleColor: Color(0XFFFF5C6C),
             title: "Top Worst Stop",
             value: "Cold Storage Solutions",
             subtitle: "3 hrs waiting",
-           backgroundColor: Color(0XFF1E1520),
+            backgroundColor: Color(0XFF1E1520),
             borderColor: Color(0XFFFF5C6C),
             subtitleColor: Colors.white,
-            
-            
-          )
+          ),
         ],
       ),
     );
