@@ -57,7 +57,7 @@ class WeeklySummaryWidget extends StatelessWidget {
                 title ?? "",
                 style: TextStyle(
                   color: titleColor ?? Colors.white, 
-                  fontSize: 14, 
+                  fontSize: 14.sp, 
                   fontWeight: FontWeight.w600
                 ),
               ),
@@ -68,7 +68,7 @@ class WeeklySummaryWidget extends StatelessWidget {
             value ?? "",
             style: TextStyle(
               color: valueColor ?? Colors.white,
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
             ),
           ),

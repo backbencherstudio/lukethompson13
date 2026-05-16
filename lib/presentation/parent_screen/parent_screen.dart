@@ -5,16 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/homeScreen.dart';
 import 'package:lukethompson/presentation/log_screen/view/screen/log_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/profile_screen.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/stops_screen.dart';
 
-
 class AppColors {
-  static const Color primaryGreen = Color(0xFF39D37C); 
-  static const Color navBackground = Color(0xFF0D151C); 
+  static const Color primaryGreen = Color(0xFF39D37C);
+  static const Color navBackground = Color(0xFF0D151C);
   static const Color unselectedGrey = Color(0xFF7B8794);
 }
-
 
 final parentScreenIndexProvider = StateProvider<int>((ref) => 0);
 
@@ -26,14 +25,12 @@ class ParentScreen extends ConsumerStatefulWidget {
 }
 
 class _ParentScreenState extends ConsumerState<ParentScreen> {
- 
-  
   final List<Widget> _screens = [
     Homescreen(),
     StopsScreen(),
-   LogScreen (),
-  ReportsScreen(),
-    const _PlaceholderScreen(title: "Profile Screen", color: Colors.brown),
+    LogScreen(),
+    ReportsScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -42,12 +39,9 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF131A23),
-      body: IndexedStack(
-        index: selectIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: selectIndex, children: _screens),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.only(top: 10, bottom: 20), 
+        padding: const EdgeInsets.only(top: 10, bottom: 20),
         decoration: const BoxDecoration(
           color: AppColors.navBackground,
           border: Border(top: BorderSide(color: Colors.white10, width: 0.5)),
@@ -55,18 +49,14 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-        
             _buildNavItem(0, IconManager.home, 'Home', selectIndex),
-            
-    
+
             _buildNavItem(1, IconManager.stops, 'Stops', selectIndex),
-            
-       
+
             _buildAddButton(2),
 
-          
-            _buildNavItem(3,IconManager.reports, 'Report', selectIndex),
-            
+            _buildNavItem(3, IconManager.reports, 'Report', selectIndex),
+
             _buildNavItem(4, IconManager.profile, 'Profile', selectIndex),
           ],
         ),
@@ -74,18 +64,19 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
     );
   }
 
- 
   Widget _buildNavItem(int index, String icon, String label, int currentIndex) {
     final isSelected = currentIndex == index;
-  
-    final color = isSelected ? AppColors.primaryGreen : AppColors.unselectedGrey;
+
+    final color = isSelected
+        ? AppColors.primaryGreen
+        : AppColors.unselectedGrey;
 
     return InkWell(
       onTap: () => ref.read(parentScreenIndexProvider.notifier).state = index,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(icon, color: color, width: 24.w,height: 24.h,),
+          Image.asset(icon, color: color, width: 24.w, height: 24.h),
           const SizedBox(height: 4),
           Text(
             label,
@@ -100,18 +91,17 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
     );
   }
 
-
   Widget _buildAddButton(int index) {
     return InkWell(
       onTap: () {
         ref.read(parentScreenIndexProvider.notifier).state = index;
       },
-      borderRadius: BorderRadius.circular(30), 
+      borderRadius: BorderRadius.circular(30),
       child: Container(
         height: 55,
         width: 55,
         decoration: BoxDecoration(
-          color: AppColors.primaryGreen, 
+          color: AppColors.primaryGreen,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
@@ -119,19 +109,14 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
               blurRadius: 12,
               spreadRadius: 2,
               offset: const Offset(0, 4),
-            )
+            ),
           ],
         ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 35,
-        ),
+        child: const Icon(Icons.add, color: Colors.white, size: 35),
       ),
     );
   }
 }
-
 
 class _PlaceholderScreen extends StatelessWidget {
   final String title;
@@ -145,7 +130,11 @@ class _PlaceholderScreen extends StatelessWidget {
       child: Center(
         child: Text(
           title,
-          style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
