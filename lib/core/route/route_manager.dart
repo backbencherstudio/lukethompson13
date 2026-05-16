@@ -9,6 +9,8 @@ import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/profile_screen.dart';
+import 'package:lukethompson/presentation/profile/view/widget/edit_profile_screen.dart';
+import 'package:lukethompson/presentation/profile/view/widget/set_your_rate.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
@@ -47,6 +49,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ReportsScreen ());
       case RoutesName.profileScreen:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
+      case RoutesName.editProfileScreen:
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen ());
+      case RoutesName.setRateScreen:
+        return MaterialPageRoute(builder: (_) => const SetRateScreen());
     
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;

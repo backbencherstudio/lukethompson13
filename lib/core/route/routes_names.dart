@@ -15,5 +15,7 @@ class RoutesName {
    static const String reviewSubmitted= "/reviewSubmitted";
    static const String reportsScreen= "/reportsScreen";
    static const String profileScreen= "/profileScreen";
+   static const String editProfileScreen = "/editProfileScreen ";
+   static const String setRateScreen = "/setRateScreen ";
  
 }

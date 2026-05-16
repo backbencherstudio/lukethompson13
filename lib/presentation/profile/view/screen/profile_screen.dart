@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -95,30 +96,40 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 15),
 
          
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.person_outline, color: Colors.white),
-                    title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutesName.editProfileScreen);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1C1F26),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const ListTile(
+                      leading: Icon(Icons.person_outline, color: Colors.white),
+                      title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
+                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+                    ),
                   ),
                 ),
 
            
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.attach_money, color: Colors.white),
-                    title: Text("Set Your Rate", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutesName.setRateScreen);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1C1F26),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const ListTile(
+                      leading: Icon(Icons.attach_money, color: Colors.white),
+                      title: Text("Set Your Rate", style: TextStyle(color: Colors.white)),
+                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+                    ),
                   ),
                 ),
 
