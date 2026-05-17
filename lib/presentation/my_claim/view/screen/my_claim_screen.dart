@@ -16,7 +16,11 @@ class MyClaimScreen extends StatelessWidget {
             end: Alignment.center,
             colors: [ColorManager.secondary, ColorManager.primary],
           ),
-        ),
-    ));
+        ),child:Column(
+          children: [
+            
+          ],
+        ) ,
+    ),);
   }
 }
