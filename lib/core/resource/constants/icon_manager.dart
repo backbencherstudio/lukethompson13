@@ -16,5 +16,7 @@ class IconManager {
   static String backArrow = '$baseUrl/arrow_left.png'; 
   static String appLogo = '$baseUrl/app_logo.png'; 
   static String clientReviewIcon = '$baseUrl/client_review_logo.png'; 
+  static String revenueIcon = '$baseUrl/revenue_icon.png'; 
+  static String worstStop = '$baseUrl/worst_stop.png'; 
  
 }
