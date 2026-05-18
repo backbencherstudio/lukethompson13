@@ -134,16 +134,21 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
            
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.assignment_outlined, color: Colors.white),
-                    title: Text("My Claims", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutesName.myClaimScreen);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1C1F26),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const ListTile(
+                      leading: Icon(Icons.assignment_outlined, color: Colors.white),
+                      title: Text("My Claims", style: TextStyle(color: Colors.white)),
+                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+                    ),
                   ),
                 ),
 
