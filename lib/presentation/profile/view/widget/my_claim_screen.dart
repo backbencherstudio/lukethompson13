@@ -4,7 +4,7 @@ import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
 import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
 
-class MyClaimScreen extends StatefulWidget { 
+class MyClaimScreen extends StatefulWidget {
   const MyClaimScreen({super.key});
 
   @override
@@ -12,16 +12,14 @@ class MyClaimScreen extends StatefulWidget {
 }
 
 class _MyClaimScreenState extends State<MyClaimScreen> {
-
   int selectedIndex = 0;
 
- 
   final List<String> categories = [
     "All(12)",
     "Submitted (4)",
     "Draft (2)",
     "Paid",
-    "Rejected"
+    "Rejected",
   ];
 
   @override
@@ -41,8 +39,9 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
           child: Padding(
             padding: EdgeInsets.all(12.r),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                    Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
@@ -72,21 +71,20 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 5.h,),
+                        SizedBox(height: 5.h),
                         Text(
                           "Track every detention claim you've filed",
                           style: TextStyle(
                             color: Color(0xff8DA2B8),
                             fontSize: 12.sp,
-                          
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 15.h,),
-               Container(
+                SizedBox(height: 15.h),
+                Container(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -131,14 +129,14 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 15.h,),
+                SizedBox(height: 15.h),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(categories.length, (index) {
                       return RowContainer(
                         title: categories[index],
-                        isSelected: selectedIndex == index, 
+                        isSelected: selectedIndex == index,
                         onTap: () {
                           setState(() {
                             selectedIndex = index;
@@ -148,26 +146,30 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                     }),
                   ),
                 ),
-                SizedBox(height: 15.h,),
+                SizedBox(height: 15.h),
                 Row(
                   children: [
                     Expanded(
-                      child: TotalClaimedWidget (
-                                    title: "Pending Claims",
-                                    amount: "\$1,240.50",
-                                    amountColor: Color(0xffFFB547),
-                                  ),
+                      child: TotalClaimedWidget(
+                        title: "Pending Claims",
+                        amount: "\$1,240.50",
+                        amountColor: Color(0xffFFB547),
+                      ),
                     ),
-            SizedBox(width: 10.w,),
+                    SizedBox(width: 10.w),
                     Expanded(
-                      child: TotalClaimedWidget (
-                                    title: "Settled This Week",
-                                    amount: "\$4,892.00",
-                                    amountColor: Color(0xff33D17A),
-                                  ),
+                      child: TotalClaimedWidget(
+                        title: "Settled This Week",
+                        amount: "\$4,892.00",
+                        amountColor: Color(0xff33D17A),
+                      ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 15.h,),
+                Text("Recent Activity",style: TextStyle(
+                  fontSize: 20.sp,color: Colors.white
+                ),)
               ],
             ),
           ),
