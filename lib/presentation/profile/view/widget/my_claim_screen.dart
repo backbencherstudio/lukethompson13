@@ -69,7 +69,7 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Set Your Rate",
+                            "My Claim",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18.sp,
