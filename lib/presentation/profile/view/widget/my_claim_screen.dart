@@ -45,7 +45,7 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // --- Header Row ---
+                  
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
