@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30),
+                 SizedBox(height: 30),
 
         
                 Stack(

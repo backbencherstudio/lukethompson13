@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
 import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
 import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
@@ -196,7 +197,9 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                         ? Colors.greenAccent.withOpacity(0.5)
                         : Colors.transparent,
                     onTap: () {
+                      Navigator.pushNamed(context,RoutesName.claimDetail);
                       setState(() {
+
                         isAmazonSelected = (isAmazonSelected == 0) ? -1 : 0;
                       });
                     },

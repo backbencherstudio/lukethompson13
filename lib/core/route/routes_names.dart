@@ -18,5 +18,6 @@ class RoutesName {
    static const String editProfileScreen = "/editProfileScreen ";
    static const String setRateScreen = "/setRateScreen ";
    static const String myClaimScreen = "/myClaimScreen ";
+   static const String claimDetail = "/claimDetail ";
  
 }
