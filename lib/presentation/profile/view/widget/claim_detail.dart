@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 
 class ClaimDetail extends StatefulWidget {
   const ClaimDetail({super.key});
@@ -165,7 +166,11 @@ class _ClaimDetailState extends State<ClaimDetail> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("FOLLOW-UP", style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                          Text("See Timeline", style: TextStyle(color: const Color(0xFF22C55E), fontSize: 13.sp, fontWeight: FontWeight.w500)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, RoutesName.followUp);
+                            },
+                            child: Text("See Timeline", style: TextStyle(color: const Color(0xFF22C55E), fontSize: 13.sp, fontWeight: FontWeight.w500))),
                         ],
                       ),
                       SizedBox(height: 10.h),
@@ -225,7 +230,7 @@ class _ClaimDetailState extends State<ClaimDetail> {
                                             ),
                                           ),
                                           Text(timelineSteps[index]["day"]!, style: TextStyle(color: Colors.white38, fontSize: 11.sp)),
-                                          if (isActive && index >= 1) // Broker থেকে বাটন শুরু
+                                          if (isActive && index >= 1) 
                                             Padding(
                                               padding: EdgeInsets.only(top: 12.h),
                                               child: GestureDetector(
