@@ -6,6 +6,8 @@ import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
+import '../../../../core/widgets/global_app_bar.dart';
+
 class OtpScreen extends StatefulWidget {
   final String email;
 
@@ -34,41 +36,13 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-
-                      child: Image.asset(
-                        IconManager.arrowLeft,
-                        width: 24.w,
-                        height: 24.h,
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 44.w),
-                          child: Text(
-                            "Back to Login",
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w700,
-                              color: ColorManager.textColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 48.h),
+                SizedBox(height: 4.h),
+                const GlobalAppBar(title: "Back To Login"),
+                SizedBox(height: 24.h),
                 Center(
                   child: Text(
                     "Enter Your OTP",

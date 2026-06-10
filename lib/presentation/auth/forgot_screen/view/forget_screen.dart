@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -14,12 +15,10 @@ class ForgetScreen extends StatefulWidget {
 }
 
 class _ForgetScreenState extends State<ForgetScreen> {
-
   final TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
-   
     _emailController.dispose();
     super.dispose();
   }
@@ -45,33 +44,9 @@ class _ForgetScreenState extends State<ForgetScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 25.h),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Image.asset(
-                          IconManager.arrowLeft,
-                          width: 26.w,
-                          height: 24.h,
-                        ),
-                      ),
-                      SizedBox(width: 60.w),
-                      Center(
-                        child: Text(
-                          "Back To Login",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700,
-                            color: ColorManager.textColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25.h),
+                  SizedBox(height: 4.h),
+                  const GlobalAppBar(title: "Back To Login"),
+                  SizedBox(height: 24.h),
                   Center(
                     child: Text(
                       "Forgot Password",
@@ -103,15 +78,9 @@ class _ForgetScreenState extends State<ForgetScreen> {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                
                   CustomTextFieldWidget(
                     hintText: "Enter your email address",
-                    controller: _emailController, 
-                    suffix: Image.asset(
-                      IconManager.email,
-                      width: 24.w,
-                      height: 24.h,
-                    ),
+                    controller: _emailController,
                   ),
                   SizedBox(height: 35.h),
                   GlobalButton(
@@ -121,14 +90,15 @@ class _ForgetScreenState extends State<ForgetScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => OtpScreen(
-                              email: _emailController.text.trim(),
-                            ),
+                            builder: (context) =>
+                                OtpScreen(email: _emailController.text.trim()),
                           ),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Please enter your email")),
+                          const SnackBar(
+                            content: Text("Please enter your email"),
+                          ),
                         );
                       }
                     },

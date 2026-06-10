@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
@@ -30,33 +31,9 @@ class ResetPasswordScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 25.h),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Image.asset(
-                          IconManager.arrowLeft,
-                          width: 26.w,
-                          height: 24.h,
-                        ),
-                      ),
-                      SizedBox(width: 60.w),
-                      Center(
-                        child: Text(
-                          "Back To Login",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700,
-                            color: ColorManager.textColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25.h),
+                  SizedBox(height: 4.h),
+                  const GlobalAppBar(title: "Back To Login"),
+                  SizedBox(height: 24.h),
                   Center(
                     child: Text(
                       "Forgot Password",
@@ -70,7 +47,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   SizedBox(height: 10.h),
                   Center(
                     child: Text(
-                      "Please enter your email address to reset password",
+                      "Set your new password",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16.sp,
@@ -117,7 +94,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 15.h),
+                  SizedBox(height: 35.h),
                   GlobalButton(
                     label: "Reset Password",
                     onPressed: () {
@@ -137,4 +114,3 @@ class ResetPasswordScreen extends StatelessWidget {
     );
   }
 }
-
