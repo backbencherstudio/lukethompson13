@@ -73,14 +73,7 @@ class SingupScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 15.h),
-                  CustomTextFieldWidget(
-                    hintText: "Enter your email address",
-                    suffix: Image.asset(
-                      IconManager.email,
-                      width: 24.w,
-                      height: 24.h,
-                    ),
-                  ),
+                  CustomTextFieldWidget(hintText: "Enter your email address"),
                   SizedBox(height: 15.h),
                   Text(
                     "Create Password",
@@ -119,6 +112,7 @@ class SingupScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 15.h),
                   GlobalButton(
+                    isDisabled: true,
                     label: "Register",
                     onPressed: () {},
                   ),

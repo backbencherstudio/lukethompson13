@@ -150,6 +150,7 @@ class _SingInScreenState extends State<SingInScreen> {
                   ),
                   SizedBox(height: 42.h),
                   GlobalButton(
+                    isDisabled: false,
                     label: "Sign in",
                     onPressed: () {
                       Navigator.pushReplacementNamed(

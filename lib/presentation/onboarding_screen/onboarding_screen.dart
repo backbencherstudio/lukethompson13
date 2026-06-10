@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -118,6 +119,8 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                     );
                   },
                 ),
+                16.height,
+                GlobalButton.secondary(label: "Skip", onPressed: () {}),
                 SizedBox(height: 20.h),
               ],
             ),
