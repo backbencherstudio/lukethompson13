@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 class LogScreen extends StatefulWidget {
   const LogScreen({super.key});
@@ -11,7 +12,6 @@ class LogScreen extends StatefulWidget {
 }
 
 class _LogScreenState extends State<LogScreen> {
-  // কনফার্মেশন ট্র্যাকিং ভেরিয়েবল
   bool isDockInConfirmed = false;
   bool isCompletedConfirmed = false;
   bool isDepartureConfirmed = false;
@@ -24,10 +24,18 @@ class _LogScreenState extends State<LogScreen> {
   static const String _initialCompletedTime = '12:45 AM';
   static const String _initialDepartureTime = '01:00 PM';
 
-  final TextEditingController facilityController = TextEditingController(text: 'Walmart DC - Memphis, TN');
-  final TextEditingController dockInController = TextEditingController(text: _initialDockInTime);
-  final TextEditingController completedController = TextEditingController(text: _initialCompletedTime);
-  final TextEditingController departureController = TextEditingController(text: _initialDepartureTime);
+  final TextEditingController facilityController = TextEditingController(
+    text: 'Walmart DC - Memphis, TN',
+  );
+  final TextEditingController dockInController = TextEditingController(
+    text: _initialDockInTime,
+  );
+  final TextEditingController completedController = TextEditingController(
+    text: _initialCompletedTime,
+  );
+  final TextEditingController departureController = TextEditingController(
+    text: _initialDepartureTime,
+  );
 
   @override
   void dispose() {
@@ -69,8 +77,21 @@ class _LogScreenState extends State<LogScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Log Stop", style: TextStyle(color: Colors.white, fontSize: 22.sp, fontWeight: FontWeight.bold)),
-                        Text("Review details before sending", style: TextStyle(color: Colors.grey.shade500, fontSize: 13.sp)),
+                        Text(
+                          "Log Stop",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Review details before sending",
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 13.sp,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -88,19 +109,31 @@ class _LogScreenState extends State<LogScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("GPS for Log Stop", style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w600)),
+                          Text(
+                            "GPS for Log Stop",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                           GestureDetector(
-                            onTap: () => setState(() => isGpsEnabled = !isGpsEnabled),
+                            onTap: () =>
+                                setState(() => isGpsEnabled = !isGpsEnabled),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               width: 36.w,
                               height: 18.h,
                               padding: EdgeInsets.symmetric(horizontal: 2.w),
                               decoration: BoxDecoration(
-                                color: isGpsEnabled ? const Color(0xFF32D583) : const Color(0xFF3B4752),
+                                color: isGpsEnabled
+                                    ? const Color(0xFF32D583)
+                                    : const Color(0xFF3B4752),
                                 borderRadius: BorderRadius.circular(999.r),
                               ),
-                              alignment: isGpsEnabled ? Alignment.centerRight : Alignment.centerLeft,
+                              alignment: isGpsEnabled
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
                               child: Container(
                                 width: 16.w,
                                 height: 16.w,
@@ -116,27 +149,52 @@ class _LogScreenState extends State<LogScreen> {
                       SizedBox(height: 20.h),
 
                       // --- Facility Name & Warning (Same as original) ---
-                      Text("FACILITY NAME", style: TextStyle(color: Colors.grey.shade400, fontSize: 12.sp, fontWeight: FontWeight.bold)),
+                      Text(
+                        "FACILITY NAME",
+                        style: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       SizedBox(height: 8.h),
                       Container(
                         height: 38.h,
-                        decoration: BoxDecoration(color: const Color(0xFF1E222C), borderRadius: BorderRadius.circular(6.r)),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E222C),
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
                         child: TextField(
                           controller: facilityController,
-                          style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: InputDecoration(
                             isDense: true,
                             filled: true,
                             fillColor: const Color(0xFF1E222C),
                             hintText: 'Facility name',
-                            hintStyle: TextStyle(color: const Color(0xFF8B95A1), fontSize: 12.sp),
+                            hintStyle: TextStyle(
+                              color: const Color(0xFF8B95A1),
+                              fontSize: 12.sp,
+                            ),
                             border: InputBorder.none,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(vertical: 11.h),
-                            prefixIcon: Icon(Icons.search, color: const Color(0xFF8B95A1), size: 18.sp),
-                            prefixIconConstraints: BoxConstraints(minWidth: 36.w),
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 11.h,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: const Color(0xFF8B95A1),
+                              size: 18.sp,
+                            ),
+                            prefixIconConstraints: BoxConstraints(
+                              minWidth: 36.w,
+                            ),
                           ),
                         ),
                       ),
@@ -146,24 +204,46 @@ class _LogScreenState extends State<LogScreen> {
                         decoration: BoxDecoration(
                           color: const Color(0xFF1A1217),
                           borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                          border: Border.all(
+                            color: Colors.red.withValues(alpha: 0.3),
+                          ),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
+                            const Icon(
+                              Icons.warning_amber_rounded,
+                              color: Colors.redAccent,
+                            ),
                             SizedBox(width: 10.w),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Heads up - Amazon FC Dallas", style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                                  Text(
+                                    "Heads up - Amazon FC Dallas",
+                                    style: TextStyle(
+                                      color: Colors.redAccent,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
                                   SizedBox(height: 4.h),
-                                  Text("8 GetDockPay drivers reported slow or no payment here. Attach your BOL and document everything.", style: TextStyle(color: Colors.grey.shade400, fontSize: 12.sp)),
+                                  Text(
+                                    "8 GetDockPay drivers reported slow or no payment here. Attach your BOL and document everything.",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade400,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            const Icon(Icons.close, color: Colors.grey, size: 18),
+                            const Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                              size: 18,
+                            ),
                           ],
                         ),
                       ),
@@ -215,7 +295,9 @@ class _LogScreenState extends State<LogScreen> {
                         nextStepConfirmed: isCompletedConfirmed,
                         onChanged: (value) {
                           setState(() {
-                            isDockInEdited = value.trim().isNotEmpty && value != _initialDockInTime;
+                            isDockInEdited =
+                                value.trim().isNotEmpty &&
+                                value != _initialDockInTime;
                           });
                         },
                         onConfirm: () {
@@ -235,11 +317,13 @@ class _LogScreenState extends State<LogScreen> {
                         onChanged: (value) {
                           setState(() {
                             isCompletedEdited =
-                                value.trim().isNotEmpty && value != _initialCompletedTime;
+                                value.trim().isNotEmpty &&
+                                value != _initialCompletedTime;
                           });
                         },
                         onConfirm: () {
-                          if (isDockInConfirmed && completedController.text.trim().isNotEmpty) {
+                          if (isDockInConfirmed &&
+                              completedController.text.trim().isNotEmpty) {
                             setState(() => isCompletedConfirmed = true);
                           }
                         },
@@ -255,19 +339,28 @@ class _LogScreenState extends State<LogScreen> {
                         onChanged: (value) {
                           setState(() {
                             isDepartureEdited =
-                                value.trim().isNotEmpty && value != _initialDepartureTime;
+                                value.trim().isNotEmpty &&
+                                value != _initialDepartureTime;
                           });
                         },
                         onConfirm: () {
-                          if (isCompletedConfirmed && departureController.text.trim().isNotEmpty) {
+                          if (isCompletedConfirmed &&
+                              departureController.text.trim().isNotEmpty) {
                             setState(() => isDepartureConfirmed = true);
                           }
                         },
                       ),
 
                       SizedBox(height: 25.h),
-                 
-                      Text("Attachments", style: TextStyle(color: const Color.fromARGB(255, 214, 213, 213), fontSize: 16.sp, fontWeight: FontWeight.bold)),
+
+                      Text(
+                        "Attachments",
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 214, 213, 213),
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       SizedBox(height: 12.h),
                       DottedBorder(
                         color: const Color(0xFF2D343C),
@@ -278,27 +371,89 @@ class _LogScreenState extends State<LogScreen> {
                         child: Container(
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
-                          decoration: BoxDecoration(color: const Color(0xFF111821), borderRadius: BorderRadius.circular(15.r)),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF111821),
+                            borderRadius: BorderRadius.circular(15.r),
+                          ),
                           child: Column(
                             children: [
-                              Container(height: 45.w, width: 45.w, decoration: const BoxDecoration(color: Color(0xFF0F2623), shape: BoxShape.circle), child: const Icon(Icons.cloud_upload, color: Color(0xFF00C853), size: 24)),
+                              Container(
+                                height: 45.w,
+                                width: 45.w,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF0F2623),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.cloud_upload,
+                                  color: Color(0xFF00C853),
+                                  size: 24,
+                                ),
+                              ),
                               SizedBox(height: 12.h),
-                              Text("Tap to upload photo", style: TextStyle(color: const Color(0xFF00C853), fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                              Text(
+                                "Tap to upload photo",
+                                style: TextStyle(
+                                  color: const Color(0xFF00C853),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                               SizedBox(height: 4.h),
-                              Text("PNG, JPG or PDF (max. 800x400px)", style: TextStyle(color: const Color(0xFF6C757D), fontSize: 12.sp)),
+                              Text(
+                                "PNG, JPG or PDF (max. 800x400px)",
+                                style: TextStyle(
+                                  color: const Color(0xFF6C757D),
+                                  fontSize: 12.sp,
+                                ),
+                              ),
                               SizedBox(height: 15.h),
                               Row(
                                 children: [
-                                  Expanded(child: Divider(color: const Color(0xFF2D343C), indent: 40.w, endIndent: 10.w)),
-                                  Text("or", style: TextStyle(color: const Color(0xFF6C757D), fontSize: 12.sp)),
-                                  Expanded(child: Divider(color: const Color(0xFF2D343C), indent: 10.w, endIndent: 40.w)),
+                                  Expanded(
+                                    child: Divider(
+                                      color: const Color(0xFF2D343C),
+                                      indent: 40.w,
+                                      endIndent: 10.w,
+                                    ),
+                                  ),
+                                  Text(
+                                    "or",
+                                    style: TextStyle(
+                                      color: const Color(0xFF6C757D),
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: const Color(0xFF2D343C),
+                                      indent: 10.w,
+                                      endIndent: 40.w,
+                                    ),
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 15.h),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 8.h),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.r), border: Border.all(color: const Color(0xFF00C853), width: 1)),
-                                child: Text("Open Camera", style: TextStyle(color: const Color(0xFF00C853), fontSize: 14.sp, fontWeight: FontWeight.w500)),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w,
+                                  vertical: 8.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  border: Border.all(
+                                    color: const Color(0xFF00C853),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  "Open Camera",
+                                  style: TextStyle(
+                                    color: const Color(0xFF00C853),
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -318,14 +473,9 @@ class _LogScreenState extends State<LogScreen> {
         width: double.infinity,
         padding: EdgeInsets.all(16.w),
         color: const Color(0xFF0F1419),
-        child: ElevatedButton(
+        child: GlobalButton(
+          label: "Calculate & Preview",
           onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2ECC71),
-            minimumSize: Size(double.infinity, 54.h),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
-          ),
-          child: Text("Calculate & Preview", style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold)),
         ),
       ),
     );
@@ -399,7 +549,9 @@ class _LogScreenState extends State<LogScreen> {
                           onChanged: onChanged,
                           enabled: isEnabled && !isConfirmed,
                           style: TextStyle(
-                            color: isInputActive ? Colors.white : disabledTextColor,
+                            color: isInputActive
+                                ? Colors.white
+                                : disabledTextColor,
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                           ),
@@ -408,16 +560,24 @@ class _LogScreenState extends State<LogScreen> {
                             filled: true,
                             fillColor: const Color(0xFF1E222C),
                             hintText: controller.text,
-                            hintStyle: TextStyle(color: disabledTextColor, fontSize: 13.sp),
+                            hintStyle: TextStyle(
+                              color: disabledTextColor,
+                              fontSize: 13.sp,
+                            ),
                             border: InputBorder.none,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 11.h),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 11.h,
+                            ),
                             suffixIcon: Icon(
                               Icons.access_time,
                               size: 16.sp,
-                              color: isInputActive ? Colors.white70 : disabledTextColor,
+                              color: isInputActive
+                                  ? Colors.white70
+                                  : disabledTextColor,
                             ),
                           ),
                         ),
@@ -430,14 +590,18 @@ class _LogScreenState extends State<LogScreen> {
                         height: 42.h,
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         decoration: BoxDecoration(
-                          color: isInputActive ? activeColor : const Color(0xFF1A2028),
+                          color: isInputActive
+                              ? activeColor
+                              : const Color(0xFF1A2028),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         alignment: Alignment.center,
                         child: Text(
                           'Confirm',
                           style: TextStyle(
-                            color: isInputActive ? Colors.white : const Color(0xFF17754B),
+                            color: isInputActive
+                                ? Colors.white
+                                : const Color(0xFF17754B),
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w700,
                           ),
@@ -455,7 +619,9 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   Widget _buildTimelineDot({required bool isActive}) {
-    final Color color = isActive ? const Color(0xFF2ECC71) : const Color(0xFF738091);
+    final Color color = isActive
+        ? const Color(0xFF2ECC71)
+        : const Color(0xFF738091);
 
     return Container(
       width: 16.w,
@@ -464,13 +630,7 @@ class _LogScreenState extends State<LogScreen> {
         shape: BoxShape.circle,
         border: Border.all(color: color, width: 1.2),
       ),
-      child: isActive
-          ? Icon(
-              Icons.check,
-              size: 10.sp,
-              color: color,
-            )
-          : null,
+      child: isActive ? Icon(Icons.check, size: 10.sp, color: color) : null,
     );
   }
 

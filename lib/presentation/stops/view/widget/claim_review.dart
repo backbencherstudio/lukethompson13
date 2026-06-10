@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 class ClaimReview extends StatelessWidget {
   const ClaimReview({super.key});
@@ -368,27 +369,7 @@ class ClaimReview extends StatelessWidget {
 
               SizedBox(height: 35.h),
 
-              SizedBox(
-                width: double.infinity,
-                height: 55.h,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF32D779),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    "Mark as Paid",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              GlobalButton(label: "Mark as Paid", onPressed: () {}),
               SizedBox(height: 15.h),
               SizedBox(
                 width: double.infinity,

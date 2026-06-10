@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class SingInScreen extends StatefulWidget {
@@ -148,29 +149,14 @@ class _SingInScreenState extends State<SingInScreen> {
                     ],
                   ),
                   SizedBox(height: 42.h),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 54.h,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, RoutesName.parentScreen);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF39D77A),
-                        foregroundColor: ColorManager.whiteColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28.r),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        "Sign in",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
+                  GlobalButton(
+                    label: "Sign in",
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        RoutesName.parentScreen,
+                      );
+                    },
                   ),
                   SizedBox(height: 34.h),
                   Row(
@@ -195,7 +181,11 @@ class _SingInScreenState extends State<SingInScreen> {
                       Expanded(
                         child: _SocialButton(
                           label: "google",
-                          leading: Image.asset(IconManager.google,width: 24.w,height: 24.h,)
+                          leading: Image.asset(
+                            IconManager.google,
+                            width: 24.w,
+                            height: 24.h,
+                          ),
                         ),
                       ),
                       SizedBox(width: 14.w),
@@ -225,7 +215,10 @@ class _SingInScreenState extends State<SingInScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, RoutesName.singupScreen);
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.singupScreen,
+                            );
                           },
                           child: Text(
                             "Create",
@@ -260,10 +253,7 @@ class _SingInScreenState extends State<SingInScreen> {
   }
 
   Widget _divider() {
-    return Container(
-      height: 1,
-      color: Colors.white.withValues(alpha: 0.35),
-    );
+    return Container(height: 1, color: Colors.white.withValues(alpha: 0.35));
   }
 }
 
@@ -271,10 +261,7 @@ class _SocialButton extends StatelessWidget {
   final String label;
   final Widget leading;
 
-  const _SocialButton({
-    required this.label,
-    required this.leading,
-  });
+  const _SocialButton({required this.label, required this.leading});
 
   @override
   Widget build(BuildContext context) {

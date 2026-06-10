@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class SetRateScreen extends StatefulWidget {
@@ -29,7 +30,6 @@ class _SetRateScreenState extends State<SetRateScreen> {
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
-        
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.center,
@@ -41,7 +41,6 @@ class _SetRateScreenState extends State<SetRateScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Column(
               children: [
-             
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -88,7 +87,6 @@ class _SetRateScreenState extends State<SetRateScreen> {
 
                         SizedBox(height: 30.h),
 
-                    
                         _buildLabel("Free Wait Time"),
                         SizedBox(height: 12.h),
                         CustomTextFieldWidget(
@@ -98,7 +96,6 @@ class _SetRateScreenState extends State<SetRateScreen> {
 
                         SizedBox(height: 15.h),
 
-                       
                         Text(
                           "*Hours before detention changes apply",
                           style: TextStyle(
@@ -112,30 +109,7 @@ class _SetRateScreenState extends State<SetRateScreen> {
                   ),
                 ),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 54.h, 
-                  child: ElevatedButton(
-                    onPressed: () {
-                 
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF34C759), 
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                    ),
-                    child: Text(
-                      "Save Changes",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                GlobalButton(label: "Save Changes", onPressed: () {}),
                 SizedBox(height: 20.h),
               ],
             ),
@@ -145,7 +119,6 @@ class _SetRateScreenState extends State<SetRateScreen> {
     );
   }
 
-  
   Widget _buildLabel(String text) {
     return Text(
       text,
@@ -157,3 +130,4 @@ class _SetRateScreenState extends State<SetRateScreen> {
     );
   }
 }
+

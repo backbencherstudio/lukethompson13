@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 class OnboardingScreen2 extends StatelessWidget {
   final String? waitTime;
@@ -29,7 +30,6 @@ class OnboardingScreen2 extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            
                 SizedBox(height: 18.h),
                 Center(
                   child: Image.asset(
@@ -106,11 +106,15 @@ class OnboardingScreen2 extends StatelessWidget {
                         height: 1,
                       ),
                       SizedBox(height: 14.h),
-                      const _SummaryRow(label: "Hourly Rate:", value: "\$50/hr"),
+                      const _SummaryRow(
+                        label: "Hourly Rate:",
+                        value: "\$50/hr",
+                      ),
                       SizedBox(height: 12.h),
                       _SummaryRow(
                         label: "Free Wait Time:",
-                        value: "${(waitTime?.isNotEmpty ?? false) ? waitTime : "2"}h",
+                        value:
+                            "${(waitTime?.isNotEmpty ?? false) ? waitTime : "2"}h",
                       ),
                       SizedBox(height: 12.h),
                       _SummaryRow(
@@ -133,29 +137,11 @@ class OnboardingScreen2 extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 54.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, RoutesName.singupScreen);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF39D77A),
-                      foregroundColor: ColorManager.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28.r),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      "Done",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                GlobalButton(
+                  label: "Done",
+                  onPressed: () {
+                    Navigator.pushNamed(context, RoutesName.singupScreen);
+                  },
                 ),
                 SizedBox(height: 20.h),
               ],
@@ -166,7 +152,6 @@ class OnboardingScreen2 extends StatelessWidget {
     );
   }
 }
-
 
 class _BottomIndicator extends StatelessWidget {
   final bool isActive;

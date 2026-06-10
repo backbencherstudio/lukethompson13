@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 class ClientReview extends StatefulWidget {
   const ClientReview({super.key});
@@ -12,20 +13,17 @@ class ClientReview extends StatefulWidget {
 }
 
 class _ClientReviewState extends State<ClientReview> {
-
   bool isCompanyOpen = false;
   bool isReviewOpen = false;
 
-
   String selectedCompany = "Select a company";
   String selectedReview = "Good Payer (80%+ pay rate)";
-
 
   final List<String> companyList = ["Google", "Microsoft", "Amazon", "Meta"];
   final List<String> reviewList = [
     "Good Payer (80%+ pay rate)",
     "Mixed Payer (50-70%+ pay rate)",
-    "Poor Payer (Under 70%+ pay rate)"
+    "Poor Payer (Under 70%+ pay rate)",
   ];
 
   @override
@@ -48,7 +46,6 @@ class _ClientReviewState extends State<ClientReview> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            
                 Row(
                   children: [
                     GestureDetector(
@@ -59,7 +56,11 @@ class _ClientReviewState extends State<ClientReview> {
                           color: Colors.white.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(Icons.arrow_back, color: Colors.white, size: 20.sp),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
                       ),
                     ),
                     SizedBox(width: 15.w),
@@ -76,28 +77,36 @@ class _ClientReviewState extends State<ClientReview> {
 
                 SizedBox(height: 30.h),
 
-           
                 Center(
-                  child:  Image.asset(IconManager.clientReviewIcon,fit: BoxFit.contain,height: 80.h,width: 80.w,)
-                      ),
-                   
-                  
-                
+                  child: Image.asset(
+                    IconManager.clientReviewIcon,
+                    fit: BoxFit.contain,
+                    height: 80.h,
+                    width: 80.w,
+                  ),
+                ),
 
                 SizedBox(height: 35.h),
 
                 Text(
                   "Select Company",
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 GestureDetector(
                   onTap: () => setState(() {
                     isCompanyOpen = !isCompanyOpen;
-                    isReviewOpen = false; 
+                    isReviewOpen = false;
                   }),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 15.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(12.r),
@@ -105,9 +114,17 @@ class _ClientReviewState extends State<ClientReview> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(selectedCompany, style: TextStyle(color: Colors.white70, fontSize: 14.sp)),
+                        Text(
+                          selectedCompany,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         Icon(
-                          isCompanyOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                          isCompanyOpen
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
                           color: Colors.white38,
                           size: 22.sp,
                         ),
@@ -134,17 +151,26 @@ class _ClientReviewState extends State<ClientReview> {
                           child: Container(
                             width: double.infinity,
                             margin: EdgeInsets.only(bottom: 5.h),
-                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15.w,
+                              vertical: 12.h,
+                            ),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF34D399) : Colors.transparent,
+                              color: isSelected
+                                  ? const Color(0xFF34D399)
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Text(
                               item,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.white54,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.white54,
                                 fontSize: 14.sp,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                               ),
                             ),
                           ),
@@ -157,16 +183,23 @@ class _ClientReviewState extends State<ClientReview> {
 
                 Text(
                   "Share your review",
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 GestureDetector(
                   onTap: () => setState(() {
                     isReviewOpen = !isReviewOpen;
-                    isCompanyOpen = false; 
+                    isCompanyOpen = false;
                   }),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 15.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(12.r),
@@ -174,9 +207,17 @@ class _ClientReviewState extends State<ClientReview> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(selectedReview, style: TextStyle(color: Colors.white70, fontSize: 14.sp)),
+                        Text(
+                          selectedReview,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         Icon(
-                          isReviewOpen ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                          isReviewOpen
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
                           color: Colors.white38,
                           size: 22.sp,
                         ),
@@ -203,17 +244,26 @@ class _ClientReviewState extends State<ClientReview> {
                           child: Container(
                             width: double.infinity,
                             margin: EdgeInsets.only(bottom: 5.h),
-                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15.w,
+                              vertical: 12.h,
+                            ),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF34D399) : Colors.transparent,
+                              color: isSelected
+                                  ? const Color(0xFF34D399)
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Text(
                               item,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.white54,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.white54,
                                 fontSize: 14.sp,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                               ),
                             ),
                           ),
@@ -224,23 +274,11 @@ class _ClientReviewState extends State<ClientReview> {
 
                 SizedBox(height: 50.h),
 
-         
-                SizedBox(
-                  width: double.infinity,
-                  height: 55.h,//
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, RoutesName.reviewSubmitted);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF34D399),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
-                    ),
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                GlobalButton(
+                  label: "Submit",
+                  onPressed: () {
+                    Navigator.pushNamed(context, RoutesName.reviewSubmitted);
+                  },
                 ),
               ],
             ),
@@ -250,3 +288,4 @@ class _ClientReviewState extends State<ClientReview> {
     );
   }
 }
+

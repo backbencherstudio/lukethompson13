@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 class ReviewSubmitted extends StatelessWidget {
   const ReviewSubmitted({super.key});
@@ -17,10 +18,7 @@ class ReviewSubmitted extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              ColorManager.secondary,
-              ColorManager.primary,
-            ],
+            colors: [ColorManager.secondary, ColorManager.primary],
           ),
         ),
         child: SafeArea(
@@ -28,7 +26,6 @@ class ReviewSubmitted extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Column(
               children: [
-              
                 Row(
                   children: [
                     GestureDetector(
@@ -71,7 +68,7 @@ class ReviewSubmitted extends StatelessWidget {
                         color: const Color(0xFF34D399).withOpacity(0.2),
                         blurRadius: 40,
                         spreadRadius: 10,
-                      )
+                      ),
                     ],
                   ),
                   child: Center(
@@ -117,7 +114,10 @@ class ReviewSubmitted extends StatelessWidget {
                 // Information Box
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 25.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.03),
                     borderRadius: BorderRadius.circular(15.r),
@@ -144,7 +144,8 @@ class ReviewSubmitted extends StatelessWidget {
                           ),
                         ),
                         const TextSpan(
-                          text: "make smarter decisions before accepting loads at this facility.",
+                          text:
+                              "make smarter decisions before accepting loads at this facility.",
                         ),
                       ],
                     ),
@@ -154,29 +155,14 @@ class ReviewSubmitted extends StatelessWidget {
                 const Spacer(flex: 2),
 
                 // Back to Home Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 55.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, RoutesName.parentScreen);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF34D399),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      "Back to Home",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                GlobalButton(
+                  label: "Back to Home",
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      RoutesName.parentScreen,
+                    );
+                  },
                 ),
                 SizedBox(height: 10.h),
               ],
@@ -187,3 +173,4 @@ class ReviewSubmitted extends StatelessWidget {
     );
   }
 }
+

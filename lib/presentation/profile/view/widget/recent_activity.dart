@@ -33,7 +33,7 @@ class CustomJobCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: const Color(0xFF1A1F26),
@@ -77,10 +77,7 @@ class CustomJobCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         dateTime ?? "",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: Colors.grey[400], fontSize: 13),
                       ),
                     ],
                   ),
@@ -101,7 +98,10 @@ class CustomJobCard extends StatelessWidget {
                 ),
                 if (statusText != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: statusBgColor ?? Colors.white.withOpacity(0.05),
                       borderRadius: BorderRadius.circular(20),

@@ -1,6 +1,7 @@
-import 'dart:ui'; 
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 class UnlockDialog extends StatelessWidget {
   const UnlockDialog({super.key});
@@ -8,7 +9,6 @@ class UnlockDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
-
       filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
       child: Dialog(
         backgroundColor: Colors.transparent,
@@ -16,10 +16,9 @@ class UnlockDialog extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
-           
             color: const Color(0xFF1C1F22).withOpacity(0.75),
             borderRadius: BorderRadius.circular(28.r),
-          
+
             border: Border.all(
               color: Colors.white.withOpacity(0.12),
               width: 1.2,
@@ -37,11 +36,9 @@ class UnlockDialog extends StatelessWidget {
             children: [
               SizedBox(height: 10.h),
 
-           
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  
                   Container(
                     height: 90.w,
                     width: 90.w,
@@ -99,7 +96,6 @@ class UnlockDialog extends StatelessWidget {
 
               SizedBox(height: 16.h),
 
-        
               Text(
                 "Get unlimited stop logging, instant PDF exports, advanced detention analytics, and an ad-free experience.",
                 textAlign: TextAlign.center,
@@ -112,33 +108,10 @@ class UnlockDialog extends StatelessWidget {
 
               SizedBox(height: 32.h),
 
-              // Subscribe Now Button
-              SizedBox(
-                width: double.infinity,
-                height: 58.h,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2ECC71),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    "Subscribe Now",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              GlobalButton(label: "Subscribe Now", onPressed: () {}),
 
               SizedBox(height: 20.h),
 
-              
               GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Text(
@@ -160,3 +133,4 @@ class UnlockDialog extends StatelessWidget {
     );
   }
 }
+

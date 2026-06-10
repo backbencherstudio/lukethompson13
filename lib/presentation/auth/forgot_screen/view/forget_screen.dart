@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
@@ -113,44 +114,24 @@ class _ForgetScreenState extends State<ForgetScreen> {
                     ),
                   ),
                   SizedBox(height: 35.h),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 54.h,
-                    child: ElevatedButton(
-                      onPressed: () {
-                   
-                        if (_emailController.text.isNotEmpty) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OtpScreen(
-                                email: _emailController.text.trim(),
-                              ),
+                  GlobalButton(
+                    label: "Send OTP",
+                    onPressed: () {
+                      if (_emailController.text.isNotEmpty) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OtpScreen(
+                              email: _emailController.text.trim(),
                             ),
-                          );
-                        } else {
-                        
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Please enter your email")),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF39D77A),
-                        foregroundColor: ColorManager.whiteColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28.r),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        "Send OTP",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Please enter your email")),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(height: 20.h),
                 ],

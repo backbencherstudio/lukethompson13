@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen2.dart';
 
@@ -104,36 +105,18 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 54.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => OnboardingScreen2(
-                            waitTime: waitTimeController.text.trim(),
-                            bilableRate: billableRateController.text.trim(),
-                          ),
+                GlobalButton(
+                  label: "Next",
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => OnboardingScreen2(
+                          waitTime: waitTimeController.text.trim(),
+                          bilableRate: billableRateController.text.trim(),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF39D77A),
-                      foregroundColor: ColorManager.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28.r),
                       ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
                 SizedBox(height: 20.h),
               ],

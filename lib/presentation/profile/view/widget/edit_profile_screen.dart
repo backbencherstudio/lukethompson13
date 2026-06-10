@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -11,14 +12,12 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
   @override
   void dispose() {
-   
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
@@ -28,15 +27,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      resizeToAvoidBottomInset: true, 
+      resizeToAvoidBottomInset: true,
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
-            end: Alignment.center, 
+            end: Alignment.center,
             colors: [ColorManager.secondary, ColorManager.primary],
           ),
         ),
@@ -45,7 +43,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Column(
               children: [
-              
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -75,8 +72,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ],
                 ),
-                
-      
+
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -84,64 +80,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       children: [
                         SizedBox(height: 40.h),
 
-          
                         _buildLabel("Full Name"),
                         SizedBox(height: 8.h),
                         CustomTextFieldWidget(
-                          hintText: "Kristin Ryen",
+                          hintText: "Enter your full name",
                           controller: _nameController,
                         ),
 
                         SizedBox(height: 25.h),
 
-                   
                         _buildLabel("Email Address"),
                         SizedBox(height: 8.h),
                         CustomTextFieldWidget(
-                          hintText: "kristin@example.com",
+                          hintText: "Enter your email address",
                           controller: _emailController,
                         ),
 
                         SizedBox(height: 25.h),
 
-                     
-                        _buildLabel("Phone"),
+                        _buildLabel("Phone Number"),
                         SizedBox(height: 8.h),
                         CustomTextFieldWidget(
-                          hintText: "+1 234 567 890",
+                          hintText: "Enter your phone number",
                           controller: _phoneController,
                         ),
-                        
-                        SizedBox(height: 40.h), 
+
+                        SizedBox(height: 40.h),
                       ],
                     ),
                   ),
                 ),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 44.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                  
-                      print("Name: ${_nameController.text}");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF34C759), 
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                    ),
-                    child: Text(
-                      "Update",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                GlobalButton(
+                  label: "Update",
+                  onPressed: () {
+                    print("Name: ${_nameController.text}");
+                  },
                 ),
                 SizedBox(height: 20.h),
               ],
@@ -151,7 +125,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
-
 
   Widget _buildLabel(String text) {
     return Text(

@@ -3,15 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
 class OtpScreen extends StatefulWidget {
   final String email;
 
-  const OtpScreen({
-    super.key,
-    this.email = 'j**e**@samplegmail.com',
-  });
+  const OtpScreen({super.key, this.email = 'j**e**@samplegmail.com'});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -46,8 +44,12 @@ class _OtpScreenState extends State<OtpScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                   
-                      child: Image.asset(IconManager.arrowLeft,width: 24.w,height: 24.h,)
+
+                      child: Image.asset(
+                        IconManager.arrowLeft,
+                        width: 24.w,
+                        height: 24.h,
+                      ),
                     ),
                     Expanded(
                       child: Center(
@@ -123,15 +125,19 @@ class _OtpScreenState extends State<OtpScreen> {
                       fieldPadding: 8.w,
                       fieldBorderRadius: 8.r,
                       fieldBorderWidth: 1.2,
-                      activeFieldBackgroundColor:
-                          Colors.white.withValues(alpha: 0.03),
-                      defaultFieldBackgroundColor:
-                          Colors.white.withValues(alpha: 0.03),
-                      filledFieldBackgroundColor:
-                          Colors.white.withValues(alpha: 0.03),
+                      activeFieldBackgroundColor: Colors.white.withValues(
+                        alpha: 0.03,
+                      ),
+                      defaultFieldBackgroundColor: Colors.white.withValues(
+                        alpha: 0.03,
+                      ),
+                      filledFieldBackgroundColor: Colors.white.withValues(
+                        alpha: 0.03,
+                      ),
                       activeFieldBorderColor: const Color(0xFF39D77A),
-                      defaultFieldBorderColor:
-                          Colors.white.withValues(alpha: 0.65),
+                      defaultFieldBorderColor: Colors.white.withValues(
+                        alpha: 0.65,
+                      ),
                       filledFieldBorderColor: const Color(0xFF39D77A),
                     ),
                     maxLength: 4,
@@ -179,31 +185,16 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
                 SizedBox(height: 36.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 54.h,
-                  child: ElevatedButton(
-                    onPressed: enteredOtp.length == 4 ? () {
-                      Navigator.pushReplacementNamed(context, RoutesName.resetPasswordScreen);
-                    } : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF39D77A),
-                      disabledBackgroundColor:
-                          const Color(0xFF39D77A).withValues(alpha: 0.5),
-                      foregroundColor: ColorManager.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28.r),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      "Verify",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                GlobalButton(
+                  label: "Verify",
+                  onPressed: enteredOtp.length == 4
+                      ? () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            RoutesName.resetPasswordScreen,
+                          );
+                        }
+                      : null,
                 ),
               ],
             ),
