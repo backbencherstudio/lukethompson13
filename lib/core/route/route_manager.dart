@@ -14,6 +14,7 @@ import 'package:lukethompson/presentation/profile/view/widget/edit_profile_scree
 import 'package:lukethompson/presentation/profile/view/widget/set_your_rate.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
+import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_review.dart';
 import 'package:lukethompson/presentation/stops/view/widget/client_review.dart';
@@ -56,7 +57,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SetRateScreen());
       case RoutesName.myClaimScreen:
         return MaterialPageRoute(builder: (_) => const MyClaimScreen());
-    
+      case RoutesName.chooseSubscriptionPlan:
+        return MaterialPageRoute(builder: (_) => const ChooseSubscriptionPlanScreen());
+
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;
       //   String? email;

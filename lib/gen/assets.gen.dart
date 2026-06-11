@@ -35,6 +35,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/clock.png
   AssetGenImage get clock => const AssetGenImage('assets/icons/clock.png');
 
+  /// File path: assets/icons/crown-alt.svg
+  String get crownAlt => 'assets/icons/crown-alt.svg';
+
   /// File path: assets/icons/detention.png
   AssetGenImage get detention =>
       const AssetGenImage('assets/icons/detention.png');
@@ -47,6 +50,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/home.png
   AssetGenImage get home => const AssetGenImage('assets/icons/home.png');
+
+  /// File path: assets/icons/lock-icon.svg
+  String get lockIcon => 'assets/icons/lock-icon.svg';
 
   /// File path: assets/icons/logo_icons.png
   AssetGenImage get logoIcons =>
@@ -96,10 +102,12 @@ class $AssetsIconsGen {
     building,
     clientReviewLogo,
     clock,
+    crownAlt,
     detention,
     email,
     google,
     home,
+    lockIcon,
     logoIcons,
     onboardingScreen,
     playStore512,

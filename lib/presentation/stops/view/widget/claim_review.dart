@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
 class ClaimReview extends StatelessWidget {
@@ -9,16 +10,7 @@ class ClaimReview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.center,
-            colors: [ColorManager.secondary, ColorManager.primary],
-          ),
-        ),
+      body: AppGradientBackground(
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(20.w, 60.h, 20.w, 30.h),
           child: Column(

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/gen/assets.gen.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_icon.dart';
 
 class UnlockDialog extends StatelessWidget {
   final String title;
@@ -33,16 +35,16 @@ class UnlockDialog extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
-            color: const Color(0xFF1C1F22).withOpacity(0.75),
+            color: const Color(0xFF1C1F22).withValues(alpha: 0.75),
             borderRadius: BorderRadius.circular(28.r),
 
             border: Border.all(
-              color: Colors.white.withOpacity(0.12),
+              color: Colors.white.withValues(alpha: 0.12),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 blurRadius: 30,
                 offset: const Offset(0, 10),
               ),
@@ -53,7 +55,7 @@ class UnlockDialog extends StatelessWidget {
             children: [
               SizedBox(height: 10.h),
 
-              _buildLockIcon(),
+              SvgCircleIcon(svgPath: Assets.icons.lockIcon),
 
               SizedBox(height: 28.h),
 
@@ -83,7 +85,10 @@ class UnlockDialog extends StatelessWidget {
 
               SizedBox(height: 32.h),
 
-              GlobalButton(label: subscribeLabel, onPressed: onSubscribe ?? () {}),
+              GlobalButton(
+                label: subscribeLabel,
+                onPressed: onSubscribe ?? () {},
+              ),
 
               SizedBox(height: 8.h),
 
@@ -103,51 +108,6 @@ class UnlockDialog extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Stack _buildLockIcon() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: 90.w,
-          width: 90.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF2ECC71).withOpacity(0.4),
-                blurRadius: 40,
-                spreadRadius: 5,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 85.w,
-          width: 85.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white.withOpacity(0.05),
-            border: Border.all(color: Colors.white10, width: 2),
-          ),
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.all(12.w),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.lock,
-                color: const Color(0xFF2ECC71),
-                size: 32.sp,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

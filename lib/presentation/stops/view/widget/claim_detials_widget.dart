@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
 class ClaimDetialsWidget extends StatelessWidget {
@@ -21,16 +22,7 @@ class ClaimDetialsWidget extends StatelessWidget {
       //   userNameColor: const Color.fromARGB(255, 204, 204, 204),
       //   userNameFontWeight: FontWeight.w400,
       // ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.center,
-            colors: [ColorManager.secondary, ColorManager.primary],
-          ),
-        ),
+      body: AppGradientBackground(
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(20.w, 50.h, 20.w, 30.h),
           child: Column(

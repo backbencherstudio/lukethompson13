@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
 import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
 import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
@@ -27,16 +27,7 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.center,
-            colors: [ColorManager.secondary, ColorManager.primary],
-          ),
-        ),
+      body: AppGradientBackground(
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(12.r),

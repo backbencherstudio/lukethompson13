@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 
 import 'package:lukethompson/presentation/reports/view/widget/custom_rab_screen1.dart';
@@ -21,16 +21,7 @@ class ReportsScreen extends StatelessWidget {
         userNameColor: const Color.fromARGB(255, 204, 204, 204),
         userNameFontWeight: FontWeight.w400,
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.center,
-            colors: [ColorManager.secondary, ColorManager.primary],
-          ),
-        ),
+      body: AppGradientBackground(
         child: SafeArea(
           bottom: false,
           child: Column(
