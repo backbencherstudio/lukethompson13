@@ -2,129 +2,101 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/chart_widget.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/detention_grid.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_widget.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/wrostStop_widget.dart';
 
 class Weeklyscreen extends StatelessWidget {
   const Weeklyscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final recentStopData = [
+      const RecentStopData(
+        title: "Walmart DC Shelbyville. TN",
+        subtitle: "Thu Apr 24 4h 15m wait 2h 15m billable",
+        amount: "\$135",
+        status: "Good Payer",
+      ),
+      const RecentStopData(
+        title: "FedEx Memphis Hub",
+        subtitle: "Fri Apr 25 3h 30m wait 1h 45m billable",
+        amount: "\$98",
+        status: "Average Payer",
+      ),
+      const RecentStopData(
+        title: "Amazon Fulfillment Center",
+        subtitle: "Mon Apr 28 5h 00m wait 3h 00m billable",
+        amount: "\$210",
+        status: "Poor Payer",
+      ),
+      const RecentStopData(
+        title: "UPS Louisville Hub",
+        subtitle: "Tue Apr 29 2h 45m wait 1h 30m billable",
+        amount: "\$75",
+        status: "Good Payer",
+      ),
+    ];
+
+    final detentionData = [
+      DetentionData(
+        imagePath: IconManager.detention,
+        title: "Detention Owed",
+        price: "\$225",
+        rate: "\$50/hr rate",
+      ),
+      DetentionData(
+        imagePath: IconManager.revenueLost,
+        title: "Revenue Lost",
+        price: "\$225",
+        rate: "Unrecovered time costs",
+        priceColor: ColorManager.redColor,
+      ),
+      DetentionData(
+        title: "Hours Waiting",
+        price: "\$14.5 hrs",
+        rate: "Avg 2h 25m per stop",
+        priceColor: ColorManager.hoursWaiting,
+      ),
+      DetentionData(
+        title: "Collection Rate",
+        price: "68%",
+        rate: "12% vs last week",
+        priceColor: ColorManager.collectionRate,
+      ),
+    ];
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: Padding(//
-        padding:  EdgeInsets.all(8.r),
-        child: Column(
-          children: [
-            SizedBox(height: 15.h),
-            Row(
-              children: [
-                Expanded(
-                  child: DetentionWidget(
-                    imagePath: IconManager.detention,
-                    title: "Detention Owed",
-                    price: "\$225",
-                    rate: "\$50/hr rate",
-                  ),
-                ),
-                SizedBox(width: 5.w),
-                Expanded(
-                  child: DetentionWidget(
-                    imagePath: IconManager.revenueLost,
-                    title: "Revenue Lost",
-                    price: "\$225",
-                    rate: "Unrecovered time costs",
-                    priceColor: ColorManager.redColor,
-                  ),
-                ),
-              ],
+      child: Column(
+        children: [
+          DetentionGrid(data: detentionData),
+          SizedBox(height: 16.h),
+          ChartWidget(),
+          SizedBox(height: 16.h),
+          SectionHeader(
+            title: 'Recent Stops',
+            action: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                textStyle: TextStyle(fontWeight: .w700, fontSize: 14.sp),
+              ),
+              child: Text('See All'),
             ),
-            SizedBox(height: 10.h,),
-            Row(
-              children: [
-                Expanded(
-                  child: DetentionWidget(
-             
-                    title: "Hours Waiting",
-                    price: "\$14.5 hrs",
-                    rate: "Avg 2h 25m per stop",
-                    priceColor: ColorManager.hoursWaiting,
-                  ),
-                ),
-                SizedBox(width: 5.w),
-                Expanded(
-                  child: DetentionWidget(
-                
-                    title: "Collection Rate",
-                    price: "68%",
-                    rate: "12% vs last week",
-                    priceColor: ColorManager.collectionRate,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 15.h,),
-            ChartWidget(),
-            SizedBox(height: 15.h,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Recent Stops",style: TextStyle(
-                  fontSize: 20.sp,color: ColorManager.whiteColor,
-                  fontWeight: FontWeight.w700
-                ),),
-                Text("See All",style: TextStyle(
-                  fontSize: 14.sp,fontWeight: FontWeight.w700,color: ColorManager.primaryButton
-                ),)
-              ],
-            ),
-            SizedBox(height: 10.h,),
-            RecentStop(),
-              SizedBox(height: 10.h,),
-            SizedBox(height: 10.h,),
-            RecentStop(),
-              SizedBox(height: 10.h,),
-            SizedBox(height: 10.h,),
-            RecentStop(),
-              SizedBox(height: 10.h,),
-            // const WroststopWidget(),
-            // //
-            // SizedBox(height: 20.h),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(20.r),
-            //     border: Border.all(width: 1.w,color:  ColorManager.backgroundColorgreen1.withValues(alpha: .2),),
-            //     color: Color(0XFF202227),
+          ),
 
-            //   ),
-            //   child: Padding(
-            //     padding:  EdgeInsets.symmetric(horizontal: 16.w,vertical: 12.h),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         Row(
-            //           children: [
-            //             Image.asset(IconManager.clock,width: 24.w,height: 24.h,),
-            //             SizedBox(width: 8.w,),
-            //             Text("Hours Tracked",style: TextStyle(
-            //               fontSize: 16.sp,color: ColorManager.textColor,fontWeight: FontWeight.w700
-            //             ),)
-            //           ],
-            //         ),
-            //         SizedBox(height: 15.h,),
-            //         Text("3h",style: TextStyle(fontSize: 32.sp,color: ColorManager.primaryButton,fontWeight: FontWeight.w700),)
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            
-            SizedBox(height: 50.h,)
-            
-          ],
-        ),
+          ...List.generate(
+            recentStopData.length,
+            (i) => Padding(
+              padding: EdgeInsets.only(bottom: 10.h),
+              child: RecentStop(data: recentStopData[i]),
+            ),
+          ),
+
+          // const WroststopWidget(),
+        ],
       ),
     );
   }

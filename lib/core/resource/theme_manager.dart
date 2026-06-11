@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/font_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 
-
- 
 ThemeData getApplicationTheme() {
   return ThemeData(
     useMaterial3: false, // set true if using Material 3
@@ -17,12 +16,12 @@ ThemeData getApplicationTheme() {
     splashColor: ColorManager.primaryDark,
     scaffoldBackgroundColor: Colors.black,
     canvasColor: Colors.black,
- 
+
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: ColorManager.primaryDark,
       error: ColorManager.errorColor,
     ),
- 
+
     // ===== Card Theme =====
     cardTheme: CardThemeData(
       color: ColorManager.whiteColor,
@@ -32,7 +31,7 @@ ThemeData getApplicationTheme() {
         borderRadius: BorderRadius.circular(AppSize.s8),
       ),
     ),
- 
+
     // ===== AppBar Theme =====
     appBarTheme: AppBarTheme(
       centerTitle: true,
@@ -44,7 +43,7 @@ ThemeData getApplicationTheme() {
         fontSize: FontSize.s16,
       ),
     ),
- 
+
     // ===== Button Theme =====
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),
@@ -52,7 +51,11 @@ ThemeData getApplicationTheme() {
       buttonColor: ColorManager.primary,
       splashColor: ColorManager.primaryDark,
     ),
- 
+
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(foregroundColor: ColorManager.primaryButton),
+    ),
+
     // ===== Elevated Button Theme =====
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -71,7 +74,7 @@ ThemeData getApplicationTheme() {
         ),
       ),
     ),
- 
+
     // ===== Text Theme =====
     textTheme: TextTheme(
       headlineLarge: getSemiBold600Style12(
@@ -91,14 +94,14 @@ ThemeData getApplicationTheme() {
         fontSize: FontSize.s12,
       ),
     ),
- 
+
     // ===== Cursor & Selection Colors =====
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: ColorManager.primary,
       selectionColor: ColorManager.primary.withValues(alpha: 0.1),
       selectionHandleColor: ColorManager.primary,
     ),
- 
+
     // ===== Input Field Theme =====
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
@@ -108,7 +111,7 @@ ThemeData getApplicationTheme() {
       helperStyle: getRegular400Style12(color: ColorManager.blackColor),
       errorStyle: getRegular400Style12(color: ColorManager.errorColor),
       contentPadding: const EdgeInsets.all(AppPadding.p12),
- 
+
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: ColorManager.borderColor,
@@ -138,7 +141,7 @@ ThemeData getApplicationTheme() {
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
       ),
     ),
- 
+
     // ===== Icon Theme =====
     iconTheme: IconThemeData(color: ColorManager.primary, size: AppSize.s24),
   );

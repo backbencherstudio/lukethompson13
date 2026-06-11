@@ -6,7 +6,7 @@ import 'package:lukethompson/core/resource/constants/image_manager.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/carusel_slider.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/tab_bar.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart'; // ডায়ালগটি ইমপোর্ট করুন
+import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -20,11 +20,11 @@ class _HomescreenState extends State<Homescreen> {
   void initState() {
     super.initState();
 
-    Future.delayed( Duration(seconds: 15), () {
+    Future.delayed(Duration(seconds: 15), () {
       if (mounted) {
         showDialog(
           context: context,
-          barrierDismissible: true, 
+          barrierDismissible: true,
           builder: (context) => UnlockDialog(),
         );
       }
@@ -36,11 +36,11 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      appBar:  CustomAppBarScreen(
-  userName: "Radwan Rahman",
-  welcomeText: "Welcome Back",
-  profileImage: ImageManager.user,
-),
+      appBar: CustomAppBarScreen(
+        userName: "Radwan Rahman",
+        welcomeText: "Welcome Back",
+        profileImage: ImageManager.user,
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -56,10 +56,8 @@ class _HomescreenState extends State<Homescreen> {
           child: Column(
             children: [
               CustomCarouselSlider(),
-              SizedBox(height: 10.h),
-              const Expanded(
-                child: CustomTabScreen(),
-              ),
+              SizedBox(height: 12.h),
+              const Expanded(child: CustomTabScreen()),
             ],
           ),
         ),

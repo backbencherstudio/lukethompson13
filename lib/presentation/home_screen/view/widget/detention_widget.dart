@@ -3,25 +3,30 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 
-class DetentionWidget extends StatelessWidget {
+class DetentionData {
+  final String? imagePath;
   final String? title;
   final String? price;
   final String? rate;
-  final String? imagePath;
   final Color? titleColor;
   final Color? priceColor;
   final Color? rateColor;
 
-  const DetentionWidget({
-    super.key,
+  const DetentionData({
+    this.imagePath,
     this.title,
     this.price,
     this.rate,
-    this.imagePath,
     this.titleColor,
     this.priceColor,
     this.rateColor,
   });
+}
+
+class DetentionWidget extends StatelessWidget {
+  final DetentionData data;
+
+  const DetentionWidget({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -34,71 +39,66 @@ class DetentionWidget extends StatelessWidget {
         );
       },
       child: Container(
+        padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             width: 1,
             color: ColorManager.backgroundColorgreen1.withValues(alpha: .2),
           ),
           color: ColorManager.boxColor,
         ),
-        child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header: Icon + Title
-              Row(
-                children: [
-                  if (imagePath != null && imagePath!.isNotEmpty) ...[
-                    Image.asset(
-                      imagePath!, 
-                      width: 20.w, 
-                      height: 20.h,
-                      // errorBuilder ব্যবহার করা ভালো যদি ইমেজ না পাওয়া যায়
-                      errorBuilder: (context, error, stackTrace) => Icon(Icons.error, size: 20.sp, color: Colors.red),
-                    ),
-                    SizedBox(width: 8.w),
-                  ],
-                  Expanded(
-                    child: Text(
-                      title ?? "Detention",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: titleColor ?? ColorManager.textColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+        child: Column(
+          crossAxisAlignment: .start,
+          mainAxisAlignment: .spaceBetween,
+          children: [
+            Row(
+              children: [
+                if (data.imagePath != null && data.imagePath!.isNotEmpty) ...[
+                  Image.asset(
+                    data.imagePath!,
+                    width: 20.w,
+                    height: 20.h,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Icon(Icons.error, size: 20.sp, color: Colors.red),
                   ),
+                  SizedBox(width: 8.w),
                 ],
-              ),
-              
-              SizedBox(height: 20.h),
-
-              // Price Text
-              Text(
-                price ?? "\$0",
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  color: priceColor ?? ColorManager.primaryButton,
-                  fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    data.title ?? "Detention",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: data.titleColor ?? ColorManager.textColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-
-              SizedBox(height: 2.h),
-
-              // Rate Text
-              Text(
-                rate ?? "\$0/hr rate",
-                style: TextStyle(
-                  color: rateColor ?? ColorManager.greyText,
-                  fontSize: 12.sp,
+              ],
+            ),
+            Column(
+              crossAxisAlignment: .start,
+              children: [
+                Text(
+                  data.price ?? "\$0",
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    color: data.priceColor ?? ColorManager.primaryButton,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
-          ),
+                SizedBox(height: 2.h),
+                Text(
+                  data.rate ?? "\$0/hr rate",
+                  style: TextStyle(
+                    color: data.rateColor ?? ColorManager.greyText,
+                    fontSize: 12.sp,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -73,9 +73,9 @@ class ColorManager {
   static const Color fillColor = Color(0xFFFEF5F3);
 
   // ===== Feedback Colors =====
-  static const Color errorColor = Color(0xFFE25839);
-  static const Color successColor = Color(0xFF388E3C);
-  static const Color warningColor = Color(0xFFFFA000);
+  static const Color errorColor = Color(0xFFFF5C6C);
+  static const Color successColor = Color(0xFF00E676);
+  static const Color warningColor = Color(0xFFFFB547);
   static const Color infoColor = Color(0xFF1976D2);
 
   // ===== Utility Colors =====

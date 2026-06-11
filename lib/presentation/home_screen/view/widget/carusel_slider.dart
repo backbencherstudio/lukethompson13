@@ -9,24 +9,23 @@ class CustomCarouselSlider extends StatefulWidget {
 }
 
 class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
-  int _currentIndex = 0; 
-
+  int _currentIndex = 0;
 
   final List<Map<String, String>> sliderData = [
     {
       "title": "Track wait time",
       "desc": "Track detention stops and boost your earnings.",
-      "image": ImageManager.pickUp 
+      "image": ImageManager.pickUp,
     },
     {
-       "title": "Track wait time",
+      "title": "Track wait time",
       "desc": "Track detention stops and boost your earnings.",
-      "image": ImageManager.pickUp 
+      "image": ImageManager.pickUp,
     },
     {
-         "title": "Track wait time",
+      "title": "Track wait time",
       "desc": "Track detention stops and boost your earnings.",
-      "image": ImageManager.pickUp 
+      "image": ImageManager.pickUp,
     },
   ];
 
@@ -36,13 +35,13 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            height: 180.0, 
-            viewportFraction: 0.95, 
+            height: 180.0,
+            viewportFraction: 1,
             autoPlay: true,
             enlargeCenterPage: true,
             onPageChanged: (index, reason) {
               setState(() {
-                _currentIndex = index; 
+                _currentIndex = index;
               });
             },
           ),
@@ -50,17 +49,16 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
             return Builder(
               builder: (BuildContext context) {
                 return Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width - 32.w,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   decoration: BoxDecoration(
-                    color: Color(0xFF63D991), 
+                    color: Color(0xFF63D991),
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Stack(
                     children: [
                       Row(
                         children: [
-                  
                           Expanded(
                             flex: 3,
                             child: Column(
@@ -82,13 +80,13 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w200,
-                                    color:  Colors.black,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                     
+
                           Expanded(
                             flex: 2,
                             child: Image.asset(
@@ -98,7 +96,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                           ),
                         ],
                       ),
-                  
+
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -113,8 +111,8 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: _currentIndex == entry.key
-                                    ? Colors.orange 
-                                    : Colors.white, 
+                                    ? Colors.orange
+                                    : Colors.white,
                               ),
                             );
                           }).toList(),
@@ -131,3 +129,4 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
     );
   }
 }
+

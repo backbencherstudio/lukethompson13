@@ -1,6 +1,6 @@
-// presentation/home_screen/view/widget/custom_tab_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/today_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
@@ -12,7 +12,8 @@ class CustomTabScreen extends StatefulWidget {
   State<CustomTabScreen> createState() => _CustomTabScreenState();
 }
 
-class _CustomTabScreenState extends State<CustomTabScreen> with SingleTickerProviderStateMixin {
+class _CustomTabScreenState extends State<CustomTabScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -29,44 +30,55 @@ class _CustomTabScreenState extends State<CustomTabScreen> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    return Column( // Removed Padding here to keep layout simple
+    return Column(
       children: [
         // TabBar Container
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Container(
-            width: double.infinity,
-            height: 50.h,
-            padding: const EdgeInsets.all(4),
+            height: 64,
             decoration: BoxDecoration(
-              color: ColorManager.tabBarBgColor,
-              borderRadius: BorderRadius.circular(25),
+              color: const Color(0xFF26323D),
+              borderRadius: BorderRadius.circular(34),
             ),
             child: TabBar(
+              labelStyle: TextStyle(fontWeight: .w700, fontSize: 16),
+              padding: EdgeInsets.all(6),
+              indicatorPadding: const EdgeInsets.symmetric(
+                horizontal: 4,
+                vertical: 2,
+              ),
+              splashBorderRadius: BorderRadius.circular(28),
               controller: _tabController,
+              dividerColor: Colors.transparent,
               indicator: BoxDecoration(
-                color: const Color(0xFF2ECC71),
-                borderRadius: BorderRadius.circular(25),
+                color: ColorManager.primaryButton,
+                borderRadius: BorderRadius.circular(28),
               ),
               labelColor: Colors.white,
-              unselectedLabelColor: ColorManager.textColor,
+              unselectedLabelColor: const Color(0xFF9CA8B3),
               indicatorSize: TabBarIndicatorSize.tab,
-              dividerColor: Colors.transparent,
               tabs: const [
-                Tab(text: "Today"),
-                Tab(text: "Weekly"),
+                Tab(text: 'Today'),
+                Tab(text: 'Weekly'),
               ],
             ),
           ),
         ),
 
-      
+        SizedBox(height: 16.h),
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: const [
-              TodayScreen(), 
-              Weeklyscreen(),
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: TodayScreen(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Weeklyscreen(),
+              ),
             ],
           ),
         ),
