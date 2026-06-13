@@ -105,23 +105,20 @@ ThemeData getApplicationTheme() {
     // ===== Input Field Theme =====
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: ColorManager.whiteColor,
-      hintStyle: getRegular400Style12(color: ColorManager.textPrimary),
-      labelStyle: getMedium500Style12(color: ColorManager.blackColor),
-      helperStyle: getRegular400Style12(color: ColorManager.blackColor),
+      fillColor: Colors.white10,
+      hintStyle: getRegular400Style12(color: ColorManager.hintTextColor, fontSize: 16),
+      labelStyle: getMedium500Style12(color: ColorManager.whiteColor),
+      helperStyle: getRegular400Style12(color: ColorManager.hintTextColor),
       errorStyle: getRegular400Style12(color: ColorManager.errorColor),
-      contentPadding: const EdgeInsets.all(AppPadding.p12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
 
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.borderColor,
-          width: AppSize.s1_5,
-        ),
+        borderSide: BorderSide(color: Colors.transparent, width: AppSize.s1_5),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: ColorManager.borderColor1,
+          color: ColorManager.primaryButtonDark,
           width: AppSize.s1_5,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),

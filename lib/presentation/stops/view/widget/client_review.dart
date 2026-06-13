@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
-class ClientReview extends StatefulWidget {
-  const ClientReview({super.key});
+class RateShipper extends StatefulWidget {
+  const RateShipper({super.key});
 
   @override
-  State<ClientReview> createState() => _ClientReviewState();
+  State<RateShipper> createState() => _RateShipperState();
 }
 
-class _ClientReviewState extends State<ClientReview> {
+class _RateShipperState extends State<RateShipper> {
   bool isCompanyOpen = false;
   bool isReviewOpen = false;
 
-  String selectedCompany = "Select a company";
-  String selectedReview = "Good Payer (80%+ pay rate)";
+  String? selectedCompany;
+  String? selectedReview;
 
   final List<String> companyList = ["Google", "Microsoft", "Amazon", "Meta"];
   final List<String> reviewList = [
@@ -28,264 +32,113 @@ class _ClientReviewState extends State<ClientReview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [ColorManager.secondary, ColorManager.primary],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: EdgeInsets.all(10.r),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 20.sp,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15.w),
-                    Text(
-                      "Client Review",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 30.h),
-
-                Center(
-                  child: Image.asset(
-                    IconManager.clientReviewIcon,
-                    fit: BoxFit.contain,
-                    height: 80.h,
-                    width: 80.w,
-                  ),
-                ),
-
-                SizedBox(height: 35.h),
-
-                Text(
-                  "Select Company",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                GestureDetector(
-                  onTap: () => setState(() {
-                    isCompanyOpen = !isCompanyOpen;
-                    isReviewOpen = false;
-                  }),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 15.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return AppGradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: GlobalAppBar(title: 'Client Review'),
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          selectedCompany,
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14.sp,
+                        SizedBox(height: 16.h),
+
+                        Center(
+                          child: Image.asset(
+                            IconManager.clientReviewIcon,
+                            fit: BoxFit.contain,
+                            height: 80.h,
+                            width: 80.w,
                           ),
                         ),
-                        Icon(
-                          isCompanyOpen
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          color: Colors.white38,
-                          size: 22.sp,
+
+                        SizedBox(height: 35.h),
+
+                        InputLabel('Select Company'),
+                        SizedBox(height: 8.h),
+                        DropdownButtonFormField<String?>(
+                          initialValue: selectedCompany,
+                          hint: Text(
+                            "Select a company",
+                            style: getRegular400Style12(
+                              color: ColorManager.hintTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          // hint: ,
+                          dropdownColor: ColorManager.tabBarBgColor,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.white38,
+                            size: 22.sp,
+                          ),
+                          items: companyList.map((item) {
+                            return DropdownMenuItem<String?>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() => selectedCompany = value);
+                          },
+                        ),
+
+                        SizedBox(height: 15.h),
+                        InputLabel('Share your review'),
+                        SizedBox(height: 8.h),
+                        DropdownButtonFormField<String?>(
+                          initialValue: selectedReview,
+                          hint: Text(
+                            "Share your review",
+                            style: getRegular400Style12(
+                              color: ColorManager.hintTextColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          // hint: ,
+                          dropdownColor: ColorManager.tabBarBgColor,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.white38,
+                            size: 22.sp,
+                          ),
+                          items: reviewList.map((item) {
+                            return DropdownMenuItem<String?>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() => selectedCompany = value);
+                          },
+                        ),
+
+                        const Spacer(),
+
+                        GlobalButton(
+                          label: "Submit",
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.reviewSubmitted,
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
                 ),
-                if (isCompanyOpen)
-                  Container(
-                    margin: EdgeInsets.only(top: 8.h),
-                    padding: EdgeInsets.all(10.r),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF161A20),
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    child: Column(
-                      children: companyList.map((item) {
-                        bool isSelected = selectedCompany == item;
-                        return GestureDetector(
-                          onTap: () => setState(() {
-                            selectedCompany = item;
-                            isCompanyOpen = false;
-                          }),
-                          child: Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.only(bottom: 5.h),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.w,
-                              vertical: 12.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? const Color(0xFF34D399)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : Colors.white54,
-                                fontSize: 14.sp,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                SizedBox(height: 25.h),
-
-                Text(
-                  "Share your review",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                GestureDetector(
-                  onTap: () => setState(() {
-                    isReviewOpen = !isReviewOpen;
-                    isCompanyOpen = false;
-                  }),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 15.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          selectedReview,
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                        Icon(
-                          isReviewOpen
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          color: Colors.white38,
-                          size: 22.sp,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (isReviewOpen)
-                  Container(
-                    margin: EdgeInsets.only(top: 8.h),
-                    padding: EdgeInsets.all(10.r),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF161A20),
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    child: Column(
-                      children: reviewList.map((item) {
-                        bool isSelected = selectedReview == item;
-                        return GestureDetector(
-                          onTap: () => setState(() {
-                            selectedReview = item;
-                            isReviewOpen = false;
-                          }),
-                          child: Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.only(bottom: 5.h),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.w,
-                              vertical: 12.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? const Color(0xFF34D399)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : Colors.white54,
-                                fontSize: 14.sp,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                SizedBox(height: 50.h),
-
-                GlobalButton(
-                  label: "Submit",
-                  onPressed: () {
-                    Navigator.pushNamed(context, RoutesName.reviewSubmitted);
-                  },
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
     );
   }
 }
-

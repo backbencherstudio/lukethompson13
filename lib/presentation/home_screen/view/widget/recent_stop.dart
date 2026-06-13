@@ -3,14 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 
 class RecentStopData {
   final String title;
   final String subtitle;
   final String amount;
+
   final String? status;
   final String? icon;
+  final String? badge;
+  final String? actionLabel;
 
   const RecentStopData({
     required this.title,
@@ -18,6 +20,8 @@ class RecentStopData {
     required this.amount,
     this.status,
     this.icon = "assets/icons/building.svg",
+    this.badge,
+    this.actionLabel,
   });
 }
 
@@ -29,6 +33,8 @@ class RecentStop extends StatelessWidget {
   final Color? subtitleColor;
   final Color? amountColor;
   final Color? borderColor;
+  final Widget? rightAction;
+  final Widget? badge;
 
   const RecentStop({
     super.key,
@@ -39,13 +45,15 @@ class RecentStop extends StatelessWidget {
     this.subtitleColor = const Color(0XFF8DA2B8),
     this.amountColor = ColorManager.primaryButton,
     this.borderColor,
+    this.rightAction,
+    this.badge,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           width: 1,
           color:
@@ -82,15 +90,23 @@ class RecentStop extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        data.title,
-                        style: TextStyle(
-                          color: titleColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              data.title,
+                              style: TextStyle(
+                                color: titleColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (badge != null) ...[SizedBox(width: 8), badge!],
+                        ],
                       ),
                       SizedBox(height: 4.h),
                       Text(
@@ -116,7 +132,7 @@ class RecentStop extends StatelessWidget {
                   ),
                 ),
 
-                StatusBadge(status: data.status ?? ""),
+                ?rightAction,
               ],
             ),
           ],

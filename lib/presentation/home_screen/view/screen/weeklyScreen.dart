@@ -7,6 +7,7 @@ import 'package:lukethompson/presentation/home_screen/view/widget/chart_widget.d
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_grid.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_widget.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 
 class Weeklyscreen extends StatelessWidget {
   const Weeklyscreen({super.key});
@@ -91,7 +92,12 @@ class Weeklyscreen extends StatelessWidget {
             recentStopData.length,
             (i) => Padding(
               padding: EdgeInsets.only(bottom: 10.h),
-              child: RecentStop(data: recentStopData[i]),
+              child: RecentStop(
+                data: recentStopData[i],
+                rightAction: StatusBadge(
+                  status: recentStopData[i].status ?? "",
+                ),
+              ),
             ),
           ),
 

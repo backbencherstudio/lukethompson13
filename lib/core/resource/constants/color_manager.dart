@@ -8,6 +8,7 @@ class ColorManager {
   // ===== Primary Colors =====
   static const Color primary = Color(0xFF0B0F14);
   static const Color primaryButton = Color(0xFF33D17A);
+  static const Color primaryButtonDark = Color(0xFF1b513b);
   static const Color secondary = Color(0xFF153E2D);
   static const Color boxColor = Color(0xFF202328);
   static const Color redColor = Color(0xFFFF5D5D);

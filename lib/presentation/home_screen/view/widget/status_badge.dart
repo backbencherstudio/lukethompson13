@@ -6,36 +6,43 @@ class StatusBadge extends StatelessWidget {
   final String status;
   final Color? textColor;
   final Color? backgroundColor;
+  final double fontSize;
+  final EdgeInsetsGeometry padding;
 
   const StatusBadge({
     super.key,
     required this.status,
     this.textColor,
     this.backgroundColor,
+    this.fontSize = 14,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
   });
 
-  Color _resolveColor() {
-    switch (status) {
-      case 'Good Payer':
-        return ColorManager.successColor;
-      case 'Average Payer':
-        return ColorManager.warningColor;
-      case 'Poor Payer':
-        return ColorManager.errorColor;
-      default:
-        return ColorManager.infoColor;
-    }
+  factory StatusBadge.small({
+    Key? key,
+    required String status,
+    Color? textColor,
+    Color? backgroundColor,
+  }) {
+    return StatusBadge(
+      key: key,
+      status: status,
+      textColor: textColor,
+      backgroundColor: backgroundColor,
+      fontSize: 10,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     if (status.trim().isEmpty) return const SizedBox.shrink();
 
-    final color = textColor ?? _resolveColor();
+    final color = textColor ?? StatusBadge.resolveColor(status);
     final bg = backgroundColor ?? color.withValues(alpha: 0.1);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: padding,
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(20.r),
@@ -44,10 +51,30 @@ class StatusBadge extends StatelessWidget {
         status,
         style: TextStyle(
           color: color,
-          fontSize: 14.sp,
+          fontSize: fontSize.sp,
           fontWeight: FontWeight.w600,
         ),
       ),
     );
+  }
+
+  static Color resolveColor(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'good payer' || 'claim now' || 'paid':
+        return ColorManager.successColor;
+
+      case 'average payer' || 'rate shipper' || 'submitted':
+        return ColorManager.warningColor;
+
+      case 'poor payer' || 'denied':
+        return ColorManager.errorColor;
+
+      case 'no claim':
+        return ColorManager.subtextColor;
+
+      case 'review claim':
+      default:
+        return ColorManager.infoColor;
+    }
   }
 }

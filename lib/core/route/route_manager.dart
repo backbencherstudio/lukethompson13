@@ -46,8 +46,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ClaimDetialsWidget());
       case RoutesName.claimReview :
         return MaterialPageRoute(builder: (_) => const ClaimReview());
-      case RoutesName.clientReview :
-        return MaterialPageRoute(builder: (_) => const ClientReview());
+      case RoutesName.rateShipper :
+        return MaterialPageRoute(builder: (_) => const RateShipper());
       case RoutesName.reviewSubmitted :
         return MaterialPageRoute(builder: (_) => const ReviewSubmitted());
       case RoutesName.reportsScreen:

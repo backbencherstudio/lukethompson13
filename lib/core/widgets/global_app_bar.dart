@@ -56,6 +56,7 @@ class AppBackButton extends StatelessWidget {
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
+  final String? subTitle;
   final List<Widget>? actions;
   final Color? backgroundColor;
   final bool hideBackButton;
@@ -63,6 +64,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GlobalAppBar({
     super.key,
     this.title,
+    this.subTitle,
     this.actions,
     this.backgroundColor = Colors.transparent,
     this.hideBackButton = false,
@@ -77,7 +79,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,
       titleTextStyle: TextStyle(fontSize: 20.sp, fontWeight: .w700),
       centerTitle: false,
-      titleSpacing: 8.w,
+      titleSpacing: 16.w,
       leading: hideBackButton
           ? SizedBox.shrink()
           : canGoBack
@@ -98,7 +100,17 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null, // Hides the button entirely if it is the first/root screen
-      title: title != null ? Text(title!) : null,
+      title: Column(
+        crossAxisAlignment: .start,
+        children: [
+          if (title != null) Text(title!),
+          if (subTitle != null)
+            Text(
+              subTitle!,
+              style: TextStyle(color: ColorManager.subtextColor, fontSize: 16),
+            ),
+        ],
+      ),
       actions: actions,
       backgroundColor: backgroundColor,
     );
