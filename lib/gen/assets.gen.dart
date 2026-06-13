@@ -17,6 +17,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/app_logo.png
   AssetGenImage get appLogo => const AssetGenImage('assets/icons/app_logo.png');
 
+  /// File path: assets/icons/apple_logo.png
+  AssetGenImage get appleLogo =>
+      const AssetGenImage('assets/icons/apple_logo.png');
+
   /// File path: assets/icons/arrow_left.png
   AssetGenImage get arrowLeft =>
       const AssetGenImage('assets/icons/arrow_left.png');
@@ -58,6 +62,9 @@ class $AssetsIconsGen {
   AssetGenImage get logoIcons =>
       const AssetGenImage('assets/icons/logo_icons.png');
 
+  /// File path: assets/icons/mastercard-logo.svg
+  String get mastercardLogo => 'assets/icons/mastercard-logo.svg';
+
   /// File path: assets/icons/onboarding_screen.png
   AssetGenImage get onboardingScreen =>
       const AssetGenImage('assets/icons/onboarding_screen.png');
@@ -97,6 +104,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
     appLogo,
+    appleLogo,
     arrowLeft,
     backArrow,
     building,
@@ -109,6 +117,7 @@ class $AssetsIconsGen {
     home,
     lockIcon,
     logoIcons,
+    mastercardLogo,
     onboardingScreen,
     playStore512,
     profile,

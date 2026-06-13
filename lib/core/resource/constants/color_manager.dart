@@ -57,6 +57,7 @@ class ColorManager {
   // ===== Button & Label Colors =====
   static const Color buttonText = Color(0xFF334289);
   static const Color hintText = Color(0xFF5B5F5F);
+  static const Color iconDisabled = Color(0xFF404040);
 
   // ===== Neutral Colors =====
   static const Color blackColor = Color(0xFF000000);

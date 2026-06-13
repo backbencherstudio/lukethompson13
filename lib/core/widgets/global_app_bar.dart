@@ -87,7 +87,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                   style: FilledButton.styleFrom(
                     padding: EdgeInsets.zero,
                     backgroundColor: Colors.white12,
-                    minimumSize: Size.square(44),
+                    minimumSize: Size.square(40),
                   ),
                   child: const Icon(Icons.arrow_back_rounded, size: 24),
                 ),
