@@ -17,6 +17,7 @@ import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/add_card_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
+import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_review.dart';
 import 'package:lukethompson/presentation/stops/view/widget/client_review.dart';
@@ -65,6 +66,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ChoosePaymentMethodScreen());
       case RoutesName.subscriptionAddCard:
         return MaterialPageRoute(builder: (_) => const SubcriptionAddCardScreen());
+      case RoutesName.subscriptionSuccess:
+        bool isFree = false;
+        if (routeSettings.arguments is Map) {
+          isFree = (routeSettings.arguments as Map)['isFree'] as bool? ?? false;
+        }
+        return MaterialPageRoute(builder: (_) => SubscriptionSuccess(isFree: isFree));
 
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;

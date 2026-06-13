@@ -30,5 +30,5 @@ class RoutesName {
   static const String chooseSubscriptionPlan = "/chooseSubscriptionPlan";
   static const String chooseSubscriptionPaymentMethod = "/chooseSubscriptionPaymentMethod";
   static const String subscriptionAddCard = "/subscriptionAddCard";
-  static const String subscriptionSuccessful = "/subscriptionSuccessful";
+  static const String subscriptionSuccess = "/subscriptionSuccessful";
 }

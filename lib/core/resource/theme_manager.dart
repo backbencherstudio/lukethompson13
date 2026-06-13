@@ -78,15 +78,15 @@ ThemeData getApplicationTheme() {
     // ===== Text Theme =====
     textTheme: TextTheme(
       headlineLarge: getSemiBold600Style12(
-        color: ColorManager.blackColor,
+        color: ColorManager.whiteColor,
         fontSize: FontSize.s20,
       ),
       titleMedium: getMedium500Style12(
-        color: ColorManager.blackColor,
+        color: ColorManager.whiteColor,
         fontSize: FontSize.s16,
       ),
       bodyMedium: getRegular400Style12(
-        color: ColorManager.blackColor,
+        color: ColorManager.whiteColor,
         fontSize: FontSize.s14,
       ),
       bodySmall: getRegular400Style12(

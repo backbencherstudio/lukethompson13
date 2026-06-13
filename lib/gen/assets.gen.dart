@@ -17,10 +17,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/app_logo.png
   AssetGenImage get appLogo => const AssetGenImage('assets/icons/app_logo.png');
 
-  /// File path: assets/icons/apple_logo.png
-  AssetGenImage get appleLogo =>
-      const AssetGenImage('assets/icons/apple_logo.png');
-
   /// File path: assets/icons/arrow_left.png
   AssetGenImage get arrowLeft =>
       const AssetGenImage('assets/icons/arrow_left.png');
@@ -104,7 +100,6 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
     appLogo,
-    appleLogo,
     arrowLeft,
     backArrow,
     building,
@@ -137,11 +132,15 @@ class $AssetsImagesGen {
   /// File path: assets/images/pickUp.png
   AssetGenImage get pickUp => const AssetGenImage('assets/images/pickUp.png');
 
+  /// File path: assets/images/subscription_success.png
+  AssetGenImage get subscriptionSuccess =>
+      const AssetGenImage('assets/images/subscription_success.png');
+
   /// File path: assets/images/user.png
   AssetGenImage get user => const AssetGenImage('assets/images/user.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [pickUp, user];
+  List<AssetGenImage> get values => [pickUp, subscriptionSuccess, user];
 }
 
 class Assets {

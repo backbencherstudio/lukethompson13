@@ -25,7 +25,7 @@ class _ChooseSubscriptionPlanScreenState
     extends ConsumerState<ChooseSubscriptionPlanScreen> {
   @override
   Widget build(BuildContext context) {
-    final selectedPlanId = ref.watch(selectedPlanIdProvider).selectedPlanId;
+    final state = ref.watch(selectedPlanIdProvider);
 
     return AppGradientBackground(
       child: Scaffold(
@@ -40,7 +40,7 @@ class _ChooseSubscriptionPlanScreenState
                 12.height,
                 GetPremiumIcon(),
                 24.height,
-                FeatureListCard(features: getFeaturedPlanItems(selectedPlanId)),
+                FeatureListCard(features: getFeaturedPlanItems(state.selectedPlanId)),
                 32.height,
                 Center(
                   child: SizedBox.square(
@@ -62,7 +62,7 @@ class _ChooseSubscriptionPlanScreenState
                 ),
 
                 16.height,
-                _buildCardsRow(selectedPlanId),
+                _buildCardsRow(state.selectedPlanId),
 
                 16.height,
                 GlobalButton(
@@ -80,7 +80,7 @@ class _ChooseSubscriptionPlanScreenState
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
-                      RoutesName.subscriptionSuccessful,
+                      RoutesName.subscriptionSuccess,
                       arguments: {'isFree': true},
                     );
                   },
