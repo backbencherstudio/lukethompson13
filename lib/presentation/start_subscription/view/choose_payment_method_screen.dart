@@ -67,12 +67,12 @@ class _ChooseSubscriptionPlanScreenState
                 const Spacer(),
 
                 GlobalButton(
+                  isDisabled: state.paymentMethod == '',
                   label: "Subscribe Now",
                   onPressed: () {
-                    print('Scaffold');
                     Navigator.pushNamed(
                       context,
-                      RoutesName.chooseSubscriptionPaymentMethod,
+                      RoutesName.subscriptionAddCard,
                     );
                   },
                 ),

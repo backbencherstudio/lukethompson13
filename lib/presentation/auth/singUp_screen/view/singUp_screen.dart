@@ -45,37 +45,16 @@ class SingupScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 30.h),
-                  Text(
-                    "Full Name",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: ColorManager.textColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
+                  InputLabel("Full Name"),
+                  SizedBox(height: 8.h),
                   CustomTextFieldWidget(hintText: "Enter your name"),
                   SizedBox(height: 15.h),
-                  Text(
-                    "Email Address",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: ColorManager.textColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
+                  InputLabel("Email Address"),
+                  SizedBox(height: 8.h),
                   CustomTextFieldWidget(hintText: "Enter your email address"),
                   SizedBox(height: 15.h),
-                  Text(
-                    "Create Password",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: ColorManager.textColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
+                  InputLabel("Create Password"),
+                  SizedBox(height: 8.h),
                   CustomTextFieldWidget(
                     hintText: "Create Password",
                     obsecure: true,
@@ -85,15 +64,8 @@ class SingupScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 15.h),
-                  Text(
-                    "Re-enter Password",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: ColorManager.textColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
+                  InputLabel("Re-enter Password"),
+                  SizedBox(height: 8.h),
                   CustomTextFieldWidget(
                     hintText: "Re-enter password",
                     obsecure: true,

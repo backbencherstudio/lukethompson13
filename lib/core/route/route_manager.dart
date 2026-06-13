@@ -14,6 +14,7 @@ import 'package:lukethompson/presentation/profile/view/widget/edit_profile_scree
 import 'package:lukethompson/presentation/profile/view/widget/set_your_rate.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
+import 'package:lukethompson/presentation/start_subscription/view/add_card_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
@@ -62,6 +63,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ChooseSubscriptionPlanScreen());
       case RoutesName.chooseSubscriptionPaymentMethod:
         return MaterialPageRoute(builder: (_) => const ChoosePaymentMethodScreen());
+      case RoutesName.subscriptionAddCard:
+        return MaterialPageRoute(builder: (_) => const SubcriptionAddCardScreen());
 
       // case RoutesName.otpScreen:
       //   final args = routeSettings.arguments;
