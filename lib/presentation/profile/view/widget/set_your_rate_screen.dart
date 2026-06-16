@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
@@ -7,23 +8,21 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class SetYourRateScreen extends StatefulWidget {
+  const SetYourRateScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  State<SetYourRateScreen> createState() => _SetYourRateScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+class _SetYourRateScreenState extends State<SetYourRateScreen> {
+  final TextEditingController _rateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
+    _rateController.dispose();
+    _timeController.dispose();
     super.dispose();
   }
 
@@ -32,7 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
-      appBar: GlobalAppBar(title: 'Edit Profile'),
+      appBar: GlobalAppBar(title: 'Set Your Rate'),
       body: AppGradientBackground(
         child: SafeArea(
           child: FullHeightScrollView(
@@ -42,40 +41,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 SizedBox(height: 24.h),
 
-                InputLabel("Full Name"),
+                InputLabel("Your Hourly Rate"),
                 SizedBox(height: 8.h),
                 CustomTextFieldWidget(
-                  hintText: "Enter your full name",
-                  controller: _nameController,
+                  hintText: "\$50",
+                  controller: _rateController,
                 ),
 
                 SizedBox(height: 16.h),
 
-                InputLabel("Email Address"),
+                InputLabel("Free Wait Time"),
                 SizedBox(height: 8.h),
                 CustomTextFieldWidget(
-                  hintText: "Enter your email address",
-                  controller: _emailController,
+                  hintText: "2",
+                  controller: _timeController,
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 6.h),
 
-                InputLabel("Phone Number"),
-                SizedBox(height: 8.h),
-                CustomTextFieldWidget(
-                  hintText: "Enter your phone number",
-                  controller: _phoneController,
+                Text(
+                  "*Hours before detention changes apply",
+                  style: TextStyle(
+                    color: ColorManager.subtextColor,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
 
                 const Spacer(),
                 SizedBox(height: 40.h),
-
-                GlobalButton(
-                  label: "Update",
-                  onPressed: () {
-                    print("Name: ${_nameController.text}");
-                  },
-                ),
+                GlobalButton(label: "Save Changes", onPressed: () {}),
               ],
             ),
           ),

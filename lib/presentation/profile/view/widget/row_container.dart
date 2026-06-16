@@ -18,27 +18,32 @@ class RowContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        alignment: .center,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        height: 38,
         margin: EdgeInsets.only(right: 10.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r), 
-          color: isSelected ? Color(0xff33D17A) : Colors.white.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(20.r),
+          color: isSelected
+              ? Color(0xff33D17A)
+              : Colors.white.withOpacity(0.05),
           border: Border.all(
-            color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.1),
+            color: isSelected
+                ? Colors.transparent
+                : Colors.white.withOpacity(0.1),
             width: 1,
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-          child: Text(
-            title,
-            style: TextStyle(
-              color: isSelected ? Colors.white : Color(0xff8DA2B8),
-              fontSize: 14.sp,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            ),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Color(0xff8DA2B8),
+            fontSize: 14.sp,
+            fontWeight: .w600,
           ),
         ),
       ),
     );
   }
 }
+

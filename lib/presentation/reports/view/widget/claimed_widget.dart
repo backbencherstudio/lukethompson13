@@ -9,13 +9,13 @@ class TotalClaimedWidget extends StatelessWidget {
   final Color amountColor;
 
   const TotalClaimedWidget({
-    Key? key,
+    super.key,
     this.title = "",
     this.amount = "",
-    this.backgroundColor = const Color(0xFF1A1F24), 
+    this.backgroundColor = const Color(0xFF1A1F24),
     this.titleColor = Colors.white,
-    this.amountColor = const Color(0xFFF6A23E), 
-  }) : super(key: key);
+    this.amountColor = const Color(0xFFF6A23E),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class TotalClaimedWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16.h),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(24.0), 
-        border: Border.all(color: Colors.white10), 
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.white10),
       ),
       child: Padding(
         padding: EdgeInsets.only(left: 12.w),
@@ -40,7 +40,7 @@ class TotalClaimedWidget extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 20), 
+            const SizedBox(height: 20),
             Text(
               amount,
               style: TextStyle(
@@ -55,3 +55,4 @@ class TotalClaimedWidget extends StatelessWidget {
     );
   }
 }
+

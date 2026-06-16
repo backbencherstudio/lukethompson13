@@ -11,7 +11,7 @@ import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.da
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/profile_screen.dart';
 import 'package:lukethompson/presentation/profile/view/widget/edit_profile_screen.dart';
-import 'package:lukethompson/presentation/profile/view/widget/set_your_rate.dart';
+import 'package:lukethompson/presentation/profile/view/widget/set_your_rate_screen.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/add_card_screen.dart';
@@ -57,7 +57,7 @@ class RouteGenerator {
       case RoutesName.editProfileScreen:
         return MaterialPageRoute(builder: (_) => const EditProfileScreen ());
       case RoutesName.setRateScreen:
-        return MaterialPageRoute(builder: (_) => const SetRateScreen());
+        return MaterialPageRoute(builder: (_) => const SetYourRateScreen());
       case RoutesName.myClaimScreen:
         return MaterialPageRoute(builder: (_) => const MyClaimScreen());
       case RoutesName.chooseSubscriptionPlan:
