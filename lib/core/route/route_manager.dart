@@ -18,10 +18,10 @@ import 'package:lukethompson/presentation/start_subscription/view/add_card_scree
 import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
-import 'package:lukethompson/presentation/stops/view/widget/claim_detials_widget.dart';
-import 'package:lukethompson/presentation/stops/view/widget/claim_review.dart';
-import 'package:lukethompson/presentation/stops/view/widget/client_review.dart';
-import 'package:lukethompson/presentation/stops/view/widget/review_submitted_widget.dart';
+import 'package:lukethompson/presentation/stops/view/screen/claim_detials_screen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/client_review_screeen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/review_submitted_screen.dart';
 
 
 
@@ -43,11 +43,11 @@ class RouteGenerator {
       case RoutesName.parentScreen :
         return MaterialPageRoute(builder: (_) => const ParentScreen());
       case RoutesName.claimDetails :
-        return MaterialPageRoute(builder: (_) => const ClaimDetialsWidget());
+        return MaterialPageRoute(builder: (_) => const ClaimDetialsScreen());
       case RoutesName.claimReview :
-        return MaterialPageRoute(builder: (_) => const ClaimReview());
+        return MaterialPageRoute(builder: (_) => const ClaimReviewScreen());
       case RoutesName.rateShipper :
-        return MaterialPageRoute(builder: (_) => const RateShipper());
+        return MaterialPageRoute(builder: (_) => const RateShipperScreen());
       case RoutesName.reviewSubmitted :
         return MaterialPageRoute(builder: (_) => const ReviewSubmitted());
       case RoutesName.reportsScreen:

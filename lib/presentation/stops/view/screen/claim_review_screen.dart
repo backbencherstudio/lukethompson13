@@ -5,8 +5,8 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
-class ClaimReview extends StatelessWidget {
-  const ClaimReview({super.key});
+class ClaimReviewScreen extends StatelessWidget {
+  const ClaimReviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

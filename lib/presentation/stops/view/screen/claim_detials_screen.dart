@@ -8,8 +8,8 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
-class ClaimDetialsWidget extends StatelessWidget {
-  const ClaimDetialsWidget({super.key});
+class ClaimDetialsScreen extends StatelessWidget {
+  const ClaimDetialsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
