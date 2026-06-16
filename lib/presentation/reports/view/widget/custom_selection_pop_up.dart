@@ -23,6 +23,7 @@ class CustomSelectionPopup extends StatelessWidget {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           _buildOption("Monthly"),
           const SizedBox(height: 4),

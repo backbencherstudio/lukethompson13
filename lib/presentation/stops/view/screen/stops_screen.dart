@@ -58,6 +58,7 @@ class StopsScreen extends StatelessWidget {
       appBar: GlobalAppBar(
         title: 'All Stops',
         subTitle: 'Track every Log Stops',
+        hideBackButton: true,
       ),
       body: AppGradientBackground(
         child: SafeArea(

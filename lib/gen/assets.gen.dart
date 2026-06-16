@@ -132,6 +132,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/pickUp.png
   AssetGenImage get pickUp => const AssetGenImage('assets/images/pickUp.png');
 
+  /// File path: assets/images/placeholder_image.jpg
+  AssetGenImage get placeholderImage =>
+      const AssetGenImage('assets/images/placeholder_image.jpg');
+
   /// File path: assets/images/subscription_success.png
   AssetGenImage get subscriptionSuccess =>
       const AssetGenImage('assets/images/subscription_success.png');
@@ -140,7 +144,12 @@ class $AssetsImagesGen {
   AssetGenImage get user => const AssetGenImage('assets/images/user.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [pickUp, subscriptionSuccess, user];
+  List<AssetGenImage> get values => [
+    pickUp,
+    placeholderImage,
+    subscriptionSuccess,
+    user,
+  ];
 }
 
 class Assets {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/chart_widget.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_grid.dart';
@@ -70,6 +71,7 @@ class Weeklyscreen extends StatelessWidget {
     ];
 
     return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [

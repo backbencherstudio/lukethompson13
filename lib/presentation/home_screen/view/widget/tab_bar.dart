@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/widgets/global_tab_bar.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/today_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
 
@@ -32,37 +32,14 @@ class _CustomTabScreenState extends State<CustomTabScreen>
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // TabBar Container
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            height: 64,
-            decoration: BoxDecoration(
-              color: const Color(0xFF26323D),
-              borderRadius: BorderRadius.circular(34),
-            ),
-            child: TabBar(
-              labelStyle: TextStyle(fontWeight: .w700, fontSize: 16),
-              padding: EdgeInsets.all(6),
-              indicatorPadding: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 2,
-              ),
-              splashBorderRadius: BorderRadius.circular(28),
-              controller: _tabController,
-              dividerColor: Colors.transparent,
-              indicator: BoxDecoration(
-                color: ColorManager.primaryButton,
-                borderRadius: BorderRadius.circular(28),
-              ),
-              labelColor: Colors.white,
-              unselectedLabelColor: const Color(0xFF9CA8B3),
-              indicatorSize: TabBarIndicatorSize.tab,
-              tabs: const [
-                Tab(text: 'Today'),
-                Tab(text: 'Weekly'),
-              ],
-            ),
+          padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+          child: GlobalTabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Today'),
+              Tab(text: 'Weekly'),
+            ],
           ),
         ),
 
@@ -70,16 +47,7 @@ class _CustomTabScreenState extends State<CustomTabScreen>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: TodayScreen(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Weeklyscreen(),
-              ),
-            ],
+            children: [TodayScreen(), Weeklyscreen()],
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/presentation/reports/view/widget/weekly_summary.dart';
 
 class WeeklySummary extends StatelessWidget {
@@ -9,7 +10,7 @@ class WeeklySummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
       child: Column(
         children: [
           WeeklySummaryWidget(
@@ -19,6 +20,7 @@ class WeeklySummary extends StatelessWidget {
             valueColor: Color(0XFFFFB547),
             borderColor: Color(0xff272C36),
           ),
+          12.height,
 
           WeeklySummaryWidget(
             title: "Detention Captured",
@@ -27,6 +29,7 @@ class WeeklySummary extends StatelessWidget {
             valueColor: Color(0XFF33D17A),
             borderColor: Color(0xff272C36),
           ),
+          12.height,
           WeeklySummaryWidget(
             icon: IconManager.revenueIcon,
             title: "Revenue Lost",
@@ -35,6 +38,7 @@ class WeeklySummary extends StatelessWidget {
             valueColor: Color(0XFFFF5C6C),
             borderColor: Color(0xff272C36),
           ),
+          12.height,
           WeeklySummaryWidget(
             icon: IconManager.worstStop,
             titleColor: Color(0XFFFF5C6C),
@@ -45,6 +49,7 @@ class WeeklySummary extends StatelessWidget {
             borderColor: Color(0XFFFF5C6C),
             subtitleColor: Colors.white,
           ),
+          16.height,
         ],
       ),
     );

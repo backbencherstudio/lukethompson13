@@ -54,6 +54,8 @@ dependencies:
   fl_chart: ^0.66.0
   dotted_border: ^2.1.0
   flutter_svg: ^2.3.0
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

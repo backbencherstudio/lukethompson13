@@ -80,6 +80,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleTextStyle: TextStyle(fontSize: 20.sp, fontWeight: .w700),
       centerTitle: false,
       titleSpacing: 16.w,
+      leadingWidth: hideBackButton ? 0 : null,
       leading: hideBackButton
           ? SizedBox.shrink()
           : canGoBack
@@ -105,9 +106,16 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           if (title != null) Text(title!),
           if (subTitle != null)
-            Text(
-              subTitle!,
-              style: TextStyle(color: ColorManager.subtextColor, fontSize: 16),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                subTitle!,
+                style: TextStyle(
+                  color: ColorManager.subtextColor,
+                  fontSize: 16,
+                  fontWeight: .normal,
+                ),
+              ),
             ),
         ],
       ),

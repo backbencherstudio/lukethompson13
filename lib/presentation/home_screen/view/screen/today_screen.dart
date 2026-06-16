@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_grid.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_widget.dart';
 
@@ -25,6 +26,9 @@ class TodayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetentionGrid(data: _detentiosData);
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+      child: DetentionGrid(data: _detentiosData),
+    );
   }
 }

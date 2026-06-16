@@ -34,7 +34,6 @@ class WeeklySummaryWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         
         color: backgroundColor ?? const Color(0xFF20252D),
