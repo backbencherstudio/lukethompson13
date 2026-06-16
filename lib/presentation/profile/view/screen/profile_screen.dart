@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/core/widgets/profile_header.dart';
+import 'package:lukethompson/core/widgets/profile_setting_item.dart';
+import 'package:lukethompson/core/widgets/section_header.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -8,226 +14,101 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: GlobalAppBar(
+        title: 'Profile',
+        hideBackButton: true,
+        centerTitle: true,
+      ),
       body: AppGradientBackground(
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
-                const Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                const SizedBox(height: 12),
+                const ProfileHeader(
+                  name: 'Kristin Rodriguez',
+                  email: 'Kristin@untitledui.com',
+                  avatarUrl: 'https://i.pravatar.cc/300',
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 32),
+                SectionHeader(title: 'Profile Setting', fontSize: 16),
 
-        
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: const Color(0xFF00E676), width: 2),
-                      ),
-                      child: const CircleAvatar(
-                        radius: 55,
-                        backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.camera_alt_outlined, size: 16, color: Colors.black),
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 15),
-
-              
-                const Text(
-                  'Kristin Rodriguez',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                ProfileSettingItem(
+                  icon: Icons.person_outline,
+                  title: "Edit Profile",
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    RoutesName.editProfileScreen,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Kristin@untitledui.com',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 14,
-                  ),
+                ProfileSettingItem(
+                  icon: Icons.attach_money,
+                  title: "Set Your Rate",
+                  onTap: () =>
+                      Navigator.pushNamed(context, RoutesName.setRateScreen),
                 ),
-                const SizedBox(height: 30),
-
-            
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Profile Setting',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                ProfileSettingItem(
+                  icon: Icons.assignment_outlined,
+                  title: "My Claims",
+                  onTap: () =>
+                      Navigator.pushNamed(context, RoutesName.myClaimScreen),
                 ),
-                const SizedBox(height: 15),
-
-         
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutesName.editProfileScreen);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1C1F26),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const ListTile(
-                      leading: Icon(Icons.person_outline, color: Colors.white),
-                      title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
-                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                    ),
-                  ),
+                const ProfileSettingItem(
+                  icon: Icons.stars_outlined,
+                  title: "Shipper Ratings",
                 ),
-
-           
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutesName.setRateScreen);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1C1F26),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const ListTile(
-                      leading: Icon(Icons.attach_money, color: Colors.white),
-                      title: Text("Set Your Rate", style: TextStyle(color: Colors.white)),
-                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                    ),
-                  ),
-                ),
-
-           
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutesName.myClaimScreen);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1C1F26),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const ListTile(
-                      leading: Icon(Icons.assignment_outlined, color: Colors.white),
-                      title: Text("My Claims", style: TextStyle(color: Colors.white)),
-                      trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                    ),
-                  ),
-                ),
-
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.stars_outlined, color: Colors.white),
-                    title: Text("Shipper Ratings", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                  ),
-                ),
-
-         
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    leading: const Icon(Icons.workspace_premium_outlined, color: Colors.white),
-                    title: const Text("Subscriptions", style: TextStyle(color: Colors.white)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF00E676),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            "Upgrade Plan",
-                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                ProfileSettingItem(
+                  icon: Icons.workspace_premium_outlined,
+                  title: "Subscriptions",
+                  onTap: () {},
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: ColorManager.primaryButton,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          "Upgrade Plan",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        const Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white38,
+                        size: 16,
+                      ),
+                    ],
                   ),
+                ),
+                const ProfileSettingItem(
+                  icon: Icons.lock_outline,
+                  title: "Privacy & policy",
+                ),
+                const ProfileSettingItem(
+                  icon: Icons.help_outline,
+                  title: "Help & Support",
+                ),
+                ProfileSettingItem(
+                  icon: Icons.logout,
+                  title: "Log Out",
+                  iconColor: Colors.redAccent,
                 ),
 
- 
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.lock_outline, color: Colors.white),
-                    title: Text("Privacy & policy", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                  ),
-                ),
-
-           
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.help_outline, color: Colors.white),
-                    title: Text("Help & Support", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                  ),
-                ),
-
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1C1F26),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(Icons.logout, color: Colors.redAccent),
-                    title: Text("Log Out", style: TextStyle(color: Colors.white)),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-                  ),
-                ),
-                
                 const SizedBox(height: 30),
               ],
             ),

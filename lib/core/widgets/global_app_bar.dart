@@ -60,6 +60,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Color? backgroundColor;
   final bool hideBackButton;
+  final bool centerTitle;
 
   const GlobalAppBar({
     super.key,
@@ -68,6 +69,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.backgroundColor = Colors.transparent,
     this.hideBackButton = false,
+    this.centerTitle = false,
   });
 
   @override
@@ -78,7 +80,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       scrolledUnderElevation: 0,
       titleTextStyle: TextStyle(fontSize: 20.sp, fontWeight: .w700),
-      centerTitle: false,
+      centerTitle: centerTitle,
       titleSpacing: 16.w,
       leadingWidth: hideBackButton ? 0 : null,
       leading: hideBackButton
