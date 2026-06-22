@@ -98,6 +98,8 @@ class ProfileScreen extends StatelessWidget {
                 ProfileSettingItem(
                   icon: Icons.lock_outline,
                   title: "Privacy & policy",
+                  onTap: () =>
+                      Navigator.pushNamed(context, RoutesName.privacyAndPolicy),
                 ),
                 ProfileSettingItem(
                   icon: Icons.help_outline,

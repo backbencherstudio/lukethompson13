@@ -9,6 +9,8 @@ class ExpansionTileRadioListView<T> extends StatefulWidget {
 
   final EdgeInsetsGeometry? padding;
   final double separatorHeight;
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
 
   const ExpansionTileRadioListView({
     super.key,
@@ -17,6 +19,8 @@ class ExpansionTileRadioListView<T> extends StatefulWidget {
     required this.childrenBuilder,
     this.padding,
     this.separatorHeight = 12,
+    this.physics,
+    this.shrinkWrap = false,
   });
 
   @override
@@ -63,6 +67,8 @@ class _ExpansionTileRadioListViewState<T>
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      physics: widget.physics,
+      shrinkWrap: widget.shrinkWrap,
       padding: widget.padding,
       itemCount: widget.items.length,
       separatorBuilder: (_, _) => SizedBox(height: widget.separatorHeight),

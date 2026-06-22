@@ -65,15 +65,17 @@ class HelpAndSupportScreen extends StatelessWidget {
       appBar: GlobalAppBar(title: 'Help & Support'),
       body: AppGradientBackground(
         child: SafeArea(
-          child: Padding(
-            padding: .symmetric(horizontal: AppPadding.screenPadding),
-            child: Column(
-              children: [
-                24.height,
-                SectionHeader(title: 'How Can We Help You?'),
-                16.height,
-                Expanded(
-                  child: ExpansionTileRadioListView(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: .symmetric(horizontal: AppPadding.screenPadding),
+              child: Column(
+                children: [
+                  24.height,
+                  SectionHeader(title: 'How Can We Help You?'),
+                  16.height,
+                  ExpansionTileRadioListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
                     items: _instructions,
                     titleBuilder: (context, item, index) {
                       return Text(
@@ -92,8 +94,8 @@ class HelpAndSupportScreen extends StatelessWidget {
                       );
                     },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

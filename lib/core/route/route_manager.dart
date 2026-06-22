@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/string_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/presentation/profile/view/screen/privacy_and_policy_screen.dart';
 
 // Splash & Onboarding
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
@@ -79,12 +80,14 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case RoutesName.editProfileScreen:
         return MaterialPageRoute(builder: (_) => const EditProfileScreen());
-      case RoutesName.helpAndSupport:
-        return MaterialPageRoute(builder: (_) => const HelpAndSupportScreen());
       case RoutesName.setRateScreen:
         return MaterialPageRoute(builder: (_) => const SetYourRateScreen());
       case RoutesName.myClaimScreen:
         return MaterialPageRoute(builder: (_) => const MyClaimScreen());
+      case RoutesName.helpAndSupport:
+        return MaterialPageRoute(builder: (_) => const HelpAndSupportScreen());
+      case RoutesName.privacyAndPolicy:
+        return MaterialPageRoute(builder: (_) => const PrivacyAndPolicyScreen());
 
       // Subscription
       case RoutesName.chooseSubscriptionPlan:

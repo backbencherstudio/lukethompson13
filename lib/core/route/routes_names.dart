@@ -26,8 +26,9 @@ class RoutesName {
   static const String profileScreen = "/profileScreen";
   static const String editProfileScreen = "/editProfileScreen";
   static const String myClaimScreen = "/myClaimScreen";
-  static const String helpAndSupport = "/helpAndSupport";
   static const String setRateScreen = "/setRateScreen";
+  static const String helpAndSupport = "/helpAndSupport";
+  static const String privacyAndPolicy = "/privacyAndPolicy";
 
   // Subscription
   static const String chooseSubscriptionPlan = "/chooseSubscriptionPlan";
