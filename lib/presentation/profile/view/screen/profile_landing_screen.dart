@@ -64,7 +64,10 @@ class ProfileScreen extends StatelessWidget {
                 ProfileSettingItem(
                   icon: Icons.workspace_premium_outlined,
                   title: "Subscriptions",
-                  onTap: () {},
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    RoutesName.manageSubscription,
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

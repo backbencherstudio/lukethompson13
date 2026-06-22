@@ -90,6 +90,9 @@ class $AssetsIconsGen {
   AssetGenImage get submittedIcon =>
       const AssetGenImage('assets/icons/submittedIcon.png');
 
+  /// File path: assets/icons/tick_mark.svg
+  String get tickMark => 'assets/icons/tick_mark.svg';
+
   /// File path: assets/icons/worst.png
   AssetGenImage get worst => const AssetGenImage('assets/icons/worst.png');
 
@@ -121,6 +124,7 @@ class $AssetsIconsGen {
     revenueLost,
     stops,
     submittedIcon,
+    tickMark,
     worst,
     worstStop,
   ];

@@ -37,7 +37,7 @@ class CustomJobCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: ColorManager.white8,
+          color: ColorManager.cardBackground,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: borderColor ?? Colors.white10,

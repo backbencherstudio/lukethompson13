@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/string_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/presentation/profile/view/screen/manage_subscription_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/privacy_and_policy_screen.dart';
 
 // Splash & Onboarding
@@ -84,6 +85,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SetYourRateScreen());
       case RoutesName.myClaimScreen:
         return MaterialPageRoute(builder: (_) => const MyClaimScreen());
+      case RoutesName.manageSubscription:
+        return MaterialPageRoute(builder: (_) => const ManageSubscriptionScreen());
       case RoutesName.helpAndSupport:
         return MaterialPageRoute(builder: (_) => const HelpAndSupportScreen());
       case RoutesName.privacyAndPolicy:

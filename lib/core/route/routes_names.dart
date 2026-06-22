@@ -29,6 +29,7 @@ class RoutesName {
   static const String setRateScreen = "/setRateScreen";
   static const String helpAndSupport = "/helpAndSupport";
   static const String privacyAndPolicy = "/privacyAndPolicy";
+  static const String manageSubscription = "/manageSubscription";
 
   // Subscription
   static const String chooseSubscriptionPlan = "/chooseSubscriptionPlan";

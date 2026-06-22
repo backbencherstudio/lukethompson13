@@ -13,7 +13,7 @@ class TotalClaimedWidget extends StatelessWidget {
     super.key,
     this.title = "",
     this.amount = "",
-    this.backgroundColor = ColorManager.white8,
+    this.backgroundColor = ColorManager.cardBackground,
     this.titleColor = Colors.white,
     this.amountColor = const Color(0xFFF6A23E),
   });

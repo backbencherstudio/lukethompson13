@@ -86,8 +86,8 @@ class _ExpansionTileRadioListViewState<T>
             borderRadius: BorderRadius.circular(16),
           ),
 
-          backgroundColor: ColorManager.white8,
-          collapsedBackgroundColor: ColorManager.white8,
+          backgroundColor: ColorManager.cardBackground,
+          collapsedBackgroundColor: ColorManager.cardBackground,
 
           textColor: ColorManager.whiteColor,
           iconColor: ColorManager.whiteColor,

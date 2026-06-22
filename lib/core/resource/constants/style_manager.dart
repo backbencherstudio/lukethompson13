@@ -131,6 +131,13 @@ TextStyle getSemiBold600Style10({
   return _getTextStyle(fontSize, FontConstants.fontFamily, fontWeight, color);
 }
 
+ShapeBorder getRoundedCardShape([Color borderColor = Colors.white10]) {
+  return RoundedRectangleBorder(
+    side: BorderSide(color: borderColor, width: 1),
+    borderRadius: BorderRadius.circular(12.0),
+  );
+}
+
 //semi bold text style
 TextStyle getSemiBold600Style12({
   double fontSize = FontSize.s12,
@@ -139,4 +146,3 @@ TextStyle getSemiBold600Style12({
 }) {
   return _getTextStyle(fontSize, FontConstants.fontFamily, fontWeight, color);
 }
-
