@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
 import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
@@ -43,52 +44,7 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 16.h),
-
-                Container(
-                  height: 56,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.topRight,
-                      colors: [Color(0xFF1D3D36), Color(0XFF18252A)],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.05),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search_outlined,
-                        color: Colors.grey.withOpacity(0.7),
-                        size: 26,
-                      ),
-                      const SizedBox(width: 12),
-                      const Expanded(
-                        child: TextField(
-                          cursorColor: Colors.white,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                          decoration: InputDecoration(
-                            hintText: "Search Stops or ID...",
-                            hintStyle: TextStyle(
-                              color: Color(0x999E9E9E),
-                              fontSize: 18,
-                            ),
-                            filled: false,
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const SearchBarWidget(),
                 SizedBox(height: 15.h),
 
                 SingleChildScrollView(
@@ -190,4 +146,3 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
     );
   }
 }
-

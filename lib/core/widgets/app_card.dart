@@ -9,6 +9,7 @@ class AppCard extends StatelessWidget {
   final Color? borderColor;
   final double? borderRadius;
   final double? borderWidth;
+  final EdgeInsetsGeometry? margin;
 
   const AppCard({
     super.key,
@@ -18,11 +19,13 @@ class AppCard extends StatelessWidget {
     this.borderColor,
     this.borderRadius,
     this.borderWidth,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: margin,
       padding: padding ?? EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: backgroundColor ?? ColorManager.cardBackground,

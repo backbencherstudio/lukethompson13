@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
 import 'font_manager.dart';
 
@@ -136,6 +137,18 @@ ShapeBorder getRoundedCardShape([Color borderColor = Colors.white10]) {
     side: BorderSide(color: borderColor, width: 1),
     borderRadius: BorderRadius.circular(12.0),
   );
+}
+
+TextStyle getListTitleStyle({Color? color}) {
+  return TextStyle(
+    color: color ?? ColorManager.whiteColor,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+}
+
+TextStyle getSubtextStyle({Color? color}) {
+  return TextStyle(color: color ?? ColorManager.subtextColor);
 }
 
 //semi bold text style

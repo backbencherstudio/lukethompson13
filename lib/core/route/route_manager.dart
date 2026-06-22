@@ -3,6 +3,7 @@ import 'package:lukethompson/core/resource/constants/string_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/presentation/profile/view/screen/manage_subscription_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/privacy_and_policy_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/shipper_ratings_screen.dart';
 
 // Splash & Onboarding
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
@@ -87,6 +88,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MyClaimScreen());
       case RoutesName.manageSubscription:
         return MaterialPageRoute(builder: (_) => const ManageSubscriptionScreen());
+      case RoutesName.shipperRatings:
+        return MaterialPageRoute(builder: (_) => const ShipperRatingsScreen());
       case RoutesName.helpAndSupport:
         return MaterialPageRoute(builder: (_) => const HelpAndSupportScreen());
       case RoutesName.privacyAndPolicy:

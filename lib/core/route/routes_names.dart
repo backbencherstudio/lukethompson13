@@ -30,6 +30,7 @@ class RoutesName {
   static const String helpAndSupport = "/helpAndSupport";
   static const String privacyAndPolicy = "/privacyAndPolicy";
   static const String manageSubscription = "/manageSubscription";
+  static const String shipperRatings = "/shipperRatings";
 
   // Subscription
   static const String chooseSubscriptionPlan = "/chooseSubscriptionPlan";

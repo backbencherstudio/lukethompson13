@@ -57,9 +57,13 @@ class ProfileScreen extends StatelessWidget {
                   onTap: () =>
                       Navigator.pushNamed(context, RoutesName.myClaimScreen),
                 ),
-                const ProfileSettingItem(
+                ProfileSettingItem(
                   icon: Icons.stars_outlined,
                   title: "Shipper Ratings",
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    RoutesName.shipperRatings,
+                  ),
                 ),
                 ProfileSettingItem(
                   icon: Icons.workspace_premium_outlined,
