@@ -23,7 +23,7 @@ class ColorManager {
   static const Color playlistBox = Color(0xFFFDFEFC);
 
   // ===== textfield color=====
-    static const Color fillColorTextFieldleft = Color(0xFF233632);
+  static const Color fillColorTextFieldleft = Color(0xFF233632);
   static const Color fillColorTextFielright = Color(0xFF20262A);
   static const Color hoursWaiting = Color(0xFFFFB547);
   static const Color collectionRate = Color(0xFF00A3FF);
@@ -33,20 +33,20 @@ class ColorManager {
   static const Color backgroundColorgreen1 = Color(0xFF91C05D);
   static const Color beginerColor = Color(0xFFC6DBAE);
   static const Color bottomSheetColor = Color(0xFFF6F6F6);
-  
 
-  static const Color bgColorgrey= Color.fromARGB(255, 234, 244, 225);
+  static const Color bgColorgrey = Color.fromARGB(255, 234, 244, 225);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color scaffoldLight = Color(0xFFFFFFFF);
   static const Color scaffoldDark = Color(0xFF1E1E1E);
   static const Color buttonbgBrings = Color(0xFFECF6EB);
+  static const Color white8 = Color(0x14FFFFFF);
 
   // ===== Text Colors =====
   static const Color textPrimary = Color(0xFF1D1F2C);
 
   static const Color subtextColorGrey = Color(0xFF8C8D8B);
   static const Color subtextColor1 = Color.fromARGB(255, 65, 65, 65);
- 
+
   static const Color hintTextColor = Color(0xFF9DA09A);
   static const Color textSecondary = Color(0xFF757575);
   static const Color titleText = Color(0xFF2F3131);

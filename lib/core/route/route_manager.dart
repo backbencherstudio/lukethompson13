@@ -1,37 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/string_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
-import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.dart';
-import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
-import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
-import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
-import 'package:lukethompson/presentation/profile/view/widget/my_claim_screen.dart';
 
-import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
-import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
-import 'package:lukethompson/presentation/profile/view/screen/profile_screen.dart';
-import 'package:lukethompson/presentation/profile/view/widget/edit_profile_screen.dart';
-import 'package:lukethompson/presentation/profile/view/widget/set_your_rate_screen.dart';
-import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
+// Splash & Onboarding
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
-import 'package:lukethompson/presentation/start_subscription/view/add_card_screen.dart';
-import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
-import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
-import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
+import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
+
+// Auth
+import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
+import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
+import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.dart';
+import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
+
+// Parent
+import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
+
+// Stops
 import 'package:lukethompson/presentation/stops/view/screen/claim_detials_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/client_review_screeen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/review_submitted_screen.dart';
 
+// Reports
+import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 
+// Profile
+import 'package:lukethompson/presentation/profile/view/screen/profile_landing_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/edit_profile_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/help_and_support_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/my_claim_screen.dart';
+import 'package:lukethompson/presentation/profile/view/widget/set_your_rate_screen.dart';
+
+// Subscription
+import 'package:lukethompson/presentation/start_subscription/view/add_card_screen.dart';
+import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
+import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
+import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      // Splash & Onboarding
       case RoutesName.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case RoutesName.onboardingScreen1:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen1());
+
+      // Auth
       case RoutesName.singupScreen:
         return MaterialPageRoute(builder: (_) => const SingupScreen());
       case RoutesName.singInScreen:
@@ -40,68 +55,58 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ForgetScreen());
       case RoutesName.resetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
-      case RoutesName.parentScreen :
+
+      // Parent
+      case RoutesName.parentScreen:
         return MaterialPageRoute(builder: (_) => const ParentScreen());
-      case RoutesName.claimDetails :
+
+      // Stops
+      case RoutesName.claimDetails:
         return MaterialPageRoute(builder: (_) => const ClaimDetialsScreen());
-      case RoutesName.claimReview :
+      case RoutesName.claimReview:
         return MaterialPageRoute(builder: (_) => const ClaimReviewScreen());
-      case RoutesName.rateShipper :
+      case RoutesName.rateShipper:
         return MaterialPageRoute(builder: (_) => const RateShipperScreen());
-      case RoutesName.reviewSubmitted :
+      case RoutesName.reviewSubmitted:
         return MaterialPageRoute(builder: (_) => const ReviewSubmitted());
+
+      // Reports
       case RoutesName.reportsScreen:
-        return MaterialPageRoute(builder: (_) => const ReportsScreen ());
+        return MaterialPageRoute(builder: (_) => const ReportsScreen());
+
+      // Profile
       case RoutesName.profileScreen:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case RoutesName.editProfileScreen:
-        return MaterialPageRoute(builder: (_) => const EditProfileScreen ());
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
+      case RoutesName.helpAndSupport:
+        return MaterialPageRoute(builder: (_) => const HelpAndSupportScreen());
       case RoutesName.setRateScreen:
         return MaterialPageRoute(builder: (_) => const SetYourRateScreen());
       case RoutesName.myClaimScreen:
         return MaterialPageRoute(builder: (_) => const MyClaimScreen());
+
+      // Subscription
       case RoutesName.chooseSubscriptionPlan:
-        return MaterialPageRoute(builder: (_) => const ChooseSubscriptionPlanScreen());
+        return MaterialPageRoute(
+          builder: (_) => const ChooseSubscriptionPlanScreen(),
+        );
       case RoutesName.chooseSubscriptionPaymentMethod:
-        return MaterialPageRoute(builder: (_) => const ChoosePaymentMethodScreen());
+        return MaterialPageRoute(
+          builder: (_) => const ChoosePaymentMethodScreen(),
+        );
       case RoutesName.subscriptionAddCard:
-        return MaterialPageRoute(builder: (_) => const SubcriptionAddCardScreen());
+        return MaterialPageRoute(
+          builder: (_) => const SubcriptionAddCardScreen(),
+        );
       case RoutesName.subscriptionSuccess:
         bool isFree = false;
         if (routeSettings.arguments is Map) {
           isFree = (routeSettings.arguments as Map)['isFree'] as bool? ?? false;
         }
-        return MaterialPageRoute(builder: (_) => SubscriptionSuccess(isFree: isFree));
-
-      // case RoutesName.otpScreen:
-      //   final args = routeSettings.arguments;
-      //   String? email;
-      //   if (args is String) {
-      //     email = args;
-      //   } else if (args is Map) {
-      //     final value = args['email'];
-      //     if (value != null) email = value.toString();
-      //   }
-      //   return MaterialPageRoute(builder: (_) => OtpScreen(email: email?.trim()));
-      // case RoutesName.newPasswordScreen:
-      //   final args = routeSettings.arguments;
-      //   String? email;
-      //   String? token;
-      //   if (args is Map) {
-      //     final e = args['email'];
-      //     final t = args['token'];
-      //     if (e != null) email = e.toString();
-      //     if (t != null) token = t.toString();
-      //   }
-      //   return MaterialPageRoute(
-      //     builder: (_) => NewPasswordScreen(email: email?.trim(), token: token?.trim()),
-      //   );
-    
-     
-      
-     
-   
-     
+        return MaterialPageRoute(
+          builder: (_) => SubscriptionSuccess(isFree: isFree),
+        );
 
       default:
         return unDefineRoute();

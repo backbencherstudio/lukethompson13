@@ -95,13 +95,15 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const ProfileSettingItem(
+                ProfileSettingItem(
                   icon: Icons.lock_outline,
                   title: "Privacy & policy",
                 ),
-                const ProfileSettingItem(
+                ProfileSettingItem(
                   icon: Icons.help_outline,
                   title: "Help & Support",
+                  onTap: () =>
+                      Navigator.pushNamed(context, RoutesName.helpAndSupport),
                 ),
                 ProfileSettingItem(
                   icon: Icons.logout,

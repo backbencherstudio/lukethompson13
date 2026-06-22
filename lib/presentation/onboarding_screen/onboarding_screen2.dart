@@ -149,8 +149,6 @@ class OnboardingScreen2 extends StatelessWidget {
                     Navigator.pushNamed(context, RoutesName.singupScreen);
                   },
                 ),
-                16.height,
-                GlobalButton.secondary(label: "Skip", onPressed: () {}),
               ],
             ),
           ),

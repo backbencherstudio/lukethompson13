@@ -143,14 +143,11 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                   statusTextColor: Colors.greenAccent,
                   statusBgColor: Colors.greenAccent.withOpacity(0.1),
                   iconColor: Colors.blueAccent,
-                  borderColor: isAmazonSelected == 0
-                      ? Colors.greenAccent.withOpacity(0.5)
-                      : Colors.transparent,
-                  onTap: () {
-                    setState(() {
-                      isAmazonSelected = (isAmazonSelected == 0) ? -1 : 0;
-                    });
-                  },
+                  // onTap: () {
+                  //   setState(() {
+                  //     isAmazonSelected = (isAmazonSelected == 0) ? -1 : 0;
+                  //   });
+                  // },
                 ),
 
                 CustomJobCard(
@@ -162,14 +159,11 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                   statusTextColor: Colors.orangeAccent,
                   statusBgColor: Colors.orangeAccent.withOpacity(0.1),
                   iconColor: Colors.orangeAccent,
-                  borderColor: isAmazonSelected == 1
-                      ? Colors.greenAccent.withOpacity(0.5)
-                      : Colors.transparent,
-                  onTap: () {
-                    setState(() {
-                      isAmazonSelected = (isAmazonSelected == 1) ? -1 : 1;
-                    });
-                  },
+                  // onTap: () {
+                  //   setState(() {
+                  //     isAmazonSelected = (isAmazonSelected == 1) ? -1 : 1;
+                  //   });
+                  // },
                 ),
 
                 // --- Job Card 3 (Cold Storage) ---
@@ -182,14 +176,11 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                   statusTextColor: Colors.redAccent,
                   statusBgColor: Colors.redAccent.withOpacity(0.1),
                   iconColor: Colors.blueAccent,
-                  borderColor: isAmazonSelected == 2
-                      ? Colors.greenAccent.withOpacity(0.5)
-                      : Colors.transparent,
-                  onTap: () {
-                    setState(() {
-                      isAmazonSelected = (isAmazonSelected == 2) ? -1 : 2;
-                    });
-                  },
+                  // onTap: () {
+                  //   setState(() {
+                  //     isAmazonSelected = (isAmazonSelected == 2) ? -1 : 2;
+                  //   });
+                  // },
                 ),
               ],
             ),

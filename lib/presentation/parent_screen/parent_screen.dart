@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/homeScreen.dart';
 import 'package:lukethompson/presentation/log_screen/view/screen/log_screen.dart';
-import 'package:lukethompson/presentation/profile/view/screen/profile_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/profile_landing_screen.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/stops_screen.dart';
 

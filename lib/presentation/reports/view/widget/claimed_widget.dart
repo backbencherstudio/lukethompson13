@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
 class TotalClaimedWidget extends StatelessWidget {
   final String title;
@@ -12,7 +13,7 @@ class TotalClaimedWidget extends StatelessWidget {
     super.key,
     this.title = "",
     this.amount = "",
-    this.backgroundColor = const Color(0xFF1A1F24),
+    this.backgroundColor = ColorManager.white8,
     this.titleColor = Colors.white,
     this.amountColor = const Color(0xFFF6A23E),
   });

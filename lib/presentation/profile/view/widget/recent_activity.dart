@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
 class CustomJobCard extends StatelessWidget {
   final String? title;
@@ -36,10 +37,10 @@ class CustomJobCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1F26),
+          color: ColorManager.white8,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: borderColor ?? Colors.transparent,
+            color: borderColor ?? Colors.white10,
             width: 1.5,
           ),
         ),
