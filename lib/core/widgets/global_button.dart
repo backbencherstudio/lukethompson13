@@ -44,18 +44,32 @@ class GlobalButton extends StatelessWidget {
        borderSide = BorderSide.none,
        isDisabled = false;
 
+  const GlobalButton.primaryOutlined({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.height,
+    this.width = double.infinity,
+    this.borderSide = const BorderSide(color: ColorManager.primaryButton),
+    this.foregroundColor = ColorManager.whiteColor,
+  }) : color = Colors.transparent,
+       disabledBackgroundColor = null,
+       borderRadius = null,
+       textStyle = null,
+       isDisabled = false;
+
   const GlobalButton.secondary({
     super.key,
     required this.label,
     required this.onPressed,
     this.height,
     this.width = double.infinity,
+    this.borderSide = const BorderSide(color: Color(0xFF8DA2B8)),
+    this.foregroundColor = const Color(0xFF8DA2B8),
   }) : color = Colors.transparent,
-       foregroundColor = const Color(0xFF8DA2B8),
        disabledBackgroundColor = null,
        borderRadius = null,
        textStyle = null,
-       borderSide = const BorderSide(color: Color(0xFF8DA2B8)),
        isDisabled = false;
 
   @override
