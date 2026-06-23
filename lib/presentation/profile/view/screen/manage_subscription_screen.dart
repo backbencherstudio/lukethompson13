@@ -6,6 +6,7 @@ import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/app_switch.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
@@ -47,7 +48,7 @@ class ManageSubscriptionScreen extends StatelessWidget {
                 16.height,
                 SubscriptionInfoCard.yourPlanIncludes(
                   items: ['Notify me 2 days before renewal'],
-                  trailing: CupertinoSwitch(
+                  trailing: AppSwitch(
                     value: true,
                     onChanged: (value) {
                       // setState(() => isEnabled = value);

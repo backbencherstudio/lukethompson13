@@ -77,21 +77,77 @@ ThemeData getApplicationTheme() {
 
     // ===== Text Theme =====
     textTheme: TextTheme(
-      headlineLarge: getSemiBold600Style12(
-        color: ColorManager.whiteColor,
-        fontSize: FontSize.s20,
+      displayLarge: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
       ),
-      titleMedium: getMedium500Style12(
-        color: ColorManager.whiteColor,
-        fontSize: FontSize.s16,
+      displayMedium: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w700,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
       ),
-      bodyMedium: getRegular400Style12(
-        color: ColorManager.whiteColor,
-        fontSize: FontSize.s14,
+      headlineLarge: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
       ),
-      bodySmall: getRegular400Style12(
+      headlineMedium: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
         color: ColorManager.subtitleText,
-        fontSize: FontSize.s12,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        fontFamily: FontConstants.fontFamily,
       ),
     ),
 
@@ -105,41 +161,31 @@ ThemeData getApplicationTheme() {
     // ===== Input Field Theme =====
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.white10,
-      hintStyle: getRegular400Style12(color: ColorManager.hintTextColor, fontSize: 16),
+      fillColor: ColorManager.cardBackground,
+      hintStyle: getRegular400Style12(
+        color: ColorManager.hintTextColor,
+        fontSize: 16,
+      ),
       labelStyle: getMedium500Style12(color: ColorManager.whiteColor),
       helperStyle: getRegular400Style12(color: ColorManager.hintTextColor),
       errorStyle: getRegular400Style12(color: ColorManager.errorColor),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
 
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.transparent, width: AppSize.s1_5),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.primaryButtonDark,
-          width: AppSize.s1_5,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.errorColor,
-          width: AppSize.s1_5,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.errorColor,
-          width: AppSize.s1_5,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
-      ),
+      enabledBorder: getInputBorderStyle(ColorManager.transparentColor),
+      focusedBorder: getInputBorderStyle(ColorManager.primaryButtonDark),
+      errorBorder: getInputBorderStyle(ColorManager.errorColor),
+      focusedErrorBorder: getInputBorderStyle(ColorManager.errorColor),
+      disabledBorder: getInputBorderStyle(Colors.transparent),
     ),
 
     // ===== Icon Theme =====
     iconTheme: IconThemeData(color: ColorManager.primary, size: AppSize.s24),
+  );
+}
+
+OutlineInputBorder getInputBorderStyle(Color borderColor) {
+  return OutlineInputBorder(
+    borderSide: BorderSide(color: borderColor, width: AppSize.s1_5),
+    borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
   );
 }

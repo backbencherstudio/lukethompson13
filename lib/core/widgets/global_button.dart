@@ -14,6 +14,7 @@ class GlobalButton extends StatelessWidget {
   final TextStyle? textStyle;
   final BorderSide? borderSide;
   final bool isDisabled;
+  final double? fontSize;
 
   const GlobalButton({
     super.key,
@@ -28,6 +29,7 @@ class GlobalButton extends StatelessWidget {
     this.textStyle,
     this.borderSide,
     this.isDisabled = false,
+    this.fontSize,
   });
 
   const GlobalButton.primary({
@@ -36,6 +38,7 @@ class GlobalButton extends StatelessWidget {
     required this.onPressed,
     this.height,
     this.width = double.infinity,
+    this.fontSize,
   }) : color = ColorManager.primaryButton,
        foregroundColor = Colors.white,
        disabledBackgroundColor = ColorManager.secondary,
@@ -52,6 +55,7 @@ class GlobalButton extends StatelessWidget {
     this.width = double.infinity,
     this.borderSide = const BorderSide(color: ColorManager.primaryButton),
     this.foregroundColor = ColorManager.whiteColor,
+    this.fontSize,
   }) : color = Colors.transparent,
        disabledBackgroundColor = null,
        borderRadius = null,
@@ -66,6 +70,7 @@ class GlobalButton extends StatelessWidget {
     this.width = double.infinity,
     this.borderSide = const BorderSide(color: Color(0xFF8DA2B8)),
     this.foregroundColor = const Color(0xFF8DA2B8),
+    this.fontSize,
   }) : color = Colors.transparent,
        disabledBackgroundColor = null,
        borderRadius = null,
@@ -76,7 +81,7 @@ class GlobalButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      height: height ?? 44.h,
+      height: height ?? 52,
       child: ElevatedButton(
         onPressed: onPressed != null && !isDisabled ? onPressed : null,
         style: ElevatedButton.styleFrom(
@@ -95,7 +100,7 @@ class GlobalButton extends StatelessWidget {
               textStyle ??
               TextStyle(
                 color: foregroundColor,
-                fontSize: 18.sp,
+                fontSize: fontSize?.sp ?? 16.sp,
                 fontWeight: FontWeight.bold,
               ),
         ),

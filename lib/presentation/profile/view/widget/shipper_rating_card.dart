@@ -8,7 +8,6 @@ import 'package:lukethompson/core/widgets/app_bottom_sheet.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/spaced_row.dart';
-import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_detail_sheet.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class StatItem {

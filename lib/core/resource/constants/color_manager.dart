@@ -16,6 +16,7 @@ class ColorManager {
   static const Color greyText = Color(0xFF8DA2B8);
   static const Color tabBarBgColor = Color(0xFF303639);
   static const Color subtextColor = Color(0xFF8DA2B8);
+  static const Color disabledText = Color(0xFF525252);
   static const Color primarygrey = Color(0xFFFAFAFA);
   static const Color primaryLight = Color(0xFFECF6EB);
   static const Color primary1 = Color(0xFFFBFDF8);

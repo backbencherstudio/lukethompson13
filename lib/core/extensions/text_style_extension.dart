@@ -31,7 +31,7 @@ extension AppTextStyles on BuildContext {
   /// Poppins • 12sp • w400
   TextStyle get bodySmall => Theme.of(this).textTheme.bodySmall!;
 
-  /// Poppins • 14sp • w500
+  /// Poppins • 16sp • w700
   TextStyle get labelLarge => Theme.of(this).textTheme.labelLarge!;
 
   /// Poppins • 11sp • w400

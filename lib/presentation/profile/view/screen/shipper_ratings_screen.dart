@@ -35,7 +35,7 @@ class _ShipperRatingsScreenState extends State<ShipperRatingsScreen> {
         child: SafeArea(
           bottom: false,
           child: FullHeightScrollView(
-            // physics: _pageLocked ? const NeverScrollableScrollPhysics() : null,
+            physics: _pageLocked ? const NeverScrollableScrollPhysics() : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
