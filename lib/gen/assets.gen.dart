@@ -83,6 +83,9 @@ class $AssetsIconsGen {
   AssetGenImage get revenueLost =>
       const AssetGenImage('assets/icons/revenue_lost.png');
 
+  /// File path: assets/icons/splash.png
+  AssetGenImage get splash => const AssetGenImage('assets/icons/splash.png');
+
   /// File path: assets/icons/stops.png
   AssetGenImage get stops => const AssetGenImage('assets/icons/stops.png');
 
@@ -122,6 +125,7 @@ class $AssetsIconsGen {
     reports,
     revenueIcon,
     revenueLost,
+    splash,
     stops,
     submittedIcon,
     tickMark,

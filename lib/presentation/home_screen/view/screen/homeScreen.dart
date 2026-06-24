@@ -21,7 +21,7 @@ class _HomescreenState extends State<Homescreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 15), () {
       if (mounted) {
         showDialog(
           context: context,
