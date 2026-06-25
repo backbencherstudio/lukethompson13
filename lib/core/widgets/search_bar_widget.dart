@@ -10,12 +10,16 @@ class SearchBarWidget extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextStyle? textStyle;
   final double? height;
+  final FocusNode? focusNode;
+  final VoidCallback? onTap;
 
   const SearchBarWidget({
     super.key,
     this.hintText = "Search Stops or ID...",
     this.controller,
     this.onChanged,
+    this.onTap,
+    this.focusNode,
     this.prefixIcon = Icons.search_outlined,
     this.iconColor,
     this.cursorColor = Colors.white,
@@ -47,9 +51,11 @@ class SearchBarWidget extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: TextField(
+              child: TextField(
               controller: controller,
+              focusNode: focusNode,
               onChanged: onChanged,
+              onTap: onTap,
               cursorColor: cursorColor,
               style:
                   textStyle ??

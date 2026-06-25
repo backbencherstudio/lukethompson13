@@ -11,6 +11,7 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/presentation/log_screen/view/widget/attachment_upload_section.dart';
+import 'package:lukethompson/presentation/log_screen/view/widget/facility_search_sheet.dart';
 import 'package:lukethompson/presentation/log_screen/view/widget/info_banner.dart';
 import 'package:lukethompson/presentation/log_screen/view/widget/timeline_item.dart';
 
@@ -40,6 +41,7 @@ class _LogScreenState extends State<LogScreen> {
   static const String _initialCompletedTime = '12:45 AM';
   static const String _initialDepartureTime = '01:00 PM';
 
+  final _facilityFocusNode = FocusNode();
   final TextEditingController facilityController = TextEditingController(
     text: 'Walmart DC - Memphis, TN',
   );
@@ -90,6 +92,7 @@ class _LogScreenState extends State<LogScreen> {
 
   @override
   void dispose() {
+    _facilityFocusNode.dispose();
     facilityController.dispose();
     dockInController.dispose();
     completedController.dispose();
@@ -140,7 +143,18 @@ class _LogScreenState extends State<LogScreen> {
                 // --- Facility Name ---
                 Text("FACILITY NAME", style: context.labelLarge),
                 SizedBox(height: 8.h),
-                const SearchBarWidget(hintText: "Search facilities..."),
+                SearchBarWidget(
+                  hintText: "Search facilities...",
+                  controller: facilityController,
+                  focusNode: _facilityFocusNode,
+                  onTap: () async {
+                    final result = await showFacilitySearchSheet(context);
+                    _facilityFocusNode.unfocus();
+                    if (result != null) {
+                      facilityController.text = result;
+                    }
+                  },
+                ),
                 SizedBox(height: 15.h),
                 InfoBanner(
                   icon: Icons.warning_amber_rounded,
