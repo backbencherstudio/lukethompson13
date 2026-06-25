@@ -1,12 +1,39 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
-class AttachmentUploadSection extends StatelessWidget {
+class AttachmentUploadSection extends StatefulWidget {
   const AttachmentUploadSection({super.key});
+
+  @override
+  State<AttachmentUploadSection> createState() =>
+      _AttachmentUploadSectionState();
+}
+
+class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final isAvailable = _picker.supportsImageSource(source);
+    if (!isAvailable) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Camera not available on this device')),
+        );
+      }
+      return;
+    }
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image != null && mounted) {
+      print("==========================");
+      print("image picked");
+      print("==========================");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +57,41 @@ class AttachmentUploadSection extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Container(
-                  height: 45.w,
-                  width: 45.w,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF0F2623),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.cloud_upload,
-                    color: ColorManager.primaryButton,
-                    size: 24,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  "Tap to upload photo",
-                  style: TextStyle(
-                    color: ColorManager.primaryButton,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  "PNG, JPG or PDF (max. 800x400px)",
-                  style: TextStyle(
-                    color: const Color(0xFF6C757D),
-                    fontSize: 12.sp,
+                InkWell(
+                  onTap: () => _pickImage(ImageSource.gallery),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 45.w,
+                        width: 45.w,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF0F2623),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.cloud_upload,
+                          color: ColorManager.primaryButton,
+                          size: 24,
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        "Tap to upload photo",
+                        style: TextStyle(
+                          color: ColorManager.primaryButton,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        "PNG, JPG or PDF (max. 800x400px)",
+                        style: TextStyle(
+                          color: const Color(0xFF6C757D),
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 15.h),
@@ -92,7 +126,7 @@ class AttachmentUploadSection extends StatelessWidget {
                   width: 160,
                   fontSize: 14,
                   label: 'Open Camera',
-                  onPressed: () {},
+                  onPressed: () => _pickImage(ImageSource.camera),
                 ),
               ],
             ),

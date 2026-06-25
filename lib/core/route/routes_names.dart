@@ -18,6 +18,7 @@ class RoutesName {
   static const String claimReview = "/claimReview";
   static const String rateShipper = "/rateShipper";
   static const String reviewSubmitted = "/reviewSubmitted";
+  static const String logStopResult = "/logStopResult";
 
   // Reports
   static const String reportsScreen = "/reportsScreen";

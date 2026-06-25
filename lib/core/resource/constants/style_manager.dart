@@ -148,7 +148,7 @@ TextStyle getListTitleStyle({Color? color}) {
 }
 
 TextStyle getSubtextStyle({Color? color}) {
-  return TextStyle(color: color ?? ColorManager.subtextColor);
+  return TextStyle(color: color ?? ColorManager.subtextColor, fontSize: 14);
 }
 
 //semi bold text style

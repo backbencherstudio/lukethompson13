@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/app_switch.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -28,8 +30,8 @@ class _LogScreenState extends State<LogScreen> {
   bool isCompletedEdited = false;
   bool isDepartureEdited = false;
 
-  var arrivalStatus = TimelineItemStatus.completed;
-  var docInStatus = TimelineItemStatus.active;
+  var arrivalStatus = TimelineItemStatus.active;
+  var docInStatus = TimelineItemStatus.idle;
   var completedStatus = TimelineItemStatus.idle;
   var departureStatus = TimelineItemStatus.idle;
 
@@ -50,6 +52,41 @@ class _LogScreenState extends State<LogScreen> {
   final TextEditingController departureController = TextEditingController(
     text: _initialDepartureTime,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((d) {
+      _checkLocationPermission();
+    });
+  }
+
+  Future<void> _checkLocationPermission() async {
+    if (!mounted) return;
+    final permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      await Geolocator.requestPermission();
+    }
+  }
+
+  Future<Position?> getCurrentLocation() async {
+    try {
+      final permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return null;
+      }
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+      return position;
+    } catch (e) {
+      debugPrint('Error getting location: $e');
+      return null;
+    }
+  }
 
   @override
   void dispose() {
@@ -73,7 +110,7 @@ class _LogScreenState extends State<LogScreen> {
       body: AppGradientBackground(
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -117,6 +154,17 @@ class _LogScreenState extends State<LogScreen> {
                   title: 'Arrival Time',
                   status: arrivalStatus,
                   controller: dockInController,
+                  onConfirm: () {
+                    getCurrentLocation().then((loc) {
+                      print("============================");
+                      print(loc);
+                      print("============================");
+                      setState(() {
+                        arrivalStatus = TimelineItemStatus.completed;
+                        docInStatus = TimelineItemStatus.active;
+                      });
+                    });
+                  },
                   onChanged: (value) {
                     setState(() {
                       isDockInEdited =
@@ -137,9 +185,14 @@ class _LogScreenState extends State<LogScreen> {
                     });
                   },
                   onConfirm: () {
-                    if (dockInController.text.trim().isNotEmpty) {
-                      setState(() => isDockInConfirmed = true);
-                    }
+                    getCurrentLocation().then((loc) {
+                      // loc.latitude,
+                      // loc.longitude
+                      setState(() {
+                        docInStatus = TimelineItemStatus.completed;
+                        completedStatus = TimelineItemStatus.active;
+                      });
+                    });
                   },
                 ),
                 TimelineItem(
@@ -154,10 +207,14 @@ class _LogScreenState extends State<LogScreen> {
                     });
                   },
                   onConfirm: () {
-                    if (isDockInConfirmed &&
-                        completedController.text.trim().isNotEmpty) {
-                      setState(() => isCompletedConfirmed = true);
-                    }
+                    getCurrentLocation().then((loc) {
+                      // loc.latitude,
+                      // loc.longitude
+                      setState(() {
+                        completedStatus = TimelineItemStatus.completed;
+                        departureStatus = TimelineItemStatus.active;
+                      });
+                    });
                   },
                 ),
                 TimelineItem(
@@ -173,10 +230,13 @@ class _LogScreenState extends State<LogScreen> {
                     });
                   },
                   onConfirm: () {
-                    if (isCompletedConfirmed &&
-                        departureController.text.trim().isNotEmpty) {
-                      setState(() => isDepartureConfirmed = true);
-                    }
+                    getCurrentLocation().then((loc) {
+                      // loc.latitude,
+                      // loc.longitude
+                      setState(() {
+                        departureStatus = TimelineItemStatus.completed;
+                      });
+                    });
                   },
                 ),
 
@@ -194,7 +254,12 @@ class _LogScreenState extends State<LogScreen> {
         width: double.infinity,
         padding: EdgeInsets.all(AppPadding.screenPadding),
         color: const Color(0xFF0F1419),
-        child: GlobalButton(label: "Calculate & Preview", onPressed: () {}),
+        child: GlobalButton(
+          label: "Calculate & Preview",
+          onPressed: () {
+            Navigator.pushNamed(context, RoutesName.logStopResult);
+          },
+        ),
       ),
     );
   }

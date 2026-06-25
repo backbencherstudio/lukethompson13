@@ -51,6 +51,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home.png
   AssetGenImage get home => const AssetGenImage('assets/icons/home.png');
 
+  /// File path: assets/icons/link-alt.svg
+  String get linkAlt => 'assets/icons/link-alt.svg';
+
   /// File path: assets/icons/lock-icon.svg
   String get lockIcon => 'assets/icons/lock-icon.svg';
 
@@ -116,6 +119,7 @@ class $AssetsIconsGen {
     email,
     google,
     home,
+    linkAlt,
     lockIcon,
     logoIcons,
     mastercardLogo,

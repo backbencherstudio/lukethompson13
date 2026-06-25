@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
@@ -49,17 +50,16 @@ class CustomTextFieldWidget extends StatelessWidget {
 
 class InputLabel extends StatelessWidget {
   final String label;
-  const InputLabel(this.label, {super.key});
+  const InputLabel(
+    this.label, {
+    super.key,
+    this.color = ColorManager.textColor,
+  });
+
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: ColorManager.textColor,
-        fontWeight: FontWeight.w700,
-      ),
-    );
+    return Text(label, style: context.labelLarge.copyWith(color: color));
   }
 }

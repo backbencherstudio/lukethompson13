@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/string_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/presentation/log_screen/view/screen/log_stop_result_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/manage_subscription_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/privacy_and_policy_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/shipper_ratings_screen.dart';
@@ -72,6 +73,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const RateShipperScreen());
       case RoutesName.reviewSubmitted:
         return MaterialPageRoute(builder: (_) => const ReviewSubmitted());
+      case RoutesName.logStopResult:
+        return MaterialPageRoute(builder: (_) => const LogStopResultScreen());
 
       // Reports
       case RoutesName.reportsScreen:

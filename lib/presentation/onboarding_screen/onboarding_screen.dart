@@ -4,6 +4,7 @@ import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen2.dart';
@@ -31,7 +32,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
     return Scaffold(
       body: AppGradientBackground(
         child: SafeArea(
-          child: Padding(
+          child: FullHeightScrollView(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,6 +89,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                   controller: billableRateController,
                 ),
                 const Spacer(),
+                SizedBox(height: 16.h),
                 Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
