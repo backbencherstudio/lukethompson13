@@ -1,25 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/data/repositories/auth_provider.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
-class SingInScreen extends StatefulWidget {
+class SingInScreen extends ConsumerStatefulWidget {
   const SingInScreen({super.key});
 
   @override
-  State<SingInScreen> createState() => _SingInScreenState();
+  ConsumerState<SingInScreen> createState() => _SingInScreenState();
 }
 
-class _SingInScreenState extends State<SingInScreen> {
+class _SingInScreenState extends ConsumerState<SingInScreen> {
   bool rememberMe = false;
   bool isPasswordHidden = true;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.listenManual(authProvider, (prev, next) {
+        next.whenOrNull(
+          error: (error, _) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(ErrorHandle.formatErrorMessage(error))),
+            );
+          },
+          data: (_) {
+            // Navigator.pushReplacementNamed(context, RoutesName.parentScreen);
+          },
+        );
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authProvider).isLoading;
+
     return Scaffold(
       body: AppGradientBackground(
         child: SafeArea(
@@ -55,6 +88,7 @@ class _SingInScreenState extends State<SingInScreen> {
                   _buildLabel("Email Address"),
                   SizedBox(height: 14.h),
                   CustomTextFieldWidget(
+                    controller: _emailController,
                     hintText: "Enter your email address",
                     suffix: Image.asset(
                       IconManager.email,
@@ -66,6 +100,7 @@ class _SingInScreenState extends State<SingInScreen> {
                   _buildLabel("Password"),
                   SizedBox(height: 14.h),
                   CustomTextFieldWidget(
+                    controller: _passwordController,
                     hintText: "Enter your password",
                     obsecure: isPasswordHidden,
                     suffix: GestureDetector(
@@ -142,13 +177,20 @@ class _SingInScreenState extends State<SingInScreen> {
                   ),
                   SizedBox(height: 42.h),
                   GlobalButton(
-                    isDisabled: false,
+                    isDisabled: isLoading,
                     label: "Sign in",
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        RoutesName.parentScreen,
-                      );
+                      ref
+                          .read(authProvider.notifier)
+                          .login(
+                            // email: '',
+                            // password: '',
+                            email: 'user@example.com',
+                            password: '12345678',
+                            // email: _emailController.text.trim(),
+                            // // password: ''
+                            // password: _passwordController.text,
+                          );
                     },
                   ),
                   SizedBox(height: 34.h),

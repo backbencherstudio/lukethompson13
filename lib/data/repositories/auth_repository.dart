@@ -1,15 +1,19 @@
-
-
-import '../sources/remote/auth_api_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lukethompson/core/network/dio_client.dart';
+import 'package:lukethompson/data/api/auth.api.dart';
+import 'package:lukethompson/data/models/auth.model.dart';
 
 class AuthRepository {
-  final AuthApiService remoteSource;
-  AuthRepository({required this.remoteSource});
-  Future<bool> register({required String name,required String email,required String password,required String weight,required String height,required String gender,required String dateOfBirth,required String personalization,required String type})async {
-   return await remoteSource.register(email: email,name: name,password: password,weight: weight,height: height,personalization: personalization,type: type,gender: gender,dateOfBirth: dateOfBirth);
-  }
-    Future<bool> login({required String email ,required String password})async {
-   return await remoteSource.login(email: email,password: password);
-  }
-  
+  final AuthApi _authApi;
+  AuthRepository({required AuthApi authApi}) : _authApi = authApi;
+
+  Future<LoginResponse> login({
+    required String email,
+    required String password,
+  }) => _authApi.login(LoginRequest(email: email, password: password));
 }
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final dio = ref.read(dioClientProvider);
+  return AuthRepository(authApi: AuthApi(dio));
+});
