@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-
 class ErrorHandle {
   static String handleDioError(DioException e) {
     final responseData = e.response?.data;
