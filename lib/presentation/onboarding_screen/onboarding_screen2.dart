@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
 class OnboardingScreen2 extends StatelessWidget {
@@ -146,7 +147,7 @@ class OnboardingScreen2 extends StatelessWidget {
                 GlobalButton(
                   label: "Done",
                   onPressed: () {
-                    Navigator.pushNamed(context, RoutesName.singupScreen);
+                    context.push(Routes.signUp);
                   },
                 ),
               ],

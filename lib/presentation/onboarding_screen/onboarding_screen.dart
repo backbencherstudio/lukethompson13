@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
-import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen2.dart';
 
 class OnboardingScreen1 extends StatefulWidget {
   const OnboardingScreen1({super.key});
@@ -104,13 +104,12 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                 GlobalButton(
                   label: "Next",
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => OnboardingScreen2(
-                          waitTime: waitTimeController.text.trim(),
-                          bilableRate: billableRateController.text.trim(),
-                        ),
-                      ),
+                    context.push(
+                      Routes.onboarding2,
+                      extra: {
+                        'waitTime': waitTimeController.text.trim(),
+                        'bilableRate': billableRateController.text.trim(),
+                      },
                     );
                   },
                 ),
@@ -118,7 +117,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                 GlobalButton.secondary(
                   label: "Skip",
                   onPressed: () {
-                    Navigator.pushNamed(context, RoutesName.singupScreen);
+                    context.push(Routes.signUp);
                   },
                 ),
                 SizedBox(height: 20.h),

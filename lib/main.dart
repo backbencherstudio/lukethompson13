@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/route/go_router_config.dart';
 import 'package:lukethompson/core/resource/theme_manager.dart';
-import 'package:lukethompson/core/route/route_manager.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(goRouterProvider);
+
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         theme: getApplicationTheme(),
-        themeMode: .dark,
+        themeMode: ThemeMode.dark,
         darkTheme: getApplicationTheme(),
-        onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: RoutesName.splashRoute,
+        routerConfig: router,
       ),
     );
   }

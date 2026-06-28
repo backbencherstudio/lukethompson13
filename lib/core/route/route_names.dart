@@ -1,0 +1,29 @@
+class Routes {
+  static const String splash = '/';
+  static const String onboarding1 = '/onboardingScreen1';
+  static const String onboarding2 = '/onboardingScreen2';
+  static const String signUp = '/singupScreen';
+  static const String signIn = '/singInScreen';
+  static const String forgotPassword = '/forgetScreen';
+  static const String otp = '/otpScreen';
+  static const String resetPassword = '/resetPasswordScreen';
+  static const String parent = '/parentScreen';
+  static const String claimDetails = '/claimDetails';
+  static const String claimReview = '/claimReview';
+  static const String rateShipper = '/rateShipper';
+  static const String reviewSubmitted = '/reviewSubmitted';
+  static const String logStopResult = '/logStopResult';
+  static const String reports = '/reportsScreen';
+  static const String profile = '/profileScreen';
+  static const String editProfile = '/editProfileScreen';
+  static const String setRate = '/setRateScreen';
+  static const String myClaims = '/myClaimScreen';
+  static const String manageSubscription = '/manageSubscription';
+  static const String shipperRatings = '/shipperRatings';
+  static const String helpAndSupport = '/helpAndSupport';
+  static const String privacyAndPolicy = '/privacyAndPolicy';
+  static const String chooseSubscriptionPlan = '/chooseSubscriptionPlan';
+  static const String chooseSubscriptionPaymentMethod = '/chooseSubscriptionPaymentMethod';
+  static const String subscriptionAddCard = '/subscriptionAddCard';
+  static const String subscriptionSuccess = '/subscriptionSuccessful';
+}

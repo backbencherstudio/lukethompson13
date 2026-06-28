@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/data/repositories/auth_provider.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -26,20 +27,6 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.listenManual(authProvider, (prev, next) {
-        next.whenOrNull(
-          error: (error, _) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(ErrorHandle.formatErrorMessage(error))),
-            );
-          },
-          data: (_) {
-            // Navigator.pushReplacementNamed(context, RoutesName.parentScreen);
-          },
-        );
-      });
-    });
   }
 
   @override
@@ -49,9 +36,39 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
     super.dispose();
   }
 
+  Future<void> _handleLogin() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+
+    await ref
+        .read(authProvider.notifier)
+        .login(
+          // email: _emailController.text.trim(),
+          // password: _passwordController.text,
+          email: 'user@example.com',
+          password: '12345678',
+        );
+
+    if (!mounted) return;
+
+    final authState = ref.read(authProvider);
+    if (authState.error != null) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            ErrorHandle.formatErrorMessage(Exception(authState.error)),
+          ),
+        ),
+      );
+    } else if (authState.isAuthenticated) {
+      router.go(Routes.parent);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authProvider).isLoading;
+    final authState = ref.watch(authProvider);
+    final isLoading = authState.isLoading;
 
     return Scaffold(
       body: AppGradientBackground(
@@ -163,7 +180,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                       const Spacer(),
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, RoutesName.forgetScreen);
+                          context.push(Routes.forgotPassword);
                         },
                         child: Text(
                           "Forgot Password",
@@ -179,19 +196,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                   GlobalButton(
                     isDisabled: isLoading,
                     label: "Sign in",
-                    onPressed: () {
-                      ref
-                          .read(authProvider.notifier)
-                          .login(
-                            // email: '',
-                            // password: '',
-                            email: 'user@example.com',
-                            password: '12345678',
-                            // email: _emailController.text.trim(),
-                            // // password: ''
-                            // password: _passwordController.text,
-                          );
-                    },
+                    onPressed: _handleLogin,
                   ),
                   SizedBox(height: 34.h),
                   Row(
@@ -250,10 +255,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesName.singupScreen,
-                            );
+                            context.push(Routes.signUp);
                           },
                           child: Text(
                             "Create",

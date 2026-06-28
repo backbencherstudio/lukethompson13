@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/app_switch.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -271,7 +272,7 @@ class _LogScreenState extends State<LogScreen> {
         child: GlobalButton(
           label: "Calculate & Preview",
           onPressed: () {
-            Navigator.pushNamed(context, RoutesName.logStopResult);
+            context.push(Routes.logStopResult);
           },
         ),
       ),
