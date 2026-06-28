@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
@@ -14,7 +15,7 @@ class CustomAppBarNew extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: onBack ?? () => Navigator.pop(context),
+          onTap: onBack ?? () => context.pop(),
           child: Image.asset(IconManager.arrowLeft, width: 26.w, height: 24.h),
         ),
         SizedBox(width: 16.w),
@@ -41,7 +42,7 @@ class AppBackButton extends StatelessWidget {
         width: 48,
         height: 48,
         child: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
           icon: const Icon(Icons.chevron_left, size: 28),
           padding: EdgeInsets.zero,
           style: IconButton.styleFrom(
@@ -74,7 +75,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool canGoBack = Navigator.of(context).canPop();
+    final bool canGoBack = context.canPop();
 
     return AppBar(
       elevation: 0,
@@ -90,9 +91,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: FilledButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => context.pop(),
                   style: FilledButton.styleFrom(
                     padding: EdgeInsets.zero,
                     backgroundColor: Colors.white12,

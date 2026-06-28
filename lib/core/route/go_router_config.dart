@@ -57,8 +57,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         Routes.signIn ||
         Routes.forgotPassword ||
         Routes.otp ||
-        Routes.resetPassword
-          => true,
+        Routes.resetPassword => true,
         _ => false,
       };
 
@@ -101,10 +100,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.otp,
-        builder: (context, state) {
-          final email = state.extra as String?;
-          return OtpScreen(email: email ?? '');
-        },
+        builder: (context, state) => OtpScreen(
+          argument: state.extra as OtpScreenArgument?,
+        ),
       ),
       GoRoute(
         path: Routes.resetPassword,

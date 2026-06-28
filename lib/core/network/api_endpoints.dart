@@ -4,7 +4,8 @@ class ApiEndpoints {
 
   static const String register = '/auth/register';
   static const String login = '/auth/login';
-  static const String forgotPass = 'api/auth/forgot-password';
+  static const String forgotPass = '/auth/forgot-password';
+  static const String verifyUserEmailAddress = '/auth/verify-email';
 
   // static const String registration = 'api/auth/register';
   //  static const String library = 'api/library/categories';

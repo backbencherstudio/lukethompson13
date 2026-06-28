@@ -6,6 +6,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class ForgetScreen extends StatefulWidget {
@@ -81,7 +82,10 @@ class _ForgetScreenState extends State<ForgetScreen> {
                       if (_emailController.text.isNotEmpty) {
                         context.go(
                           Routes.otp,
-                          extra: _emailController.text.trim(),
+                          extra: OtpScreenArgument(
+                            email: _emailController.text.trim(),
+                            otpType: OtpType.forgetPassword,
+                          ),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(

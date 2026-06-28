@@ -13,4 +13,7 @@ class BaseResponse {
       _$BaseResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$BaseResponseToJson(this);
+
+  @override
+  String toString() => 'BaseResponse${toJson()}';
 }

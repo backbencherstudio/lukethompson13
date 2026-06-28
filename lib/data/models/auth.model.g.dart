@@ -46,6 +46,35 @@ LoginRequest _$LoginRequestFromJson(Map<String, dynamic> json) => LoginRequest(
 Map<String, dynamic> _$LoginRequestToJson(LoginRequest instance) =>
     <String, dynamic>{'email': instance.email, 'password': instance.password};
 
+RegisterRequest _$RegisterRequestFromJson(Map<String, dynamic> json) =>
+    RegisterRequest(
+      name: json['name'] as String,
+      email: json['email'] as String,
+      password: json['password'] as String,
+      freeWaitTime: (json['free_wait_time'] as num?)?.toInt(),
+      ratePerHour: (json['rate_per_hour'] as num?)?.toInt(),
+      type: json['type'] as String,
+    );
+
+Map<String, dynamic> _$RegisterRequestToJson(RegisterRequest instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'email': instance.email,
+      'password': instance.password,
+      'free_wait_time': instance.freeWaitTime,
+      'rate_per_hour': instance.ratePerHour,
+      'type': instance.type,
+    };
+
+VerifyEmailRequest _$VerifyEmailRequestFromJson(Map<String, dynamic> json) =>
+    VerifyEmailRequest(
+      email: json['email'] as String,
+      token: json['token'] as String,
+    );
+
+Map<String, dynamic> _$VerifyEmailRequestToJson(VerifyEmailRequest instance) =>
+    <String, dynamic>{'email': instance.email, 'token': instance.token};
+
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     LoginResponse(
       success: json['success'] as bool,
