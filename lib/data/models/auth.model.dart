@@ -64,6 +64,45 @@ class LoginRequest {
 }
 
 @JsonSerializable()
+class RegisterRequest {
+  final String name;
+  final String email;
+  final String password;
+  @JsonKey(name: 'free_wait_time')
+  final int? freeWaitTime;
+  @JsonKey(name: 'rate_per_hour')
+  final int? ratePerHour;
+  final String type;
+
+  RegisterRequest({
+    required this.name,
+    required this.email,
+    required this.password,
+    this.freeWaitTime,
+    this.ratePerHour,
+    required this.type,
+  });
+
+  factory RegisterRequest.fromJson(Map<String, dynamic> json) =>
+      _$RegisterRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RegisterRequestToJson(this);
+}
+
+@JsonSerializable()
+class VerifyEmailRequest {
+  final String email;
+  final String token;
+
+  VerifyEmailRequest({required this.email, required this.token});
+
+  factory VerifyEmailRequest.fromJson(Map<String, dynamic> json) =>
+      _$VerifyEmailRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VerifyEmailRequestToJson(this);
+}
+
+@JsonSerializable()
 class LoginResponse extends BaseResponse {
   final Authorization? authorization;
   final User? user;
@@ -78,6 +117,7 @@ class LoginResponse extends BaseResponse {
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
       _$LoginResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 
   @override

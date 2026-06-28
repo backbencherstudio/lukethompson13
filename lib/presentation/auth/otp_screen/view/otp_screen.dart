@@ -1,25 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/data/repositories/auth_provider.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
-class OtpScreen extends StatefulWidget {
+enum OtpType { register, forgetPassword }
+
+class OtpScreenArgument {
   final String email;
+  final OtpType otpType;
 
-  const OtpScreen({super.key, this.email = 'j**e**@samplegmail.com'});
-
-  @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  const OtpScreenArgument({this.email = '', required this.otpType});
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class OtpScreen extends ConsumerStatefulWidget {
+  static const otpLength = 6;
+
+  final OtpScreenArgument? argument;
+
+  const OtpScreen({super.key, this.argument});
+
+  @override
+  ConsumerState<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends ConsumerState<OtpScreen> {
   final _otpPinFieldController = GlobalKey<OtpPinFieldState>();
   String enteredOtp = '';
+
+  String get _email => widget.argument?.email ?? '';
+  OtpType? get _otpType => widget.argument?.otpType;
+
+  Future<void> _handleVerify() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+
+    final response = await ref
+        .read(authProvider.notifier)
+        .verifyEmail(email: _email, token: enteredOtp);
+
+    if (!mounted) return;
+
+    if (response != null && response.success) {
+      switch (_otpType) {
+        case OtpType.forgetPassword:
+          router.go(Routes.signIn);
+        case OtpType.register:
+        default:
+          router.go(Routes.signIn);
+      }
+
+      messenger.showSnackBar(SnackBar(content: Text(response.message)));
+    } else {
+      final authState = ref.read(authProvider);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            ErrorHandle.formatErrorMessage(Exception(authState.error)),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +81,12 @@ class _OtpScreenState extends State<OtpScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 4.h),
-                const CustomAppBarNew(title: "Back To Login"),
+                CustomAppBarNew(
+                  title: "Back To Login",
+                  onBack: () {
+                    context.go(Routes.signIn);
+                  },
+                ),
                 SizedBox(height: 24.h),
                 Center(
                   child: Text(
@@ -47,8 +101,8 @@ class _OtpScreenState extends State<OtpScreen> {
                 SizedBox(height: 14.h),
                 Center(
                   child: Text(
-                    "To verify email address, please enter the OTP sent\n"
-                    "to your email: ${widget.email}",
+                    "To verify email address, please enter \nthe OTP sent "
+                    "to your email: $_email",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16.sp,
@@ -58,65 +112,72 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
                 SizedBox(height: 32.h),
-                Center(
-                  child: OtpPinField(
-                    key: _otpPinFieldController,
-                    autoFillEnable: false,
-                    textInputAction: TextInputAction.done,
-                    onSubmit: (text) {
-                      setState(() {
-                        enteredOtp = text;
-                      });
-                    },
-                    onChange: (text) {
-                      setState(() {
-                        enteredOtp = text;
-                      });
-                    },
-                    onCodeChanged: (code) {
-                      setState(() {
-                        enteredOtp = code;
-                      });
-                    },
-                    otpPinFieldStyle: OtpPinFieldStyle(
-                      showHintText: true,
-                      hintText: "",
-                      hintTextColor: Colors.white54,
-                      textStyle: TextStyle(
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFF39D77A),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final totalPadding = 8.0 * (OtpScreen.otpLength - 1);
+                    final fieldWidth =
+                        ((constraints.maxWidth - totalPadding) /
+                                OtpScreen.otpLength)
+                            .clamp(36.0, 52.0);
+                    return OtpPinField(
+                      key: _otpPinFieldController,
+                      autoFillEnable: false,
+                      textInputAction: TextInputAction.done,
+                      onSubmit: (text) {
+                        setState(() {
+                          enteredOtp = text;
+                        });
+                      },
+                      onChange: (text) {
+                        setState(() {
+                          enteredOtp = text;
+                        });
+                      },
+                      onCodeChanged: (code) {
+                        setState(() {
+                          enteredOtp = code;
+                        });
+                      },
+                      otpPinFieldStyle: OtpPinFieldStyle(
+                        showHintText: true,
+                        hintText: "",
+                        hintTextColor: Colors.white54,
+                        textStyle: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF39D77A),
+                        ),
+                        fieldPadding: 8,
+                        fieldBorderRadius: 8.r,
+                        fieldBorderWidth: 1.2,
+                        activeFieldBackgroundColor: Colors.white.withValues(
+                          alpha: 0.03,
+                        ),
+                        defaultFieldBackgroundColor: Colors.white.withValues(
+                          alpha: 0.03,
+                        ),
+                        filledFieldBackgroundColor: Colors.white.withValues(
+                          alpha: 0.03,
+                        ),
+                        activeFieldBorderColor: ColorManager.primaryButton,
+                        defaultFieldBorderColor: Colors.white.withValues(
+                          alpha: 0.65,
+                        ),
+                        filledFieldBorderColor: ColorManager.primaryButton,
                       ),
-                      fieldPadding: 8.w,
-                      fieldBorderRadius: 8.r,
-                      fieldBorderWidth: 1.2,
-                      activeFieldBackgroundColor: Colors.white.withValues(
-                        alpha: 0.03,
-                      ),
-                      defaultFieldBackgroundColor: Colors.white.withValues(
-                        alpha: 0.03,
-                      ),
-                      filledFieldBackgroundColor: Colors.white.withValues(
-                        alpha: 0.03,
-                      ),
-                      activeFieldBorderColor: const Color(0xFF39D77A),
-                      defaultFieldBorderColor: Colors.white.withValues(
-                        alpha: 0.65,
-                      ),
-                      filledFieldBorderColor: const Color(0xFF39D77A),
-                    ),
-                    maxLength: 4,
-                    showCursor: true,
-                    cursorColor: const Color(0xFF39D77A),
-                    showCustomKeyboard: false,
-                    showDefaultKeyboard: true,
-                    cursorWidth: 2,
-                    fieldHeight: 52.h,
-                    fieldWidth: 52.w,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    otpPinFieldDecoration:
-                        OtpPinFieldDecoration.defaultPinBoxDecoration,
-                  ),
+                      maxLength: OtpScreen.otpLength,
+                      showCursor: true,
+                      cursorColor: ColorManager.primaryButton,
+                      showCustomKeyboard: false,
+                      showDefaultKeyboard: true,
+                      cursorWidth: 2,
+                      fieldHeight: 52,
+                      fieldWidth: fieldWidth,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      otpPinFieldDecoration:
+                          OtpPinFieldDecoration.defaultPinBoxDecoration,
+                    );
+                  },
                 ),
                 SizedBox(height: 22.h),
                 Center(
@@ -152,11 +213,10 @@ class _OtpScreenState extends State<OtpScreen> {
                 SizedBox(height: 36.h),
                 GlobalButton(
                   label: "Verify",
-                  onPressed: enteredOtp.length == 4
-                      ? () {
-                          context.go(Routes.resetPassword);
-                        }
-                      : null,
+                  isDisabled:
+                      enteredOtp.length != OtpScreen.otpLength ||
+                      ref.watch(authProvider).isLoading,
+                  onPressed: _handleVerify,
                 ),
               ],
             ),

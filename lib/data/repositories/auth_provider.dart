@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/data/models/auth_state.dart';
+import 'package:lukethompson/data/models/base.model.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';
 import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
 
@@ -17,13 +19,68 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  Future<BaseResponse?> verifyEmail({
+    required String email,
+    required String token,
+  }) async {
+    state = const AuthState.loading();
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final response = await repo.verifyEmail(email: email, token: token);
+      if (response.success) {
+        state = const AuthState.initial();
+        return response;
+      } else {
+        state = AuthState.failure(response.message);
+        return null;
+      }
+    } catch (e) {
+      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
+      return null;
+    }
+  }
+
+  Future<BaseResponse?> register({
+    required String name,
+    required String email,
+    required String password,
+    int? freeWaitTime,
+    int? ratePerHour,
+    String type = 'user',
+  }) async {
+    state = const AuthState.loading();
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final response = await repo.register(
+        name: name,
+        email: email,
+        password: password,
+        freeWaitTime: freeWaitTime,
+        ratePerHour: ratePerHour,
+        type: type,
+      );
+      if (response.success) {
+        state = const AuthState.initial();
+        return response;
+      } else {
+        state = AuthState.failure(response.message);
+        return null;
+      }
+    } catch (e) {
+      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
+      return null;
+    }
+  }
+
   Future<void> login({required String email, required String password}) async {
     state = const AuthState.loading();
     try {
       final repo = ref.read(authRepositoryProvider);
       final response = await repo.login(email: email, password: password);
       if (response.success && response.authorization != null) {
-        await SharedPreferenceData.setToken(response.authorization!.accessToken);
+        await SharedPreferenceData.setToken(
+          response.authorization!.accessToken,
+        );
         state = AuthState.authenticated(
           user: response.user,
           token: response.authorization!.accessToken,
@@ -32,7 +89,7 @@ class AuthNotifier extends Notifier<AuthState> {
         state = AuthState.failure(response.message);
       }
     } catch (e) {
-      state = AuthState.failure(e.toString());
+      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
     }
   }
 

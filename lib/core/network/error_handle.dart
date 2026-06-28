@@ -56,6 +56,13 @@ class ErrorHandle {
     return null;
   }
 
+  static String extractServerMessage(Object error) {
+    if (error is DioException) {
+      return _extractMessage(error.response?.data) ?? error.toString();
+    }
+    return error.toString();
+  }
+
   static String formatErrorMessage(Object error) {
     if (error is DioException) {
       return handleDioError(error);

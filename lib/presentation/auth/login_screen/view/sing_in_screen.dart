@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,13 +17,20 @@ class SingInScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<SingInScreen> createState() => _SingInScreenState();
+
+  static const defaultEmail = 'fabom85192@luxudata.com';
+  static const defaultPassword = '12345678';
 }
 
 class _SingInScreenState extends ConsumerState<SingInScreen> {
   bool rememberMe = false;
   bool isPasswordHidden = true;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(
+    text: kDebugMode ? SingInScreen.defaultEmail : null,
+  );
+  final _passwordController = TextEditingController(
+    text: kDebugMode ? SingInScreen.defaultPassword : null,
+  );
 
   @override
   void initState() {
@@ -43,10 +51,8 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
     await ref
         .read(authProvider.notifier)
         .login(
-          // email: _emailController.text.trim(),
-          // password: _passwordController.text,
-          email: 'user@example.com',
-          password: '12345678',
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
         );
 
     if (!mounted) return;

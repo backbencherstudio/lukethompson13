@@ -1,17 +1,92 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/data/repositories/auth_provider.dart';
+import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
+import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
-class SingupScreen extends StatelessWidget {
+class SingupScreen extends ConsumerStatefulWidget {
   const SingupScreen({super.key});
 
   @override
+  ConsumerState<SingupScreen> createState() => _SingupScreenState();
+}
+
+class _SingupScreenState extends ConsumerState<SingupScreen> {
+  bool _isPasswordHidden = true;
+  final _nameController = TextEditingController(
+    text: kDebugMode ? "User" : null,
+  );
+  final _emailController = TextEditingController(
+    text: kDebugMode ? SingInScreen.defaultEmail : null,
+  );
+  final _passwordController = TextEditingController(
+    text: kDebugMode ? SingInScreen.defaultPassword : null,
+  );
+  final _confirmPasswordController = TextEditingController(
+    text: kDebugMode ? SingInScreen.defaultPassword : null,
+  );
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
+      return;
+    }
+
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+    final email = _emailController.text.trim();
+
+    final response = await ref
+        .read(authProvider.notifier)
+        .register(
+          name: _nameController.text.trim(),
+          password: _passwordController.text,
+          email: email,
+        );
+
+    if (!mounted) return;
+
+    if (response != null && response.success) {
+      router.go(
+        Routes.otp,
+        extra: OtpScreenArgument(email: email, otpType: OtpType.register),
+      );
+    } else {
+      final authState = ref.read(authProvider);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            ErrorHandle.formatErrorMessage(Exception(authState.error)),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authProvider).isLoading;
+
     return Scaffold(
       body: AppGradientBackground(
         child: SafeArea(
@@ -47,20 +122,38 @@ class SingupScreen extends StatelessWidget {
                   SizedBox(height: 30.h),
                   InputLabel("Full Name"),
                   SizedBox(height: 8.h),
-                  CustomTextFieldWidget(hintText: "Enter your name"),
+                  CustomTextFieldWidget(
+                    hintText: "Enter your name",
+                    controller: _nameController,
+                  ),
                   SizedBox(height: 15.h),
                   InputLabel("Email Address"),
                   SizedBox(height: 8.h),
-                  CustomTextFieldWidget(hintText: "Enter your email address"),
+                  CustomTextFieldWidget(
+                    hintText: "Enter your email address",
+                    controller: _emailController,
+                  ),
                   SizedBox(height: 15.h),
                   InputLabel("Create Password"),
                   SizedBox(height: 8.h),
                   CustomTextFieldWidget(
                     hintText: "Create Password",
-                    obsecure: true,
-                    suffix: Icon(
-                      Icons.visibility_off,
-                      color: const Color.fromARGB(255, 172, 192, 208),
+                    obsecure: _isPasswordHidden,
+                    controller: _passwordController,
+                    suffix: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
+                      child: Icon(
+                        _isPasswordHidden
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        color: const Color(0xFFA8B7C7),
+                        size: 22.sp,
+                      ),
                     ),
                   ),
                   SizedBox(height: 15.h),
@@ -68,17 +161,38 @@ class SingupScreen extends StatelessWidget {
                   SizedBox(height: 8.h),
                   CustomTextFieldWidget(
                     hintText: "Re-enter password",
-                    obsecure: true,
-                    suffix: Icon(
-                      Icons.visibility_off,
-                      color: const Color.fromARGB(255, 172, 192, 208),
+                    obsecure: _isPasswordHidden,
+                    controller: _confirmPasswordController,
+                    suffix: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
+                      child: Icon(
+                        _isPasswordHidden
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        color: const Color(0xFFA8B7C7),
+                        size: 22.sp,
+                      ),
                     ),
                   ),
                   SizedBox(height: 15.h),
                   GlobalButton(
-                    isDisabled: true,
+                    isDisabled: isLoading,
                     label: "Register",
-                    onPressed: () {},
+                    // onPressed: () {
+                    //   context.go(
+                    //     Routes.otp,
+                    //     extra: {
+                    //       'email': _emailController.text.trim(),
+                    //       'ridirectPath': Routes.signIn,
+                    //     },
+                    //   );
+                    // },
+                    onPressed: _handleRegister,
                   ),
                   SizedBox(height: 20.h),
                   Center(
@@ -94,7 +208,7 @@ class SingupScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                          context.push(Routes.signIn);
+                            context.push(Routes.signIn);
                           },
                           child: Text(
                             "Login",
@@ -112,6 +226,23 @@ class SingupScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class InputLabel extends StatelessWidget {
+  final String label;
+  const InputLabel(this.label, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: TextStyle(
+        fontSize: 16.sp,
+        color: ColorManager.textColor,
+        fontWeight: FontWeight.w700,
       ),
     );
   }

@@ -19,14 +19,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 5), () async {
-      if (!mounted) return;
       final token = await SharedPreferenceData.getToken();
-      final completed = await SharedPreferenceData.getOnboardingCompleted();
+      if (!mounted) return;
       final destination = (token != null && token != 'null' && token.isNotEmpty)
           ? Routes.parent
-          : completed
-              ? Routes.signIn
-              : Routes.onboarding1;
+          : Routes.signIn;
       context.go(destination);
     });
   }
