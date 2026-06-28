@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:lukethompson/core/network/api_endpoints.dart';
 import 'package:lukethompson/data/models/auth.model.dart';
@@ -18,4 +20,17 @@ abstract class AuthApi {
 
   @POST(ApiEndpoints.verifyUserEmailAddress)
   Future<BaseResponse> verifyUserEmailAddress(@Body() VerifyEmailRequest body);
+
+  @GET(ApiEndpoints.getMe)
+  Future<GetMeResponse> getMe();
+
+  @PATCH(ApiEndpoints.updateUserProfile)
+  @MultiPart()
+  Future<GetMeResponse> updateUserProfile(
+    @Part(name: 'name') String? name,
+    @Part(name: 'phone_number') String? phoneNumber,
+    @Part(name: 'free_wait_time') int? freeWaitTime,
+    @Part(name: 'rate_per_hour') int? ratePerHour,
+    @Part(name: 'image') File? image,
+  );
 }
