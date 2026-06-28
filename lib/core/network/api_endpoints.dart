@@ -6,14 +6,14 @@ class ApiEndpoints {
   static const String login = '/auth/login';
   static const String forgotPass = '/auth/forgot-password';
   static const String verifyUserEmailAddress = '/auth/verify-email';
+  static const String getMe = '/auth/me';
+  static const String updateUserProfile = '/auth/update';
 
   // static const String registration = 'api/auth/register';
   //  static const String library = 'api/library/categories';
   //  static const String verifyOtp = 'api/auth/check-otp';
   //  static const String verifyEmail = 'api/auth/verify-email';
   //  static const String resetPassWord = 'api/auth/reset-password';
-  //  static const String getMe= 'api/auth/me';
-  //  static const String updateUser= 'api/auth/update';
   //  static const String  suggestedVideo= 'api/library';
   //  static const String  prescriptionResume= 'api/prescription/resume';
   //  static const String  prescribe= 'api/prescription';

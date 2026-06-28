@@ -1,23 +1,24 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/image_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/data/repositories/user_provider.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/carusel_slider.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/tab_bar.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 
-class Homescreen extends StatefulWidget {
+class Homescreen extends ConsumerStatefulWidget {
   const Homescreen({super.key});
 
   @override
-  State<Homescreen> createState() => _HomescreenState();
+  ConsumerState<Homescreen> createState() => _HomescreenState();
 }
 
-class _HomescreenState extends State<Homescreen> {
+class _HomescreenState extends ConsumerState<Homescreen> {
   @override
   void initState() {
     super.initState();
@@ -39,12 +40,15 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userAsync = ref.watch(userQuery);
+    final userName = userAsync.asData?.value?.name ?? "--";
+
     return AppGradientBackground(
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
         appBar: CustomAppBarScreen(
-          userName: "Radwan Rahman",
+          userName: userName,
           welcomeText: "Welcome Back",
           profileImage: ImageManager.user,
         ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/network/dio_client.dart';
 import 'package:lukethompson/data/api/auth.api.dart';
@@ -20,6 +22,8 @@ class AuthRepository {
     VerifyEmailRequest(email: email, token: token),
   );
 
+  Future<GetMeResponse> getMe() => _authApi.getMe();
+
   Future<BaseResponse> register({
     required String name,
     required String email,
@@ -36,6 +40,20 @@ class AuthRepository {
       ratePerHour: ratePerHour,
       type: type,
     ),
+  );
+
+  Future<GetMeResponse> updateUserProfile({
+    String? name,
+    String? phoneNumber,
+    int? freeWaitTime,
+    int? ratePerHour,
+    File? image,
+  }) => _authApi.updateUserProfile(
+    name,
+    phoneNumber,
+    freeWaitTime,
+    ratePerHour,
+    image,
   );
 }
 

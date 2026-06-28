@@ -26,6 +26,8 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
   phoneNumber: json['phone_number'] as String?,
   createdAt: json['created_at'] as String,
   type: json['type'] as String,
+  ratePerHour: (json['rate_per_hour'] as num?)?.toInt(),
+  freeWaitTime: (json['free_wait_time'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -36,6 +38,8 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'phone_number': instance.phoneNumber,
   'created_at': instance.createdAt,
   'type': instance.type,
+  'rate_per_hour': instance.ratePerHour,
+  'free_wait_time': instance.freeWaitTime,
 };
 
 LoginRequest _$LoginRequestFromJson(Map<String, dynamic> json) => LoginRequest(
@@ -95,4 +99,20 @@ Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
       'message': instance.message,
       'authorization': instance.authorization,
       'user': instance.user,
+    };
+
+GetMeResponse _$GetMeResponseFromJson(Map<String, dynamic> json) =>
+    GetMeResponse(
+      success: json['success'] as bool,
+      message: json['message'] as String,
+      data: json['data'] == null
+          ? null
+          : User.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GetMeResponseToJson(GetMeResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+      'message': instance.message,
+      'data': instance.data,
     };

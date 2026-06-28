@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
+import 'package:lukethompson/core/network/dio_client.dart';
 import 'package:lukethompson/data/models/auth_state.dart';
 import 'package:lukethompson/data/models/base.model.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';
@@ -15,6 +16,7 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> _init() async {
     final token = await SharedPreferenceData.getToken();
     if (token != null && token != 'null' && token.isNotEmpty) {
+      ref.read(cachedTokenProvider.notifier).setToken(token);
       state = AuthState.authenticated(token: token);
     }
   }
@@ -78,13 +80,11 @@ class AuthNotifier extends Notifier<AuthState> {
       final repo = ref.read(authRepositoryProvider);
       final response = await repo.login(email: email, password: password);
       if (response.success && response.authorization != null) {
-        await SharedPreferenceData.setToken(
-          response.authorization!.accessToken,
-        );
-        state = AuthState.authenticated(
-          user: response.user,
-          token: response.authorization!.accessToken,
-        );
+        final token = response.authorization!.accessToken;
+        await SharedPreferenceData.setToken(token);
+        ref.read(cachedTokenProvider.notifier).setToken(token);
+
+        state = AuthState.authenticated(user: response.user, token: token);
       } else {
         state = AuthState.failure(response.message);
       }
@@ -94,6 +94,7 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> logout() async {
+    ref.read(cachedTokenProvider.notifier).setToken(null);
     await SharedPreferenceData.removeToken();
     state = const AuthState.initial();
   }

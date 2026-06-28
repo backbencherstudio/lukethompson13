@@ -15,7 +15,7 @@ class SharedPreferenceData {
   static const _keyOnboardingDob = 'onboarding_dob';
   static const _keyOnboardingPersonalization = 'onboarding_personalization';
 
-static Future<void> setToken(String? token) async {
+  static Future<void> setToken(String? token) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyAuthToken, "$token");
   }
@@ -174,3 +174,4 @@ static Future<void> setToken(String? token) async {
     await prefs.remove(_keyOnboardingPersonalization);
   }
 }
+

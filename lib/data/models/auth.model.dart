@@ -31,6 +31,10 @@ class User {
   @JsonKey(name: 'created_at')
   final String createdAt;
   final String type;
+  @JsonKey(name: 'rate_per_hour')
+  final int? ratePerHour;
+  @JsonKey(name: 'free_wait_time')
+  final int? freeWaitTime;
 
   User({
     required this.id,
@@ -40,6 +44,8 @@ class User {
     this.phoneNumber,
     required this.createdAt,
     required this.type,
+    this.ratePerHour,
+    this.freeWaitTime,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -122,4 +128,20 @@ class LoginResponse extends BaseResponse {
 
   @override
   String toString() => 'LoginResponse${toJson()}';
+}
+
+@JsonSerializable()
+class GetMeResponse extends BaseResponse {
+  final User? data;
+
+  GetMeResponse({required super.success, required super.message, this.data});
+
+  factory GetMeResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetMeResponseFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$GetMeResponseToJson(this);
+
+  @override
+  String toString() => 'GetMeResponse${toJson()}';
 }
