@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/profile_header.dart';
 import 'package:lukethompson/core/widgets/profile_setting_item.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
+import 'package:lukethompson/data/repositories/auth_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -40,38 +43,27 @@ class ProfileScreen extends StatelessWidget {
                 ProfileSettingItem(
                   icon: Icons.person_outline,
                   title: "Edit Profile",
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    RoutesName.editProfileScreen,
-                  ),
+                  onTap: () => context.push(Routes.editProfile),
                 ),
                 ProfileSettingItem(
                   icon: Icons.attach_money,
                   title: "Set Your Rate",
-                  onTap: () =>
-                      Navigator.pushNamed(context, RoutesName.setRateScreen),
+                  onTap: () => context.push(Routes.setRate),
                 ),
                 ProfileSettingItem(
                   icon: Icons.assignment_outlined,
                   title: "My Claims",
-                  onTap: () =>
-                      Navigator.pushNamed(context, RoutesName.myClaimScreen),
+                  onTap: () => context.push(Routes.myClaims),
                 ),
                 ProfileSettingItem(
                   icon: Icons.stars_outlined,
                   title: "Shipper Ratings",
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    RoutesName.shipperRatings,
-                  ),
+                  onTap: () => context.push(Routes.shipperRatings),
                 ),
                 ProfileSettingItem(
                   icon: Icons.workspace_premium_outlined,
                   title: "Subscriptions",
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    RoutesName.manageSubscription,
-                  ),
+                  onTap: () => context.push(Routes.manageSubscription),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -105,19 +97,23 @@ class ProfileScreen extends StatelessWidget {
                 ProfileSettingItem(
                   icon: Icons.lock_outline,
                   title: "Privacy & policy",
-                  onTap: () =>
-                      Navigator.pushNamed(context, RoutesName.privacyAndPolicy),
+                  onTap: () => context.push(Routes.privacyAndPolicy),
                 ),
                 ProfileSettingItem(
                   icon: Icons.help_outline,
                   title: "Help & Support",
-                  onTap: () =>
-                      Navigator.pushNamed(context, RoutesName.helpAndSupport),
+                  onTap: () => context.push(Routes.helpAndSupport),
                 ),
-                ProfileSettingItem(
-                  icon: Icons.logout,
-                  title: "Log Out",
-                  iconColor: Colors.redAccent,
+                Consumer(
+                  builder: (context, ref, _) => ProfileSettingItem(
+                    icon: Icons.logout,
+                    title: "Log Out",
+                    iconColor: Colors.redAccent,
+                    onTap: () {
+                      ref.read(authProvider.notifier).logout();
+                      context.go(Routes.signIn);
+                    },
+                  ),
                 ),
 
                 const SizedBox(height: 30),

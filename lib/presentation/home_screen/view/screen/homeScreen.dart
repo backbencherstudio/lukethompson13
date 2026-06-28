@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/image_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/carusel_slider.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/tab_bar.dart';
@@ -28,7 +29,7 @@ class _HomescreenState extends State<Homescreen> {
           barrierDismissible: true,
           builder: (context) => UnlockDialog(
             onSubscribe: () {
-              Navigator.pushNamed(context, RoutesName.chooseSubscriptionPlan);
+              context.push(Routes.chooseSubscriptionPlan);
             },
           ),
         );

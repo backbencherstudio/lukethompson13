@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
@@ -68,20 +69,16 @@ class _ChooseSubscriptionPlanScreenState
                 GlobalButton(
                   label: "Subscribe Now",
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesName.chooseSubscriptionPaymentMethod,
-                    );
+                    context.push(Routes.chooseSubscriptionPaymentMethod);
                   },
                 ),
                 16.height,
                 GlobalButton.secondary(
                   label: "Start Free Trial",
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesName.subscriptionSuccess,
-                      arguments: {'isFree': true},
+                    context.push(
+                      Routes.subscriptionSuccess,
+                      extra: {'isFree': true},
                     );
                   },
                 ),

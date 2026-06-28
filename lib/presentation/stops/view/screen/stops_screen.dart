@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
-import 'package:lukethompson/presentation/stops/view/widget/walmart_card_widget.dart';
 
 class StopsScreen extends StatelessWidget {
   const StopsScreen({super.key});
@@ -100,19 +100,19 @@ class StopsScreen extends StatelessWidget {
 
                                   switch (label) {
                                     case 'claim now':
-                                      navTo = RoutesName.claimDetails;
+                                      navTo = Routes.claimDetails;
                                       break;
                                     case 'review claim':
-                                      navTo = RoutesName.claimReview;
+                                      navTo = Routes.claimReview;
                                       break;
                                     case 'rate shipper':
-                                      navTo = RoutesName.rateShipper;
+                                      navTo = Routes.rateShipper;
                                       break;
                                     default:
                                   }
 
                                   if (navTo != null) {
-                                    Navigator.pushNamed(context, navTo);
+                                    context.push(navTo);
                                   }
                                 },
                                 style: OutlinedButton.styleFrom(
