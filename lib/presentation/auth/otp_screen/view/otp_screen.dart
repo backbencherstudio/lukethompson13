@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/core/widgets/heading_section.dart';
+import 'package:lukethompson/data/models/base.model.dart';
 import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
@@ -39,16 +43,16 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   OtpType? get _otpType => widget.argument?.otpType;
 
   Future<void> _handleVerify() async {
-    final messenger = ScaffoldMessenger.of(context);
     final router = GoRouter.of(context);
+    BaseResponse? response;
 
-    final response = await ref
+    response = await ref
         .read(authProvider.notifier)
         .verifyEmail(email: _email, token: enteredOtp);
 
-    if (!mounted) return;
+    if (!mounted || response == null) return;
 
-    if (response != null && response.success) {
+    if (response.success) {
       switch (_otpType) {
         case OtpType.forgetPassword:
           router.go(Routes.signIn);
@@ -57,15 +61,11 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
           router.go(Routes.signIn);
       }
 
-      messenger.showSnackBar(SnackBar(content: Text(response.message)));
+      context.showSuccessSnackBar(response.message);
     } else {
       final authState = ref.read(authProvider);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            ErrorHandle.formatErrorMessage(Exception(authState.error)),
-          ),
-        ),
+      context.showSuccessSnackBar(
+        ErrorHandle.formatErrorMessage(Exception(authState.error)),
       );
     }
   }
@@ -73,45 +73,27 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: GlobalAppBar(
+        title: "Back To Login",
+        onBackPressed: () => context.go(Routes.signIn),
+      ),
       body: AppGradientBackground(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 4.h),
-                CustomAppBarNew(
-                  title: "Back To Login",
-                  onBack: () {
-                    context.go(Routes.signIn);
-                  },
-                ),
                 SizedBox(height: 24.h),
-                Center(
-                  child: Text(
-                    "Enter Your OTP",
-                    style: TextStyle(
-                      fontSize: 30.sp,
-                      fontWeight: FontWeight.w700,
-                      color: ColorManager.textColor,
-                    ),
-                  ),
+                HeadingSection(
+                  title: "Enter Your OTP",
+                  subtitle:
+                      "To verify email address, please enter \nthe OTP sent "
+                      "to your email: $_email",
                 ),
-                SizedBox(height: 14.h),
-                Center(
-                  child: Text(
-                    "To verify email address, please enter \nthe OTP sent "
-                    "to your email: $_email",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      height: 1.55,
-                      color: ColorManager.subtextColor,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 32.h),
+                SizedBox(height: 34.h),
+
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final totalPadding = 8.0 * (OtpScreen.otpLength - 1);

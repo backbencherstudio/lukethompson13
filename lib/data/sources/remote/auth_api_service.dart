@@ -102,7 +102,7 @@ class AuthApiService {
       final body = {"email": email, };
       final dynamic response = await apiClient.postRequest(
         body: body,
-        endpoints: ApiEndpoints.forgotPass,
+        endpoints: ApiEndpoints.forgotPassword,
       );
       if (response['success'] == true) {
         return true;

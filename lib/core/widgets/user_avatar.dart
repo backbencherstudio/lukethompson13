@@ -21,8 +21,8 @@ class UserAvatar extends StatelessWidget {
     if (imageUrl == null || imageUrl!.isEmpty) {
       return CircleAvatar(
         radius: radius,
-        backgroundColor: ColorManager.primary,
-        child: Text(initial),
+        backgroundColor: ColorManager.primaryButtonDark,
+        child: Text(initial, style: TextStyle(fontSize: radius * 0.8)),
       );
     }
 
@@ -35,7 +35,7 @@ class UserAvatar extends StatelessWidget {
         child: const CircularProgressIndicator(strokeWidth: 2),
       ),
       errorWidget: (context, url, error) =>
-          CircleAvatar(radius: radius, child: Text(initial)),
+          CircleAvatar(radius: radius, child: Text(initial, style: TextStyle(fontSize: radius * 0.8))),
     );
   }
 }

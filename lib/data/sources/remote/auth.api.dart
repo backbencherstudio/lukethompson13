@@ -33,4 +33,10 @@ abstract class AuthApi {
     @Part(name: 'rate_per_hour') int? ratePerHour,
     @Part(name: 'image') File? image,
   );
+
+  @POST(ApiEndpoints.forgotPassword)
+  Future<BaseResponse> forgotPassword(@Body() ForgotPasswordRequest body);
+
+  @POST(ApiEndpoints.verifyOtp)
+  Future<BaseResponse> checkOtp(@Body() CheckOtpRequest body);
 }

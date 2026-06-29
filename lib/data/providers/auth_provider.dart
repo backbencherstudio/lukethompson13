@@ -42,6 +42,45 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  Future<BaseResponse?> forgotPassword({required String email}) async {
+    state = const AuthState.loading();
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final response = await repo.forgotPassword(email: email);
+      if (response.success) {
+        state = const AuthState.initial();
+        return response;
+      } else {
+        state = AuthState.failure(response.message);
+        return null;
+      }
+    } catch (e) {
+      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
+      return null;
+    }
+  }
+
+  Future<BaseResponse?> checkOtp({
+    required String email,
+    required String otp,
+  }) async {
+    state = const AuthState.loading();
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final response = await repo.checkOtp(email: email, otp: otp);
+      if (response.success) {
+        state = const AuthState.initial();
+        return response;
+      } else {
+        state = AuthState.failure(response.message);
+        return null;
+      }
+    } catch (e) {
+      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
+      return null;
+    }
+  }
+
   Future<BaseResponse?> register({
     required String name,
     required String email,

@@ -79,6 +79,20 @@ VerifyEmailRequest _$VerifyEmailRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$VerifyEmailRequestToJson(VerifyEmailRequest instance) =>
     <String, dynamic>{'email': instance.email, 'token': instance.token};
 
+ForgotPasswordRequest _$ForgotPasswordRequestFromJson(
+  Map<String, dynamic> json,
+) => ForgotPasswordRequest(email: json['email'] as String);
+
+Map<String, dynamic> _$ForgotPasswordRequestToJson(
+  ForgotPasswordRequest instance,
+) => <String, dynamic>{'email': instance.email};
+
+CheckOtpRequest _$CheckOtpRequestFromJson(Map<String, dynamic> json) =>
+    CheckOtpRequest(email: json['email'] as String, otp: json['otp'] as String);
+
+Map<String, dynamic> _$CheckOtpRequestToJson(CheckOtpRequest instance) =>
+    <String, dynamic>{'email': instance.email, 'otp': instance.otp};
+
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     LoginResponse(
       success: json['success'] as bool,

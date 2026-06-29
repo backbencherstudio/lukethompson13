@@ -6,9 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/core/widgets/heading_section.dart';
 import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
@@ -18,7 +20,7 @@ class SingInScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<SingInScreen> createState() => _SingInScreenState();
 
-  static const defaultEmail = 'fabom85192@luxudata.com';
+  static const defaultEmail = 'cofiti8057@luxudata.com';
   static const defaultPassword = '12345678';
 }
 
@@ -80,36 +82,20 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
       body: AppGradientBackground(
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 24.h),
-                  Center(
-                    child: Text(
-                      "Welcome Back",
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w700,
-                        color: ColorManager.textColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  Center(
-                    child: Text(
-                      "Log in to your account",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: ColorManager.subtextColor,
-                      ),
-                    ),
+                  HeadingSection(
+                    title: "Welcome Back",
+                    subtitle: "Log in to your account",
                   ),
                   SizedBox(height: 34.h),
-                  _buildLabel("Email Address"),
-                  SizedBox(height: 14.h),
+                  InputLabel("Email Address"),
+                  SizedBox(height: 8.h),
                   CustomTextFieldWidget(
                     controller: _emailController,
                     hintText: "Enter your email address",
@@ -120,8 +106,8 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                     ),
                   ),
                   SizedBox(height: 18.h),
-                  _buildLabel("Password"),
-                  SizedBox(height: 14.h),
+                  InputLabel("Password"),
+                  SizedBox(height: 8.h),
                   CustomTextFieldWidget(
                     controller: _passwordController,
                     hintText: "Enter your password",
@@ -280,17 +266,6 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildLabel(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: ColorManager.textColor,
-        fontWeight: FontWeight.w700,
       ),
     );
   }

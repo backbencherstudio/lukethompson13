@@ -22,6 +22,15 @@ class AuthRepository {
     VerifyEmailRequest(email: email, token: token),
   );
 
+  Future<BaseResponse> forgotPassword({required String email}) =>
+      _authApi.forgotPassword(ForgotPasswordRequest(email: email));
+
+  Future<BaseResponse> checkOtp({
+    required String email,
+    required String otp,
+  }) =>
+      _authApi.checkOtp(CheckOtpRequest(email: email, otp: otp));
+
   Future<GetMeResponse> getMe() => _authApi.getMe();
 
   Future<BaseResponse> register({
