@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/route/route_names.dart';
-import 'package:lukethompson/data/repositories/auth_provider.dart';
+import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';

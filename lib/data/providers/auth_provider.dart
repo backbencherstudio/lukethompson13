@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
-import 'package:lukethompson/core/network/dio_client.dart';
+import 'package:lukethompson/core/network/providers.dart';
 import 'package:lukethompson/data/models/auth_state.dart';
 import 'package:lukethompson/data/models/base.model.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';

@@ -8,7 +8,7 @@ import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/data/repositories/auth_provider.dart';
+import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';

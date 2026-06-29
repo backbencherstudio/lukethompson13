@@ -18,8 +18,8 @@ class UpdateUserProfileParams {
   final File? image;
 
   const UpdateUserProfileParams({
-    required this.name,
-    required this.phoneNumber,
+    this.name,
+    this.phoneNumber,
     this.freeWaitTime,
     this.ratePerHour,
     this.image,
