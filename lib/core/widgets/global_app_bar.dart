@@ -62,6 +62,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final bool hideBackButton;
   final bool centerTitle;
+  final VoidCallback? onBackPressed;
 
   const GlobalAppBar({
     super.key,
@@ -71,6 +72,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor = Colors.transparent,
     this.hideBackButton = false,
     this.centerTitle = false,
+    this.onBackPressed,
   });
 
   @override
@@ -91,7 +93,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: FilledButton(
-                  onPressed: () => context.pop(),
+                  onPressed: onBackPressed ?? () => context.pop(),
                   style: FilledButton.styleFrom(
                     padding: EdgeInsets.zero,
                     backgroundColor: Colors.white12,

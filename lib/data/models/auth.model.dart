@@ -109,6 +109,31 @@ class VerifyEmailRequest {
 }
 
 @JsonSerializable()
+class ForgotPasswordRequest {
+  final String email;
+
+  ForgotPasswordRequest({required this.email});
+
+  factory ForgotPasswordRequest.fromJson(Map<String, dynamic> json) =>
+      _$ForgotPasswordRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ForgotPasswordRequestToJson(this);
+}
+
+@JsonSerializable()
+class CheckOtpRequest {
+  final String email;
+  final String otp;
+
+  CheckOtpRequest({required this.email, required this.otp});
+
+  factory CheckOtpRequest.fromJson(Map<String, dynamic> json) =>
+      _$CheckOtpRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CheckOtpRequestToJson(this);
+}
+
+@JsonSerializable()
 class LoginResponse extends BaseResponse {
   final Authorization? authorization;
   final User? user;

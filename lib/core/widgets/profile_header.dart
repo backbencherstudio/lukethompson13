@@ -8,11 +8,13 @@ class ProfileHeader extends StatelessWidget {
   final String email;
   final String? avatarUrl;
   final double avatarRadius;
+  final void Function()? onChangePressed;
 
   const ProfileHeader({
     super.key,
     required this.name,
     required this.email,
+    required this.onChangePressed,
     this.avatarUrl,
     this.avatarRadius = 44,
   });
@@ -36,17 +38,16 @@ class ProfileHeader extends StatelessWidget {
                 radius: avatarRadius.r,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
+            IconButton.filled(
+              onPressed: onChangePressed,
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white,
+                minimumSize: const Size(40, 40),
+                padding: EdgeInsets.zero,
+                shape: const CircleBorder(),
+                iconSize: 20,
               ),
-              child: const Icon(
-                Icons.camera_alt_outlined,
-                size: 16,
-                color: Colors.black,
-              ),
+              icon: const Icon(Icons.camera_alt_outlined),
             ),
           ],
         ),

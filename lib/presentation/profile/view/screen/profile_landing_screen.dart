@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
@@ -10,6 +14,7 @@ import 'package:lukethompson/core/widgets/profile_header.dart';
 import 'package:lukethompson/core/widgets/profile_setting_item.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/data/providers/auth_provider.dart';
+import 'package:lukethompson/data/providers/user_query_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -31,11 +36,7 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 12),
-                const ProfileHeader(
-                  name: 'Kristin Rodriguez',
-                  email: 'Kristin@untitledui.com',
-                  avatarUrl: 'https://i.pravatar.cc/300',
-                ),
+                const ProfileImage(),
                 const SizedBox(height: 32),
                 SectionHeader(title: 'Profile Setting', fontSize: 16),
 
@@ -122,6 +123,48 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ProfileImage extends ConsumerStatefulWidget {
+  const ProfileImage({super.key});
+
+  @override
+  ConsumerState<ProfileImage> createState() => _ProfileImageState();
+}
+
+class _ProfileImageState extends ConsumerState<ProfileImage> {
+  Future<void> _handleImageChange() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+
+    if (picked == null || !mounted) return;
+
+    final action = ref.read(updateUserProfileMutation);
+    final response = await action.run(
+      UpdateUserProfileParams(image: File(picked.path)),
+    );
+
+    if (!mounted) return;
+
+    if (response.success) {
+      ref.invalidate(userQuery);
+      context.showSuccessSnackBar('Avatar updated successfully');
+    } else {
+      context.showErrorSnackBar(response.message);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userAsync = ref.watch(userQuery);
+
+    return ProfileHeader(
+      name: userAsync.asData?.value?.name ?? '',
+      email: userAsync.asData?.value?.email ?? '',
+      avatarUrl: userAsync.asData?.value?.avatar,
+      onChangePressed: _handleImageChange,
     );
   }
 }

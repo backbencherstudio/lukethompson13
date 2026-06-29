@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/font_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
@@ -7,7 +6,6 @@ import 'package:lukethompson/core/resource/constants/values_manager.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
-    useMaterial3: false, // set true if using Material 3
     // ===== Main colors =====
     primaryColor: ColorManager.primary,
     primaryColorLight: ColorManager.primary,
