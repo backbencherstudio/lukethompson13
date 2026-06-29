@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
@@ -10,6 +9,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final bool? readonly;
   final bool? obsecure;
   final VoidCallback? onTap;
+  final TextInputType? keyboardType;
 
   const CustomTextFieldWidget({
     super.key,
@@ -19,12 +19,14 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.readonly,
     this.obsecure,
     this.onTap,
+    this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      keyboardType: keyboardType,
       style: const TextStyle(color: Colors.white, fontSize: 18),
       cursorColor: Colors.white,
       readOnly: readonly ?? false,

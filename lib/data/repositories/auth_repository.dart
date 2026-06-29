@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lukethompson/core/network/dio_client.dart';
-import 'package:lukethompson/data/api/auth.api.dart';
+import 'package:lukethompson/core/network/providers.dart';
+import 'package:lukethompson/data/sources/remote/auth.api.dart';
 import 'package:lukethompson/data/models/auth.model.dart';
 import 'package:lukethompson/data/models/base.model.dart';
 

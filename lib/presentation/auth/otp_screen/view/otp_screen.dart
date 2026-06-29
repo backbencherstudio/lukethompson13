@@ -8,7 +8,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
-import 'package:lukethompson/data/repositories/auth_provider.dart';
+import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
 enum OtpType { register, forgetPassword }
