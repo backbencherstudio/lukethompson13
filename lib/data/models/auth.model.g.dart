@@ -88,10 +88,29 @@ Map<String, dynamic> _$ForgotPasswordRequestToJson(
 ) => <String, dynamic>{'email': instance.email};
 
 CheckOtpRequest _$CheckOtpRequestFromJson(Map<String, dynamic> json) =>
-    CheckOtpRequest(email: json['email'] as String, otp: json['otp'] as String);
+    CheckOtpRequest(
+      email: json['email'] as String,
+      otp: json['token'] as String,
+    );
 
 Map<String, dynamic> _$CheckOtpRequestToJson(CheckOtpRequest instance) =>
-    <String, dynamic>{'email': instance.email, 'otp': instance.otp};
+    <String, dynamic>{'email': instance.email, 'token': instance.otp};
+
+ResetPasswordRequest _$ResetPasswordRequestFromJson(
+  Map<String, dynamic> json,
+) => ResetPasswordRequest(
+  email: json['email'] as String,
+  token: json['token'] as String,
+  password: json['password'] as String,
+);
+
+Map<String, dynamic> _$ResetPasswordRequestToJson(
+  ResetPasswordRequest instance,
+) => <String, dynamic>{
+  'email': instance.email,
+  'token': instance.token,
+  'password': instance.password,
+};
 
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     LoginResponse(

@@ -3,14 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
-import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
+import 'package:lukethompson/data/models/auth.model.dart';
 import 'package:lukethompson/data/models/base.model.dart';
 import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
@@ -43,30 +44,42 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   OtpType? get _otpType => widget.argument?.otpType;
 
   Future<void> _handleVerify() async {
-    final router = GoRouter.of(context);
-    BaseResponse? response;
+    final otpType = _otpType;
+    if (otpType == null) {
+      context.showErrorSnackBar("Invalid OTP type");
+      return;
+    }
 
-    response = await ref
-        .read(authProvider.notifier)
-        .verifyEmail(email: _email, token: enteredOtp);
+    final ctx = context;
+    late final BaseResponse response;
 
-    if (!mounted || response == null) return;
+    switch (otpType) {
+      case OtpType.forgetPassword:
+        response = await ref
+            .read(checkOtpMutation)
+            .run(CheckOtpRequest(email: _email, otp: enteredOtp));
+      case OtpType.register:
+        response = await ref
+            .read(verifyEmailMutation)
+            .run(VerifyEmailRequest(email: _email, token: enteredOtp));
+    }
+
+    if (!ctx.mounted) return;
 
     if (response.success) {
-      switch (_otpType) {
+      switch (otpType) {
         case OtpType.forgetPassword:
-          router.go(Routes.signIn);
+          ctx.go(
+            Routes.resetPassword,
+            extra: ResetPasswordArgument(email: _email, token: enteredOtp),
+          );
         case OtpType.register:
-        default:
-          router.go(Routes.signIn);
+          ctx.go(Routes.signIn);
       }
 
-      context.showSuccessSnackBar(response.message);
+      ctx.showSuccessSnackBar("OTP Verified successfully");
     } else {
-      final authState = ref.read(authProvider);
-      context.showSuccessSnackBar(
-        ErrorHandle.formatErrorMessage(Exception(authState.error)),
-      );
+      ctx.showErrorSnackBar(response.message);
     }
   }
 
@@ -83,7 +96,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: 24.h),
                 HeadingSection(
@@ -199,6 +212,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       enteredOtp.length != OtpScreen.otpLength ||
                       ref.watch(authProvider).isLoading,
                   onPressed: _handleVerify,
+                  // onPressed: () {
+                  //   context.push(Routes.resetPassword);
+                  // },
                 ),
               ],
             ),

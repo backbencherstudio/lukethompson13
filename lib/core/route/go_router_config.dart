@@ -36,7 +36,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = _AuthChangeNotifier();
 
-  ref.listen(authProvider, (_, __) {
+  ref.listen(authProvider, (_, _) {
     authChangeNotifier.notify();
   });
 
@@ -106,7 +106,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.resetPassword,
-        builder: (context, state) => const ResetPasswordScreen(),
+        builder: (context, state) => ResetPasswordScreen(
+          argument: state.extra as ResetPasswordArgument?,
+        ),
       ),
       GoRoute(
         path: Routes.parent,

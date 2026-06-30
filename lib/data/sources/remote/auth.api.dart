@@ -39,4 +39,7 @@ abstract class AuthApi {
 
   @POST(ApiEndpoints.verifyOtp)
   Future<BaseResponse> checkOtp(@Body() CheckOtpRequest body);
+
+  @POST(ApiEndpoints.resetForgottenPassword)
+  Future<BaseResponse> resetForgottenPassword(@Body() ResetPasswordRequest body);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
@@ -20,7 +21,7 @@ class SingInScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<SingInScreen> createState() => _SingInScreenState();
 
-  static const defaultEmail = 'cofiti8057@luxudata.com';
+  static const defaultEmail = 'pigopip766@noproposal.com';
   static const defaultPassword = '12345678';
 }
 
@@ -47,7 +48,6 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
   }
 
   Future<void> _handleLogin() async {
-    final messenger = ScaffoldMessenger.of(context);
     final router = GoRouter.of(context);
 
     await ref
@@ -61,12 +61,8 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
 
     final authState = ref.read(authProvider);
     if (authState.error != null) {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            ErrorHandle.formatErrorMessage(Exception(authState.error)),
-          ),
-        ),
+      context.showErrorSnackBar(
+        ErrorHandle.formatErrorMessage(Exception(authState.error)),
       );
     } else if (authState.isAuthenticated) {
       router.go(Routes.parent);
