@@ -13,6 +13,9 @@ class ApiEndpoints {
   static const String verifyOtp = '/auth/check-otp';
   static const String resetForgottenPassword = '/auth/reset-password';
 
+  static const String stoplogRepost = '/stoplog/report';
+  static const String stoplogHomeData = '/stoplog/home-data';
+
   //  static const String library = 'api/library/categories';
   //  static const String  suggestedVideo= 'api/library';
   //  static const String  prescriptionResume= 'api/prescription/resume';
