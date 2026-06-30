@@ -6,6 +6,8 @@ class SharedPreferenceData {
   static const _keyRole = 'role';
   static const _keyEmail = 'email';
 
+  static const _keyRememberMe = 'remember_me';
+
   static const _keyOnboardingCompleted = 'onboarding_completed';
   static const _keyOnboardingWeight = 'onboarding_weight';
   static const _keyOnboardingWeightUnit = 'onboarding_weight_unit';
@@ -74,6 +76,21 @@ class SharedPreferenceData {
   Future<void> removeEmailId() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(_keyEmail);
+  }
+
+  // --- Remember Me (stores email only) ---
+  static Future<void> setRememberMeEmail(String? email) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (email != null && email.isNotEmpty) {
+      await prefs.setString(_keyRememberMe, email);
+    } else {
+      await prefs.remove(_keyRememberMe);
+    }
+  }
+
+  static Future<String?> getRememberMeEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyRememberMe);
   }
 
   // --- Onboarding (local) ---

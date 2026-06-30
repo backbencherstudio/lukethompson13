@@ -10,9 +10,11 @@ import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/auth_prompt.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
 import 'package:lukethompson/data/providers/providers.dart';
+import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class SingInScreen extends ConsumerStatefulWidget {
@@ -28,16 +30,31 @@ class SingInScreen extends ConsumerStatefulWidget {
 class _SingInScreenState extends ConsumerState<SingInScreen> {
   bool rememberMe = false;
   bool isPasswordHidden = true;
-  final _emailController = TextEditingController(
-    text: kDebugMode ? SingInScreen.defaultEmail : null,
-  );
-  final _passwordController = TextEditingController(
-    text: kDebugMode ? SingInScreen.defaultPassword : null,
-  );
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _loadRememberMe();
+  }
+
+  Future<void> _loadRememberMe() async {
+    final email = await SharedPreferenceData.getRememberMeEmail();
+    if (mounted) {
+      setState(() {
+        rememberMe = email != null;
+      });
+      if (email != null) _emailController.text = email;
+    }
+  }
+
+  void _persistRememberMe() {
+    if (rememberMe) {
+      SharedPreferenceData.setRememberMeEmail(_emailController.text.trim());
+    } else {
+      SharedPreferenceData.setRememberMeEmail(null);
+    }
   }
 
   @override
@@ -65,6 +82,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
         ErrorHandle.formatErrorMessage(Exception(authState.error)),
       );
     } else if (authState.isAuthenticated) {
+      _persistRememberMe();
       router.go(Routes.parent);
     }
   }
@@ -127,42 +145,34 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                   SizedBox(height: 14.h),
                   Row(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            rememberMe = !rememberMe;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(6.r),
-                        child: Container(
-                          width: 18.w,
-                          height: 18.w,
-                          decoration: BoxDecoration(
-                            color: rememberMe
-                                ? const Color(0xFF39D77A)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(4.r),
-                            border: Border.all(
-                              color: rememberMe
-                                  ? const Color(0xFF39D77A)
-                                  : Colors.white70,
+                      Transform.translate(
+                        offset: Offset(-10, 0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value: rememberMe,
+                              onChanged: (v) => setState(() {
+                                rememberMe = v!;
+                                _persistRememberMe();
+                              }),
+                              activeColor: const Color(0xFF39D77A),
+                              checkColor: Colors.white,
+                              side: const BorderSide(color: Colors.white70),
                             ),
-                          ),
-                          child: rememberMe
-                              ? Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 14.sp,
-                                )
-                              : null,
-                        ),
-                      ),
-                      SizedBox(width: 10.w),
-                      Text(
-                        "Remember Me",
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          color: ColorManager.subtextColor,
+                            GestureDetector(
+                              onTap: () => setState(() {
+                                rememberMe = !rememberMe;
+                                _persistRememberMe();
+                              }),
+                              child: Text(
+                                "Remember Me",
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  color: ColorManager.subtextColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const Spacer(),
@@ -229,33 +239,12 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 18.h),
-                  Center(
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: ColorManager.subtextColor,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            context.push(Routes.signUp);
-                          },
-                          child: Text(
-                            "Create",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF39D77A),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  SizedBox(height: 24.h),
+
+                  AuthPrompt(
+                    message: "Don't have an account? ",
+                    actionText: 'Sign Up Now',
+                    onPressed: () => context.pushReplacement(Routes.signUp),
                   ),
                 ],
               ),

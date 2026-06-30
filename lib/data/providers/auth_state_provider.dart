@@ -20,7 +20,10 @@ class AuthStateNotifier extends Notifier<AuthState> {
     }
   }
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
     state = const AuthState.loading();
     try {
       final repo = ref.read(authRepositoryProvider);

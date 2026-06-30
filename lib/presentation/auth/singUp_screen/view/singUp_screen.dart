@@ -7,6 +7,7 @@ import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/auth_prompt.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/data/models/auth.model.dart';
 import 'package:lukethompson/data/providers/providers.dart';
@@ -56,19 +57,21 @@ class _SingupScreenState extends ConsumerState<SingupScreen> {
     final router = GoRouter.of(context);
     final email = _emailController.text.trim();
 
-    final response = await ref.read(registerMutation).run(
-      RegisterRequest(
-        name: _nameController.text.trim(),
-        password: _passwordController.text,
-        email: email,
-        type: 'user',
-      ),
-    );
+    final response = await ref
+        .read(registerMutation)
+        .run(
+          RegisterRequest(
+            name: _nameController.text.trim(),
+            password: _passwordController.text,
+            email: email,
+            type: 'user',
+          ),
+        );
 
     if (!mounted) return;
 
     if (response.success) {
-      router.go(
+      router.push(
         Routes.otp,
         extra: OtpScreenArgument(email: email, otpType: OtpType.register),
       );
@@ -173,7 +176,7 @@ class _SingupScreenState extends ConsumerState<SingupScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15.h),
+                  SizedBox(height: 42.h),
                   GlobalButton(
                     isDisabled: isLoading,
                     label: "Register",
@@ -189,54 +192,17 @@ class _SingupScreenState extends ConsumerState<SingupScreen> {
                     onPressed: _handleRegister,
                   ),
                   SizedBox(height: 20.h),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already Have an account? ",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: ColorManager.subtextColor,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            context.push(Routes.signIn);
-                          },
-                          child: Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Color(0xFF39D77A),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+
+                  AuthPrompt(
+                    message: "Already Have an account? ",
+                    actionText: 'Login',
+                    onPressed: () => context.pushReplacement(Routes.signIn),
                   ),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class InputLabel extends StatelessWidget {
-  final String label;
-  const InputLabel(this.label, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: ColorManager.textColor,
-        fontWeight: FontWeight.w700,
       ),
     );
   }
