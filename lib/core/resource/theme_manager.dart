@@ -73,6 +73,10 @@ ThemeData getApplicationTheme() {
       ),
     ),
 
+    checkboxTheme: CheckboxThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    ),
+
     // ===== Text Theme =====
     textTheme: TextTheme(
       displayLarge: TextStyle(
