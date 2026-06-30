@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/route/route_names.dart';
-import 'package:lukethompson/data/providers/auth_provider.dart';
+import 'package:lukethompson/data/providers/providers.dart';
 import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
@@ -36,7 +36,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = _AuthChangeNotifier();
 
-  ref.listen(authProvider, (_, _) {
+  ref.listen(authStateProvider, (_, _) {
     authChangeNotifier.notify();
   });
 
@@ -45,7 +45,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: Routes.splash,
     refreshListenable: authChangeNotifier,
     redirect: (context, state) {
-      final authState = ref.read(authProvider);
+      final authState = ref.read(authStateProvider);
       final isAuthenticated = authState.isAuthenticated;
       final location = state.matchedLocation;
 

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lukethompson/core/network/error_handle.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/data/providers/auth_provider.dart';
+import 'package:lukethompson/data/models/auth.model.dart';
+import 'package:lukethompson/data/providers/providers.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -52,40 +53,33 @@ class _SingupScreenState extends ConsumerState<SingupScreen> {
       return;
     }
 
-    final messenger = ScaffoldMessenger.of(context);
     final router = GoRouter.of(context);
     final email = _emailController.text.trim();
 
-    final response = await ref
-        .read(authProvider.notifier)
-        .register(
-          name: _nameController.text.trim(),
-          password: _passwordController.text,
-          email: email,
-        );
+    final response = await ref.read(registerMutation).run(
+      RegisterRequest(
+        name: _nameController.text.trim(),
+        password: _passwordController.text,
+        email: email,
+        type: 'user',
+      ),
+    );
 
     if (!mounted) return;
 
-    if (response != null && response.success) {
+    if (response.success) {
       router.go(
         Routes.otp,
         extra: OtpScreenArgument(email: email, otpType: OtpType.register),
       );
     } else {
-      final authState = ref.read(authProvider);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            ErrorHandle.formatErrorMessage(Exception(authState.error)),
-          ),
-        ),
-      );
+      context.showErrorSnackBar(response.message);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authProvider).isLoading;
+    final isLoading = ref.watch(authStateProvider).isLoading;
 
     return Scaffold(
       body: AppGradientBackground(

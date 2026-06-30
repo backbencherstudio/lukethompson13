@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';

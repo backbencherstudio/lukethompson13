@@ -13,7 +13,7 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
 import 'package:lukethompson/data/models/auth.model.dart';
 import 'package:lukethompson/data/models/base.model.dart';
-import 'package:lukethompson/data/providers/auth_provider.dart';
+import 'package:lukethompson/data/providers/providers.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
 enum OtpType { register, forgetPassword }
@@ -45,6 +45,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   Future<void> _handleVerify() async {
     final otpType = _otpType;
+    final email = _email;
     if (otpType == null) {
       context.showErrorSnackBar("Invalid OTP type");
       return;
@@ -57,29 +58,29 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       case OtpType.forgetPassword:
         response = await ref
             .read(checkOtpMutation)
-            .run(CheckOtpRequest(email: _email, otp: enteredOtp));
+            .run(CheckOtpRequest(email: email, otp: enteredOtp));
       case OtpType.register:
         response = await ref
             .read(verifyEmailMutation)
-            .run(VerifyEmailRequest(email: _email, token: enteredOtp));
+            .run(VerifyEmailRequest(email: email, token: enteredOtp));
     }
 
     if (!ctx.mounted) return;
 
-    if (response.success) {
-      switch (otpType) {
-        case OtpType.forgetPassword:
-          ctx.go(
-            Routes.resetPassword,
-            extra: ResetPasswordArgument(email: _email, token: enteredOtp),
-          );
-        case OtpType.register:
-          ctx.go(Routes.signIn);
-      }
-
-      ctx.showSuccessSnackBar("OTP Verified successfully");
-    } else {
+    if (!response.success) {
       ctx.showErrorSnackBar(response.message);
+    }
+
+    switch (otpType) {
+      case OtpType.forgetPassword:
+        ctx.go(
+          Routes.resetPassword,
+          extra: ResetPasswordArgument(email: email, token: enteredOtp),
+        );
+        ctx.showSuccessSnackBar("OTP verified successfully");
+      case OtpType.register:
+        ctx.go(Routes.signIn);
+        ctx.showSuccessSnackBar("Account Created successfully");
     }
   }
 
@@ -210,7 +211,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   label: "Verify",
                   isDisabled:
                       enteredOtp.length != OtpScreen.otpLength ||
-                      ref.watch(authProvider).isLoading,
+                      ref.watch(authStateProvider).isLoading,
                   onPressed: _handleVerify,
                   // onPressed: () {
                   //   context.push(Routes.resetPassword);
