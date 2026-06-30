@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/image_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
-import 'package:lukethompson/data/providers/user_query_provider.dart';
+import 'package:lukethompson/data/providers/user_queries.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/carusel_slider.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/tab_bar.dart';

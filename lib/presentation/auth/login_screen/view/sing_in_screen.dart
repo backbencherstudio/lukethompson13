@@ -12,7 +12,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
-import 'package:lukethompson/data/providers/auth_provider.dart';
+import 'package:lukethompson/data/providers/providers.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class SingInScreen extends ConsumerStatefulWidget {
@@ -21,7 +21,7 @@ class SingInScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<SingInScreen> createState() => _SingInScreenState();
 
-  static const defaultEmail = 'pigopip766@noproposal.com';
+  static const defaultEmail = 'tetibap348@luxudata.com';
   static const defaultPassword = '12345678';
 }
 
@@ -51,7 +51,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
     final router = GoRouter.of(context);
 
     await ref
-        .read(authProvider.notifier)
+        .read(authStateProvider.notifier)
         .login(
           email: _emailController.text.trim(),
           password: _passwordController.text,
@@ -59,7 +59,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
 
     if (!mounted) return;
 
-    final authState = ref.read(authProvider);
+    final authState = ref.read(authStateProvider);
     if (authState.error != null) {
       context.showErrorSnackBar(
         ErrorHandle.formatErrorMessage(Exception(authState.error)),
@@ -71,7 +71,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authStateProvider);
     final isLoading = authState.isLoading;
 
     return Scaffold(

@@ -13,8 +13,7 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/profile_header.dart';
 import 'package:lukethompson/core/widgets/profile_setting_item.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
-import 'package:lukethompson/data/providers/auth_provider.dart';
-import 'package:lukethompson/data/providers/user_query_provider.dart';
+import 'package:lukethompson/data/providers/providers.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -111,7 +110,7 @@ class ProfileScreen extends StatelessWidget {
                     title: "Log Out",
                     iconColor: Colors.redAccent,
                     onTap: () {
-                      ref.read(authProvider.notifier).logout();
+                      ref.read(authStateProvider.notifier).logout();
                       context.go(Routes.signIn);
                     },
                   ),

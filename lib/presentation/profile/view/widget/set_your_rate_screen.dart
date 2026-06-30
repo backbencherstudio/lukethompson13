@@ -8,7 +8,7 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/data/models/auth.model.dart';
-import 'package:lukethompson/data/providers/user_query_provider.dart';
+import 'package:lukethompson/data/providers/user_queries.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class SetYourRateScreen extends ConsumerStatefulWidget {
