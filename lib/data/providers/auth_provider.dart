@@ -1,10 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/network/providers.dart';
+import 'package:lukethompson/data/models/auth.model.dart';
 import 'package:lukethompson/data/models/auth_state.dart';
 import 'package:lukethompson/data/models/base.model.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';
 import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
+import 'package:zenquery/zenquery.dart';
 
 class AuthNotifier extends Notifier<AuthState> {
   @override
@@ -18,66 +19,6 @@ class AuthNotifier extends Notifier<AuthState> {
     if (token != null && token != 'null' && token.isNotEmpty) {
       ref.read(cachedTokenProvider.notifier).setToken(token);
       state = AuthState.authenticated(token: token);
-    }
-  }
-
-  Future<BaseResponse?> verifyEmail({
-    required String email,
-    required String token,
-  }) async {
-    state = const AuthState.loading();
-    try {
-      final repo = ref.read(authRepositoryProvider);
-      final response = await repo.verifyEmail(email: email, token: token);
-      if (response.success) {
-        state = const AuthState.initial();
-        return response;
-      } else {
-        state = AuthState.failure(response.message);
-        return null;
-      }
-    } catch (e) {
-      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
-      return null;
-    }
-  }
-
-  Future<BaseResponse?> forgotPassword({required String email}) async {
-    state = const AuthState.loading();
-    try {
-      final repo = ref.read(authRepositoryProvider);
-      final response = await repo.forgotPassword(email: email);
-      if (response.success) {
-        state = const AuthState.initial();
-        return response;
-      } else {
-        state = AuthState.failure(response.message);
-        return null;
-      }
-    } catch (e) {
-      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
-      return null;
-    }
-  }
-
-  Future<BaseResponse?> checkOtp({
-    required String email,
-    required String otp,
-  }) async {
-    state = const AuthState.loading();
-    try {
-      final repo = ref.read(authRepositoryProvider);
-      final response = await repo.checkOtp(email: email, otp: otp);
-      if (response.success) {
-        state = const AuthState.initial();
-        return response;
-      } else {
-        state = AuthState.failure(response.message);
-        return null;
-      }
-    } catch (e) {
-      state = AuthState.failure(ErrorHandle.extractServerMessage(e));
-      return null;
     }
   }
 
@@ -142,3 +83,41 @@ class AuthNotifier extends Notifier<AuthState> {
 final authProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );
+
+final forgotPasswordMutation =
+    createMutationWithParam<BaseResponse, ForgotPasswordRequest>((
+      tsx,
+      params,
+    ) async {
+      final repo = tsx.get(authRepositoryProvider);
+      return await repo.forgotPassword(email: params.email);
+    });
+
+final verifyEmailMutation =
+    createMutationWithParam<BaseResponse, VerifyEmailRequest>((
+      tsx,
+      params,
+    ) async {
+      final repo = tsx.get(authRepositoryProvider);
+      return await repo.verifyEmail(email: params.email, token: params.token);
+    });
+
+final checkOtpMutation = createMutationWithParam<BaseResponse, CheckOtpRequest>(
+  (tsx, params) async {
+    final repo = tsx.get(authRepositoryProvider);
+    return await repo.checkOtp(email: params.email, otp: params.otp);
+  },
+);
+
+final resetForgottenPasswordMutation =
+    createMutationWithParam<BaseResponse, ResetPasswordRequest>((
+      tsx,
+      params,
+    ) async {
+      final repo = tsx.get(authRepositoryProvider);
+      return await repo.resetForgottenPassword(
+        email: params.email,
+        token: params.token,
+        password: params.password,
+      );
+    });

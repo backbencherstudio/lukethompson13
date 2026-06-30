@@ -88,7 +88,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: hideBackButton ? 0 : null,
       leading: hideBackButton
           ? SizedBox.shrink()
-          : canGoBack
+          : canGoBack || onBackPressed != null
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),

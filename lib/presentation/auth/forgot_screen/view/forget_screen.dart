@@ -4,14 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
-import 'package:lukethompson/core/extensions/text_style_extension.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
+import 'package:lukethompson/data/models/auth.model.dart';
 import 'package:lukethompson/data/providers/auth_provider.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
@@ -40,18 +39,22 @@ class _ForgetScreenState extends ConsumerState<ForgetScreen> {
 
     if (email.isEmpty) {
       context.showErrorSnackBar('Please enter your email');
+      return;
     }
 
-    final ctx = context;
     final response = await ref
-        .read(authProvider.notifier)
-        .forgotPassword(email: email);
+        .read(forgotPasswordMutation)
+        .run(ForgotPasswordRequest(email: email));
 
-    if (response != null && ctx.mounted) {
-      ctx.push(
+    if (!mounted) return;
+
+    if (response.success) {
+      context.push(
         Routes.otp,
         extra: OtpScreenArgument(email: email, otpType: OtpType.forgetPassword),
       );
+    } else {
+      context.showErrorSnackBar(response.message);
     }
   }
 

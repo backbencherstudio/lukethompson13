@@ -2,20 +2,18 @@ class ApiEndpoints {
   static const String baseUrl = "http://10.10.9.51:2004";
   static const String apiURL = "$baseUrl/api";
 
-  static const String register = '/auth/register';
-  static const String login = '/auth/login';
-  static const String forgotPassword = '/auth/forgot-password';
-  static const String verifyUserEmailAddress = '/auth/verify-email';
   static const String getMe = '/auth/me';
   static const String updateUserProfile = '/auth/update';
 
-  static const String verifyOtp = '/auth/check-otp';
+  static const String login = '/auth/login';
+  static const String register = '/auth/register';
+  static const String verifyUserEmailAddress = '/auth/verify-email';
 
-  // static const String registration = 'api/auth/register';
+  static const String forgotPassword = '/auth/forgot-password';
+  static const String verifyOtp = '/auth/check-otp';
+  static const String resetForgottenPassword = '/auth/reset-password';
+
   //  static const String library = 'api/library/categories';
-  //  static const String verifyOtp = 'api/auth/check-otp';
-  //  static const String verifyEmail = 'api/auth/verify-email';
-  //  static const String resetPassWord = 'api/auth/reset-password';
   //  static const String  suggestedVideo= 'api/library';
   //  static const String  prescriptionResume= 'api/prescription/resume';
   //  static const String  prescribe= 'api/prescription';

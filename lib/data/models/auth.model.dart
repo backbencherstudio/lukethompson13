@@ -123,6 +123,7 @@ class ForgotPasswordRequest {
 @JsonSerializable()
 class CheckOtpRequest {
   final String email;
+  @JsonKey(name: 'token')
   final String otp;
 
   CheckOtpRequest({required this.email, required this.otp});
@@ -131,6 +132,24 @@ class CheckOtpRequest {
       _$CheckOtpRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckOtpRequestToJson(this);
+}
+
+@JsonSerializable()
+class ResetPasswordRequest {
+  final String email;
+  final String token;
+  final String password;
+
+  ResetPasswordRequest({
+    required this.email,
+    required this.token,
+    required this.password,
+  });
+
+  factory ResetPasswordRequest.fromJson(Map<String, dynamic> json) =>
+      _$ResetPasswordRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ResetPasswordRequestToJson(this);
 }
 
 @JsonSerializable()
