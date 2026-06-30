@@ -25,7 +25,7 @@ class SingupScreen extends ConsumerStatefulWidget {
 class _SingupScreenState extends ConsumerState<SingupScreen> {
   bool _isPasswordHidden = true;
   final _nameController = TextEditingController(
-    text: kDebugMode ? "User" : null,
+    text: kDebugMode ? SingInScreen.defaultUserName : null,
   );
   final _emailController = TextEditingController(
     text: kDebugMode ? SingInScreen.defaultEmail : null,

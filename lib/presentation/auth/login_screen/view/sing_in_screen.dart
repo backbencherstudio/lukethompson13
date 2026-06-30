@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +22,8 @@ class SingInScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<SingInScreen> createState() => _SingInScreenState();
 
-  static const defaultEmail = 'tetibap348@luxudata.com';
+  static const defaultUserName = 'User';
+  static const defaultEmail =  'user@example.com';
   static const defaultPassword = '12345678';
 }
 

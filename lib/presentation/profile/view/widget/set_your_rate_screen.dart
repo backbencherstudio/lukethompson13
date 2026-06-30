@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
@@ -56,21 +58,28 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
     final ctx = context;
     final action = ref.read(updateUserProfileMutation);
 
-    final response = await action.run(
-      UpdateUserProfileParams(ratePerHour: rate, freeWaitTime: freeWaitTime),
-    );
+    try {
+      final response = await action.run(
+        UpdateUserProfileParams(ratePerHour: rate, freeWaitTime: freeWaitTime),
+      );
 
-    if (!ctx.mounted) return;
+      if (!ctx.mounted) return;
 
-    if (response.success) {
-      ref.invalidate(userQuery);
+      if (response.success) {
+        ref.invalidate(userQuery);
+        ctx.pop();
+      }
+
+      ctx.showResultSnackBar(
+        response.success
+            ? 'Rate updated successfully'
+            : 'Failed to update rate',
+        isSuccess: response.success,
+        subtitle: response.success ? null : response.message,
+      );
+    } catch (e) {
+      ctx.showResultSnackBar(ErrorHandle.formatErrorMessage(e));
     }
-
-    ctx.showResultSnackBar(
-      response.success ? 'Rate updated successfully' : 'Failed to update rate',
-      isSuccess: response.success,
-      subtitle: response.success ? null : response.message,
-    );
   }
 
   @override
