@@ -4,6 +4,7 @@ import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
+import 'package:lukethompson/data/models/stoplog.model.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_grid.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/detention_widget.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
@@ -13,20 +14,22 @@ final _detentiosData = [
   DetentionData(
     imagePath: IconManager.detention,
     title: "Detention Owed",
-    price: "\$225",
-    rate: "\$50/hr rate",
+    value: "\$225",
+    subtitle: "\$50/hr rate",
   ),
   DetentionData(
     imagePath: IconManager.revenueLost,
     title: "Revenue Lost",
-    price: "\$225",
-    rate: "Unrecovered time costs",
-    priceColor: ColorManager.redColor,
+    value: "\$225",
+    subtitle: "Unrecovered time costs",
+    valueColor: ColorManager.redColor,
   ),
 ];
 
 class TodayScreen extends StatelessWidget {
-  const TodayScreen({super.key});
+  const TodayScreen({super.key, this.data});
+
+  final HomeDataOverview? data;
 
   @override
   Widget build(BuildContext context) {

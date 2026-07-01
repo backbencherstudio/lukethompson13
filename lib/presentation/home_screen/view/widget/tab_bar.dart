@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/global_tab_bar.dart';
-import 'package:lukethompson/data/providers/stoplog_queries.dart';
-import 'package:lukethompson/presentation/home_screen/view/screen/today_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
 
-class CustomTabScreen extends ConsumerStatefulWidget {
+class CustomTabScreen extends StatefulWidget {
   const CustomTabScreen({super.key});
 
   @override
-  ConsumerState<CustomTabScreen> createState() => _CustomTabScreenState();
+  State<CustomTabScreen> createState() => _CustomTabScreenState();
 }
 
-class _CustomTabScreenState extends ConsumerState<CustomTabScreen>
+class _CustomTabScreenState extends State<CustomTabScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -32,10 +29,6 @@ class _CustomTabScreenState extends ConsumerState<CustomTabScreen>
 
   @override
   Widget build(BuildContext context) {
-    final overviewData = ref.watch(getStoplogHomeOverviewQuery(.today));
-
-    print(overviewData.isLoading);
-    print(overviewData.asData?.value);
 
     return Column(
       children: [
@@ -54,7 +47,10 @@ class _CustomTabScreenState extends ConsumerState<CustomTabScreen>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [TodayScreen(), Weeklyscreen()],
+            children: [
+              Weeklyscreen(period: .today),
+              Weeklyscreen(period: .week),
+            ],
           ),
         ),
       ],
