@@ -9,6 +9,7 @@ import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
 
+// TODO: use infinity scroll and search
 class StopsScreen extends ConsumerWidget {
   const StopsScreen({super.key});
 

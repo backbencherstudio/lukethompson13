@@ -23,6 +23,9 @@ abstract class StoplogApi {
     @Query('search') String? search,
     @Query('status') StopLogStatus? status,
   );
+
+  @GET(ApiEndpoints.stoplogReport)
+  Future<WeeklyReportSummaryResponse> getWeeklyReportSummary(@Query('tab') String tab);
 }
 
 final stoplogApiProvider = Provider<StoplogApi>((ref) {

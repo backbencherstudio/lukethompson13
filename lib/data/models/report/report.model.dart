@@ -67,17 +67,17 @@ class ReportTabData {
 }
 
 @JsonSerializable()
-class ReportResponse extends BaseResponse {
-  final List<ReportTabData>? data;
+class WeeklyReportSummaryResponse extends BaseResponse {
+  final ReportTabData? data;
 
-  ReportResponse({required super.success, required super.message, this.data});
+  WeeklyReportSummaryResponse({required super.success, required super.message, this.data});
 
-  factory ReportResponse.fromJson(Map<String, dynamic> json) =>
-      _$ReportResponseFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$ReportResponseToJson(this);
+  factory WeeklyReportSummaryResponse.fromJson(Map<String, dynamic> json) =>
+      _$WeeklyReportSummaryResponseFromJson(json);
 
   @override
-  String toString() => 'ReportResponse${toJson()}';
+  Map<String, dynamic> toJson() => _$WeeklyReportSummaryResponseToJson(this);
+
+  @override
+  String toString() => 'WeeklyReportSummaryResponse${toJson()}';
 }

@@ -1,57 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/utils/date.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
+import 'package:lukethompson/data/providers/report_queries.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/reports/view/widget/weekly_summary.dart';
 
-class WeeklySummary extends StatelessWidget {
-  const WeeklySummary({super.key});
+class WeeklySummaryReport extends ConsumerWidget {
+  const WeeklySummaryReport({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-      child: Column(
-        children: [
-          WeeklySummaryWidget(
-            title: "Total Waiting",
-            value: "14.5 Hrs",
-            subtitle: "This Week",
-            valueColor: Color(0XFFFFB547),
-            borderColor: Color(0xff272C36),
-          ),
-          12.height,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weeklyReportSummary = ref.watch(getWeeklyReportSummaryQuery);
 
-          WeeklySummaryWidget(
-            title: "Detention Captured",
-            value: "\$225",
-            subtitle: "Recovered revenue",
-            valueColor: Color(0XFF33D17A),
-            borderColor: Color(0xff272C36),
+    return weeklyReportSummary.when(
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      loading: () => const Center(child: ActivityIndicator()),
+      error: (e, _) => StatusDisplay.error(e.toString()),
+      data: (data) {
+        if (data == null) {
+          return StatusDisplay.muted('No Weekly Summary data found');
+        }
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+          child: Column(
+            children: [
+              WeeklySummaryWidget(
+                title: "Total Waiting",
+                value: data.totalWaitingText,
+                subtitle: "This Week",
+                valueColor: ColorManager.hoursWaiting,
+              ),
+              12.height,
+
+              WeeklySummaryWidget(
+                title: "Detention Captured",
+                value: Currency.addPrefix(data.detentionCaptured),
+                subtitle: "Recovered revenue",
+                valueColor: ColorManager.primaryButton,
+              ),
+              12.height,
+              WeeklySummaryWidget(
+                icon: IconManager.revenueIcon,
+                title: "Revenue Lost",
+                value: Currency.addPrefix(data.revenueLost),
+                subtitle: "Still Hurting margin",
+                valueColor: ColorManager.errorColor,
+              ),
+              12.height,
+              WeeklySummaryWidget(
+                icon: IconManager.worstStop,
+                titleColor: ColorManager.errorColor,
+                title: "Top Worst Stop",
+                value: data.topWorstStop?.facilityName ?? "--",
+                subtitle:
+                    "${data.topWorstStop?.waitingTimeText ?? "0h 0m"} waiting",
+                backgroundColor: ColorManager.errorColor.withValues(
+                  alpha: 0.12,
+                ),
+                borderColor: ColorManager.errorColor,
+                subtitleColor: ColorManager.subtextColor,
+              ),
+              16.height,
+            ],
           ),
-          12.height,
-          WeeklySummaryWidget(
-            icon: IconManager.revenueIcon,
-            title: "Revenue Lost",
-            value: "\$225",
-            subtitle: "Still Hurting margin",
-            valueColor: Color(0XFFFF5C6C),
-            borderColor: Color(0xff272C36),
-          ),
-          12.height,
-          WeeklySummaryWidget(
-            icon: IconManager.worstStop,
-            titleColor: Color(0XFFFF5C6C),
-            title: "Top Worst Stop",
-            value: "Cold Storage Solutions",
-            subtitle: "3 hrs waiting",
-            backgroundColor: Color(0XFF1E1520),
-            borderColor: Color(0XFFFF5C6C),
-            subtitleColor: Colors.white,
-          ),
-          16.height,
-        ],
-      ),
+        );
+      },
     );
   }
 }

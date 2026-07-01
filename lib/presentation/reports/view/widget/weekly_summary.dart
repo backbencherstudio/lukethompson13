@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/widgets/app_card.dart';
 
 class WeeklySummaryWidget extends StatelessWidget {
   final String? title;
   final String? value;
   final String? subtitle;
   final String? icon;
-  
- 
+
   final Color? backgroundColor;
   final Color? titleColor;
   final Color? valueColor;
@@ -31,33 +31,29 @@ class WeeklySummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        
-        color: backgroundColor ?? const Color(0xFF20252D),
-        borderRadius: BorderRadius.circular(16),
-        
-        border: borderColor != null 
-            ? Border.all(color: borderColor!, width: 1) 
-            : null,
-      ),
+    return AppCard(
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               if (icon != null) ...[
-                Image.asset(icon!, color: iconColor ?? Colors.redAccent, height: 18.h, width: 18.w),
+                Image.asset(
+                  icon!,
+                  color: iconColor ?? Colors.redAccent,
+                  height: 18.h,
+                  width: 18.w,
+                ),
                 const SizedBox(width: 8),
               ],
               Text(
                 title ?? "",
                 style: TextStyle(
-                  color: titleColor ?? Colors.white, 
-                  fontSize: 14.sp, 
-                  fontWeight: FontWeight.w600
+                  color: titleColor ?? Colors.white,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -74,10 +70,7 @@ class WeeklySummaryWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle ?? "",
-            style: TextStyle(
-              color: subtitleColor ?? Colors.grey, 
-              fontSize: 12
-            ),
+            style: TextStyle(color: subtitleColor ?? Colors.grey, fontSize: 12),
           ),
         ],
       ),

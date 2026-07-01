@@ -66,7 +66,7 @@ class _ReportsScreenState extends State<ReportsScreen>
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
-                  children: const [WeeklySummary(), TaxReport()],
+                  children: const [WeeklySummaryReport(), TaxReport()],
                 ),
               ),
             ],
