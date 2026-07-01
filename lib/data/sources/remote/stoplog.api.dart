@@ -15,6 +15,14 @@ abstract class StoplogApi {
   Future<HomeDataOverviewResponse> homeDataOverview(
     @Query('period') HomeDataPeriod period,
   );
+
+  @GET(ApiEndpoints.stoplogList)
+  Future<StopLogListResponse> getStopLogList(
+    @Query('cursor') String? cursor,
+    @Query('limit') int? limit,
+    @Query('search') String? search,
+    @Query('status') StopLogStatus? status,
+  );
 }
 
 final stoplogApiProvider = Provider<StoplogApi>((ref) {

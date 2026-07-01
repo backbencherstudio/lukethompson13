@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/data/models/models.dart';
@@ -23,6 +24,9 @@ class Weeklyscreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final overviewAsync = ref.watch(getStoplogHomeOverviewQuery(period));
+    final recentStops = ref.watch(
+      getStoplogListQuery(StopLogListParams(limit: 10)),
+    );
 
     return overviewAsync.when(
       skipLoadingOnRefresh: true,
@@ -34,7 +38,6 @@ class Weeklyscreen extends ConsumerWidget {
         if (d == null) {
           return StatusDisplay.muted('No overview data available');
         }
-
 
         final detentionData = [
           DetentionData(
@@ -85,17 +88,36 @@ class Weeklyscreen extends ConsumerWidget {
                 ),
               ),
 
-              ...List.generate(
-                RecentStop.mockrecentStopData.length,
-                (i) => Padding(
-                  padding: EdgeInsets.only(bottom: 10.h),
-                  child: RecentStop(
-                    data: RecentStop.mockrecentStopData[i],
-                    rightAction: StatusBadge(
-                      status: RecentStop.mockrecentStopData[i].status ?? "",
+              recentStops.when(
+                skipLoadingOnRefresh: true,
+                skipLoadingOnReload: true,
+                loading: () => const Center(child: ActivityIndicator()),
+                error: (e, _) =>
+                    StatusDisplay.error('Failed to load Recent Stops data'),
+                data: (lists) {
+                  final d = lists;
+                  if (d == null) {
+                    return StatusDisplay.muted('No overview data available');
+                  }
+
+                  return Column(
+                    children: List.generate(
+                      d.length,
+                      (i) => Padding(
+                        padding: EdgeInsets.only(bottom: 10.h),
+                        child: RecentStop(
+                          data: RecentStopData(
+                            title: d[i].facilityName,
+                            subtitle: AppDateUtils.formatDateWithTime(d[i].date),
+                            amount: Currency.addPrefix(d[i].amount),
+                            status: d[i].status,
+                          ),
+                          rightAction: StatusBadge(status: d[i].status),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),

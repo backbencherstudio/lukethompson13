@@ -1,7 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/data/models/common/base.model.dart';
 
-part 'stop_log_response.model.g.dart';
+part 'stop_log_list_response.model.g.dart';
+
+enum StopLogStatus {
+  progress('progress'),
+  completed('completed');
+
+  final String value;
+  const StopLogStatus(this.value);
+
+  @override
+  String toString() => value;
+}
 
 @JsonSerializable()
 class StopLog {
@@ -61,11 +72,7 @@ class MetaData {
 
   final MetaDataFilters filters;
 
-  MetaData({
-    this.nextCursor,
-    required this.limit,
-    required this.filters,
-  });
+  MetaData({this.nextCursor, required this.limit, required this.filters});
 
   factory MetaData.fromJson(Map<String, dynamic> json) =>
       _$MetaDataFromJson(json);
@@ -77,25 +84,47 @@ class MetaData {
 }
 
 @JsonSerializable()
-class StopLogResponse extends BaseResponse {
+class StopLogListResponse extends BaseResponse {
   final List<StopLog>? data;
 
   @JsonKey(name: 'meta_data')
   final MetaData? metaData;
 
-  StopLogResponse({
+  StopLogListResponse({
     required super.success,
     required super.message,
     this.data,
     this.metaData,
   });
 
-  factory StopLogResponse.fromJson(Map<String, dynamic> json) =>
-      _$StopLogResponseFromJson(json);
+  factory StopLogListResponse.fromJson(Map<String, dynamic> json) =>
+      _$StopLogListResponseFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$StopLogResponseToJson(this);
+  Map<String, dynamic> toJson() => _$StopLogListResponseToJson(this);
 
   @override
-  String toString() => 'StopLogResponse${toJson()}';
+  String toString() => 'StopLogListResponse${toJson()}';
+}
+
+class StopLogListParams {
+  final String? cursor;
+  final int? limit;
+  final String? search;
+  final StopLogStatus? status;
+
+  const StopLogListParams({this.cursor, this.limit, this.search, this.status});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StopLogListParams &&
+          runtimeType == other.runtimeType &&
+          cursor == other.cursor &&
+          limit == other.limit &&
+          search == other.search &&
+          status == other.status;
+
+  @override
+  int get hashCode => Object.hash(cursor, limit, search, status);
 }
