@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
+import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
@@ -31,6 +32,7 @@ class RecentStopData {
   });
 }
 
+// TODO: validate data with the ui
 class RecentStop extends StatelessWidget {
   final RecentStopData data;
 
@@ -57,92 +59,80 @@ class RecentStop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          width: 1,
-          color:
-              borderColor ??
-              ColorManager.backgroundColorgreen1.withValues(alpha: .2),
-        ),
-        color: ColorManager.boxColor,
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.r),
-                    color: iconColor?.withAlpha(30),
-                  ),
-                  child: SvgPicture.asset(
-                    data.icon ?? Assets.icons.building,
-                    colorFilter: iconColor != null
-                        ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
-                        : null,
-                    width: 20.w,
-                    height: 20.h,
-                  ),
+    return AppCard(
+      borderColor: borderColor,
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.r),
+                  color: iconColor?.withAlpha(30),
                 ),
-                SizedBox(width: 12.w),
+                child: SvgPicture.asset(
+                  data.icon ?? Assets.icons.building,
+                  colorFilter: iconColor != null
+                      ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
+                      : null,
+                  width: 20.w,
+                  height: 20.h,
+                ),
+              ),
+              SizedBox(width: 12.w),
 
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              data.title,
-                              style: TextStyle(
-                                color: titleColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            data.title,
+                            style: TextStyle(
+                              color: titleColor,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          if (badge != null) ...[SizedBox(width: 8), badge!],
-                        ],
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        data.subtitle,
-                        style: TextStyle(color: subtitleColor, fontSize: 14.sp),
-                      ),
-                    ],
-                  ),
+                        ),
+                        if (badge != null) ...[SizedBox(width: 8), badge!],
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      data.subtitle,
+                      style: TextStyle(color: subtitleColor, fontSize: 14.sp),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            SizedBox(height: 16.h),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  data.amount,
-                  style: TextStyle(
-                    color: amountColor,
-                    fontSize: 26.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                data.amount,
+                style: TextStyle(
+                  color: amountColor,
+                  fontSize: 26.sp,
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
 
-                ?rightAction,
-              ],
-            ),
-          ],
-        ),
+              ?rightAction,
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -186,9 +176,8 @@ class RecentStopList extends StatelessWidget {
       skipLoadingOnRefresh: true,
       skipLoadingOnReload: true,
       loading: () => const Center(child: ActivityIndicator()),
-      error: (e, _) => StatusDisplay.error(
-        'Something went wrong. Please try again.',
-      ),
+      error: (e, _) =>
+          StatusDisplay.error('Something went wrong. Please try again.'),
       data: (stops) {
         if (stops == null || stops.isEmpty) {
           return StatusDisplay.muted('No stops found');

@@ -25,7 +25,15 @@ abstract class StoplogApi {
   );
 
   @GET(ApiEndpoints.stoplogReport)
-  Future<WeeklyReportSummaryResponse> getWeeklyReportSummary(@Query('tab') String tab);
+  Future<WeeklyReportSummaryResponse> getWeeklyReportSummary({
+    @Query('tab') required String tab,
+  });
+
+  @GET(ApiEndpoints.stoplogReport)
+  Future<TaxReportResponse> getTaxReportSummary({
+    @Query('tab') required String tab,
+    @Query('period') required TaxReportDataPeriod period,
+  });
 }
 
 final stoplogApiProvider = Provider<StoplogApi>((ref) {

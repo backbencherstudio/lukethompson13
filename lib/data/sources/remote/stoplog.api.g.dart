@@ -87,7 +87,9 @@ class _StoplogApi implements StoplogApi {
   }
 
   @override
-  Future<WeeklyReportSummaryResponse> getWeeklyReportSummary(String tab) async {
+  Future<WeeklyReportSummaryResponse> getWeeklyReportSummary({
+    required String tab,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'tab': tab};
     final _headers = <String, dynamic>{};
@@ -106,6 +108,36 @@ class _StoplogApi implements StoplogApi {
     late WeeklyReportSummaryResponse _value;
     try {
       _value = WeeklyReportSummaryResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<TaxReportResponse> getTaxReportSummary({
+    required String tab,
+    required TaxReportDataPeriod period,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'tab': tab, r'period': period};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<TaxReportResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/stoplog/report',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late TaxReportResponse _value;
+    try {
+      _value = TaxReportResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
