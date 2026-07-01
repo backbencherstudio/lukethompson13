@@ -1,56 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
+import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 
-class StopsScreen extends StatelessWidget {
+class StopsScreen extends ConsumerWidget {
   const StopsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final recentStopData = [
-      const RecentStopData(
-        title: "FedEx Ground Port",
-        subtitle: "Oct 21, 2026 • 09:00 AM",
-        amount: "\$135",
-        actionLabel: 'Claim Now',
-        badge: 'No Claim',
-      ),
-      const RecentStopData(
-        title: "Walmart DC Shelbyville. TN",
-        subtitle: "Oct 24, 2026 • 08:30 AM",
-        amount: "\$135",
-        actionLabel: "Rate Shipper",
-        badge: 'Paid',
-      ),
-      const RecentStopData(
-        title: "Cold Storage Solutions",
-        subtitle: "Oct 22, 2026 • 11:45 AM",
-        amount: "\$210",
-        actionLabel: "Claim Now",
-        badge: 'No Claim',
-      ),
-      const RecentStopData(
-        title: "Walmart DC Shelbyville",
-        subtitle: "Oct 24, 2026 • 08:30 AM",
-        amount: "\$75",
-        actionLabel: "Rate Shipper",
-        badge: 'Denied',
-      ),
-      const RecentStopData(
-        title: "Amazon Distribution DC",
-        subtitle: "Oct 23, 2026 • 11:45 AM",
-        amount: "\$200",
-        actionLabel: "Review Claim",
-        badge: 'Submitted',
-      ),
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recentStops = ref.watch(getStoplogListQuery(StopLogListParams()));
+
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -72,66 +37,7 @@ class StopsScreen extends StatelessWidget {
 
                 Expanded(
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ...List.generate(recentStopData.length, (i) {
-                          final item = recentStopData[i];
-                          final actionTheme = StatusBadge.resolveColor(
-                            item.actionLabel ?? '',
-                          );
-                          final statusTheme = StatusBadge.resolveColor(
-                            item.badge ?? '',
-                          );
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: RecentStop(
-                              amountColor: statusTheme,
-                              iconColor: statusTheme,
-                              data: item,
-                              badge: item.badge == null
-                                  ? null
-                                  : StatusBadge.small(status: item.badge!),
-                              rightAction: OutlinedButton(
-                                onPressed: () {
-                                  final label = item.actionLabel
-                                      ?.toLowerCase()
-                                      .trim();
-                                  String? navTo;
-
-                                  switch (label) {
-                                    case 'claim now':
-                                      navTo = Routes.claimDetails;
-                                      break;
-                                    case 'review claim':
-                                      navTo = Routes.claimReview;
-                                      break;
-                                    case 'rate shipper':
-                                      navTo = Routes.rateShipper;
-                                      break;
-                                    default:
-                                  }
-
-                                  if (navTo != null) {
-                                    context.push(navTo);
-                                  }
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  backgroundColor: actionTheme.withValues(
-                                    alpha: 0.05,
-                                  ),
-                                  foregroundColor: actionTheme,
-                                  side: BorderSide(color: actionTheme),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: Text(item.actionLabel ?? ""),
-                              ),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
+                    child: RecentStopList(value: recentStops),
                   ),
                 ),
               ],

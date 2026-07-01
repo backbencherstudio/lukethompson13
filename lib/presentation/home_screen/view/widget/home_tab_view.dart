@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/global_tab_bar.dart';
-import 'package:lukethompson/data/models/models.dart';
-import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
 
 class HomeTabView extends ConsumerStatefulWidget {

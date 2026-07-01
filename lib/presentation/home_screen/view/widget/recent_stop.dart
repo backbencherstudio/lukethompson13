@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/utils/date.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
+import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 
 class RecentStopData {
   final String title;
@@ -167,4 +173,46 @@ class RecentStop extends StatelessWidget {
       status: "Good Payer",
     ),
   ];
+}
+
+class RecentStopList extends StatelessWidget {
+  final AsyncValue<List<StopLog>?> value;
+
+  const RecentStopList({super.key, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return value.when(
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      loading: () => const Center(child: ActivityIndicator()),
+      error: (e, _) => StatusDisplay.error(
+        'Something went wrong. Please try again.',
+      ),
+      data: (stops) {
+        if (stops == null || stops.isEmpty) {
+          return StatusDisplay.muted('No stops found');
+        }
+
+        return Column(
+          children: stops
+              .map(
+                (stop) => Padding(
+                  padding: EdgeInsets.only(bottom: 10.h),
+                  child: RecentStop(
+                    data: RecentStopData(
+                      title: stop.facilityName,
+                      subtitle: AppDateUtils.formatDateWithTime(stop.date),
+                      amount: Currency.addPrefix(stop.amount),
+                      status: stop.status,
+                    ),
+                    rightAction: StatusBadge(status: stop.status),
+                  ),
+                ),
+              )
+              .toList(),
+        );
+      },
+    );
+  }
 }

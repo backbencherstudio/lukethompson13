@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/home_screen.dart';
 import 'package:lukethompson/presentation/log_screen/view/screen/log_screen.dart';
@@ -9,13 +9,21 @@ import 'package:lukethompson/presentation/profile/view/screen/profile_landing_sc
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/stops_screen.dart';
 
-class AppColors {
-  static const Color primaryGreen = Color(0xFF39D37C);
-  static const Color navBackground = Color(0xFF0D151C);
-  static const Color unselectedGrey = Color(0xFF7B8794);
+class ParentScreenNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void goTo(int index) => state = index;
+  void goToHome() => goTo(0);
+  void goToStops() => goTo(1);
+  void goToLog() => goTo(2);
+  void goToReports() => goTo(3);
+  void goToProfile() => goTo(4);
 }
 
-final parentScreenIndexProvider = StateProvider<int>((ref) => 0);
+final parentScreenIndexProvider = NotifierProvider<ParentScreenNotifier, int>(
+  ParentScreenNotifier.new,
+);
 
 class ParentScreen extends ConsumerStatefulWidget {
   const ParentScreen({super.key});
@@ -38,25 +46,20 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
     final selectIndex = ref.watch(parentScreenIndexProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF131A23),
       body: IndexedStack(index: selectIndex, children: _screens),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(top: 10, bottom: 20),
         decoration: const BoxDecoration(
-          color: AppColors.navBackground,
+          color: ColorManager.primary,
           border: Border(top: BorderSide(color: Colors.white10, width: 0.5)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavItem(0, IconManager.home, 'Home', selectIndex),
-
             _buildNavItem(1, IconManager.stops, 'Stops', selectIndex),
-
             _buildAddButton(2),
-
             _buildNavItem(3, IconManager.reports, 'Report', selectIndex),
-
             _buildNavItem(4, IconManager.profile, 'Profile', selectIndex),
           ],
         ),
@@ -68,11 +71,11 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
     final isSelected = currentIndex == index;
 
     final color = isSelected
-        ? AppColors.primaryGreen
-        : AppColors.unselectedGrey;
+        ? ColorManager.primaryButton
+        : ColorManager.greyText;
 
     return InkWell(
-      onTap: () => ref.read(parentScreenIndexProvider.notifier).state = index,
+      onTap: () => _onTap(index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -91,21 +94,22 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
     );
   }
 
+  void _onTap(int index) =>
+      ref.read(parentScreenIndexProvider.notifier).goTo(index);
+
   Widget _buildAddButton(int index) {
     return InkWell(
-      onTap: () {
-        ref.read(parentScreenIndexProvider.notifier).state = index;
-      },
+      onTap: () => _onTap(index),
       borderRadius: BorderRadius.circular(30),
       child: Container(
         height: 55,
         width: 55,
         decoration: BoxDecoration(
-          color: AppColors.primaryGreen,
+          color: ColorManager.primaryButton,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: AppColors.primaryGreen.withOpacity(0.3),
+              color: ColorManager.primaryButton.withValues(alpha: 0.3),
               blurRadius: 12,
               spreadRadius: 2,
               offset: const Offset(0, 4),
@@ -126,7 +130,7 @@ class _PlaceholderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: color.withOpacity(0.1),
+      color: color.withValues(alpha: 0.1),
       child: Center(
         child: Text(
           title,
