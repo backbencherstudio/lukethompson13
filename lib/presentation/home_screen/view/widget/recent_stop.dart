@@ -140,4 +140,31 @@ class RecentStop extends StatelessWidget {
       ),
     );
   }
+
+  static final mockrecentStopData = [
+    const RecentStopData(
+      title: "Walmart DC Shelbyville. TN",
+      subtitle: "Thu Apr 24 4h 15m wait 2h 15m billable",
+      amount: "\$135",
+      status: "Good Payer",
+    ),
+    const RecentStopData(
+      title: "FedEx Memphis Hub",
+      subtitle: "Fri Apr 25 3h 30m wait 1h 45m billable",
+      amount: "\$98",
+      status: "Average Payer",
+    ),
+    const RecentStopData(
+      title: "Amazon Fulfillment Center",
+      subtitle: "Mon Apr 28 5h 00m wait 3h 00m billable",
+      amount: "\$210",
+      status: "Poor Payer",
+    ),
+    const RecentStopData(
+      title: "UPS Louisville Hub",
+      subtitle: "Tue Apr 29 2h 45m wait 1h 30m billable",
+      amount: "\$75",
+      status: "Good Payer",
+    ),
+  ];
 }

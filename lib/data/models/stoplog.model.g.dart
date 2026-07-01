@@ -71,12 +71,14 @@ Map<String, dynamic> _$WeeklyActivityToJson(WeeklyActivity instance) =>
     };
 
 TopWorstStop _$TopWorstStopFromJson(Map<String, dynamic> json) => TopWorstStop(
+  facilityName: json['facility_name'] as String?,
   waitingHours: json['waiting_hours'] as String,
   waitingTimeText: json['waiting_time_text'] as String,
 );
 
 Map<String, dynamic> _$TopWorstStopToJson(TopWorstStop instance) =>
     <String, dynamic>{
+      'facility_name': instance.facilityName,
       'waiting_hours': instance.waitingHours,
       'waiting_time_text': instance.waitingTimeText,
     };

@@ -111,7 +111,7 @@ class WeeklyActivity {
 @JsonSerializable()
 class TopWorstStop {
   @JsonKey(name: 'facility_name')
-  final String? facilityNamefoo;
+  final String? facilityName;
 
   @JsonKey(name: 'waiting_hours')
   final String waitingHours;

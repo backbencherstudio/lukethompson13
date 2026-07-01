@@ -6,20 +6,20 @@ import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.
 class DetentionData {
   final String? imagePath;
   final String? title;
-  final String? price;
-  final String? rate;
+  final String? value;
+  final String? subtitle;
   final Color? titleColor;
-  final Color? priceColor;
-  final Color? rateColor;
+  final Color? valueColor;
+  final Color? subtitleColor;
 
   const DetentionData({
     this.imagePath,
     this.title,
-    this.price,
-    this.rate,
+    this.value,
+    this.subtitle,
     this.titleColor,
-    this.priceColor,
-    this.rateColor,
+    this.valueColor,
+    this.subtitleColor,
   });
 }
 
@@ -81,19 +81,19 @@ class DetentionWidget extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  data.price ?? "\$0",
+                  data.value ?? "\$0",
                   style: TextStyle(
                     fontSize: 24.sp,
-                    color: data.priceColor ?? ColorManager.primaryButton,
+                    color: data.valueColor ?? ColorManager.primaryButton,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 2.h),
                 Text(
-                  data.rate ?? "\$0/hr rate",
+                  data.subtitle ?? "",
                   style: TextStyle(
-                    color: data.rateColor ?? ColorManager.greyText,
-                    fontSize: 12.sp,
+                    color: data.subtitleColor ?? ColorManager.greyText,
+                    fontSize: 12,
                   ),
                 ),
               ],
