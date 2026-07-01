@@ -1,4 +1,4 @@
-import 'package:lukethompson/data/models/stoplog.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/stoplog.api.dart';
 import 'package:zenquery/zenquery.dart';
 

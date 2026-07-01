@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/network/providers.dart';
-import 'package:lukethompson/data/models/auth_state.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';
 import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
 

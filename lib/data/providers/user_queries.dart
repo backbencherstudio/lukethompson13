@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:lukethompson/data/models/auth.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:zenquery/zenquery.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';
 
