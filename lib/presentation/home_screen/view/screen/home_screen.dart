@@ -8,7 +8,7 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/data/providers/user_queries.dart';
 import 'package:lukethompson/presentation/custom_app_bar/custom_app_bar_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/carusel_slider.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/tab_bar.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/home_tab_view.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 
 class Homescreen extends ConsumerStatefulWidget {
@@ -58,7 +58,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
             children: [
               CustomCarouselSlider(),
               SizedBox(height: 12.h),
-              const Expanded(child: CustomTabScreen()),
+              const Expanded(child: HomeTabView()),
             ],
           ),
         ),

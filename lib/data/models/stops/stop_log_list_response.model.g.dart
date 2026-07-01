@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'stop_log_response.model.dart';
+part of 'stop_log_list_response.model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -42,8 +42,8 @@ Map<String, dynamic> _$MetaDataToJson(MetaData instance) => <String, dynamic>{
   'filters': instance.filters,
 };
 
-StopLogResponse _$StopLogResponseFromJson(Map<String, dynamic> json) =>
-    StopLogResponse(
+StopLogListResponse _$StopLogListResponseFromJson(Map<String, dynamic> json) =>
+    StopLogListResponse(
       success: json['success'] as bool,
       message: json['message'] as String,
       data: (json['data'] as List<dynamic>?)
@@ -54,10 +54,11 @@ StopLogResponse _$StopLogResponseFromJson(Map<String, dynamic> json) =>
           : MetaData.fromJson(json['meta_data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$StopLogResponseToJson(StopLogResponse instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'message': instance.message,
-      'data': instance.data,
-      'meta_data': instance.metaData,
-    };
+Map<String, dynamic> _$StopLogListResponseToJson(
+  StopLogListResponse instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'message': instance.message,
+  'data': instance.data,
+  'meta_data': instance.metaData,
+};

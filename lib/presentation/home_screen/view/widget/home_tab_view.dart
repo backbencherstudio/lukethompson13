@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/global_tab_bar.dart';
+import 'package:lukethompson/data/models/models.dart';
+import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/weeklyScreen.dart';
 
-class CustomTabScreen extends StatefulWidget {
-  const CustomTabScreen({super.key});
+class HomeTabView extends ConsumerStatefulWidget {
+  const HomeTabView({super.key});
 
   @override
-  State<CustomTabScreen> createState() => _CustomTabScreenState();
+  ConsumerState<HomeTabView> createState() => _CustomTabScreenState();
 }
 
-class _CustomTabScreenState extends State<CustomTabScreen>
+class _CustomTabScreenState extends ConsumerState<HomeTabView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
