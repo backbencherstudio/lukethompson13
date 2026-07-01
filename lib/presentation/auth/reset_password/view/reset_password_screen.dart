@@ -9,7 +9,7 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
-import 'package:lukethompson/data/models/auth.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/providers/providers.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 

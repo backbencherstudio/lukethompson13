@@ -1,4 +1,4 @@
-import 'package:lukethompson/data/models/auth.model.dart';
+import 'package:lukethompson/data/models/auth/auth.model.dart';
 
 class AuthState {
   final User? user;

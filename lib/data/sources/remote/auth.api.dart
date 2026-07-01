@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:lukethompson/core/network/api_endpoints.dart';
-import 'package:lukethompson/data/models/auth.model.dart';
-import 'package:lukethompson/data/models/base.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth.api.g.dart';

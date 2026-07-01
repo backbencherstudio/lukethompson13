@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:lukethompson/data/models/base.model.dart';
+import 'package:lukethompson/data/models/common/base.model.dart';
 
 part 'auth.model.g.dart';
 

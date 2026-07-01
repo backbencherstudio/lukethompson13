@@ -11,8 +11,7 @@ import 'package:lukethompson/presentation/auth/reset_password/view/reset_passwor
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
-import 'package:lukethompson/data/models/auth.model.dart';
-import 'package:lukethompson/data/models/base.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/providers/providers.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 

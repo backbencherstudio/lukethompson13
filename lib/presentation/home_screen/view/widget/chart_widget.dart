@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/data/models/stoplog.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 
 class ChartWidget extends StatelessWidget {
   const ChartWidget({super.key, this.chartData});

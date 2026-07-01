@@ -1,5 +1,4 @@
-import 'package:lukethompson/data/models/auth.model.dart';
-import 'package:lukethompson/data/models/base.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/repositories/auth_repository.dart';
 import 'package:zenquery/zenquery.dart';
 
