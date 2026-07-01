@@ -67,10 +67,133 @@ class ReportTabData {
 }
 
 @JsonSerializable()
+class TaxReportDateRange {
+  final String start;
+  final String end;
+
+  TaxReportDateRange({required this.start, required this.end});
+
+  factory TaxReportDateRange.fromJson(Map<String, dynamic> json) =>
+      _$TaxReportDateRangeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaxReportDateRangeToJson(this);
+
+  @override
+  String toString() => 'TaxReportDateRange${toJson()}';
+}
+
+@JsonSerializable()
+class RevenueRealization {
+  final String label;
+  final String claimed;
+  final String collected;
+
+  RevenueRealization({
+    required this.label,
+    required this.claimed,
+    required this.collected,
+  });
+
+  factory RevenueRealization.fromJson(Map<String, dynamic> json) =>
+      _$RevenueRealizationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RevenueRealizationToJson(this);
+
+  @override
+  String toString() => 'RevenueRealization${toJson()}';
+}
+
+@JsonSerializable()
+class TaxReportData {
+  final String tab;
+  final String period;
+
+  @JsonKey(name: 'date_range')
+  final TaxReportDateRange? dateRange;
+
+  @JsonKey(name: 'total_claimed')
+  final String totalClaimed;
+
+  @JsonKey(name: 'total_collected')
+  final String totalCollected;
+
+  @JsonKey(name: 'collection_rate')
+  final String collectionRate;
+
+  @JsonKey(name: 'avg_days_to_pay')
+  final String avgDaysToPay;
+
+  @JsonKey(name: 'avg_days_to_pay_text')
+  final String avgDaysToPayText;
+
+  @JsonKey(name: 'revenue_lost')
+  final String revenueLost;
+
+  @JsonKey(name: 'revenue_realization')
+  final List<RevenueRealization>? revenueRealization;
+
+  TaxReportData({
+    required this.tab,
+    required this.period,
+    this.dateRange,
+    required this.totalClaimed,
+    required this.totalCollected,
+    required this.collectionRate,
+    required this.avgDaysToPay,
+    required this.avgDaysToPayText,
+    required this.revenueLost,
+    this.revenueRealization,
+  });
+
+  factory TaxReportData.fromJson(Map<String, dynamic> json) =>
+      _$TaxReportDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaxReportDataToJson(this);
+
+  @override
+  String toString() => 'TaxReportData${toJson()}';
+}
+
+@JsonSerializable()
+class TaxReportResponse extends BaseResponse {
+  final TaxReportData? data;
+
+  TaxReportResponse({
+    required super.success,
+    required super.message,
+    this.data,
+  });
+
+  factory TaxReportResponse.fromJson(Map<String, dynamic> json) =>
+      _$TaxReportResponseFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$TaxReportResponseToJson(this);
+
+  @override
+  String toString() => 'TaxReportResponse${toJson()}';
+}
+
+enum TaxReportDataPeriod {
+  monthly('MONTHLY'),
+  yearly('YEARLY');
+
+  final String value;
+  const TaxReportDataPeriod(this.value);
+
+  @override
+  String toString() => value;
+}
+
+@JsonSerializable()
 class WeeklyReportSummaryResponse extends BaseResponse {
   final ReportTabData? data;
 
-  WeeklyReportSummaryResponse({required super.success, required super.message, this.data});
+  WeeklyReportSummaryResponse({
+    required super.success,
+    required super.message,
+    this.data,
+  });
 
   factory WeeklyReportSummaryResponse.fromJson(Map<String, dynamic> json) =>
       _$WeeklyReportSummaryResponseFromJson(json);
