@@ -43,18 +43,20 @@ Map<String, dynamic> _$ReportTabDataToJson(ReportTabData instance) =>
       'top_worst_stop': instance.topWorstStop,
     };
 
-ReportResponse _$ReportResponseFromJson(Map<String, dynamic> json) =>
-    ReportResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => ReportTabData.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+WeeklyReportSummaryResponse _$WeeklyReportSummaryResponseFromJson(
+  Map<String, dynamic> json,
+) => WeeklyReportSummaryResponse(
+  success: json['success'] as bool,
+  message: json['message'] as String,
+  data: json['data'] == null
+      ? null
+      : ReportTabData.fromJson(json['data'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$ReportResponseToJson(ReportResponse instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'message': instance.message,
-      'data': instance.data,
-    };
+Map<String, dynamic> _$WeeklyReportSummaryResponseToJson(
+  WeeklyReportSummaryResponse instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'message': instance.message,
+  'data': instance.data,
+};

@@ -41,7 +41,12 @@ class StatusDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: padding ?? EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+        padding:
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: AppPadding.screenPadding,
+              vertical: 16,
+            ),
         child: Text(
           message,
           style: TextStyle(color: color),
