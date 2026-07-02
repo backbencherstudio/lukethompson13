@@ -101,6 +101,20 @@ class RevenueRealization {
 
   @override
   String toString() => 'RevenueRealization${toJson()}';
+
+  static List<RevenueRealization> get mock => [
+    RevenueRealization(label: 'Jan', claimed: '400', collected: '340'),
+    RevenueRealization(label: 'Feb', claimed: '250', collected: '200'),
+    RevenueRealization(label: 'Mar', claimed: '400', collected: '300'),
+    RevenueRealization(label: 'Apr', claimed: '300', collected: '200'),
+    RevenueRealization(label: 'May', claimed: '400', collected: '350'),
+    RevenueRealization(label: 'Jun', claimed: '330', collected: '270'),
+    RevenueRealization(label: 'Jul', claimed: '200', collected: '200'),
+    RevenueRealization(label: 'Aug', claimed: '200', collected: '200'),
+    RevenueRealization(label: 'Sep', claimed: '200', collected: '200'),
+    RevenueRealization(label: 'Nov', claimed: '200', collected: '200'),
+    RevenueRealization(label: 'Dec', claimed: '200', collected: '200'),
+  ];
 }
 
 @JsonSerializable()

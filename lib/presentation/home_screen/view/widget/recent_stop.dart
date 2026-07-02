@@ -192,7 +192,7 @@ class RecentStopList extends StatelessWidget {
                     data: RecentStopData(
                       title: stop.facilityName,
                       subtitle: AppDateUtils.formatDateWithTime(stop.date),
-                      amount: Currency.addPrefix(stop.amount),
+                      amount: CurrencyFormatter.format(stop.amount),
                       status: stop.status,
                     ),
                     rightAction: StatusBadge(status: stop.status),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 
 class WeeklySummaryWidget extends StatelessWidget {
@@ -24,7 +25,7 @@ class WeeklySummaryWidget extends StatelessWidget {
     this.backgroundColor,
     this.titleColor,
     this.valueColor,
-    this.subtitleColor,
+    this.subtitleColor = ColorManager.subtextColor,
     this.iconColor,
     this.borderColor,
   });
@@ -70,7 +71,7 @@ class WeeklySummaryWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle ?? "",
-            style: TextStyle(color: subtitleColor ?? Colors.grey, fontSize: 12),
+            style: TextStyle(color: subtitleColor, fontSize: 12),
           ),
         ],
       ),
