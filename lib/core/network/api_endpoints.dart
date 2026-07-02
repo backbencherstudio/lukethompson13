@@ -15,7 +15,7 @@ class ApiEndpoints {
 
   static const String stoplogReport = '/stoplog/report';
   static const String stoplogHomeData = '/stoplog/home-data';
-  static const String stoplogList = '/stoplog';
+  static const String stoplog = '/stoplog';
 
   //  static const String library = 'api/library/categories';
   //  static const String  suggestedVideo= 'api/library';

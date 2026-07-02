@@ -17,7 +17,7 @@ abstract class StoplogApi {
     @Query('period') HomeDataPeriod period,
   );
 
-  @GET(ApiEndpoints.stoplogList)
+  @GET(ApiEndpoints.stoplog)
   Future<StopLogListResponse> getStopLogList(
     @Query('cursor') String? cursor,
     @Query('limit') int? limit,
@@ -36,11 +36,11 @@ abstract class StoplogApi {
     @Query('period') required TaxReportDataPeriod period,
   });
 
-  @PUT(ApiEndpoints.stoplogReport)
+  @PUT(ApiEndpoints.stoplog)
   @MultiPart()
   Future<BaseResponse> recordSingleStopLog({
-    @Part() required String id,
     @Part() required StopLogStep step,
+    @Part() required String? id,
     @Part() String? shipperId,
     @Part() String? facilityName,
     @Part() String? location,

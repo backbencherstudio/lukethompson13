@@ -19,6 +19,7 @@ class ApiClient {
       connectTimeout: _defaultTimeout,
       sendTimeout: _defaultTimeout,
       receiveTimeout: _defaultTimeout,
+      validateStatus: (status) => status != null && status < 500,
     ),
   );
   static Map<String, String>? headers;

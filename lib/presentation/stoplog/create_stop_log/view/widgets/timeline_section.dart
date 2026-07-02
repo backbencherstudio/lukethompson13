@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/data/providers/stoplog_queries.dart';
 
 import 'timeline_item.dart';
 
-class TimelineSection extends StatefulWidget {
+class TimelineSection extends ConsumerStatefulWidget {
   const TimelineSection({super.key});
 
   @override
-  State<TimelineSection> createState() => _TimelineSectionState();
+  ConsumerState<TimelineSection> createState() => _TimelineSectionState();
 }
 
-class _TimelineSectionState extends State<TimelineSection> {
+class _TimelineSectionState extends ConsumerState<TimelineSection> {
   var arrivalStatus = TimelineItemStatus.active;
   var dockInStatus = TimelineItemStatus.idle;
   var completedStatus = TimelineItemStatus.idle;
@@ -55,22 +58,39 @@ class _TimelineSectionState extends State<TimelineSection> {
     }
   }
 
+  Future<void> _logArrivalTime() async {
+    try {
+      final res = await ref
+          .read(recordStopLogMutation)
+          .run(RecordStopLogParams(step: .arrivalTime));
+      print("========================================");
+      print(res);
+      print("========================================");
+
+      _getLocation().then((_) {
+        setState(() {
+          arrivalStatus = TimelineItemStatus.completed;
+          dockInStatus = TimelineItemStatus.active;
+        });
+      });
+    } catch (e) {
+      if (mounted) {
+        context.showErrorSnackBar(e.toString());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final createLog = ref.watch(recordStopLogMutation);
+
     return Column(
       children: [
         TimelineItem(
           title: 'Arrival Time',
           status: arrivalStatus,
           controller: dockInController,
-          onConfirm: () {
-            _getLocation().then((_) {
-              setState(() {
-                arrivalStatus = TimelineItemStatus.completed;
-                dockInStatus = TimelineItemStatus.active;
-              });
-            });
-          },
+          onConfirm: _logArrivalTime,
           onChanged: (value) {
             setState(() {
               // no edited flag needed internally

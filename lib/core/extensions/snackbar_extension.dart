@@ -26,7 +26,7 @@ extension AppSnackBar on BuildContext {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           elevation: 0,
           backgroundColor: background,
           duration: duration,
