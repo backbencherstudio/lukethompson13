@@ -14,6 +14,7 @@ class DioClient {
            baseUrl: baseUrl,
            connectTimeout: connectTimeout ?? const Duration(seconds: 10),
            receiveTimeout: receiveTimeout ?? const Duration(seconds: 10),
+           validateStatus: (status) => status != null && status < 500,
          ),
        ) {
     if (interceptors != null) {

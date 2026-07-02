@@ -147,8 +147,8 @@ class _StoplogApi implements StoplogApi {
 
   @override
   Future<BaseResponse> recordSingleStopLog({
-    required String id,
     required StopLogStep step,
+    required String? id,
     String? shipperId,
     String? facilityName,
     String? location,
@@ -160,8 +160,10 @@ class _StoplogApi implements StoplogApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry('id', id));
     _data.fields.add(MapEntry('step', step.toString()));
+    if (id != null) {
+      _data.fields.add(MapEntry('id', id));
+    }
     if (shipperId != null) {
       _data.fields.add(MapEntry('shipperId', shipperId));
     }
@@ -186,7 +188,7 @@ class _StoplogApi implements StoplogApi {
           )
           .compose(
             _dio.options,
-            '/stoplog/report',
+            '/stoplog',
             queryParameters: queryParameters,
             data: _data,
           )
