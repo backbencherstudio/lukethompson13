@@ -1,17 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/widgets/app_card.dart';
+import 'package:lukethompson/data/models/report/report.model.dart';
 
 class RevenueRealizationChart extends StatelessWidget {
-  const RevenueRealizationChart({super.key});
+  const RevenueRealizationChart({super.key, this.chartData});
+
+  final List<RevenueRealization>? chartData;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1B1E26), // Dark background
-        borderRadius: BorderRadius.circular(24),
-      ),
+    return AppCard(
+      borderRadius: 16.r,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -23,7 +24,7 @@ class RevenueRealizationChart extends StatelessWidget {
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
-                maxY: 400,
+                maxY: _maxY,
                 barTouchData: BarTouchData(enabled: false),
                 titlesData: _buildTitlesData(),
                 gridData: _buildGridData(),
@@ -67,7 +68,7 @@ class RevenueRealizationChart extends StatelessWidget {
             const SizedBox(height: 8),
             _buildLegendItem("Claimed", const Color(0xFF33373E)),
           ],
-        )
+        ),
       ],
     );
   }
@@ -84,43 +85,34 @@ class RevenueRealizationChart extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
-        ),
+        Text(label, style: const TextStyle(color: Colors.white, fontSize: 14)),
       ],
     );
   }
 
   List<BarChartGroupData> _getBarGroups() {
-    // Data: [MonthIndex, CollectedValue, ClaimedValue]
-    final data = [
-      [0, 340.0, 400.0], // Jan
-      [1, 200.0, 250.0], // Feb
-      [2, 300.0, 400.0], // Mar
-      [3, 200.0, 300.0], // Apr
-      [4, 350.0, 400.0], // May
-      [5, 270.0, 330.0], // Jun
-      [6, 200.0, 200.0], // Jul
-    ];
+    if (chartData == null) return [];
 
-    return data.map((item) {
+    return chartData!.asMap().entries.map((entry) {
+      final i = entry.key;
+      final item = entry.value;
+      final collected = double.tryParse(item.collected) ?? 0;
+      final claimed = double.tryParse(item.claimed) ?? 0;
       return BarChartGroupData(
-        x: item[0].toInt(),
+        x: i,
         barRods: [
           BarChartRodData(
-            toY: (item[1] as num).toDouble(),
-            width: 32,
+            toY: collected,
+            width: 16,
             borderRadius: BorderRadius.circular(16),
             gradient: const LinearGradient(
               colors: [Color(0xFF32D779), Color(0xFF42E88B)],
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
             ),
-            // This creates the background "Claimed" bar
             backDrawRodData: BackgroundBarChartRodData(
               show: true,
-              toY: (item[2] as num).toDouble(),
+              toY: claimed,
               color: const Color(0xFF33373E),
             ),
           ),
@@ -129,7 +121,20 @@ class RevenueRealizationChart extends StatelessWidget {
     }).toList();
   }
 
+  double get _maxY {
+    if (chartData == null) return 0;
+    double max = 0;
+    for (final item in chartData!) {
+      final claimed = double.tryParse(item.claimed) ?? 0;
+      final collected = double.tryParse(item.collected) ?? 0;
+      final m = claimed > collected ? claimed : collected;
+      if (m > max) max = m;
+    }
+    return max == 0 ? 100 : max * 1.15;
+  }
+
   FlTitlesData _buildTitlesData() {
+    final labels = chartData?.map((e) => e.label).toList() ?? [];
     return FlTitlesData(
       show: true,
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -138,7 +143,7 @@ class RevenueRealizationChart extends StatelessWidget {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 40,
-          interval: 100,
+          interval: (_maxY / 4).ceilToDouble().clamp(50, double.infinity),
           getTitlesWidget: (value, meta) {
             return Text(
               '\$${value.toInt()}',
@@ -151,13 +156,11 @@ class RevenueRealizationChart extends StatelessWidget {
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (value, meta) {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
-            return Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
-                months[value.toInt()],
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
-              ),
+            final i = value.toInt();
+            if (i >= labels.length) return const SizedBox.shrink();
+            return Text(
+              labels[i],
+              style: const TextStyle(color: Colors.grey, fontSize: 12),
             );
           },
         ),
@@ -172,7 +175,7 @@ class RevenueRealizationChart extends StatelessWidget {
       horizontalInterval: 100,
       getDrawingHorizontalLine: (value) {
         return FlLine(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           strokeWidth: 1,
         );
       },

@@ -1,86 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/utils/date.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
+import 'package:lukethompson/data/models/report/report.model.dart';
+import 'package:lukethompson/data/providers/report_queries.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
 import 'package:lukethompson/presentation/reports/view/widget/revenue_realization.dart';
+import 'package:lukethompson/presentation/reports/view/widget/tax_period_selector.dart';
 import 'package:lukethompson/presentation/reports/view/widget/weekly_summary.dart';
 
-import '../widget/custome_date_selector.dart';
+import '../../providers/tax_report_filter.dart';
 
-class TaxReport extends StatelessWidget {
+class TaxReport extends ConsumerWidget {
   const TaxReport({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filter = ref.watch(taxReportFilterProvider);
+    final taxDataAsync = ref.watch(
+      getTaxReportSummaryQuery(switch (filter.type) {
+        DateRangeType.monthly => TaxReportDataPeriod.monthly,
+        DateRangeType.yearly => TaxReportDataPeriod.yearly,
+      }),
+    );
+
     return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
       child: Column(
         children: [
-          CustomDateSelector(),
-          20.height,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TotalClaimedWidget(
-                    title: "Total Claimed",
-                    amount: "\$600",
-                  ),
-                ),
-                SizedBox(width: 10.h),
-                Expanded(
-                  child: TotalClaimedWidget(
-                    title: "Total Collection",
-                    amount: "\$225",
-                    amountColor: Color(0xff33D17A),
-                  ),
-                ),
-              ],
-            ),
+          TaxPeriodSelector(
+            selectedType: filter.type,
+            onTypeChanged: (type) =>
+                ref.read(taxReportFilterProvider.notifier).setType(type),
           ),
           12.height,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TotalClaimedWidget(
-                    title: "Collection Rate",
-                    amount: "45%",
-                    amountColor: Colors.white,
+          taxDataAsync.when(
+            skipLoadingOnRefresh: true,
+            skipLoadingOnReload: true,
+            loading: () => const Center(child: ActivityIndicator()),
+            error: (e, _) => StatusDisplay.error(e.toString()),
+            data: (data) {
+              if (data == null) {
+                return StatusDisplay.muted('No Tax Report data found');
+              }
+
+              return Column(
+                children: [
+                  GridView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 7 / 4,
+                        ),
+                    children: [
+                      TotalClaimedWidget(
+                        title: "Total Claimed",
+                        amount: CurrencyFormatter.format(data.totalClaimed),
+                        amountColor: ColorManager.warningColor,
+                      ),
+                      TotalClaimedWidget(
+                        title: "Total Collection",
+                        amount: CurrencyFormatter.format(data.totalCollected),
+                        amountColor: ColorManager.primaryButton,
+                      ),
+                      TotalClaimedWidget(
+                        title: "Collection Rate",
+                        amount: ValueFormatter.asPercentage(
+                          data.collectionRate,
+                        ),
+                      ),
+                      TotalClaimedWidget(
+                        title: "Avg Days to Pay",
+                        amount: CurrencyFormatter.format(data.avgDaysToPay),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: 10.h),
-                Expanded(
-                  child: TotalClaimedWidget(
-                    title: "Avg Days to Pay",
-                    amount: "\$25",
-                    amountColor: Colors.white,
+                  12.height,
+                  WeeklySummaryWidget(
+                    icon: IconManager.revenueIcon,
+                    title: "Revenue Lost",
+                    value: CurrencyFormatter.format(data.revenueLost),
+                    subtitle: "Still Hurting margin",
+                    valueColor: ColorManager.errorColor,
                   ),
-                ),
-              ],
-            ),
+                  12.height,
+                  RevenueRealizationChart(chartData: data.revenueRealization),
+                ],
+              );
+            },
           ),
-          12.height,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: WeeklySummaryWidget(
-              icon: IconManager.revenueIcon,
-              title: "Revenue Lost",
-              value: "\$225",
-              subtitle: "Still Hurting margin",
-              valueColor: Color(0XFFFF5C6C),
-              borderColor: Color(0xff272C36),
-            ),
-          ),
-          12.height,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: RevenueRealizationChart(),
-          ),
+
           16.height,
         ],
       ),

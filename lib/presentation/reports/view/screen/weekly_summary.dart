@@ -41,7 +41,7 @@ class WeeklySummaryReport extends ConsumerWidget {
 
               WeeklySummaryWidget(
                 title: "Detention Captured",
-                value: Currency.addPrefix(data.detentionCaptured),
+                value: CurrencyFormatter.format(data.detentionCaptured),
                 subtitle: "Recovered revenue",
                 valueColor: ColorManager.primaryButton,
               ),
@@ -49,7 +49,7 @@ class WeeklySummaryReport extends ConsumerWidget {
               WeeklySummaryWidget(
                 icon: IconManager.revenueIcon,
                 title: "Revenue Lost",
-                value: Currency.addPrefix(data.revenueLost),
+                value: CurrencyFormatter.format(data.revenueLost),
                 subtitle: "Still Hurting margin",
                 valueColor: ColorManager.errorColor,
               ),
