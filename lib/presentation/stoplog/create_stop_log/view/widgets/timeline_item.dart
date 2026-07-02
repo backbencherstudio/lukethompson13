@@ -57,7 +57,7 @@ class TimelineItem extends StatelessWidget {
                   top: 40,
                   child: Container(
                     width: 2,
-                    height: 85,
+                    height: 92,
                     color: isCompleted ? activeColor : inactiveText,
                   ),
                 ),

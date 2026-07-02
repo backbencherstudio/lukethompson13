@@ -8,9 +8,9 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
-import 'package:lukethompson/presentation/log_screen/view/widget/breakdown_card.dart';
-import 'package:lukethompson/presentation/log_screen/view/widget/proof_package_card.dart';
-import 'package:lukethompson/presentation/log_screen/view/widget/send_method_toggle.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/breakdown_card.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/proof_package_card.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart';
 
 class LogStopResultScreen extends StatefulWidget {
   const LogStopResultScreen({super.key});
