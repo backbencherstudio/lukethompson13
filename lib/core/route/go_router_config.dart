@@ -8,7 +8,7 @@ import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
-import 'package:lukethompson/presentation/log_screen/view/screen/log_stop_result_screen.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen2.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';

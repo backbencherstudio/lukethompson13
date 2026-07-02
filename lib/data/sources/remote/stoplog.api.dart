@@ -7,6 +7,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'stoplog.api.g.dart';
 
+
 @RestApi()
 abstract class StoplogApi {
   factory StoplogApi(Dio dio) = _StoplogApi;
@@ -33,6 +34,18 @@ abstract class StoplogApi {
   Future<TaxReportResponse> getTaxReportSummary({
     @Query('tab') required String tab,
     @Query('period') required TaxReportDataPeriod period,
+  });
+
+  @PUT(ApiEndpoints.stoplogReport)
+  @MultiPart()
+  Future<BaseResponse> recordSingleStopLog({
+    @Part() required String id,
+    @Part() required StopLogStep step,
+    @Part() String? shipperId,
+    @Part() String? facilityName,
+    @Part() String? location,
+    @Part() List<MultipartFile>? attachments,
+    @Part() String? bolNumber,
   });
 }
 

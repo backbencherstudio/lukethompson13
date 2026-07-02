@@ -145,6 +145,64 @@ class _StoplogApi implements StoplogApi {
     return _value;
   }
 
+  @override
+  Future<BaseResponse> recordSingleStopLog({
+    required String id,
+    required StopLogStep step,
+    String? shipperId,
+    String? facilityName,
+    String? location,
+    List<MultipartFile>? attachments,
+    String? bolNumber,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry('id', id));
+    _data.fields.add(MapEntry('step', step.toString()));
+    if (shipperId != null) {
+      _data.fields.add(MapEntry('shipperId', shipperId));
+    }
+    if (facilityName != null) {
+      _data.fields.add(MapEntry('facilityName', facilityName));
+    }
+    if (location != null) {
+      _data.fields.add(MapEntry('location', location));
+    }
+    if (attachments != null) {
+      _data.files.addAll(attachments.map((i) => MapEntry('attachments', i)));
+    }
+    if (bolNumber != null) {
+      _data.fields.add(MapEntry('bolNumber', bolNumber));
+    }
+    final _options = _setStreamType<BaseResponse>(
+      Options(
+            method: 'PUT',
+            headers: _headers,
+            extra: _extra,
+            contentType: 'multipart/form-data',
+          )
+          .compose(
+            _dio.options,
+            '/stoplog/report',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late BaseResponse _value;
+    try {
+      _value = BaseResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
