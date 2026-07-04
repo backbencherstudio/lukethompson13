@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:lukethompson/core/utils/mutation.dart';
 
 import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/stoplog.api.dart';
-import 'package:zenquery/zenquery.dart';
+import 'package:zenquery/zenquery.dart' hide MutationState;
 
 final getStoplogHomeOverviewQuery = createQueryFamilyPersist((
   ref,
@@ -11,6 +15,18 @@ final getStoplogHomeOverviewQuery = createQueryFamilyPersist((
 ) async {
   final api = ref.read(stoplogApiProvider);
   final response = await api.homeDataOverview(period);
+  return response.data;
+});
+
+final getCurrentActiveStoplog = createQuery((ref) async {
+  final api = ref.read(stoplogApiProvider);
+  final response = await api.getCurrentActiveStoplog();
+  return response.data;
+});
+
+final getSingleLogWithId = createQueryFamily((ref, String id) async {
+  final api = ref.read(stoplogApiProvider);
+  final response = await api.getSingleStoplog(id);
   return response.data;
 });
 
@@ -35,7 +51,7 @@ class RecordStopLogParams {
   final StopLogStep step;
   final String? shipperId;
   final String? facilityName;
-  final String? location;
+  final StopLogLocation? location;
   final List<MultipartFile>? attachments;
   final String? bolNumber;
 
@@ -64,30 +80,33 @@ class RecordStopLogParams {
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    step,
-    shipperId,
-    facilityName,
-    location,
-    Object.hashAll(attachments ?? const []),
-    bolNumber,
-  );
+  int get hashCode =>
+      Object.hash(id, step, shipperId, facilityName, location, bolNumber);
 }
 
-final recordStopLogMutation =
-    createMutationWithParam<BaseResponse, RecordStopLogParams>((
-      tsx,
-      params,
-    ) async {
-      final api = tsx.get(stoplogApiProvider);
-      return await api.recordSingleStopLog(
+final recordStopLogProviderAction =
+    NotifierProvider<
+      RecordStopLogNotifier,
+      MutationState<StopLogRecordResponse>
+    >(RecordStopLogNotifier.new);
+
+class RecordStopLogNotifier extends MutationNotifier<StopLogRecordResponse> {
+  Future<StopLogRecordResponse> record(RecordStopLogParams params) {
+    final api = ref.read(stoplogApiProvider);
+
+    return mutate(() async {
+      return api.recordSingleStopLog(
+        // Should I await this function here?
         id: params.id,
         step: params.step,
         shipperId: params.shipperId,
         facilityName: params.facilityName,
-        location: params.location,
+        location: params.location != null
+            ? jsonEncode(params.location!.toJson())
+            : null,
         attachments: params.attachments,
         bolNumber: params.bolNumber,
       );
     });
+  }
+}

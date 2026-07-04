@@ -7,7 +7,6 @@ import 'package:retrofit/retrofit.dart';
 
 part 'stoplog.api.g.dart';
 
-
 @RestApi()
 abstract class StoplogApi {
   factory StoplogApi(Dio dio) = _StoplogApi;
@@ -15,14 +14,6 @@ abstract class StoplogApi {
   @GET(ApiEndpoints.stoplogHomeData)
   Future<HomeDataOverviewResponse> homeDataOverview(
     @Query('period') HomeDataPeriod period,
-  );
-
-  @GET(ApiEndpoints.stoplog)
-  Future<StopLogListResponse> getStopLogList(
-    @Query('cursor') String? cursor,
-    @Query('limit') int? limit,
-    @Query('search') String? search,
-    @Query('status') StopLogStatus? status,
   );
 
   @GET(ApiEndpoints.stoplogReport)
@@ -36,16 +27,30 @@ abstract class StoplogApi {
     @Query('period') required TaxReportDataPeriod period,
   });
 
+  @GET(ApiEndpoints.stoplogActive)
+  Future<ActiveStoplogResponse> getCurrentActiveStoplog();
+
+  @GET(ApiEndpoints.stoplogSingleId)
+  Future<SingleStoplogResponse> getSingleStoplog(@Path('id') String id);
+
+  @GET(ApiEndpoints.stoplog)
+  Future<StopLogListResponse> getStopLogList(
+    @Query('cursor') String? cursor,
+    @Query('limit') int? limit,
+    @Query('search') String? search,
+    @Query('status') StopLogStatus? status,
+  );
+
   @PUT(ApiEndpoints.stoplog)
   @MultiPart()
-  Future<BaseResponse> recordSingleStopLog({
+  Future<StopLogRecordResponse> recordSingleStopLog({
     @Part() required StopLogStep step,
     @Part() required String? id,
-    @Part() String? shipperId,
-    @Part() String? facilityName,
+    @Part(name: 'shipper_id') String? shipperId,
+    @Part(name: 'facility_name') String? facilityName,
     @Part() String? location,
     @Part() List<MultipartFile>? attachments,
-    @Part() String? bolNumber,
+    @Part(name: 'bol_number') String? bolNumber,
   });
 }
 

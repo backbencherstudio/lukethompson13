@@ -13,4 +13,8 @@ export 'report/report.model.dart';
 
 // Stops
 export 'stops/stop_log_list_response.model.dart';
+export 'stops/stop_log_location.model.dart';
+export 'stops/stop_log_record_response.model.dart';
+export 'stops/active_stoplog.model.dart';
+export 'stops/single_stoplog.model.dart';
 export 'stops/stop_log.model.dart';

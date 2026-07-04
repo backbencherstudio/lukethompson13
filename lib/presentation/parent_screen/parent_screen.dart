@@ -33,20 +33,28 @@ class ParentScreen extends ConsumerStatefulWidget {
 }
 
 class _ParentScreenState extends ConsumerState<ParentScreen> {
-  final List<Widget> _screens = [
-    Homescreen(),
-    StopsScreen(),
-    CreateStopLogScreen(),
-    ReportsScreen(),
-    ProfileScreen(),
-  ];
+  Widget _buildBody(int index) {
+    if (index == 2) {
+      return const CreateStopLogScreen();
+    }
+
+    return IndexedStack(
+      index: index > 2 ? index - 1 : index,
+      children: const [
+        Homescreen(),
+        StopsScreen(),
+        ReportsScreen(),
+        ProfileScreen(),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final selectIndex = ref.watch(parentScreenIndexProvider);
 
     return Scaffold(
-      body: IndexedStack(index: selectIndex, children: _screens),
+      body: _buildBody(selectIndex),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(top: 10, bottom: 20),
         decoration: const BoxDecoration(

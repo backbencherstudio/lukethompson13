@@ -49,44 +49,6 @@ class _StoplogApi implements StoplogApi {
   }
 
   @override
-  Future<StopLogListResponse> getStopLogList(
-    String? cursor,
-    int? limit,
-    String? search,
-    StopLogStatus? status,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'cursor': cursor,
-      r'limit': limit,
-      r'search': search,
-      r'status': status,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<StopLogListResponse>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/stoplog',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late StopLogListResponse _value;
-    try {
-      _value = StopLogListResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, response: _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<WeeklyReportSummaryResponse> getWeeklyReportSummary({
     required String tab,
   }) async {
@@ -146,7 +108,99 @@ class _StoplogApi implements StoplogApi {
   }
 
   @override
-  Future<BaseResponse> recordSingleStopLog({
+  Future<ActiveStoplogResponse> getCurrentActiveStoplog() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ActiveStoplogResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/stoplog/active',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ActiveStoplogResponse _value;
+    try {
+      _value = ActiveStoplogResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<SingleStoplogResponse> getSingleStoplog(String id) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<SingleStoplogResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/stoplog/${id}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SingleStoplogResponse _value;
+    try {
+      _value = SingleStoplogResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<StopLogListResponse> getStopLogList(
+    String? cursor,
+    int? limit,
+    String? search,
+    StopLogStatus? status,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursor': cursor,
+      r'limit': limit,
+      r'search': search,
+      r'status': status,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<StopLogListResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/stoplog',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late StopLogListResponse _value;
+    try {
+      _value = StopLogListResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<StopLogRecordResponse> recordSingleStopLog({
     required StopLogStep step,
     required String? id,
     String? shipperId,
@@ -165,10 +219,10 @@ class _StoplogApi implements StoplogApi {
       _data.fields.add(MapEntry('id', id));
     }
     if (shipperId != null) {
-      _data.fields.add(MapEntry('shipperId', shipperId));
+      _data.fields.add(MapEntry('shipper_id', shipperId));
     }
     if (facilityName != null) {
-      _data.fields.add(MapEntry('facilityName', facilityName));
+      _data.fields.add(MapEntry('facility_name', facilityName));
     }
     if (location != null) {
       _data.fields.add(MapEntry('location', location));
@@ -177,9 +231,9 @@ class _StoplogApi implements StoplogApi {
       _data.files.addAll(attachments.map((i) => MapEntry('attachments', i)));
     }
     if (bolNumber != null) {
-      _data.fields.add(MapEntry('bolNumber', bolNumber));
+      _data.fields.add(MapEntry('bol_number', bolNumber));
     }
-    final _options = _setStreamType<BaseResponse>(
+    final _options = _setStreamType<StopLogRecordResponse>(
       Options(
             method: 'PUT',
             headers: _headers,
@@ -195,9 +249,9 @@ class _StoplogApi implements StoplogApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse _value;
+    late StopLogRecordResponse _value;
     try {
-      _value = BaseResponse.fromJson(_result.data!);
+      _value = StopLogRecordResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

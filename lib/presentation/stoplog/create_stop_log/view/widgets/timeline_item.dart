@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 
 enum TimelineItemStatus { idle, active, completed }
 
@@ -9,6 +10,7 @@ class TimelineItem extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final bool isLastStep;
+  final bool isActionPending;
 
   // final bool isConfirmed;
   // final bool isEdited;
@@ -27,6 +29,7 @@ class TimelineItem extends StatelessWidget {
     required this.onChanged,
     this.onConfirm,
     this.status = TimelineItemStatus.idle,
+    this.isActionPending = false,
   });
 
   @override
@@ -102,29 +105,13 @@ class TimelineItem extends StatelessWidget {
                     ),
                     if (!isCompleted) ...[
                       SizedBox(width: 8.w),
-                      GestureDetector(
-                        onTap: isActive ? onConfirm : null,
-                        child: Container(
-                          height: 54,
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          decoration: BoxDecoration(
-                            color: isActive
-                                ? activeColor
-                                : const Color(0xFF1A2028),
-                            borderRadius: BorderRadius.circular(6.r),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                              color: isActive
-                                  ? Colors.white
-                                  : const Color(0xFF17754B),
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
+                      GlobalButton(
+                        width: null,
+                        borderRadius: 8,
+                        label: isActionPending ? 'loading..' :  'Confirm',
+                        onPressed: isActive && !isActionPending
+                            ? onConfirm
+                            : null,
                       ),
                     ],
                   ],

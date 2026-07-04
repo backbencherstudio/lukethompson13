@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/app_bottom_sheet.dart';
@@ -78,11 +80,27 @@ class _FacilitySearchSheetContentState
   Widget build(BuildContext context) {
     return AppBottomSheet(
       title: 'Select Facility',
-      heightRatio: 0.6,
-      fixedHeader: SearchBarWidget(
-        hintText: 'Search facilities...',
-        controller: _searchController,
-        focusNode: _focusNode,
+      heightRatio: 0.9,
+      fixedHeader: Column(
+        children: [
+          SearchBarWidget(
+            hintText: 'Search facilities...',
+            controller: _searchController,
+            focusNode: _focusNode,
+          ),
+
+          ListTile(
+            title: Text(
+              'Add "${_searchController.text}"',
+              style: const TextStyle(color: Colors.white),
+            ),
+            trailing: const Icon(
+              Icons.chevron_right,
+              color: ColorManager.subtextColor,
+            ),
+            onTap: () => Navigator.pop(context, _searchController.text),
+          ),
+        ],
       ),
       child: _filtered.isEmpty
           ? Padding(
