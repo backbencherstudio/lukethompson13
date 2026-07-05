@@ -1,69 +1,74 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/data/models/common/base.model.dart';
+import 'package:lukethompson/data/models/stops/stop_log.model.dart';
+import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
 
 part 'single_stoplog.model.g.dart';
 
 @JsonSerializable()
 class SingleStoplogData {
-  final String id;
+  final String? id;
 
-  @JsonKey(name: 'status')
-  final SingleStoplogStatus status;
+  @JsonKey(name: 'user_id')
+  final String? userId;
+
+  @JsonKey(name: 'shipper_facility_id')
+  final String? shipperFacilityId;
+
+  @JsonKey(name: 'shipper_id')
+  final String? shipperId;
+
+  @JsonKey(name: 'shipper_name')
+  final String? shipperName;
 
   @JsonKey(name: 'facility_name')
-  final String facilityName;
-
-  @JsonKey(name: 'arrived_at')
-  final DateTime arrivedAt;
-
-  @JsonKey(name: 'departed_at')
-  final DateTime? departedAt;
+  final String? facilityName;
 
   @JsonKey(name: 'bol_number')
   final String? bolNumber;
 
-  @JsonKey(name: 'gps_coordinates')
-  final String? gpsCoordinates;
+  final SingleStoplogStatus? status;
 
-  @JsonKey(name: 'rate_per_hour')
-  final int ratePerHour;
+  @JsonKey(name: 'arrived_at')
+  final DateTime? arrivedAt;
 
-  @JsonKey(name: 'free_wait_time')
-  final int freeWaitTime;
+  @JsonKey(name: 'docked_at')
+  final DateTime? dockedAt;
 
-  @JsonKey(name: 'billable_time')
-  final String billableTime;
+  @JsonKey(name: 'completed_at')
+  final DateTime? completedAt;
 
-  @JsonKey(name: 'billable_time_text')
-  final String billableTimeText;
+  @JsonKey(name: 'departed_at')
+  final DateTime? departedAt;
 
-  @JsonKey(name: 'arrival_departure_time')
-  final String arrivalDepartureTime;
+  @JsonKey(name: 'arrival_location')
+  final StopLogLocation? arrivalLocation;
 
-  final String address;
-  final String detention;
-  final String lost;
-  final List<String> attachments;
-  final dynamic claim;
+  @JsonKey(name: 'facility_address')
+  final StopLogLocation? facilityAddress;
+
+  final List<String>? attachments;
+
+  @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
+  final StopLogStep? currentStep;
 
   SingleStoplogData({
-    required this.id,
-    required this.status,
-    required this.facilityName,
-    required this.arrivedAt,
-    this.departedAt,
+    this.id,
+    this.userId,
+    this.shipperFacilityId,
+    this.shipperId,
+    this.shipperName,
+    this.facilityName,
     this.bolNumber,
-    this.gpsCoordinates,
-    required this.ratePerHour,
-    required this.freeWaitTime,
-    required this.billableTime,
-    required this.billableTimeText,
-    required this.arrivalDepartureTime,
-    required this.address,
-    required this.detention,
-    required this.lost,
-    required this.attachments,
-    this.claim,
+    this.status,
+    this.arrivedAt,
+    this.dockedAt,
+    this.completedAt,
+    this.departedAt,
+    this.arrivalLocation,
+    this.facilityAddress,
+    this.attachments,
+    this.currentStep,
   });
 
   factory SingleStoplogData.fromJson(Map<String, dynamic> json) =>
@@ -101,5 +106,5 @@ enum SingleStoplogStatus {
   @JsonValue('COMPLETED')
   completed,
   @JsonValue('PROGRESS')
-  progress;
+  progress,
 }

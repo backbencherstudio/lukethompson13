@@ -2,6 +2,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'stop_log_location.model.g.dart';
 
+double? _parseDouble(dynamic value) {
+  if (value == null) return null;
+  if (value is double) return value;
+  if (value is int) return value.toDouble();
+  if (value is String) return double.tryParse(value);
+  return null;
+}
+
 @JsonSerializable()
 class StopLogLocation {
   final String? city;
@@ -9,7 +17,11 @@ class StopLogLocation {
   final String? country;
   final String? address;
   final String? zip;
+
+  @JsonKey(fromJson: _parseDouble)
   final double? lat;
+
+  @JsonKey(fromJson: _parseDouble)
   final double? lng;
 
   StopLogLocation({

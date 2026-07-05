@@ -13,8 +13,8 @@ StopLogLocation _$StopLogLocationFromJson(Map<String, dynamic> json) =>
       country: json['country'] as String?,
       address: json['address'] as String?,
       zip: json['zip'] as String?,
-      lat: (json['lat'] as num?)?.toDouble(),
-      lng: (json['lng'] as num?)?.toDouble(),
+      lat: _parseDouble(json['lat']),
+      lng: _parseDouble(json['lng']),
     );
 
 Map<String, dynamic> _$StopLogLocationToJson(StopLogLocation instance) =>

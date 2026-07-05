@@ -13,26 +13,15 @@ import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/a
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_section.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/timeline_section.dart';
 
-class CreateStopLogScreen extends ConsumerStatefulWidget {
+class CreateStopLogScreen extends ConsumerWidget {
   const CreateStopLogScreen({super.key});
 
   @override
-  ConsumerState<CreateStopLogScreen> createState() =>
-      _CreateStopLogScreenState();
-}
-
-class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    print("initState ==========================");
-    final activeSession = ref.read(getCurrentActiveStoplog);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final activeSession = ref.watch(getCurrentActiveStoplog);
+    final session = ref.watch(
+      getSingleLogWithId(activeSession.value?.id ?? ''),
+    );
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -44,7 +33,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
       ),
       body: AppGradientBackground(
         child: SafeArea(
-          child: activeSession.isLoading
+          child: activeSession.isLoading || session.isLoading
               ? Center(child: ActivityIndicator())
               : SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
@@ -57,7 +46,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                       const FacilitySection(),
 
                       SizedBox(height: 24.h),
-                      const TimelineSection(),
+                      TimelineSection(session: session.value),
 
                       SizedBox(height: 24.h),
                       const AttachmentUploadSection(),

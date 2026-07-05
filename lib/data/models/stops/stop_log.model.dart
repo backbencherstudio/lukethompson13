@@ -7,6 +7,9 @@ enum StopLogStep {
   final String value;
   const StopLogStep(this.value);
 
+  static StopLogStep? fromValue(String? value) =>
+      values.where((e) => e.value == value).firstOrNull;
+
   @override
   String toString() => value;
 }

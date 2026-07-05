@@ -9,9 +9,9 @@ part of 'stop_log_record_response.model.dart';
 StopLogRecordLocation _$StopLogRecordLocationFromJson(
   Map<String, dynamic> json,
 ) => StopLogRecordLocation(
-  id: json['id'] as String,
-  createdAt: json['created_at'] as String,
-  updatedAt: json['updated_at'] as String,
+  id: json['id'] as String?,
+  createdAt: json['created_at'] as String?,
+  updatedAt: json['updated_at'] as String?,
   city: json['city'] as String?,
   state: json['state'] as String?,
   country: json['country'] as String?,
@@ -38,13 +38,13 @@ Map<String, dynamic> _$StopLogRecordLocationToJson(
 
 StopLogRecordData _$StopLogRecordDataFromJson(Map<String, dynamic> json) =>
     StopLogRecordData(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      shipperFacilityId: json['shipper_facility_id'] as String,
-      shipperName: json['shipper_name'] as String,
-      facilityName: json['facility_name'] as String,
+      id: json['id'] as String?,
+      userId: json['user_id'] as String?,
+      shipperFacilityId: json['shipper_facility_id'] as String?,
+      shipperName: json['shipper_name'] as String?,
+      facilityName: json['facility_name'] as String?,
       bolNumber: json['bol_number'] as String?,
-      status: json['status'] as String,
+      status: $enumDecodeNullable(_$SingleStoplogStatusEnumMap, json['status']),
       arrivedAt: json['arrived_at'] as String?,
       dockedAt: json['docked_at'] as String?,
       completedAt: json['completed_at'] as String?,
@@ -59,9 +59,11 @@ StopLogRecordData _$StopLogRecordDataFromJson(Map<String, dynamic> json) =>
           : StopLogRecordLocation.fromJson(
               json['facility_address'] as Map<String, dynamic>,
             ),
-      attachments: json['attachments'] as List<dynamic>?,
-      shipperId: json['shipper_id'] as String,
-      currentStep: _stepFromJson(json['current_step'] as String?),
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      shipperId: json['shipper_id'] as String?,
+      currentStep: StopLogStep.fromValue(json['current_step'] as String?),
     );
 
 Map<String, dynamic> _$StopLogRecordDataToJson(StopLogRecordData instance) =>
@@ -72,7 +74,7 @@ Map<String, dynamic> _$StopLogRecordDataToJson(StopLogRecordData instance) =>
       'shipper_name': instance.shipperName,
       'facility_name': instance.facilityName,
       'bol_number': instance.bolNumber,
-      'status': instance.status,
+      'status': _$SingleStoplogStatusEnumMap[instance.status],
       'arrived_at': instance.arrivedAt,
       'docked_at': instance.dockedAt,
       'completed_at': instance.completedAt,
@@ -81,8 +83,21 @@ Map<String, dynamic> _$StopLogRecordDataToJson(StopLogRecordData instance) =>
       'facility_address': instance.facilityAddress,
       'attachments': instance.attachments,
       'shipper_id': instance.shipperId,
-      'current_step': _stepToJson(instance.currentStep),
+      'current_step': _$StopLogStepEnumMap[instance.currentStep],
     };
+
+const _$SingleStoplogStatusEnumMap = {
+  SingleStoplogStatus.active: 'ACTIVE',
+  SingleStoplogStatus.completed: 'COMPLETED',
+  SingleStoplogStatus.progress: 'PROGRESS',
+};
+
+const _$StopLogStepEnumMap = {
+  StopLogStep.arrivalTime: 'arrivalTime',
+  StopLogStep.dockInTime: 'dockInTime',
+  StopLogStep.completedTime: 'completedTime',
+  StopLogStep.departureTime: 'departureTime',
+};
 
 StopLogRecordResponse _$StopLogRecordResponseFromJson(
   Map<String, dynamic> json,

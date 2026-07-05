@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/utils/error.dart';
-import 'package:lukethompson/data/models/stops/active_stoplog.model.dart';
 import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
+import 'package:lukethompson/data/models/stops/stop_log.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
+import 'package:lukethompson/data/sources/local/gps_service.dart';
 
 import 'timeline_item.dart';
 
 class TimelineSection extends ConsumerStatefulWidget {
-  const TimelineSection({super.key, this.activeSession});
+  const TimelineSection({super.key, this.session});
 
-  final ActiveStoplogData? activeSession;
+  final SingleStoplogData? session;
 
   @override
   ConsumerState<TimelineSection> createState() => _TimelineSectionState();
 }
 
 class _TimelineSectionState extends ConsumerState<TimelineSection> {
-  var arrivalStatus = TimelineItemStatus.active;
+  var arrivalStatus = TimelineItemStatus.idle;
   var dockInStatus = TimelineItemStatus.idle;
   var completedStatus = TimelineItemStatus.idle;
   var departureStatus = TimelineItemStatus.idle;
@@ -39,16 +39,47 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     text: _initialDepartureTime,
   );
 
-  SingleStoplogData? currentAciveSession;
-
   @override
   void initState() {
     super.initState();
+    _updateStatuses();
+  }
 
-    final session = widget.activeSession;
-    if (session != null) {
-      currentAciveSession = ref.watch(getSingleLogWithId(session.id)).value;
+  @override
+  void didUpdateWidget(TimelineSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.session != widget.session) {
+      _updateStatuses();
     }
+  }
+
+  void _updateStatuses() {
+    final s = widget.session;
+    if (s == null) return;
+
+    setState(() {
+      switch (s.currentStep) {
+        case StopLogStep.arrivalTime:
+          arrivalStatus = .completed;
+          dockInStatus = .active;
+        case StopLogStep.dockInTime:
+          arrivalStatus = .completed;
+          dockInStatus = .completed;
+          completedStatus = .active;
+        case StopLogStep.completedTime:
+          arrivalStatus = .completed;
+          dockInStatus = .completed;
+          completedStatus = .completed;
+          departureStatus = .active;
+        case StopLogStep.departureTime:
+          arrivalStatus = .completed;
+          dockInStatus = .completed;
+          completedStatus = .completed;
+          departureStatus = .completed;
+        case null:
+          context.showErrorSnackBar("currentStep is null");
+      }
+    });
   }
 
   @override
@@ -59,24 +90,13 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     super.dispose();
   }
 
-  Future<void> _getLocation() async {
-    try {
-      final permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        await Geolocator.requestPermission();
-      }
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
-      );
-      debugPrint('Location: $position');
-    } catch (e) {
-      debugPrint('Error getting location: $e');
-    }
-  }
-
   Future<void> _logArrivalTime() async {
+    final activeSessionId = widget.session?.id;
+    if (activeSessionId == null) return;
+
+    final position = await GpsService.getCurrentLocation();
+    if (position == null) return;
+
     final params = RecordStopLogParams(
       step: .arrivalTime,
       facilityName: "Test facility",
@@ -99,12 +119,130 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
       return;
     }
 
-    _getLocation().then((_) {
-      setState(() {
-        arrivalStatus = TimelineItemStatus.completed;
-        dockInStatus = TimelineItemStatus.active;
-      });
+    setState(() {
+      arrivalStatus = TimelineItemStatus.completed;
+      dockInStatus = TimelineItemStatus.active;
     });
+
+    if (mounted) {
+      context.showSuccessSnackBar("Arrival Time logged successfully");
+    }
+    ref.invalidate(getStoplogListQuery);
+  }
+
+  Future<void> _logDockedInTime() async {
+    final activeSessionId = widget.session?.id;
+    if (activeSessionId == null) return;
+
+    final position = await GpsService.getCurrentLocation();
+    if (position == null) return;
+
+    final params = RecordStopLogParams(
+      id: activeSessionId,
+      step: .dockInTime,
+      location: StopLogLocation(
+        city: 'Dhaka',
+        state: 'Dhaka Division',
+        country: 'BD',
+        address: 'Warehouse A, Williamsburg Bridge',
+        zip: '10001',
+        lat: position.latitude,
+        lng: position.longitude,
+      ),
+    );
+    final res = await ref
+        .read(recordStopLogProviderAction.notifier)
+        .record(params);
+
+    if (!res.success && mounted) {
+      context.showErrorSnackBar(res.message);
+      return;
+    }
+
+    setState(() {
+      dockInStatus = TimelineItemStatus.completed;
+      completedStatus = TimelineItemStatus.active;
+    });
+    if (mounted) {
+      context.showSuccessSnackBar("Dock In Time logged successfully");
+    }
+    ref.invalidate(getStoplogListQuery);
+  }
+
+  Future<void> _logCompletedTime() async {
+    final activeSessionId = widget.session?.id;
+    if (activeSessionId == null) return;
+
+    final position = await GpsService.getCurrentLocation();
+    if (position == null) return;
+
+    final params = RecordStopLogParams(
+      id: activeSessionId,
+      step: .completedTime,
+      location: StopLogLocation(
+        city: 'Dhaka',
+        state: 'Dhaka Division',
+        country: 'BD',
+        address: 'Warehouse A, Williamsburg Bridge',
+        zip: '10001',
+        lat: position.latitude,
+        lng: position.longitude,
+      ),
+    );
+    final res = await ref
+        .read(recordStopLogProviderAction.notifier)
+        .record(params);
+
+    if (!res.success && mounted) {
+      context.showErrorSnackBar(res.message);
+      return;
+    }
+
+    setState(() {
+      completedStatus = TimelineItemStatus.completed;
+      departureStatus = TimelineItemStatus.active;
+    });
+    if (mounted) {
+      context.showSuccessSnackBar("Completed Time logged successfully");
+    }
+    ref.invalidate(getStoplogListQuery);
+  }
+
+  Future<void> _logDepartureTime() async {
+    final activeSessionId = widget.session?.id;
+    if (activeSessionId == null) return;
+
+    final position = await GpsService.getCurrentLocation();
+    if (position == null) return;
+
+    final params = RecordStopLogParams(
+      id: activeSessionId,
+      step: .departureTime,
+      location: StopLogLocation(
+        city: 'Dhaka',
+        state: 'Dhaka Division',
+        country: 'BD',
+        address: 'Warehouse A, Williamsburg Bridge',
+        zip: '10001',
+        lat: position.latitude,
+        lng: position.longitude,
+      ),
+    );
+    final res = await ref
+        .read(recordStopLogProviderAction.notifier)
+        .record(params);
+
+    if (!res.success && mounted) {
+      context.showErrorSnackBar(res.message);
+      return;
+    }
+
+    setState(() {
+      departureStatus = TimelineItemStatus.completed;
+    });
+    if (mounted) {
+      context.showSuccessSnackBar("Departure Time logged successfully");
+    }
     ref.invalidate(getStoplogListQuery);
   }
 
@@ -128,7 +266,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           controller: dockInController,
           onConfirm: () => tryAwait(
             _logArrivalTime(),
-            onError: (e, _) => showSnackbarError(context, e),
+            onError: (e, _) => context.showErrorSnackBar(e.toString()),
           ),
           onChanged: (value) {
             setState(() {
@@ -141,28 +279,20 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           status: dockInStatus,
           controller: dockInController,
           onChanged: (_) {},
-          onConfirm: () {
-            _getLocation().then((_) {
-              setState(() {
-                dockInStatus = TimelineItemStatus.completed;
-                completedStatus = TimelineItemStatus.active;
-              });
-            });
-          },
+          onConfirm: () => tryAwait(
+            _logDockedInTime(),
+            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          ),
         ),
         TimelineItem(
           title: 'Completed Time',
           status: completedStatus,
           controller: completedController,
           onChanged: (_) {},
-          onConfirm: () {
-            _getLocation().then((_) {
-              setState(() {
-                completedStatus = TimelineItemStatus.completed;
-                departureStatus = TimelineItemStatus.active;
-              });
-            });
-          },
+          onConfirm: () => tryAwait(
+            _logCompletedTime(),
+            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          ),
         ),
         TimelineItem(
           title: 'Departure Time',
@@ -170,13 +300,10 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           controller: departureController,
           isLastStep: true,
           onChanged: (_) {},
-          onConfirm: () {
-            _getLocation().then((_) {
-              setState(() {
-                departureStatus = TimelineItemStatus.completed;
-              });
-            });
-          },
+          onConfirm: () => tryAwait(
+            _logDepartureTime(),
+            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          ),
         ),
       ],
     );

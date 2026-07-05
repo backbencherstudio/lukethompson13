@@ -1,25 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/data/models/common/base.model.dart';
+import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log.model.dart';
+import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
 
 part 'stop_log_record_response.model.g.dart';
 
-StopLogStep? _stepFromJson(String? value) {
-  if (value == null) return null;
-  return StopLogStep.values.firstWhere((e) => e.value == value);
-}
-
-String? _stepToJson(StopLogStep? step) => step?.value;
-
 @JsonSerializable()
 class StopLogRecordLocation {
-  final String id;
+  final String? id;
 
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final String? createdAt;
 
   @JsonKey(name: 'updated_at')
-  final String updatedAt;
+  final String? updatedAt;
 
   final String? city;
   final String? state;
@@ -30,9 +25,9 @@ class StopLogRecordLocation {
   final String? lng;
 
   StopLogRecordLocation({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
     this.city,
     this.state,
     this.country,
@@ -53,24 +48,24 @@ class StopLogRecordLocation {
 
 @JsonSerializable()
 class StopLogRecordData {
-  final String id;
+  final String? id;
 
   @JsonKey(name: 'user_id')
-  final String userId;
+  final String? userId;
 
   @JsonKey(name: 'shipper_facility_id')
-  final String shipperFacilityId;
+  final String? shipperFacilityId;
 
   @JsonKey(name: 'shipper_name')
-  final String shipperName;
+  final String? shipperName;
 
   @JsonKey(name: 'facility_name')
-  final String facilityName;
+  final String? facilityName;
 
   @JsonKey(name: 'bol_number')
   final String? bolNumber;
 
-  final String status;
+  final SingleStoplogStatus? status;
 
   @JsonKey(name: 'arrived_at')
   final String? arrivedAt;
@@ -90,22 +85,22 @@ class StopLogRecordData {
   @JsonKey(name: 'facility_address')
   final StopLogRecordLocation? facilityAddress;
 
-  final List<dynamic>? attachments;
+  final List<String>? attachments;
 
   @JsonKey(name: 'shipper_id')
-  final String shipperId;
+  final String? shipperId;
 
-  @JsonKey(name: 'current_step', fromJson: _stepFromJson, toJson: _stepToJson)
+  @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
   final StopLogStep? currentStep;
 
   StopLogRecordData({
-    required this.id,
-    required this.userId,
-    required this.shipperFacilityId,
-    required this.shipperName,
-    required this.facilityName,
+    this.id,
+    this.userId,
+    this.shipperFacilityId,
+    this.shipperName,
+    this.facilityName,
     this.bolNumber,
-    required this.status,
+    this.status,
     this.arrivedAt,
     this.dockedAt,
     this.completedAt,
@@ -113,7 +108,7 @@ class StopLogRecordData {
     this.arrivalLocation,
     this.facilityAddress,
     this.attachments,
-    required this.shipperId,
+    this.shipperId,
     this.currentStep,
   });
 
