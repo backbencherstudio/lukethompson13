@@ -44,7 +44,7 @@ abstract class StoplogApi {
   @PUT(ApiEndpoints.stoplog)
   @MultiPart()
   Future<StopLogRecordResponse> recordSingleStopLog({
-    @Part() required StopLogStep step,
+    @Part() StopLogStep? step,
     @Part() required String? id,
     @Part(name: 'shipper_id') String? shipperId,
     @Part(name: 'facility_name') String? facilityName,

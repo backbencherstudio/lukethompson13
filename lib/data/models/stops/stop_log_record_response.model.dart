@@ -3,6 +3,7 @@ import 'package:lukethompson/data/models/common/base.model.dart';
 import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
+import 'package:lukethompson/data/models/stops/stop_log_attachment.model.dart';
 
 part 'stop_log_record_response.model.g.dart';
 
@@ -85,7 +86,7 @@ class StopLogRecordData {
   @JsonKey(name: 'facility_address')
   final StopLogRecordLocation? facilityAddress;
 
-  final List<String>? attachments;
+  final List<StopLogAttachment>? attachments;
 
   @JsonKey(name: 'shipper_id')
   final String? shipperId;

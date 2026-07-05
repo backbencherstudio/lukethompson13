@@ -39,7 +39,7 @@ SingleStoplogData _$SingleStoplogDataFromJson(Map<String, dynamic> json) =>
               json['facility_address'] as Map<String, dynamic>,
             ),
       attachments: (json['attachments'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => StopLogAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
       currentStep: StopLogStep.fromValue(json['current_step'] as String?),
     );
@@ -75,6 +75,7 @@ const _$StopLogStepEnumMap = {
   StopLogStep.dockInTime: 'dockInTime',
   StopLogStep.completedTime: 'completedTime',
   StopLogStep.departureTime: 'departureTime',
+  StopLogStep.uploadDocuments: 'uploadDocuments',
 };
 
 SingleStoplogResponse _$SingleStoplogResponseFromJson(

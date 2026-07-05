@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/utils/error.dart';
-import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
-import 'package:lukethompson/data/models/stops/stop_log.model.dart';
-import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/data/sources/local/gps_service.dart';
 
 import 'timeline_item.dart';
 
 class TimelineSection extends ConsumerStatefulWidget {
-  const TimelineSection({super.key, this.session});
+  const TimelineSection({
+    super.key,
+    this.session,
+    required this.onSingleLogComplete,
+  });
 
   final SingleStoplogData? session;
+  final void Function(StopLogStep step) onSingleLogComplete;
 
   @override
   ConsumerState<TimelineSection> createState() => _TimelineSectionState();
@@ -55,7 +58,12 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
 
   void _updateStatuses() {
     final s = widget.session;
-    if (s == null) return;
+    if (s == null) {
+      setState(() {
+        arrivalStatus = .active;
+      });
+      return;
+    }
 
     setState(() {
       switch (s.currentStep) {
@@ -76,6 +84,8 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           dockInStatus = .completed;
           completedStatus = .completed;
           departureStatus = .completed;
+        case StopLogStep.uploadDocuments:
+          context.showErrorSnackBar("currentStep is uploadDocuments");
         case null:
           context.showErrorSnackBar("currentStep is null");
       }
@@ -92,7 +102,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
 
   Future<void> _logArrivalTime() async {
     final activeSessionId = widget.session?.id;
-    if (activeSessionId == null) return;
+    if (activeSessionId != null) return;
 
     final position = await GpsService.getCurrentLocation();
     if (position == null) return;
@@ -126,8 +136,8 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
 
     if (mounted) {
       context.showSuccessSnackBar("Arrival Time logged successfully");
+      widget.onSingleLogComplete(.arrivalTime);
     }
-    ref.invalidate(getStoplogListQuery);
   }
 
   Future<void> _logDockedInTime() async {
@@ -165,8 +175,8 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     });
     if (mounted) {
       context.showSuccessSnackBar("Dock In Time logged successfully");
+      widget.onSingleLogComplete(.dockInTime);
     }
-    ref.invalidate(getStoplogListQuery);
   }
 
   Future<void> _logCompletedTime() async {
@@ -204,8 +214,8 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     });
     if (mounted) {
       context.showSuccessSnackBar("Completed Time logged successfully");
+      widget.onSingleLogComplete(.completedTime);
     }
-    ref.invalidate(getStoplogListQuery);
   }
 
   Future<void> _logDepartureTime() async {
@@ -242,8 +252,8 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     });
     if (mounted) {
       context.showSuccessSnackBar("Departure Time logged successfully");
+      widget.onSingleLogComplete(.departureTime);
     }
-    ref.invalidate(getStoplogListQuery);
   }
 
   @override

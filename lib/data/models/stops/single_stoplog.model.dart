@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/data/models/common/base.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
+import 'package:lukethompson/data/models/stops/stop_log_attachment.model.dart';
 
 part 'single_stoplog.model.g.dart';
 
@@ -47,7 +48,7 @@ class SingleStoplogData {
   @JsonKey(name: 'facility_address')
   final StopLogLocation? facilityAddress;
 
-  final List<String>? attachments;
+  final List<StopLogAttachment>? attachments;
 
   @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
   final StopLogStep? currentStep;

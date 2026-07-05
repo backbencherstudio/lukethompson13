@@ -1,27 +1,79 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/data/models/stops/stop_log.model.dart';
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/attachment_upload_section.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_section.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/timeline_section.dart';
 
-class CreateStopLogScreen extends ConsumerWidget {
+class CreateStopLogScreen extends ConsumerStatefulWidget {
   const CreateStopLogScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CreateStopLogScreen> createState() =>
+      _CreateStopLogScreenState();
+}
+
+class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
+  Future<void> _onAttachmentPicked(XFile file) async {
+    final multipartFile = MultipartFile.fromFileSync(
+      file.path,
+      filename: file.name,
+    );
+
+    final params = RecordStopLogParams(
+      step: .uploadDocuments,
+      attachments: [multipartFile],
+    );
+    final res = await ref
+        .read(recordStopLogProviderAction.notifier)
+        .record(params);
+
+    if (!res.success && mounted) {
+      context.showErrorSnackBar(res.message);
+      return;
+    }
+
+    if (mounted) {
+      refetchSession();
+      context.showSuccessSnackBar("Log attachment uploaded successfully");
+    }
+  }
+
+  void refetchSession(StopLogStep step) {
+    // ref.invalidate(getStoplogListQuery);
+    ref.invalidate(getCurrentActiveStoplog);
+    ref.invalidate(getSingleLogWithId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final activeSession = ref.watch(getCurrentActiveStoplog);
     final session = ref.watch(
       getSingleLogWithId(activeSession.value?.id ?? ''),
     );
+
+    final submitedDepartureTime =
+        session.asData?.value?.status == .active &&
+        session.asData?.value?.currentStep == .departureTime;
+    final hasAttachemtn =
+        session.asData?.value?.attachments?.isNotEmpty ?? false;
+
+    print(session.asData?.value?.status);
+    print(session.asData?.value?.currentStep);
+    print(hasAttachemtn);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -33,7 +85,9 @@ class CreateStopLogScreen extends ConsumerWidget {
       ),
       body: AppGradientBackground(
         child: SafeArea(
-          child: activeSession.isLoading || session.isLoading
+          child:
+              activeSession.isLoading && !activeSession.hasValue ||
+                  session.isLoading && !session.hasValue
               ? Center(child: ActivityIndicator())
               : SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
@@ -46,10 +100,21 @@ class CreateStopLogScreen extends ConsumerWidget {
                       const FacilitySection(),
 
                       SizedBox(height: 24.h),
-                      TimelineSection(session: session.value),
+                      TimelineSection(
+                        onSingleLogComplete: (step) => refetchSession(step),
+                        session: session.value,
+                      ),
 
                       SizedBox(height: 24.h),
-                      const AttachmentUploadSection(),
+                      AttachmentUploadSection(
+                        disabled: !submitedDepartureTime || hasAttachemtn,
+                        onAttachmentPicked: (file) => tryAwait(
+                          _onAttachmentPicked(file),
+                          onError: (e, st) {
+                            context.showErrorSnackBar(e.toString());
+                          },
+                        ),
+                      ),
                       SizedBox(height: 100.h),
                     ],
                   ),
