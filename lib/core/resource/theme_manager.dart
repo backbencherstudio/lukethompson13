@@ -155,9 +155,9 @@ ThemeData getApplicationTheme() {
 
     // ===== Cursor & Selection Colors =====
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: ColorManager.primary,
-      selectionColor: ColorManager.primary.withValues(alpha: 0.1),
-      selectionHandleColor: ColorManager.primary,
+      cursorColor: ColorManager.primaryButton,
+      // selectionColor: ColorManager..withValues(alpha: 0.1),
+      // selectionHandleColor: ColorManager.primary,
     ),
 
     // ===== Input Field Theme =====

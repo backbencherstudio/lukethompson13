@@ -24,6 +24,13 @@ class CreateStopLogScreen extends ConsumerStatefulWidget {
 class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
   String? _sessionId;
   bool _isActiveSessionLoading = true;
+  bool _canCalculateAndPreview = false;
+
+  void activateCalculateBtn() {
+    setState(() {
+      _canCalculateAndPreview = true;
+    });
+  }
 
   @override
   void initState() {
@@ -50,11 +57,6 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     final isLoading =
         _isActiveSessionLoading && _sessionId == null ||
         session.isLoading && !session.hasValue;
-
-    final canCalculateAndPreview =
-        session.hasValue &&
-        !session.hasError &&
-        session.value?.status == .completed;
 
     // print("value ==========================================");
     // print(session.value);
@@ -92,6 +94,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                       SizedBox(height: 24.h),
                       TimelineSection(
                         onSingleLogComplete: (_) {},
+                        activateCalculateBtn: activateCalculateBtn,
                         session: session.value,
                       ),
 
@@ -104,15 +107,13 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(AppPadding.screenPadding),
-        child: canCalculateAndPreview
-            ? GlobalButton(
-                isDisabled: !canCalculateAndPreview,
-                label: "Calculate & Preview",
-                onPressed: () {
-                  context.push(Routes.logStopResult);
-                },
-              )
-            : null,
+        child: GlobalButton(
+          isDisabled: !_canCalculateAndPreview,
+          label: "Calculate & Preview",
+          onPressed: () {
+            context.push(Routes.logStopResult);
+          },
+        ),
       ),
     );
   }

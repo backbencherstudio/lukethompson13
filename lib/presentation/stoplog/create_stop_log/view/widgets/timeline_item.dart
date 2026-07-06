@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
@@ -15,6 +14,7 @@ class TimelineItem extends StatelessWidget {
   final TimelineItemStatus status;
   final Widget child;
   final bool isActionPending;
+  final double lineHeight;
 
   const TimelineItem({
     super.key,
@@ -23,6 +23,7 @@ class TimelineItem extends StatelessWidget {
     this.status = TimelineItemStatus.idle,
     required this.child,
     required this.isActionPending,
+    this.lineHeight = 92,
   });
 
   @override
@@ -61,7 +62,11 @@ class TimelineItem extends StatelessWidget {
               if (!isLastStep)
                 Positioned(
                   top: 22,
-                  child: Container(width: 2, height: 92, color: statusColor),
+                  child: Container(
+                    width: 2,
+                    height: lineHeight,
+                    color: statusColor,
+                  ),
                 ),
             ],
           ),
@@ -114,7 +119,7 @@ class TimelineItem extends StatelessWidget {
 }
 
 class TimelineContent extends StatelessWidget {
-  final TextEditingController controller;
+  final String value;
   final TimelineItemStatus status;
   final bool isActionPending;
   final ValueChanged<String> onChanged;
@@ -122,7 +127,7 @@ class TimelineContent extends StatelessWidget {
 
   const TimelineContent({
     super.key,
-    required this.controller,
+    required this.value,
     required this.status,
     required this.isActionPending,
     required this.onChanged,
@@ -131,6 +136,7 @@ class TimelineContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isIdle = status == TimelineItemStatus.idle;
     final isCompleted = status == TimelineItemStatus.completed;
     final isActive = status == TimelineItemStatus.active;
     final Color inactiveText = ColorManager.subtextColor;
@@ -151,7 +157,7 @@ class TimelineContent extends StatelessWidget {
               mainAxisAlignment: .spaceBetween,
               children: [
                 Text(
-                  controller.text,
+                  isIdle ? '00:00' : value,
                   style: TextStyle(
                     color: isCompleted
                         ? Colors.white
@@ -179,6 +185,74 @@ class TimelineContent extends StatelessWidget {
             onPressed: isActive && !isActionPending ? onConfirm : null,
           ),
         ],
+      ],
+    );
+  }
+}
+
+class TimelineContentField extends StatelessWidget {
+  final TextEditingController controller;
+  final TimelineItemStatus status;
+  final bool isActionPending;
+  final ValueChanged<String> onChanged;
+  final VoidCallback? onConfirm;
+
+  const TimelineContentField({
+    super.key,
+    required this.controller,
+    required this.status,
+    required this.isActionPending,
+    required this.onChanged,
+    this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isCompleted = status == TimelineItemStatus.completed;
+    final isActive = status == TimelineItemStatus.active;
+    final Color inactiveText = ColorManager.subtextColor;
+    // final hideActionBtn = isCompleted || !isCompleted && isActionPending;
+
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: controller,
+            onChanged: onChanged,
+            enabled: isActive && !isActionPending,
+            style: TextStyle(
+              color: isCompleted
+                  ? Colors.white
+                  : isActive
+                  ? Colors.white
+                  : ColorManager.disabledText,
+            ),
+            decoration: InputDecoration(
+              hintStyle: TextStyle(
+                color: isActive ? inactiveText : ColorManager.disabledText,
+              ),
+              hintText: 'Enter BOL number',
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 15,
+              ),
+              suffixIcon: Icon(
+                Icons.description_outlined,
+                size: 16.sp,
+                color: isActive ? Colors.white70 : inactiveText,
+              ),
+            ),
+          ),
+        ),
+        // if (!hideActionBtn) ...[
+        //   SizedBox(width: 8.w),
+        //   GlobalButton(
+        //     width: 120,
+        //     borderRadius: 8,
+        //     label: isActionPending ? 'Logging..' : 'Confirm',
+        //     onPressed: isActive && !isActionPending ? onConfirm : null,
+        //   ),
+        // ],
       ],
     );
   }

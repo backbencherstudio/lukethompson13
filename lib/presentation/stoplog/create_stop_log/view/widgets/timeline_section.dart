@@ -16,10 +16,12 @@ class TimelineSection extends ConsumerStatefulWidget {
     super.key,
     this.session,
     required this.onSingleLogComplete,
+    required this.activateCalculateBtn,
   });
 
   final SingleStoplogData? session;
   final void Function(StopLogStep step) onSingleLogComplete;
+  final void Function() activateCalculateBtn;
 
   @override
   ConsumerState<TimelineSection> createState() => _TimelineSectionState();
@@ -31,20 +33,12 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
   var completedStatus = TimelineItemStatus.idle;
   var departureStatus = TimelineItemStatus.idle;
   var attachmentsStatus = TimelineItemStatus.idle;
+  var bolNumberStatus = TimelineItemStatus.idle;
+  XFile? attachmentFile;
 
-  static const String _initialDockInTime = '08:15 AM';
-  static const String _initialCompletedTime = '12:45 AM';
   static const String _initialDepartureTime = '01:00 PM';
 
-  final TextEditingController dockInController = TextEditingController(
-    text: _initialDockInTime,
-  );
-  final TextEditingController completedController = TextEditingController(
-    text: _initialCompletedTime,
-  );
-  final TextEditingController departureController = TextEditingController(
-    text: _initialDepartureTime,
-  );
+  final bolNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -64,53 +58,67 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     final s = widget.session;
     if (s == null) {
       setState(() {
-        arrivalStatus = .active;
-        // arrivalStatus = .completed;
-        // dockInStatus = .completed;
-        // completedStatus = .completed;
-        // departureStatus = .active;
-        // attachmentsStatus = .active;
+        arrivalStatus = TimelineItemStatus.active;
+        dockInStatus = TimelineItemStatus.idle;
+        completedStatus = TimelineItemStatus.idle;
+        departureStatus = TimelineItemStatus.idle;
+        attachmentsStatus = TimelineItemStatus.idle;
+        bolNumberStatus = TimelineItemStatus.idle;
       });
       return;
     }
 
     setState(() {
+      if (s.bolNumber != null && bolNumberController.text != s.bolNumber) {
+        bolNumberController.text = s.bolNumber!;
+      }
+
+      arrivalStatus = TimelineItemStatus.idle;
+      dockInStatus = TimelineItemStatus.idle;
+      completedStatus = TimelineItemStatus.idle;
+      departureStatus = TimelineItemStatus.idle;
+      attachmentsStatus = TimelineItemStatus.idle;
+      bolNumberStatus = TimelineItemStatus.idle;
+
       switch (s.currentStep) {
         case StopLogStep.arrivalTime:
-          arrivalStatus = .completed;
-          dockInStatus = .active;
+          arrivalStatus = TimelineItemStatus.completed;
+          dockInStatus = TimelineItemStatus.active;
         case StopLogStep.dockInTime:
-          arrivalStatus = .completed;
-          dockInStatus = .completed;
-          completedStatus = .active;
+          arrivalStatus = TimelineItemStatus.completed;
+          dockInStatus = TimelineItemStatus.completed;
+          completedStatus = TimelineItemStatus.active;
         case StopLogStep.completedTime:
-          arrivalStatus = .completed;
-          dockInStatus = .completed;
-          completedStatus = .completed;
-          departureStatus = .active;
+          arrivalStatus = TimelineItemStatus.completed;
+          dockInStatus = TimelineItemStatus.completed;
+          completedStatus = TimelineItemStatus.completed;
+          departureStatus = TimelineItemStatus.active;
         case StopLogStep.departureTime:
-          arrivalStatus = .completed;
-          dockInStatus = .completed;
-          completedStatus = .completed;
-          departureStatus = .completed;
-          attachmentsStatus = .active;
+          arrivalStatus = TimelineItemStatus.completed;
+          dockInStatus = TimelineItemStatus.completed;
+          completedStatus = TimelineItemStatus.completed;
+          departureStatus = TimelineItemStatus.completed;
+          attachmentsStatus = TimelineItemStatus.active;
         case StopLogStep.uploadDocuments:
-          arrivalStatus = .completed;
-          dockInStatus = .completed;
-          completedStatus = .completed;
-          departureStatus = .completed;
-          attachmentsStatus = .completed;
+          arrivalStatus = TimelineItemStatus.completed;
+          dockInStatus = TimelineItemStatus.completed;
+          completedStatus = TimelineItemStatus.completed;
+          departureStatus = TimelineItemStatus.completed;
+          attachmentsStatus = TimelineItemStatus.completed;
+          bolNumberStatus = TimelineItemStatus.active;
         case null:
           print("currentStep is null");
+      }
+
+      if (s.bolNumber != null && s.bolNumber!.isNotEmpty) {
+        bolNumberStatus = TimelineItemStatus.completed;
       }
     });
   }
 
   @override
   void dispose() {
-    dockInController.dispose();
-    completedController.dispose();
-    departureController.dispose();
+    bolNumberController.dispose();
     super.dispose();
   }
 
@@ -283,16 +291,44 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     ref.invalidate(getSingleLogWithId);
   }
 
-  Future<void> _onAttachmentPicked(XFile file) async {
-    final multipartFile = MultipartFile.fromFileSync(
-      file.path,
-      filename: file.name,
-    );
+  Future<void> _pickAttachmentFile(XFile file) async {
+    attachmentFile = file;
+    setState(() {
+      attachmentsStatus = TimelineItemStatus.completed;
+      bolNumberStatus = TimelineItemStatus.active;
+    });
+    widget.activateCalculateBtn();
+  }
+
+  Future<void> _logBolNumberAndAttachment() async {
+    final activeSessionId = widget.session?.id;
+    if (activeSessionId == null) return;
+
+    final hasExistingAttachments =
+        widget.session?.attachments != null &&
+        widget.session!.attachments!.isNotEmpty;
+    if (attachmentFile == null && !hasExistingAttachments) {
+      context.showErrorSnackBar("Please select an attachment file");
+      return;
+    }
+
+    MultipartFile? multipartFile;
+    if (attachmentFile != null) {
+      multipartFile = MultipartFile.fromFileSync(
+        attachmentFile!.path,
+        filename: attachmentFile!.name,
+      );
+    }
 
     final params = RecordStopLogParams(
-      step: .uploadDocuments,
-      attachments: [multipartFile],
+      id: activeSessionId,
+      step: StopLogStep.uploadDocuments,
+      bolNumber: bolNumberController.text.trim().isEmpty
+          ? null
+          : bolNumberController.text.trim(),
+      attachments: multipartFile != null ? [multipartFile] : null,
     );
+
     final res = await ref
         .read(recordStopLogProviderAction.notifier)
         .record(params);
@@ -302,12 +338,13 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
       return;
     }
 
+    setState(() {
+      bolNumberStatus = TimelineItemStatus.completed;
+    });
+
     if (mounted) {
-      setState(() {
-        attachmentsStatus = .completed;
-      });
-      ref.invalidate(getSingleLogWithId);
-      context.showSuccessSnackBar("Log attachment uploaded successfully");
+      context.showSuccessSnackBar("Your Step log is completed");
+      _refetchSession();
     }
   }
 
@@ -328,7 +365,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Arrival Time',
           status: arrivalStatus,
           child: TimelineContent(
-            controller: dockInController,
+            value: _initialDepartureTime,
             status: arrivalStatus,
             isActionPending: _isActionPending(
               null,
@@ -349,7 +386,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Dock In Time',
           status: dockInStatus,
           child: TimelineContent(
-            controller: dockInController,
+            value: _initialDepartureTime,
             status: dockInStatus,
             isActionPending: _isActionPending(
               .arrivalTime,
@@ -370,7 +407,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Completed Time',
           status: completedStatus,
           child: TimelineContent(
-            controller: completedController,
+            value: _initialDepartureTime,
             status: completedStatus,
             isActionPending: _isActionPending(
               .dockInTime,
@@ -391,7 +428,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Departure Time',
           status: departureStatus,
           child: TimelineContent(
-            controller: departureController,
+            value: _initialDepartureTime,
             status: departureStatus,
             isActionPending: _isActionPending(
               .completedTime,
@@ -405,18 +442,38 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           ),
         ),
         TimelineItem(
+          lineHeight: 330,
           isActionPending:
               attachmentsStatus == .active && recordStopLogMutation.isPending,
           label: 'Attachments',
           status: attachmentsStatus,
-          isLastStep: true,
           child: AttachmentUploadSection(
             disabled: attachmentsStatus != .active,
             onAttachmentPicked: (file) => tryAwait(
-              _onAttachmentPicked(file),
+              _pickAttachmentFile(file),
               onError: (e, st) {
                 context.showErrorSnackBar(e.toString());
               },
+            ),
+          ),
+        ),
+        TimelineItem(
+          isActionPending:
+              bolNumberStatus == TimelineItemStatus.active &&
+              recordStopLogMutation.isPending,
+          label: 'BOL Number',
+          isLastStep: true,
+          status: bolNumberStatus,
+          child: TimelineContentField(
+            controller: bolNumberController,
+            status: bolNumberStatus,
+            isActionPending:
+                bolNumberStatus == TimelineItemStatus.active &&
+                recordStopLogMutation.isPending,
+            onChanged: (_) {},
+            onConfirm: () => tryAwait(
+              _logBolNumberAndAttachment(),
+              onError: (e, _) => context.showErrorSnackBar(e.toString()),
             ),
           ),
         ),
