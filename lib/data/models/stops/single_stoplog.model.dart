@@ -53,6 +53,24 @@ class SingleStoplogData {
   @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
   final StopLogStep? currentStep;
 
+
+  // Available on stoplog completion
+  @JsonKey(name: 'gps_coordinates')
+  final String? gpsCoordinates;
+  @JsonKey(name: 'rate_per_hour')
+  final int? ratePerHour;
+  @JsonKey(name: 'free_wait_time')
+  final int? freeWaitTime;
+  @JsonKey(name: 'billable_time')
+  final String? billableTime;
+  @JsonKey(name: 'billable_time_text')
+  final String? billableTimeText;
+  @JsonKey(name: 'arrival_departure_time')
+  final String? arrivalDepartureTime;
+  final String? address;
+  final String? detention;
+  final String? lost;
+
   SingleStoplogData({
     this.id,
     this.userId,
@@ -70,6 +88,15 @@ class SingleStoplogData {
     this.facilityAddress,
     this.attachments,
     this.currentStep,
+    this.gpsCoordinates,
+    this.ratePerHour,
+    this.freeWaitTime,
+    this.billableTime,
+    this.billableTimeText,
+    this.arrivalDepartureTime,
+    this.address,
+    this.detention,
+    this.lost,
   });
 
   factory SingleStoplogData.fromJson(Map<String, dynamic> json) =>

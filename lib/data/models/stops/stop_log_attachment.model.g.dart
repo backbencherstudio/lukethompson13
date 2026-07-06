@@ -11,10 +11,10 @@ StopLogAttachment _$StopLogAttachmentFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       type: json['type'] as String,
       fileName: json['file_name'] as String,
-      fileUrl: json['file_url'] as String,
-      mimeType: json['mime_type'] as String,
-      sizeBytes: (json['size_bytes'] as num).toInt(),
-      createdAt: json['created_at'] as String,
+      fileUrl: json['file_url'] as String?,
+      mimeType: json['mime_type'] as String?,
+      sizeBytes: (json['size_bytes'] as num?)?.toInt(),
+      createdAt: json['created_at'] as String?,
     );
 
 Map<String, dynamic> _$StopLogAttachmentToJson(StopLogAttachment instance) =>

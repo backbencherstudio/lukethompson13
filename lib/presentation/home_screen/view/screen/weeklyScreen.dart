@@ -24,9 +24,9 @@ class Weeklyscreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final overviewAsync = ref.watch(getStoplogHomeOverviewQuery(period));
-    final recentStops = ref.watch(
-      getStoplogListQuery(StopLogListParams(limit: 10)),
-    );
+    // final recentStops = ref.watch(
+    //   getStoplogListQuery(StopLogListParams(limit: 10)),
+    // );
 
     return overviewAsync.when(
       skipLoadingOnRefresh: true,
@@ -89,7 +89,7 @@ class Weeklyscreen extends ConsumerWidget {
                   child: Text('See All'),
                 ),
               ),
-              RecentStopList(value: recentStops),
+              // RecentStopList(value: recentStops),
             ],
           ),
         );

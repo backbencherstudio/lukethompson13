@@ -12,25 +12,25 @@ class StopLogAttachment {
   final String fileName;
 
   @JsonKey(name: 'file_url')
-  final String fileUrl;
+  final String? fileUrl;
 
   @JsonKey(name: 'mime_type')
-  final String mimeType;
+  final String? mimeType;
 
   @JsonKey(name: 'size_bytes')
-  final int sizeBytes;
+  final int? sizeBytes;
 
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final String? createdAt;
 
   StopLogAttachment({
     required this.id,
     required this.type,
     required this.fileName,
-    required this.fileUrl,
-    required this.mimeType,
-    required this.sizeBytes,
-    required this.createdAt,
+    this.fileUrl,
+    this.mimeType,
+    this.sizeBytes,
+    this.createdAt,
   });
 
   factory StopLogAttachment.fromJson(Map<String, dynamic> json) =>

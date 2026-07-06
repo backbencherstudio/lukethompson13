@@ -45,14 +45,14 @@ class _FacilitySectionState extends State<FacilitySection> {
             }
           },
         ),
-        SizedBox(height: 15.h),
-        InfoBanner(
-          icon: Icons.warning_amber_rounded,
-          title: "Heads up - Amazon FC Dallas",
-          content:
-              "8 GetDockPay drivers reported slow or no payment here. Attach your BOL and document everything.",
-          titleColor: ColorManager.errorColor,
-        ),
+        // SizedBox(height: 15.h),
+        // InfoBanner(
+        //   icon: Icons.warning_amber_rounded,
+        //   title: "Heads up - Amazon FC Dallas",
+        //   content:
+        //       "8 GetDockPay drivers reported slow or no payment here. Attach your BOL and document everything.",
+        //   titleColor: ColorManager.errorColor,
+        // ),
       ],
     );
   }

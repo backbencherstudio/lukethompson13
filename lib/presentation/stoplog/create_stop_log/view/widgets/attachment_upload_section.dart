@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
-import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
@@ -62,8 +61,8 @@ class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Attachments", style: context.labelLarge),
-        SizedBox(height: 12.h),
+        // Text("Attachments", style: context.labelLarge),
+        // SizedBox(height: 12.h),
         DottedBorder(
           color: ColorManager.subtextColor.withValues(
             alpha: widget.disabled ? 0.2 : 0.5,

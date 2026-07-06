@@ -1,20 +1,15 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:lukethompson/core/extensions/snackbar_extension.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/utils/error.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/data/models/stops/stop_log.model.dart';
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/attachment_upload_section.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_section.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/timeline_section.dart';
 
@@ -27,53 +22,48 @@ class CreateStopLogScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
-  Future<void> _onAttachmentPicked(XFile file) async {
-    final multipartFile = MultipartFile.fromFileSync(
-      file.path,
-      filename: file.name,
-    );
+  String? _sessionId;
+  bool _isActiveSessionLoading = true;
 
-    final params = RecordStopLogParams(
-      step: .uploadDocuments,
-      attachments: [multipartFile],
-    );
-    final res = await ref
-        .read(recordStopLogProviderAction.notifier)
-        .record(params);
-
-    if (!res.success && mounted) {
-      context.showErrorSnackBar(res.message);
-      return;
-    }
-
-    if (mounted) {
-      refetchSession();
-      context.showSuccessSnackBar("Log attachment uploaded successfully");
-    }
-  }
-
-  void refetchSession(StopLogStep step) {
-    // ref.invalidate(getStoplogListQuery);
-    ref.invalidate(getCurrentActiveStoplog);
-    ref.invalidate(getSingleLogWithId);
+  @override
+  void initState() {
+    super.initState();
+    final activeSession = ref.read(getCurrentActiveStoplog);
+    _sessionId = activeSession.value?.id;
+    _isActiveSessionLoading = activeSession.isLoading;
   }
 
   @override
   Widget build(BuildContext context) {
-    final activeSession = ref.watch(getCurrentActiveStoplog);
-    final session = ref.watch(
-      getSingleLogWithId(activeSession.value?.id ?? ''),
-    );
+    final session = _sessionId != null && _sessionId!.isNotEmpty
+        ? ref.watch(getSingleLogWithId(_sessionId!))
+        : const AsyncValue.data(null);
 
-    final submitedDepartureTime =
-        session.asData?.value?.status == .active &&
-        session.asData?.value?.currentStep == .departureTime;
-    final hasAttachemtn =
-        session.asData?.value?.attachments?.isNotEmpty ?? false;
+    ref.listen(getCurrentActiveStoplog, (prev, next) {
+      if (!mounted) return;
+      setState(() {
+        _sessionId = next.value?.id;
+        _isActiveSessionLoading = next.isLoading;
+      });
+    });
 
-    print(session.asData?.value?.status);
-    print(session.asData?.value?.currentStep);
-    print(hasAttachemtn);
+    final isLoading =
+        _isActiveSessionLoading && _sessionId == null ||
+        session.isLoading && !session.hasValue;
+
+    final canCalculateAndPreview =
+        session.hasValue &&
+        !session.hasError &&
+        session.value?.status == .completed;
+
+    // print("value ==========================================");
+    // print(session.value);
+    // print(session.value?.status);
+    // print(session.value?.currentStep);
+    // print("==========================================");
+    // final canCalculateAndPreview = session.value?.status == .completed;
+    // print(session.error.toString());
+    // print(session.stackTrace);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -85,10 +75,10 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
       ),
       body: AppGradientBackground(
         child: SafeArea(
-          child:
-              activeSession.isLoading && !activeSession.hasValue ||
-                  session.isLoading && !session.hasValue
+          child: isLoading
               ? Center(child: ActivityIndicator())
+              : session.hasError
+              ? StatusDisplay.error(session.error.toString())
               : SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
                     horizontal: AppPadding.screenPadding,
@@ -101,20 +91,10 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
 
                       SizedBox(height: 24.h),
                       TimelineSection(
-                        onSingleLogComplete: (step) => refetchSession(step),
+                        onSingleLogComplete: (_) {},
                         session: session.value,
                       ),
 
-                      SizedBox(height: 24.h),
-                      AttachmentUploadSection(
-                        disabled: !submitedDepartureTime || hasAttachemtn,
-                        onAttachmentPicked: (file) => tryAwait(
-                          _onAttachmentPicked(file),
-                          onError: (e, st) {
-                            context.showErrorSnackBar(e.toString());
-                          },
-                        ),
-                      ),
                       SizedBox(height: 100.h),
                     ],
                   ),
@@ -124,12 +104,15 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(AppPadding.screenPadding),
-        child: GlobalButton(
-          label: "Calculate & Preview",
-          onPressed: () {
-            context.push(Routes.logStopResult);
-          },
-        ),
+        child: canCalculateAndPreview
+            ? GlobalButton(
+                isDisabled: !canCalculateAndPreview,
+                label: "Calculate & Preview",
+                onPressed: () {
+                  context.push(Routes.logStopResult);
+                },
+              )
+            : null,
       ),
     );
   }

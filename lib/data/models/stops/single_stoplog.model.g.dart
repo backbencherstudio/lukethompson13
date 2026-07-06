@@ -42,6 +42,15 @@ SingleStoplogData _$SingleStoplogDataFromJson(Map<String, dynamic> json) =>
           ?.map((e) => StopLogAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
       currentStep: StopLogStep.fromValue(json['current_step'] as String?),
+      gpsCoordinates: json['gps_coordinates'] as String?,
+      ratePerHour: (json['rate_per_hour'] as num?)?.toInt(),
+      freeWaitTime: (json['free_wait_time'] as num?)?.toInt(),
+      billableTime: json['billable_time'] as String?,
+      billableTimeText: json['billable_time_text'] as String?,
+      arrivalDepartureTime: json['arrival_departure_time'] as String?,
+      address: json['address'] as String?,
+      detention: json['detention'] as String?,
+      lost: json['lost'] as String?,
     );
 
 Map<String, dynamic> _$SingleStoplogDataToJson(SingleStoplogData instance) =>
@@ -62,6 +71,15 @@ Map<String, dynamic> _$SingleStoplogDataToJson(SingleStoplogData instance) =>
       'facility_address': instance.facilityAddress,
       'attachments': instance.attachments,
       'current_step': _$StopLogStepEnumMap[instance.currentStep],
+      'gps_coordinates': instance.gpsCoordinates,
+      'rate_per_hour': instance.ratePerHour,
+      'free_wait_time': instance.freeWaitTime,
+      'billable_time': instance.billableTime,
+      'billable_time_text': instance.billableTimeText,
+      'arrival_departure_time': instance.arrivalDepartureTime,
+      'address': instance.address,
+      'detention': instance.detention,
+      'lost': instance.lost,
     };
 
 const _$SingleStoplogStatusEnumMap = {

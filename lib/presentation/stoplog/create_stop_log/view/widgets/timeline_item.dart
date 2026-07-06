@@ -1,45 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 
 enum TimelineItemStatus { idle, active, completed }
 
 class TimelineItem extends StatelessWidget {
-  final String title;
-  final TextEditingController controller;
+  final String label;
   final bool isLastStep;
-  final bool isActionPending;
-
-  // final bool isConfirmed;
-  // final bool isEdited;
-  // final bool isEnabled;
-  // final bool nextStepConfirmed;
-
-  final ValueChanged<String> onChanged;
-  final VoidCallback? onConfirm;
   final TimelineItemStatus status;
+  final Widget child;
+  final bool isActionPending;
 
   const TimelineItem({
     super.key,
-    required this.title,
-    required this.controller,
+    required this.label,
     this.isLastStep = false,
-    required this.onChanged,
-    this.onConfirm,
     this.status = TimelineItemStatus.idle,
-    this.isActionPending = false,
+    required this.child,
+    required this.isActionPending,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Color activeColor = ColorManager.primaryButton;
-    final Color inactiveText = ColorManager.subtextColor;
-
     final isIdle = status == TimelineItemStatus.idle;
     final isActive = status == TimelineItemStatus.active;
     final isCompleted = status == TimelineItemStatus.completed;
+
+    final Color statusColor = isActionPending
+        ? ColorManager.subtextColor.withValues(alpha: 0.8)
+        : isActive
+        ? ColorManager.whiteColor
+        : isCompleted
+        ? ColorManager.primaryButton
+        : ColorManager.subtextColor.withValues(alpha: 0.8);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -52,17 +50,18 @@ class TimelineItem extends StatelessWidget {
             children: [
               const SizedBox(width: 20),
               Positioned(
-                top: 20,
-                child: _buildTimelineDot(isActive: isCompleted),
+                top: 0,
+                child: _buildTimelineDot(
+                  statusColor,
+                  isActive,
+                  isCompleted,
+                  isActionPending,
+                ),
               ),
               if (!isLastStep)
                 Positioned(
-                  top: 40,
-                  child: Container(
-                    width: 2,
-                    height: 92,
-                    color: isCompleted ? activeColor : inactiveText,
-                  ),
+                  top: 22,
+                  child: Container(width: 2, height: 92, color: statusColor),
                 ),
             ],
           ),
@@ -71,51 +70,20 @@ class TimelineItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: context.labelLarge.copyWith(
-                    color: isCompleted
-                        ? Colors.white.withValues(alpha: 0.88)
-                        : inactiveText,
-                  ),
-                ),
-                SizedBox(height: 8.h),
                 Row(
+                  // mainAxisAlignment: .spaceBetween,
                   children: [
-                    Expanded(
-                      child: TextField(
-                        controller: controller,
-                        onChanged: onChanged,
-                        enabled: true,
-                        style: TextStyle(
-                          color: isCompleted
-                              ? Colors.white
-                              : isActive
-                              ? inactiveText
-                              : ColorManager.disabledText,
-                        ),
-                        decoration: InputDecoration(
-                          suffixIcon: Icon(
-                            Icons.access_time,
-                            size: 16.sp,
-                            color: isActive ? Colors.white70 : inactiveText,
-                          ),
-                        ),
-                      ),
+                    Text(
+                      label,
+                      style: context.labelLarge.copyWith(color: statusColor),
                     ),
-                    if (!isCompleted) ...[
-                      SizedBox(width: 8.w),
-                      GlobalButton(
-                        width: null,
-                        borderRadius: 8,
-                        label: isActionPending ? 'loading..' :  'Confirm',
-                        onPressed: isActive && !isActionPending
-                            ? onConfirm
-                            : null,
-                      ),
-                    ],
+
+                    // 8.width,
+                    // if (isActionPending) ActivityIndicator(radius: 8),
                   ],
                 ),
+                SizedBox(height: 8.h),
+                child,
               ],
             ),
           ),
@@ -124,20 +92,94 @@ class TimelineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTimelineDot({required bool isActive}) {
-    final Color color = isActive
-        ? const Color(0xFF2ECC71)
-        : const Color(0xFF738091);
-
+  Widget _buildTimelineDot(
+    Color color,
+    bool isActive,
+    bool isCompleted,
+    bool isActionPending,
+  ) {
     return Container(
-      width: 21,
-      height: 21,
+      width: 24,
+      height: 24,
       decoration: BoxDecoration(
         color: ColorManager.primary,
         shape: BoxShape.circle,
         border: Border.all(color: color, width: 2),
       ),
-      child: Icon(Icons.check, size: 14, color: color),
+      child: isActionPending
+          ? ActivityIndicator(radius: 8)
+          : Icon(Icons.check, size: 14, color: color),
+    );
+  }
+}
+
+class TimelineContent extends StatelessWidget {
+  final TextEditingController controller;
+  final TimelineItemStatus status;
+  final bool isActionPending;
+  final ValueChanged<String> onChanged;
+  final VoidCallback? onConfirm;
+
+  const TimelineContent({
+    super.key,
+    required this.controller,
+    required this.status,
+    required this.isActionPending,
+    required this.onChanged,
+    this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isCompleted = status == TimelineItemStatus.completed;
+    final isActive = status == TimelineItemStatus.active;
+    final Color inactiveText = ColorManager.subtextColor;
+
+    final hideActionBtn = isCompleted || !isCompleted && isActionPending;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            height: 54,
+            decoration: BoxDecoration(
+              color: ColorManager.cardBackground,
+              borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
+            ),
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                Text(
+                  controller.text,
+                  style: TextStyle(
+                    color: isCompleted
+                        ? Colors.white
+                        : isActive
+                        ? inactiveText
+                        : ColorManager.disabledText,
+                  ),
+                ),
+
+                Icon(
+                  Icons.access_time,
+                  size: 16.sp,
+                  color: isActive ? Colors.white70 : inactiveText,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (!hideActionBtn) ...[
+          SizedBox(width: 8.w),
+          GlobalButton(
+            width: 120,
+            borderRadius: 8,
+            label: isActionPending ? 'Logging..' : 'Confirm',
+            onPressed: isActive && !isActionPending ? onConfirm : null,
+          ),
+        ],
+      ],
     );
   }
 }

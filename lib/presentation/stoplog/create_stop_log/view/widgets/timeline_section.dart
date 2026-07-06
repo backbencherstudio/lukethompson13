@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
 import 'package:lukethompson/data/sources/local/gps_service.dart';
 
+import 'attachment_upload_section.dart';
 import 'timeline_item.dart';
 
 class TimelineSection extends ConsumerStatefulWidget {
@@ -27,6 +30,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
   var dockInStatus = TimelineItemStatus.idle;
   var completedStatus = TimelineItemStatus.idle;
   var departureStatus = TimelineItemStatus.idle;
+  var attachmentsStatus = TimelineItemStatus.idle;
 
   static const String _initialDockInTime = '08:15 AM';
   static const String _initialCompletedTime = '12:45 AM';
@@ -61,6 +65,11 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     if (s == null) {
       setState(() {
         arrivalStatus = .active;
+        // arrivalStatus = .completed;
+        // dockInStatus = .completed;
+        // completedStatus = .completed;
+        // departureStatus = .active;
+        // attachmentsStatus = .active;
       });
       return;
     }
@@ -84,10 +93,15 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
           dockInStatus = .completed;
           completedStatus = .completed;
           departureStatus = .completed;
+          attachmentsStatus = .active;
         case StopLogStep.uploadDocuments:
-          context.showErrorSnackBar("currentStep is uploadDocuments");
+          arrivalStatus = .completed;
+          dockInStatus = .completed;
+          completedStatus = .completed;
+          departureStatus = .completed;
+          attachmentsStatus = .completed;
         case null:
-          context.showErrorSnackBar("currentStep is null");
+          print("currentStep is null");
       }
     });
   }
@@ -137,6 +151,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     if (mounted) {
       context.showSuccessSnackBar("Arrival Time logged successfully");
       widget.onSingleLogComplete(.arrivalTime);
+      _refetchSession();
     }
   }
 
@@ -176,6 +191,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     if (mounted) {
       context.showSuccessSnackBar("Dock In Time logged successfully");
       widget.onSingleLogComplete(.dockInTime);
+      _refetchSession();
     }
   }
 
@@ -215,6 +231,7 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     if (mounted) {
       context.showSuccessSnackBar("Completed Time logged successfully");
       widget.onSingleLogComplete(.completedTime);
+      _refetchSession();
     }
   }
 
@@ -253,66 +270,154 @@ class _TimelineSectionState extends ConsumerState<TimelineSection> {
     if (mounted) {
       context.showSuccessSnackBar("Departure Time logged successfully");
       widget.onSingleLogComplete(.departureTime);
+      _refetchSession();
+    }
+  }
+
+  bool _isActionPending(StopLogStep? step, bool isPending) {
+    return isPending && widget.session?.currentStep == step;
+  }
+
+  void _refetchSession() {
+    ref.invalidate(getCurrentActiveStoplog);
+    ref.invalidate(getSingleLogWithId);
+  }
+
+  Future<void> _onAttachmentPicked(XFile file) async {
+    final multipartFile = MultipartFile.fromFileSync(
+      file.path,
+      filename: file.name,
+    );
+
+    final params = RecordStopLogParams(
+      step: .uploadDocuments,
+      attachments: [multipartFile],
+    );
+    final res = await ref
+        .read(recordStopLogProviderAction.notifier)
+        .record(params);
+
+    if (!res.success && mounted) {
+      context.showErrorSnackBar(res.message);
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        attachmentsStatus = .completed;
+      });
+      ref.invalidate(getSingleLogWithId);
+      context.showSuccessSnackBar("Log attachment uploaded successfully");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final recordStopLogMutation = ref.watch(recordStopLogProviderAction);
-    // print("===================== createLogState =====================");
-    // print(recordStopLogMutation.status);
-    // print("=========================================================");
 
     return Column(
       children: [
-        if (recordStopLogMutation.isPending) ...[
-          const CircularProgressIndicator(),
-          const SizedBox(width: 8),
-        ],
-
+        Text(
+          "isPending ${recordStopLogMutation.isPending.toString()} | currentStep ${widget.session?.currentStep}",
+        ),
         TimelineItem(
-          title: 'Arrival Time',
+          isActionPending: _isActionPending(
+            null,
+            recordStopLogMutation.isPending,
+          ),
+          label: 'Arrival Time',
           status: arrivalStatus,
-          controller: dockInController,
-          onConfirm: () => tryAwait(
-            _logArrivalTime(),
-            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          child: TimelineContent(
+            controller: dockInController,
+            status: arrivalStatus,
+            isActionPending: _isActionPending(
+              null,
+              recordStopLogMutation.isPending,
+            ),
+            onChanged: (value) => setState(() {}),
+            onConfirm: () => tryAwait(
+              _logArrivalTime(),
+              onError: (e, _) => context.showErrorSnackBar(e.toString()),
+            ),
           ),
-          onChanged: (value) {
-            setState(() {
-              // no edited flag needed internally
-            });
-          },
         ),
         TimelineItem(
-          title: 'Dock In Time',
+          isActionPending: _isActionPending(
+            .arrivalTime,
+            recordStopLogMutation.isPending,
+          ),
+          label: 'Dock In Time',
           status: dockInStatus,
-          controller: dockInController,
-          onChanged: (_) {},
-          onConfirm: () => tryAwait(
-            _logDockedInTime(),
-            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          child: TimelineContent(
+            controller: dockInController,
+            status: dockInStatus,
+            isActionPending: _isActionPending(
+              .arrivalTime,
+              recordStopLogMutation.isPending,
+            ),
+            onChanged: (_) {},
+            onConfirm: () => tryAwait(
+              _logDockedInTime(),
+              onError: (e, _) => context.showErrorSnackBar(e.toString()),
+            ),
           ),
         ),
         TimelineItem(
-          title: 'Completed Time',
+          isActionPending: _isActionPending(
+            .dockInTime,
+            recordStopLogMutation.isPending,
+          ),
+          label: 'Completed Time',
           status: completedStatus,
-          controller: completedController,
-          onChanged: (_) {},
-          onConfirm: () => tryAwait(
-            _logCompletedTime(),
-            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          child: TimelineContent(
+            controller: completedController,
+            status: completedStatus,
+            isActionPending: _isActionPending(
+              .dockInTime,
+              recordStopLogMutation.isPending,
+            ),
+            onChanged: (_) {},
+            onConfirm: () => tryAwait(
+              _logCompletedTime(),
+              onError: (e, _) => context.showErrorSnackBar(e.toString()),
+            ),
           ),
         ),
         TimelineItem(
-          title: 'Departure Time',
+          isActionPending: _isActionPending(
+            .completedTime,
+            recordStopLogMutation.isPending,
+          ),
+          label: 'Departure Time',
           status: departureStatus,
-          controller: departureController,
+          child: TimelineContent(
+            controller: departureController,
+            status: departureStatus,
+            isActionPending: _isActionPending(
+              .completedTime,
+              recordStopLogMutation.isPending,
+            ),
+            onChanged: (_) {},
+            onConfirm: () => tryAwait(
+              _logDepartureTime(),
+              onError: (e, _) => context.showErrorSnackBar(e.toString()),
+            ),
+          ),
+        ),
+        TimelineItem(
+          isActionPending:
+              attachmentsStatus == .active && recordStopLogMutation.isPending,
+          label: 'Attachments',
+          status: attachmentsStatus,
           isLastStep: true,
-          onChanged: (_) {},
-          onConfirm: () => tryAwait(
-            _logDepartureTime(),
-            onError: (e, _) => context.showErrorSnackBar(e.toString()),
+          child: AttachmentUploadSection(
+            disabled: attachmentsStatus != .active,
+            onAttachmentPicked: (file) => tryAwait(
+              _onAttachmentPicked(file),
+              onError: (e, st) {
+                context.showErrorSnackBar(e.toString());
+              },
+            ),
           ),
         ),
       ],
