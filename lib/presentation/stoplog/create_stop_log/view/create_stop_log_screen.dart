@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -22,13 +20,14 @@ class CreateStopLogScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
+  final _timelineKey = GlobalKey<TimelineSectionState>();
   String? _sessionId;
   bool _isActiveSessionLoading = true;
   bool _canCalculateAndPreview = false;
 
-  void activateCalculateBtn() {
+  void activateCalculateBtn(bool enabled) {
     setState(() {
-      _canCalculateAndPreview = true;
+      _canCalculateAndPreview = enabled;
     });
   }
 
@@ -93,6 +92,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
 
                       SizedBox(height: 24.h),
                       TimelineSection(
+                        key: _timelineKey,
                         onSingleLogComplete: (_) {},
                         activateCalculateBtn: activateCalculateBtn,
                         session: session.value,
@@ -106,12 +106,17 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: EdgeInsets.all(AppPadding.screenPadding),
+        padding: EdgeInsets.fromLTRB(
+          AppPadding.screenPadding,
+          0,
+          AppPadding.screenPadding,
+          12,
+        ),
         child: GlobalButton(
           isDisabled: !_canCalculateAndPreview,
           label: "Calculate & Preview",
           onPressed: () {
-            context.push(Routes.logStopResult);
+            _timelineKey.currentState?.logBolNumberAndAttachment();
           },
         ),
       ),

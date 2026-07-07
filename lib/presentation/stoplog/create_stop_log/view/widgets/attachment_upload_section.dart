@@ -2,18 +2,25 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/core/widgets/link_button.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/proof_package_list.dart';
 
 class AttachmentUploadSection extends StatefulWidget {
   const AttachmentUploadSection({
     super.key,
     this.onAttachmentPicked,
+    this.onAttachmentRemoved,
     this.disabled = false,
+    required this.attachments,
   });
 
-  final void Function(XFile file)? onAttachmentPicked;
+  final List<XFile> attachments;
+  final void Function(List<XFile> files)? onAttachmentPicked;
+  final void Function(List<XFile> files, int index)? onAttachmentRemoved;
   final bool disabled;
 
   @override
@@ -23,10 +30,10 @@ class AttachmentUploadSection extends StatefulWidget {
 
 class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> _attachments = [];
 
-  Future<void> _pickImage(ImageSource source) async {
-    if (widget.disabled) return;
+  Future<void> _pickImage(ImageSource source, [bool forcePick = false]) async {
+    if (widget.disabled && !forcePick) return;
+
     final isAvailable = _picker.supportsImageSource(source);
     if (!isAvailable) {
       if (mounted) {
@@ -50,8 +57,8 @@ class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
       return;
     }
 
-    setState(() => _attachments.add(image));
-    widget.onAttachmentPicked?.call(image);
+    final updated = [...widget.attachments, image];
+    widget.onAttachmentPicked?.call(updated);
   }
 
   @override
@@ -61,124 +68,147 @@ class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text("Attachments", style: context.labelLarge),
-        // SizedBox(height: 12.h),
-        DottedBorder(
-          color: ColorManager.subtextColor.withValues(
-            alpha: widget.disabled ? 0.2 : 0.5,
+        if (widget.attachments.isEmpty) _buildFilePicker(alpha),
+        if (widget.attachments.isNotEmpty) ...[
+          ProofPackageList(
+            onRemoveItem: (index) {
+              final updated = List<XFile>.from(widget.attachments)..removeAt(index);
+              widget.onAttachmentRemoved?.call(updated, index);
+            },
+            fineNames: widget.attachments.map((e) => e.name).toList(),
           ),
-          strokeWidth: 1.5,
-          dashPattern: const [6, 4],
-          borderType: BorderType.RRect,
-          radius: Radius.circular(15.r),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 20.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFF111821).withValues(alpha: alpha),
-              borderRadius: BorderRadius.circular(15.r),
+
+          8.height,
+          Row(
+            mainAxisAlignment: .end,
+            children: [
+              LinkButton(
+                child: Text('Open camera'),
+                onPressed: () => _pickImage(ImageSource.camera, true),
+              ),
+              12.width,
+              LinkButton(
+                child: Text('Add more photo'),
+                onPressed: () => _pickImage(ImageSource.gallery, true),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  DottedBorder _buildFilePicker(double alpha) {
+    return DottedBorder(
+      color: ColorManager.subtextColor.withValues(
+        alpha: widget.disabled ? 0.2 : 0.5,
+      ),
+      strokeWidth: 1.5,
+      dashPattern: const [6, 4],
+      borderType: BorderType.RRect,
+      radius: Radius.circular(15.r),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 20.h),
+        decoration: BoxDecoration(
+          color: const Color(0xFF111821).withValues(alpha: alpha),
+          borderRadius: BorderRadius.circular(15.r),
+        ),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: widget.disabled
+                  ? null
+                  : () => _pickImage(ImageSource.gallery),
+              child: Column(
+                children: [
+                  Container(
+                    height: 45.w,
+                    width: 45.w,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0F2623).withValues(alpha: alpha),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.cloud_upload,
+                      color: ColorManager.primaryButton.withValues(
+                        alpha: alpha,
+                      ),
+                      size: 24,
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Text(
+                    "Tap to upload photo",
+                    style: TextStyle(
+                      color: ColorManager.primaryButton.withValues(
+                        alpha: alpha,
+                      ),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "PNG, JPG or PDF (max. 800x400px)",
+                    style: TextStyle(
+                      color: const Color(0xFF6C757D).withValues(alpha: alpha),
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
+            SizedBox(height: 15.h),
+            Row(
               children: [
-                InkWell(
-                  onTap: widget.disabled
-                      ? null
-                      : () => _pickImage(ImageSource.gallery),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 45.w,
-                        width: 45.w,
-                        decoration: BoxDecoration(
-                          color: const Color(
-                            0xFF0F2623,
-                          ).withValues(alpha: alpha),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.cloud_upload,
-                          color: ColorManager.primaryButton.withValues(
-                            alpha: alpha,
-                          ),
-                          size: 24,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        "Tap to upload photo",
-                        style: TextStyle(
-                          color: ColorManager.primaryButton.withValues(
-                            alpha: alpha,
-                          ),
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        "PNG, JPG or PDF (max. 800x400px)",
-                        style: TextStyle(
-                          color: const Color(
-                            0xFF6C757D,
-                          ).withValues(alpha: alpha),
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ],
+                Expanded(
+                  child: Divider(
+                    color: ColorManager.subtextColor.withValues(
+                      alpha: widget.disabled ? 0.15 : 0.5,
+                    ),
+                    indent: 40.w,
+                    endIndent: 10.w,
                   ),
                 ),
-                SizedBox(height: 15.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: ColorManager.subtextColor.withValues(
-                          alpha: widget.disabled ? 0.15 : 0.5,
-                        ),
-                        indent: 40.w,
-                        endIndent: 10.w,
-                      ),
+                Text(
+                  "or",
+                  style: TextStyle(
+                    color: ColorManager.subtextColor.withValues(
+                      alpha: widget.disabled ? 0.15 : 0.5,
                     ),
-                    Text(
-                      "or",
-                      style: TextStyle(
-                        color: ColorManager.subtextColor.withValues(
-                          alpha: widget.disabled ? 0.15 : 0.5,
-                        ),
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: ColorManager.subtextColor.withValues(
-                          alpha: widget.disabled ? 0.15 : 0.5,
-                        ),
-                        indent: 10.w,
-                        endIndent: 40.w,
-                      ),
-                    ),
-                  ],
+                    fontSize: 14.sp,
+                  ),
                 ),
-                SizedBox(height: 15.h),
-                GlobalButton.primaryOutlined(
-                  foregroundColor: ColorManager.primaryButton.withValues(
-                    alpha: alpha,
+                Expanded(
+                  child: Divider(
+                    color: ColorManager.subtextColor.withValues(
+                      alpha: widget.disabled ? 0.15 : 0.5,
+                    ),
+                    indent: 10.w,
+                    endIndent: 40.w,
                   ),
-                  borderSide: BorderSide(
-                    color: ColorManager.primaryButton.withValues(alpha: alpha),
-                  ),
-                  width: 160,
-                  fontSize: 14,
-                  label: 'Open Camera',
-                  onPressed: widget.disabled
-                      ? null
-                      : () => _pickImage(ImageSource.camera),
                 ),
               ],
             ),
-          ),
+            SizedBox(height: 15.h),
+            GlobalButton.primaryOutlined(
+              foregroundColor: ColorManager.primaryButton.withValues(
+                alpha: alpha,
+              ),
+              borderSide: BorderSide(
+                color: ColorManager.primaryButton.withValues(alpha: alpha),
+              ),
+              width: 160,
+              fontSize: 14,
+              label: 'Open Camera',
+              onPressed: widget.disabled
+                  ? null
+                  : () => _pickImage(ImageSource.camera),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -18,30 +18,28 @@ class SendMethodToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(AppPadding.screenPadding),
-      child: SpacedRow(
-        children: List.generate(labels.length, (index) {
-          final isSelected = index == selectedIndex;
-          return Expanded(
-            child: GlobalButton(
-              borderSide: BorderSide(
-                color: isSelected
-                    ? ColorManager.primaryButton
-                    : ColorManager.subtextColor,
-              ),
-              foregroundColor: isSelected
+    return Row(
+      spacing: 12,
+      children: List.generate(labels.length, (index) {
+        final isSelected = index == selectedIndex;
+        return Expanded(
+          child: GlobalButton(
+            borderSide: BorderSide(
+              color: isSelected
                   ? ColorManager.primaryButton
                   : ColorManager.subtextColor,
-              color: isSelected
-                  ? ColorManager.primaryButton.withValues(alpha: 0.12)
-                  : ColorManager.subtextColor.withValues(alpha: 0.08),
-              label: labels[index],
-              onPressed: () => onChanged(index),
             ),
-          );
-        }),
-      ),
+            foregroundColor: isSelected
+                ? ColorManager.primaryButton
+                : ColorManager.subtextColor,
+            color: isSelected
+                ? ColorManager.primaryButton.withValues(alpha: 0.12)
+                : ColorManager.subtextColor.withValues(alpha: 0.08),
+            label: labels[index],
+            onPressed: () => onChanged(index),
+          ),
+        );
+      }),
     );
   }
 }

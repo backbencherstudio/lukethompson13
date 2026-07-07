@@ -51,17 +51,33 @@ class CustomTextFieldWidget extends StatelessWidget {
 }
 
 class InputLabel extends StatelessWidget {
-  final String label;
   const InputLabel(
     this.label, {
     super.key,
     this.color = ColorManager.textColor,
+    this.hint,
   });
 
+  final String label;
+  final String? hint;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Text(label, style: context.labelLarge.copyWith(color: color));
+    return RichText(
+      text: TextSpan(
+        text: label,
+        children: [
+          if (hint != null)
+            TextSpan(
+              text: ' $hint',
+              style: TextStyle(
+                color: ColorManager.subtextColor.withValues(alpha: 0.8),
+              ),
+            ),
+        ],
+        style: context.labelLarge.copyWith(color: color),
+      ),
+    );
   }
 }

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 enum TimelineItemStatus { idle, active, completed }
 
 class TimelineItem extends StatelessWidget {
   final String label;
+  final String? labelHint;
   final bool isLastStep;
   final TimelineItemStatus status;
   final Widget child;
@@ -19,6 +20,7 @@ class TimelineItem extends StatelessWidget {
   const TimelineItem({
     super.key,
     required this.label,
+    this.labelHint,
     this.isLastStep = false,
     this.status = TimelineItemStatus.idle,
     required this.child,
@@ -75,18 +77,7 @@ class TimelineItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  // mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Text(
-                      label,
-                      style: context.labelLarge.copyWith(color: statusColor),
-                    ),
-
-                    // 8.width,
-                    // if (isActionPending) ActivityIndicator(radius: 8),
-                  ],
-                ),
+                InputLabel(label, color: statusColor, hint: labelHint),
                 SizedBox(height: 8.h),
                 child,
               ],
@@ -194,6 +185,7 @@ class TimelineContentField extends StatelessWidget {
   final TextEditingController controller;
   final TimelineItemStatus status;
   final bool isActionPending;
+  final bool canSkip;
   final ValueChanged<String> onChanged;
   final VoidCallback? onConfirm;
 
@@ -204,6 +196,7 @@ class TimelineContentField extends StatelessWidget {
     required this.isActionPending,
     required this.onChanged,
     this.onConfirm,
+    this.canSkip = false,
   });
 
   @override
@@ -211,7 +204,7 @@ class TimelineContentField extends StatelessWidget {
     final isCompleted = status == TimelineItemStatus.completed;
     final isActive = status == TimelineItemStatus.active;
     final Color inactiveText = ColorManager.subtextColor;
-    // final hideActionBtn = isCompleted || !isCompleted && isActionPending;
+    final hideActionBtn = isCompleted || !isCompleted && isActionPending;
 
     return Row(
       children: [
@@ -244,15 +237,22 @@ class TimelineContentField extends StatelessWidget {
             ),
           ),
         ),
-        // if (!hideActionBtn) ...[
-        //   SizedBox(width: 8.w),
-        //   GlobalButton(
-        //     width: 120,
-        //     borderRadius: 8,
-        //     label: isActionPending ? 'Logging..' : 'Confirm',
-        //     onPressed: isActive && !isActionPending ? onConfirm : null,
-        //   ),
-        // ],
+        if (!hideActionBtn) ...[
+          SizedBox(width: 8.w),
+          ListenableBuilder(
+            listenable: controller,
+            builder: (context, _) => GlobalButton(
+              width: 120,
+              borderRadius: 8,
+              label: controller.text.isEmpty && canSkip
+                  ? 'Skip'
+                  : isActionPending
+                  ? 'Logging..'
+                  : 'Confirm',
+              onPressed: isActive && !isActionPending ? onConfirm : null,
+            ),
+          ),
+        ],
       ],
     );
   }

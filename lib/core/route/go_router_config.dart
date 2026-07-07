@@ -100,9 +100,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.otp,
-        builder: (context, state) => OtpScreen(
-          argument: state.extra as OtpScreenArgument?,
-        ),
+        builder: (context, state) =>
+            OtpScreen(argument: state.extra as OtpScreenArgument?),
       ),
       GoRoute(
         path: Routes.resetPassword,
@@ -132,7 +131,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.logStopResult,
-        builder: (context, state) => const LogStopResultScreen(),
+        builder: (context, state) => LogStopResultScreen(
+          argument: state.extra as LogStopResultScreenArg,
+        ),
       ),
       GoRoute(
         path: Routes.reports,
