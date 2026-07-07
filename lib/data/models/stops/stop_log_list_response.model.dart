@@ -4,8 +4,9 @@ import 'package:lukethompson/data/models/common/base.model.dart';
 part 'stop_log_list_response.model.g.dart';
 
 enum StopLogStatus {
-  progress('progress'),
-  completed('completed');
+  all('ALL'),
+  progress('PROGRESS'),
+  completed('COMPLETED');
 
   final String value;
   const StopLogStatus(this.value);
