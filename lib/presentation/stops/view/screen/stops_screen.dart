@@ -15,8 +15,7 @@ class StopsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final recentStops = ref.watch(getStoplogListQuery(StopLogListParams()));
-
+    final recentStops = ref.watch(getStoplogListQuery(StopLogListParams()));
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -36,11 +35,11 @@ class StopsScreen extends ConsumerWidget {
                 _searchInput(),
                 SizedBox(height: 15.h),
 
-                // Expanded(
-                //   child: SingleChildScrollView(
-                //     child: RecentStopList(value: recentStops),
-                //   ),
-                // ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: RecentStopList(value: recentStops),
+                  ),
+                ),
               ],
             ),
           ),

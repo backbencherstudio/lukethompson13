@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
@@ -366,6 +367,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
   @override
   Widget build(BuildContext context) {
     final recordStopLogMutation = ref.watch(recordStopLogProviderAction);
+    print(widget.session?.arrivedAt.runtimeType);
 
     return Column(
       children: [
@@ -380,7 +382,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Arrival Time',
           status: _arrivalStatus,
           child: TimelineContent(
-            value: _initialDepartureTime,
+            value: widget.session?.arrivedAt?.formatTime(),
             status: _arrivalStatus,
             isActionPending: _isActionPending(
               null,
@@ -401,7 +403,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Dock In Time',
           status: _dockInStatus,
           child: TimelineContent(
-            value: _initialDepartureTime,
+            value: widget.session?.dockedAt?.formatTime(),
             status: _dockInStatus,
             isActionPending: _isActionPending(
               .arrivalTime,
@@ -422,7 +424,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Completed Time',
           status: _completedStatus,
           child: TimelineContent(
-            value: _initialDepartureTime,
+            value: widget.session?.completedAt?.formatTime(),
             status: _completedStatus,
             isActionPending: _isActionPending(
               .dockInTime,
@@ -443,7 +445,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
           label: 'Departure Time',
           status: _departureStatus,
           child: TimelineContent(
-            value: _initialDepartureTime,
+            value: widget.session?.departedAt?.formatTime(),
             status: _departureStatus,
             isActionPending: _isActionPending(
               .completedTime,

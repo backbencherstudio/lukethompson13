@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
@@ -109,13 +111,7 @@ class TimelineItem extends StatelessWidget {
   }
 }
 
-class TimelineContent extends StatelessWidget {
-  final String value;
-  final TimelineItemStatus status;
-  final bool isActionPending;
-  final ValueChanged<String> onChanged;
-  final VoidCallback? onConfirm;
-
+class TimelineContent extends StatefulWidget {
   const TimelineContent({
     super.key,
     required this.value,
@@ -125,14 +121,43 @@ class TimelineContent extends StatelessWidget {
     this.onConfirm,
   });
 
+  final String? value;
+  final TimelineItemStatus status;
+  final bool isActionPending;
+  final ValueChanged<String> onChanged;
+  final VoidCallback? onConfirm;
+
+  @override
+  State<TimelineContent> createState() => _TimelineContentState();
+}
+
+class _TimelineContentState extends State<TimelineContent> {
+  DateTime _now = DateTime.now();
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted && widget.status == .active) {
+        setState(() => _now = DateTime.now());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isIdle = status == TimelineItemStatus.idle;
-    final isCompleted = status == TimelineItemStatus.completed;
-    final isActive = status == TimelineItemStatus.active;
+    final isCompleted = widget.status == TimelineItemStatus.completed;
+    final isActive = widget.status == TimelineItemStatus.active;
     final Color inactiveText = ColorManager.subtextColor;
 
-    final hideActionBtn = isCompleted || !isCompleted && isActionPending;
+    final hideActionBtn = isCompleted || !isCompleted && widget.isActionPending;
 
     return Row(
       children: [
@@ -145,10 +170,12 @@ class TimelineContent extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
             ),
             child: Row(
-              mainAxisAlignment: .spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  isIdle ? '00:00' : value,
+                  isActive
+                      ? DateFormat('hh:mm a').format(_now)
+                      : widget.value ?? '00:00',
                   style: TextStyle(
                     color: isCompleted
                         ? Colors.white
@@ -172,8 +199,10 @@ class TimelineContent extends StatelessWidget {
           GlobalButton(
             width: 120,
             borderRadius: 8,
-            label: isActionPending ? 'Logging..' : 'Confirm',
-            onPressed: isActive && !isActionPending ? onConfirm : null,
+            label: widget.isActionPending ? 'Logging..' : 'Confirm',
+            onPressed: isActive && !widget.isActionPending
+                ? widget.onConfirm
+                : null,
           ),
         ],
       ],
