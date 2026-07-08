@@ -7,7 +7,7 @@ import 'package:lukethompson/core/utils/mutation.dart';
 
 import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/stoplog.api.dart';
-import 'package:zenquery/zenquery.dart' hide MutationState;
+import 'package:zenquery/zenquery.dart';
 
 final getStoplogHomeOverviewQuery = createQueryFamilyPersist((
   ref,
@@ -85,10 +85,9 @@ class RecordStopLogParams {
 }
 
 final recordStopLogProviderAction =
-    NotifierProvider<
-      RecordStopLogNotifier,
-      MutationState<StopLogRecordResponse>
-    >(RecordStopLogNotifier.new);
+    mutationProvider<RecordStopLogNotifier, StopLogRecordResponse>(
+      RecordStopLogNotifier.new,
+    );
 
 class RecordStopLogNotifier extends MutationNotifier<StopLogRecordResponse> {
   Future<StopLogRecordResponse> record(RecordStopLogParams params) {
@@ -96,7 +95,6 @@ class RecordStopLogNotifier extends MutationNotifier<StopLogRecordResponse> {
 
     return mutate(() async {
       return api.recordSingleStopLog(
-        // Should I await this function here?
         id: params.id,
         step: params.step,
         shipperId: params.shipperId,

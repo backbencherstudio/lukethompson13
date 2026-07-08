@@ -92,7 +92,7 @@ class LogStopResultScreen extends ConsumerWidget {
                           [],
                     ),
 
-                    ClaimSendTo(),
+                    if (data != null) ClaimSendTo(data: data),
                     16.height,
                     GlobalButton.secondary(
                       label: 'Export PDF',

@@ -72,3 +72,10 @@ abstract class MutationNotifier<T> extends Notifier<MutationState<T>> {
     state = MutationState.idle();
   }
 }
+
+NotifierProvider<TNotifier, MutationState<TData>> mutationProvider<
+  TNotifier extends MutationNotifier<TData>,
+  TData
+>(TNotifier Function() create) {
+  return NotifierProvider<TNotifier, MutationState<TData>>(create);
+}

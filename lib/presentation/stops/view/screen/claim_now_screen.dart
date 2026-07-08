@@ -122,7 +122,7 @@ class ClaimNowScreen extends ConsumerWidget {
                       onPressed: () {},
                     ),
 
-                    ClaimSendTo(),
+                    if (data != null) ClaimSendTo(data: data),
                   ],
                 ),
               );

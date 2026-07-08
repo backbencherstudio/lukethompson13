@@ -3,19 +3,17 @@ import 'package:dio/dio.dart';
 class ErrorHandle {
   static String handleDioError(DioException e) {
     final responseData = e.response?.data;
-    final serverMessage = _extractMessage(responseData);
+    final serverMessage = _extractMessage(responseData) ?? e.message;
     final statusCode = e.response?.statusCode;
+
+    if (serverMessage != null && serverMessage.isNotEmpty) {
+      return serverMessage;
+    }
 
     switch (e.type) {
       case DioExceptionType.badCertificate:
         return "Bad certificate. Please try again.";
       case DioExceptionType.badResponse:
-        if (statusCode != null && statusCode >= 500) {
-          return "Something went wrong. Please try again later.";
-        }
-        if (serverMessage != null && serverMessage.isNotEmpty) {
-          return serverMessage;
-        }
         if (statusCode == 404) {
           return "No data found.";
         }
@@ -37,7 +35,7 @@ class ErrorHandle {
       case DioExceptionType.sendTimeout:
         return "Send timeout. Please try again.";
       case DioExceptionType.unknown:
-        return serverMessage ?? "Unknown error occurred. Please try again.";
+        return "Unknown error occurred. Please try again.";
     }
   }
 
@@ -68,13 +66,17 @@ class ErrorHandle {
       return handleDioError(error);
     }
 
-    final rawMessage = error.toString().trim();
+    var rawMessage = error.toString().trim();
 
     if (rawMessage.startsWith('Exception: ')) {
-      return rawMessage.substring('Exception: '.length).trim();
+      rawMessage = rawMessage.substring('Exception: '.length).trim();
     }
 
     if (rawMessage.startsWith('DioException')) {
+      final colonIdx = rawMessage.indexOf(':');
+      if (colonIdx != -1) {
+        return rawMessage.substring(colonIdx + 1).trim();
+      }
       return "Connection error. Please check your internet.";
     }
 
