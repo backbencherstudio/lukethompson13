@@ -5,13 +5,21 @@ import 'package:lukethompson/core/widgets/app_card.dart';
 
 class BreakdownCard extends StatelessWidget {
   final List<BreakdownItem> items;
+  final Color? color;
+  final Color? borderColor;
 
-  const BreakdownCard({super.key, required this.items});
+  const BreakdownCard({
+    super.key,
+    required this.items,
+    this.color,
+    this.borderColor = Colors.white30,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      borderColor: Colors.white30,
+      backgroundColor: color,
+      borderColor: borderColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

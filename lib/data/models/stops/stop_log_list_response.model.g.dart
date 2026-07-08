@@ -6,29 +6,51 @@ part of 'stop_log_list_response.model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-StopLog _$StopLogFromJson(Map<String, dynamic> json) => StopLog(
-  id: json['id'] as String,
-  facilityName: json['facility_name'] as String,
-  shipperFacilityId: json['shipper_facility_id'] as String,
-  date: json['date'] as String,
-  amount: json['amount'] as String,
-  status: json['status'] as String,
-);
+StopLogListItem _$StopLogListItemFromJson(Map<String, dynamic> json) =>
+    StopLogListItem(
+      id: json['id'] as String,
+      facilityName: json['facility_name'] as String,
+      shipperFacilityId: json['shipper_facility_id'] as String,
+      date: json['date'] as String,
+      amount: json['amount'] as String,
+      status: $enumDecodeNullable(_$StopLogStatusEnumMap, json['status']),
+      claimStatus: $enumDecodeNullable(
+        _$ClaimStatusEnumMap,
+        json['claim_status'],
+      ),
+    );
 
-Map<String, dynamic> _$StopLogToJson(StopLog instance) => <String, dynamic>{
-  'id': instance.id,
-  'facility_name': instance.facilityName,
-  'shipper_facility_id': instance.shipperFacilityId,
-  'date': instance.date,
-  'amount': instance.amount,
-  'status': instance.status,
+Map<String, dynamic> _$StopLogListItemToJson(StopLogListItem instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'facility_name': instance.facilityName,
+      'shipper_facility_id': instance.shipperFacilityId,
+      'date': instance.date,
+      'amount': instance.amount,
+      'status': _$StopLogStatusEnumMap[instance.status],
+      'claim_status': _$ClaimStatusEnumMap[instance.claimStatus],
+    };
+
+const _$StopLogStatusEnumMap = {
+  StopLogStatus.all: 'ALL',
+  StopLogStatus.active: 'ACTIVE',
+  StopLogStatus.completed: 'COMPLETED',
+};
+
+const _$ClaimStatusEnumMap = {
+  ClaimStatus.draft: 'DRAFT',
+  ClaimStatus.submitted: 'SUBMITTED',
+  ClaimStatus.paid: 'PAID',
+  ClaimStatus.denied: 'DENIED',
 };
 
 MetaDataFilters _$MetaDataFiltersFromJson(Map<String, dynamic> json) =>
-    MetaDataFilters(status: json['status'] as String);
+    MetaDataFilters(
+      status: $enumDecode(_$StopLogStatusEnumMap, json['status']),
+    );
 
 Map<String, dynamic> _$MetaDataFiltersToJson(MetaDataFilters instance) =>
-    <String, dynamic>{'status': instance.status};
+    <String, dynamic>{'status': _$StopLogStatusEnumMap[instance.status]!};
 
 MetaData _$MetaDataFromJson(Map<String, dynamic> json) => MetaData(
   nextCursor: json['next_cursor'] as String?,
@@ -47,7 +69,7 @@ StopLogListResponse _$StopLogListResponseFromJson(Map<String, dynamic> json) =>
       success: json['success'] as bool,
       message: json['message'] as String,
       data: (json['data'] as List<dynamic>?)
-          ?.map((e) => StopLog.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => StopLogListItem.fromJson(e as Map<String, dynamic>))
           .toList(),
       metaData: json['meta_data'] == null
           ? null

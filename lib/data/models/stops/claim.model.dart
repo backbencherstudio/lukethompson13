@@ -34,6 +34,12 @@ class Claim {
   @JsonKey(name: 'recipient_email')
   final String? recipientEmail;
 
+  @JsonKey(name: 'level')
+  final int? level;
+
+  @JsonKey(name: 'level_name')
+  final String? levelName;
+
   @JsonKey(name: 'recourse_level')
   final int? recourseLevel;
 
@@ -53,6 +59,8 @@ class Claim {
     this.paidAmount,
     this.sentAt,
     this.recipientEmail,
+    this.level,
+    this.levelName,
     this.recourseLevel,
     this.followupCount,
     this.followupDueAt,

@@ -41,10 +41,20 @@ SingleStoplogData _$SingleStoplogDataFromJson(Map<String, dynamic> json) =>
       attachments: (json['attachments'] as List<dynamic>?)
           ?.map((e) => StopLogAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
+      detentionSummaryPdf: json['detention_summary_pdf'] == null
+          ? null
+          : StopLogAttachment.fromJson(
+              json['detention_summary_pdf'] as Map<String, dynamic>,
+            ),
+      brokerEmail: json['broker_email'] as String?,
+      recipientEmail: json['recipient_email'] as String?,
+      claim: json['claim'] == null
+          ? null
+          : Claim.fromJson(json['claim'] as Map<String, dynamic>),
       currentStep: StopLogStep.fromValue(json['current_step'] as String?),
       gpsCoordinates: json['gps_coordinates'] as String?,
-      ratePerHour: (json['rate_per_hour'] as num?)?.toInt(),
-      freeWaitTime: (json['free_wait_time'] as num?)?.toInt(),
+      ratePerHour: json['rate_per_hour'] as String?,
+      freeWaitTime: json['free_wait_time'] as String?,
       billableTime: json['billable_time'] as String?,
       billableTimeText: json['billable_time_text'] as String?,
       arrivalDepartureTime: json['arrival_departure_time'] as String?,
@@ -70,6 +80,10 @@ Map<String, dynamic> _$SingleStoplogDataToJson(SingleStoplogData instance) =>
       'arrival_location': instance.arrivalLocation,
       'facility_address': instance.facilityAddress,
       'attachments': instance.attachments,
+      'detention_summary_pdf': instance.detentionSummaryPdf,
+      'broker_email': instance.brokerEmail,
+      'recipient_email': instance.recipientEmail,
+      'claim': instance.claim,
       'current_step': _$StopLogStepEnumMap[instance.currentStep],
       'gps_coordinates': instance.gpsCoordinates,
       'rate_per_hour': instance.ratePerHour,

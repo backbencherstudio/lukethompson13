@@ -8,7 +8,7 @@ import 'package:lukethompson/data/sources/remote/stoplog.api.dart';
 const _limit = 5;
 
 class StopLogPaginationState {
-  final List<StopLog> stops;
+  final List<StopLogListItem> stops;
   final String? nextCursor;
   final bool hasMore;
   final bool isLoadingMore;
@@ -25,7 +25,7 @@ class StopLogPaginationState {
   });
 
   StopLogPaginationState copyWith({
-    List<StopLog>? stops,
+    List<StopLogListItem>? stops,
     String? Function()? nextCursor,
     bool? hasMore,
     bool? isLoadingMore,

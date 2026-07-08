@@ -1,22 +1,44 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/status_colorable.dart';
 import 'package:lukethompson/data/models/common/base.model.dart';
 
 part 'stop_log_list_response.model.g.dart';
 
-enum StopLogStatus {
-  all('ALL'),
-  progress('PROGRESS'),
-  completed('COMPLETED');
+@JsonEnum(valueField: 'value')
+enum StopLogStatus implements StatusColorable {
+  all('ALL', 'All', ColorManager.infoColor),
+  active('ACTIVE', 'Active', ColorManager.warningColor),
+  completed('COMPLETED', 'Completed', ColorManager.successColor);
+
+  const StopLogStatus(this.value, this.displayName, this.badgeColor);
 
   final String value;
-  const StopLogStatus(this.value);
-
   @override
-  String toString() => value;
+  final String displayName;
+  @override
+  final Color badgeColor;
+}
+
+@JsonEnum(valueField: 'value')
+enum ClaimStatus implements StatusColorable {
+  draft('DRAFT', 'No Claim', ColorManager.subtextColor),
+  submitted('SUBMITTED', 'Submitted', ColorManager.warningColor),
+  paid('PAID', 'Paid', ColorManager.successColor),
+  denied('DENIED', 'Denied', ColorManager.errorColor);
+
+  const ClaimStatus(this.value, this.displayName, this.badgeColor);
+
+  final String value;
+  @override
+  final String displayName;
+  @override
+  final Color badgeColor;
 }
 
 @JsonSerializable()
-class StopLog {
+class StopLogListItem {
   final String id;
 
   @JsonKey(name: 'facility_name')
@@ -29,21 +51,25 @@ class StopLog {
 
   final String amount;
 
-  final String status;
+  final StopLogStatus? status;
 
-  StopLog({
+  @JsonKey(name: 'claim_status')
+  final ClaimStatus? claimStatus;
+
+  StopLogListItem({
     required this.id,
     required this.facilityName,
     required this.shipperFacilityId,
     required this.date,
     required this.amount,
     required this.status,
+    required this.claimStatus,
   });
 
-  factory StopLog.fromJson(Map<String, dynamic> json) =>
-      _$StopLogFromJson(json);
+  factory StopLogListItem.fromJson(Map<String, dynamic> json) =>
+      _$StopLogListItemFromJson(json);
 
-  Map<String, dynamic> toJson() => _$StopLogToJson(this);
+  Map<String, dynamic> toJson() => _$StopLogListItemToJson(this);
 
   @override
   String toString() => 'StopLog${toJson()}';
@@ -51,7 +77,7 @@ class StopLog {
 
 @JsonSerializable()
 class MetaDataFilters {
-  final String status;
+  final StopLogStatus status;
 
   MetaDataFilters({required this.status});
 
@@ -86,7 +112,7 @@ class MetaData {
 
 @JsonSerializable()
 class StopLogListResponse extends BaseResponse {
-  final List<StopLog>? data;
+  final List<StopLogListItem>? data;
 
   @JsonKey(name: 'meta_data')
   final MetaData? metaData;

@@ -8,7 +8,7 @@ class Routes {
   static const String otp = '/otpScreen';
   static const String resetPassword = '/resetPasswordScreen';
   static const String parent = '/parentScreen';
-  static const String claimDetails = '/claimDetails';
+  static const String claimNow = '/claimNow';
   static const String claimReview = '/claimReview';
   static const String rateShipper = '/rateShipper';
   static const String reviewSubmitted = '/reviewSubmitted';

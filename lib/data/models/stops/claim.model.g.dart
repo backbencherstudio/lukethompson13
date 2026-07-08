@@ -21,6 +21,8 @@ Claim _$ClaimFromJson(Map<String, dynamic> json) => Claim(
       ? null
       : DateTime.parse(json['sent_at'] as String),
   recipientEmail: json['recipient_email'] as String?,
+  level: (json['level'] as num?)?.toInt(),
+  levelName: json['level_name'] as String?,
   recourseLevel: (json['recourse_level'] as num?)?.toInt(),
   followupCount: (json['followup_count'] as num?)?.toInt(),
   followupDueAt: json['followup_due_at'] == null
@@ -38,6 +40,8 @@ Map<String, dynamic> _$ClaimToJson(Claim instance) => <String, dynamic>{
   'paid_amount': instance.paidAmount,
   'sent_at': instance.sentAt?.toIso8601String(),
   'recipient_email': instance.recipientEmail,
+  'level': instance.level,
+  'level_name': instance.levelName,
   'recourse_level': instance.recourseLevel,
   'followup_count': instance.followupCount,
   'followup_due_at': instance.followupDueAt?.toIso8601String(),

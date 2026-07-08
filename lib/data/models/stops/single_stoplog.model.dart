@@ -3,6 +3,7 @@ import 'package:lukethompson/data/models/common/base.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log_location.model.dart';
 import 'package:lukethompson/data/models/stops/stop_log_attachment.model.dart';
+import 'package:lukethompson/data/models/stops/claim.model.dart';
 
 part 'single_stoplog.model.g.dart';
 
@@ -50,17 +51,27 @@ class SingleStoplogData {
 
   final List<StopLogAttachment>? attachments;
 
+  @JsonKey(name: 'detention_summary_pdf')
+  final StopLogAttachment? detentionSummaryPdf;
+
+  @JsonKey(name: 'broker_email')
+  final String? brokerEmail;
+
+  @JsonKey(name: 'recipient_email')
+  final String? recipientEmail;
+
+  final Claim? claim;
+
   @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
   final StopLogStep? currentStep;
-
 
   // Available on stoplog completion
   @JsonKey(name: 'gps_coordinates')
   final String? gpsCoordinates;
   @JsonKey(name: 'rate_per_hour')
-  final int? ratePerHour;
+  final String? ratePerHour;
   @JsonKey(name: 'free_wait_time')
-  final int? freeWaitTime;
+  final String? freeWaitTime;
   @JsonKey(name: 'billable_time')
   final String? billableTime;
   @JsonKey(name: 'billable_time_text')
@@ -87,6 +98,10 @@ class SingleStoplogData {
     this.arrivalLocation,
     this.facilityAddress,
     this.attachments,
+    this.detentionSummaryPdf,
+    this.brokerEmail,
+    this.recipientEmail,
+    this.claim,
     this.currentStep,
     this.gpsCoordinates,
     this.ratePerHour,

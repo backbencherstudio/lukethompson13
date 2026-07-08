@@ -89,17 +89,18 @@ class _FacilitySearchSheetContentState
             focusNode: _focusNode,
           ),
 
-          ListTile(
-            title: Text(
-              'Add "${_searchController.text}"',
-              style: const TextStyle(color: Colors.white),
+          if (_searchController.text.isNotEmpty)
+            ListTile(
+              title: Text(
+                'Add "${_searchController.text}"',
+                style: const TextStyle(color: Colors.white),
+              ),
+              trailing: const Icon(
+                Icons.chevron_right,
+                color: ColorManager.subtextColor,
+              ),
+              onTap: () => Navigator.pop(context, _searchController.text),
             ),
-            trailing: const Icon(
-              Icons.chevron_right,
-              color: ColorManager.subtextColor,
-            ),
-            onTap: () => Navigator.pop(context, _searchController.text),
-          ),
         ],
       ),
       child: _filtered.isEmpty

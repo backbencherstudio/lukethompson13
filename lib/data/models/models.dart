@@ -12,6 +12,7 @@ export 'home/home_data_overview.model.dart';
 export 'report/report.model.dart';
 
 // Stops
+export 'stops/claim.model.dart';
 export 'stops/stop_log_attachment.model.dart';
 export 'stops/stop_log_location.model.dart';
 export 'stops/stop_log_list_response.model.dart';

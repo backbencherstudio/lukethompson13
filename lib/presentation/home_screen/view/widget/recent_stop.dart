@@ -11,32 +11,10 @@ import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart
 import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
-
-class RecentStopData {
-  final String title;
-  final String subtitle;
-  final String amount;
-
-  final String? status;
-  final String? icon;
-  final String? badge;
-  final String? actionLabel;
-
-  const RecentStopData({
-    required this.title,
-    required this.subtitle,
-    required this.amount,
-    this.status,
-    this.icon = "assets/icons/building.svg",
-    this.badge,
-    this.actionLabel,
-  });
-}
+import 'package:lukethompson/presentation/home_screen/view/widget/stop_action_button.dart';
 
 // TODO: validate data with the ui
-class RecentStop extends StatelessWidget {
-  final RecentStopData data;
-
+class RecentStopCard extends StatelessWidget {
   final Color? iconColor;
   final Color? titleColor;
   final Color? subtitleColor;
@@ -45,9 +23,16 @@ class RecentStop extends StatelessWidget {
   final Widget? rightAction;
   final Widget? badge;
 
-  const RecentStop({
+  final String title;
+  final String subtitle;
+  final String amount;
+
+  final Widget? status;
+  final String? icon;
+  final String? actionLabel;
+
+  const RecentStopCard({
     super.key,
-    required this.data,
 
     this.titleColor = Colors.white,
     this.iconColor = const Color(0xFF00A3FF),
@@ -56,6 +41,13 @@ class RecentStop extends StatelessWidget {
     this.borderColor,
     this.rightAction,
     this.badge,
+
+    required this.title,
+    required this.subtitle,
+    required this.amount,
+    this.status,
+    this.icon = "assets/icons/building.svg",
+    this.actionLabel,
   });
 
   @override
@@ -74,7 +66,7 @@ class RecentStop extends StatelessWidget {
                   color: iconColor?.withAlpha(30),
                 ),
                 child: SvgPicture.asset(
-                  data.icon ?? Assets.icons.building,
+                  icon ?? Assets.icons.building,
                   colorFilter: iconColor != null
                       ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
                       : null,
@@ -93,7 +85,7 @@ class RecentStop extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            data.title,
+                            title,
                             style: TextStyle(
                               color: titleColor,
                               fontSize: 16.sp,
@@ -108,7 +100,7 @@ class RecentStop extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      data.subtitle,
+                      subtitle,
                       style: TextStyle(color: subtitleColor, fontSize: 14.sp),
                     ),
                   ],
@@ -122,7 +114,7 @@ class RecentStop extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                data.amount,
+                amount,
                 style: TextStyle(
                   color: amountColor,
                   fontSize: 26.sp,
@@ -137,37 +129,10 @@ class RecentStop extends StatelessWidget {
       ),
     );
   }
-
-  static final mockrecentStopData = [
-    const RecentStopData(
-      title: "Walmart DC Shelbyville. TN",
-      subtitle: "Thu Apr 24 4h 15m wait 2h 15m billable",
-      amount: "\$135",
-      status: "Good Payer",
-    ),
-    const RecentStopData(
-      title: "FedEx Memphis Hub",
-      subtitle: "Fri Apr 25 3h 30m wait 1h 45m billable",
-      amount: "\$98",
-      status: "Average Payer",
-    ),
-    const RecentStopData(
-      title: "Amazon Fulfillment Center",
-      subtitle: "Mon Apr 28 5h 00m wait 3h 00m billable",
-      amount: "\$210",
-      status: "Poor Payer",
-    ),
-    const RecentStopData(
-      title: "UPS Louisville Hub",
-      subtitle: "Tue Apr 29 2h 45m wait 1h 30m billable",
-      amount: "\$75",
-      status: "Good Payer",
-    ),
-  ];
 }
 
 class RecentStopList extends StatelessWidget {
-  final AsyncValue<List<StopLog>?> value;
+  final AsyncValue<List<StopLogListItem>?> value;
 
   const RecentStopList({super.key, required this.value});
 
@@ -189,14 +154,16 @@ class RecentStopList extends StatelessWidget {
               .map(
                 (stop) => Padding(
                   padding: EdgeInsets.only(bottom: 10.h),
-                  child: RecentStop(
-                    data: RecentStopData(
-                      title: stop.facilityName,
-                      subtitle: AppDateUtils.formatDateWithTime(stop.date),
-                      amount: CurrencyFormatter.format(stop.amount),
-                      status: stop.status,
+                  child: RecentStopCard(
+                    title: stop.facilityName,
+                    subtitle: AppDateUtils.formatDateWithTime(stop.date),
+                    amount: CurrencyFormatter.format(stop.amount),
+                    badge: StatusBadge(
+                      status: stop.status == .active
+                          ? stop.status
+                          : stop.claimStatus,
                     ),
-                    rightAction: StatusBadge(status: stop.status),
+                    rightAction: StopActionButton(stop: stop),
                   ),
                 ),
               )

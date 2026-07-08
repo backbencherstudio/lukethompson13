@@ -35,6 +35,7 @@ class ColorManager {
   static const Color beginerColor = Color(0xFFC6DBAE);
   static const Color bottomSheetColor = Color(0xFFF6F6F6);
 
+  static const Color surfaceBacground = Color(0xff111926);
   static const Color bgColorgrey = Color.fromARGB(255, 234, 244, 225);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color scaffoldLight = Color(0xFFFFFFFF);

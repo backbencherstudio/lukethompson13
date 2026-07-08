@@ -94,7 +94,7 @@ class _ChooseSubscriptionPlanScreenState
     return Container(
       padding: .all(12.w),
       decoration: BoxDecoration(
-        color: Color(0xff111926),
+        color: ColorManager.surfaceBacground,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(

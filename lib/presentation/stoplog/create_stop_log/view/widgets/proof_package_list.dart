@@ -34,8 +34,8 @@ class ProofPackageList extends StatelessWidget {
     int index,
   ) {
     return AppCard(
-      backgroundColor: const Color(0xff111926),
-      borderRadius: 8,
+      backgroundColor: ColorManager.surfaceBacground,
+      borderRadius: 12,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Stack(
         children: [

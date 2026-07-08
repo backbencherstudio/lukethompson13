@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_search_sheet.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/info_banner.dart';
 
 class FacilitySection extends StatefulWidget {
   const FacilitySection({super.key});
@@ -15,9 +13,7 @@ class FacilitySection extends StatefulWidget {
 
 class _FacilitySectionState extends State<FacilitySection> {
   final _focusNode = FocusNode();
-  final TextEditingController _controller = TextEditingController(
-    text: 'Walmart DC - Memphis, TN',
-  );
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
@@ -34,7 +30,7 @@ class _FacilitySectionState extends State<FacilitySection> {
         Text("FACILITY NAME", style: context.labelLarge),
         SizedBox(height: 8.h),
         SearchBarWidget(
-          hintText: "Search facilities...",
+          hintText: "Search or enter a facility name...",
           controller: _controller,
           focusNode: _focusNode,
           onTap: () async {

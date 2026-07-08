@@ -26,7 +26,7 @@ import 'package:lukethompson/presentation/start_subscription/view/add_card_scree
 import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
-import 'package:lukethompson/presentation/stops/view/screen/claim_detials_screen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/client_review_screeen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/review_submitted_screen.dart';
@@ -114,8 +114,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ParentScreen(),
       ),
       GoRoute(
-        path: Routes.claimDetails,
-        builder: (context, state) => const ClaimDetialsScreen(),
+        path: Routes.claimNow,
+        builder: (context, state) => ClaimNowScreen(
+          argument: state.extra as ClaimNowScreenArg?
+        ),
       ),
       GoRoute(
         path: Routes.claimReview,

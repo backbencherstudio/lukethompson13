@@ -6,7 +6,7 @@ import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
-import 'package:lukethompson/data/providers/infinite_scroll.dart';
+import 'package:lukethompson/data/providers/stoplog_list_infinite_scroll.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/recent_stop.dart';
 
 class StopsScreen extends ConsumerStatefulWidget {
