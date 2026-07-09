@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lukethompson/core/utils/logger.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
@@ -10,100 +13,188 @@ import 'package:lukethompson/data/models/claim/submit_claim.dart';
 import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
 import 'package:lukethompson/data/providers/claim_queries.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart'
+    show SendMethod, SendMethodToggle;
 
-class ClaimSendTo extends StatefulWidget {
+class ClaimSendTo extends ConsumerStatefulWidget {
   const ClaimSendTo({super.key, required this.data});
 
   final SingleStoplogData data;
 
   @override
-  State<ClaimSendTo> createState() => _ClaimSendToState();
+  ConsumerState<ClaimSendTo> createState() => _ClaimSendToState();
 }
 
-class _ClaimSendToState extends State<ClaimSendTo> {
-  int _sendMethodIndex = 0;
-  final _recipientController = TextEditingController();
-  final _ccController = TextEditingController();
+class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
+  final form = ClaimSendToForm();
 
-  @override
-  void initState() {
-    super.initState();
-    _recipientController.addListener(() => setState(() {}));
+  FormControl<String> get recipientEmail => form.recipientEmail;
+  FormControl<String> get brokerEmail => form.brokerEmail;
+  FormControl<int> get sendMethod => form.sendMethod;
+
+  Future<void> onClaim() async {
+    final method = SendMethod.values[sendMethod.value ?? 0];
+
+    switch (method) {
+      case .email:
+        form.markAllAsTouched();
+        if (!form.valid) return;
+        final id = widget.data.id;
+        if (id == null) return;
+
+        await _submitClaimViaEmail(ref, id, method);
+        break;
+      default:
+    }
+  }
+
+  Future<void> _submitClaimViaEmail(
+    WidgetRef ref,
+    String id,
+    SendMethod method,
+  ) async {
+    final (err, res) = await tryAwait(
+      ref
+          .read(submitAClaimAction.notifier)
+          .submit(
+            id,
+            SubmitClaimRequest(
+              claimMethod: method.apiValue,
+              recipientEmail: recipientEmail.value,
+              brokerEmail: brokerEmail.value,
+            ),
+          ),
+    );
+
+    if (!mounted) return;
+
+    if (err != null) {
+      context.showErrorSnackBar(ErrorHandle.formatErrorMessage(err));
+      return;
+    }
+
+    context.showSuccessSnackBar(res?.message ?? '');
   }
 
   @override
   void dispose() {
-    _recipientController.dispose();
-    _ccController.dispose();
+    form.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return ReactiveForm(
+      formGroup: form,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          24.height,
+          const SectionHeader(title: 'Send To'),
+          12.height,
+          _buildSendMethodToggle(),
+          16.height,
+          ReactiveValueListenableBuilder<int>(
+            formControl: sendMethod,
+            builder: (_, control, _) {
+              final isEmail =
+                  SendMethod.values[control.value ?? 0] == SendMethod.email;
+              if (!isEmail) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildRecipientEmailField(),
+                  16.height,
+                  _buildBrokerEmailField(),
+                  16.height,
+                ],
+              );
+            },
+          ),
+          _buildClaimButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecipientEmailField() {
     return Column(
-      crossAxisAlignment: .stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        24.height,
-        SectionHeader(title: 'Send To'),
-        12.height,
-        InputLabel('Recipient Email'),
+        const InputLabel('Recipient Email'),
         8.height,
-        CustomTextFieldWidget(
-          hintText: "Enter recipient email",
-          controller: _recipientController,
-        ),
-        SizedBox(height: 16),
-
-        InputLabel('CC Broker', hint: '(Optional)'),
-        8.height,
-        CustomTextFieldWidget(
-          hintText: "Enter CC broker",
-          controller: _ccController,
-        ),
-
-        16.height,
-        SendMethodToggle(
-          selectedIndex: _sendMethodIndex,
-          onChanged: (index) => setState(() => _sendMethodIndex = index),
-        ),
-
-        16.height,
-        Consumer(
-          builder: (context, ref, child) {
-            return GlobalButton(
-              label: 'Claim Now',
-              isDisabled: _recipientController.text.trim().isEmpty,
-              onPressed: () async {
-                final id = widget.data.id;
-                if (id == null) return;
-
-                final (err, res, _) = await tryAwait(
-                  ref
-                      .read(submitAClaimAction.notifier)
-                      .submit(
-                        id,
-                        SubmitClaimRequest(
-                          claimMethod: "EMAIL",
-                          recipientEmail: _recipientController.text,
-                          brokerEmail: _ccController.text,
-                        ),
-                      ),
-                );
-
-                if (err != null) {
-                  context.showErrorSnackBar(
-                    ErrorHandle.formatErrorMessage(err),
-                  );
-                  return;
-                }
-
-                context.showSuccessSnackBar(res?.message ?? '');
-              },
-            );
+        ReactiveTextField<String>(
+          formControl: recipientEmail,
+          validationMessages: {
+            ValidationMessage.required: (_) => 'Recipient email is required',
+            ValidationMessage.email: (_) => 'Please enter a valid email',
           },
+          decoration: const InputDecoration(hintText: 'Enter recipient email'),
         ),
       ],
     );
   }
+
+  Widget _buildBrokerEmailField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const InputLabel('CC Broker', hint: '(Optional)'),
+        8.height,
+        ReactiveTextField<String>(
+          formControl: brokerEmail,
+          decoration: const InputDecoration(hintText: 'Enter CC broker'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSendMethodToggle() {
+    return ReactiveValueListenableBuilder<int>(
+      formControl: sendMethod,
+      builder: (_, control, _) {
+        return SendMethodToggle(
+          selectedMethod: SendMethod.values[control.value ?? 0],
+          onChanged: (method) => control.updateValue(method.index),
+        );
+      },
+    );
+  }
+
+  Widget _buildClaimButton() {
+    return ReactiveFormConsumer(
+      builder: (_, form, _) {
+        return ReactiveValueListenableBuilder<int>(
+          formControl: sendMethod,
+          builder: (_, control, _) {
+            final isEmail = SendMethod.values[control.value ?? 0] == .email;
+            return GlobalButton(
+              label: 'Claim Now',
+              isDisabled: isEmail && !form.valid,
+              onPressed: onClaim,
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class ClaimSendToForm extends FormGroup {
+  ClaimSendToForm()
+    : super({
+        'recipientEmail': FormControl<String>(
+          validators: [Validators.required, Validators.email],
+        ),
+        'brokerEmail': FormControl<String>(validators: [Validators.email]),
+        'sendMethod': FormControl<int>(value: 0),
+      });
+
+  FormControl<String> get recipientEmail =>
+      control('recipientEmail') as FormControl<String>;
+
+  FormControl<String> get brokerEmail =>
+      control('brokerEmail') as FormControl<String>;
+
+  FormControl<int> get sendMethod => control('sendMethod') as FormControl<int>;
 }

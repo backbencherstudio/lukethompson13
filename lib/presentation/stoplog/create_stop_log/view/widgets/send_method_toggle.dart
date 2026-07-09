@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/core/widgets/spaced_row.dart';
+
+enum SendMethod {
+  email('Email'),
+  sms('SMS'),
+  share('Share');
+
+  final String label;
+  const SendMethod(this.label);
+
+  String get apiValue => name.toUpperCase();
+}
 
 class SendMethodToggle extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onChanged;
+  final SendMethod selectedMethod;
+  final ValueChanged<SendMethod> onChanged;
 
   const SendMethodToggle({
     super.key,
-    required this.selectedIndex,
+    required this.selectedMethod,
     required this.onChanged,
   });
-
-  static const labels = ['Email', 'SMS', 'Share'];
 
   @override
   Widget build(BuildContext context) {
     return Row(
       spacing: 12,
-      children: List.generate(labels.length, (index) {
-        final isSelected = index == selectedIndex;
+      children: List.generate(SendMethod.values.length, (index) {
+        final method = SendMethod.values[index];
+        final isSelected = method == selectedMethod;
         return Expanded(
           child: GlobalButton(
             borderSide: BorderSide(
@@ -35,8 +43,8 @@ class SendMethodToggle extends StatelessWidget {
             color: isSelected
                 ? ColorManager.primaryButton.withValues(alpha: 0.12)
                 : ColorManager.subtextColor.withValues(alpha: 0.08),
-            label: labels[index],
-            onPressed: () => onChanged(index),
+            label: method.label,
+            onPressed: () => onChanged(method),
           ),
         );
       }),

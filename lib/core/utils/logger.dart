@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-final log = Logger(
+final logger = Logger(
   printer: PrettyPrinter(
     methodCount: 0,
     errorMethodCount: 8,
