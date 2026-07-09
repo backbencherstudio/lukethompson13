@@ -9,7 +9,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/providers/stoplog_queries.dart';
-import 'package:lukethompson/data/sources/local/gps_service.dart';
+import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 
 import 'attachment_upload_section.dart';
@@ -358,7 +358,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
   }
 
   Future<void> logBolNumberAndAttachment() async {
-    await tryAwait(
+    await tryCatch(
       _logBolNumberAndAttachment(),
       onError: (e, _) => context.showErrorSnackBar(e.toString()),
     );
@@ -389,7 +389,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
               recordStopLogMutation.isPending,
             ),
             onChanged: (value) => setState(() {}),
-            onConfirm: () => tryAwait(
+            onConfirm: () => tryCatch(
               _logArrivalTime(),
               onError: (e, _) => context.showErrorSnackBar(e.toString()),
             ),
@@ -410,7 +410,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
               recordStopLogMutation.isPending,
             ),
             onChanged: (_) {},
-            onConfirm: () => tryAwait(
+            onConfirm: () => tryCatch(
               _logDockedInTime(),
               onError: (e, _) => context.showErrorSnackBar(e.toString()),
             ),
@@ -431,7 +431,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
               recordStopLogMutation.isPending,
             ),
             onChanged: (_) {},
-            onConfirm: () => tryAwait(
+            onConfirm: () => tryCatch(
               _logCompletedTime(),
               onError: (e, _) => context.showErrorSnackBar(e.toString()),
             ),
@@ -452,7 +452,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
               recordStopLogMutation.isPending,
             ),
             onChanged: (_) {},
-            onConfirm: () => tryAwait(
+            onConfirm: () => tryCatch(
               _logDepartureTime(),
               onError: (e, _) => context.showErrorSnackBar(e.toString()),
             ),

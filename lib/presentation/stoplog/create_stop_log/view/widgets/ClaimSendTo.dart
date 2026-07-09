@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lukethompson/core/utils/logger.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
+import 'package:lukethompson/core/platform/share_service.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
@@ -15,6 +13,7 @@ import 'package:lukethompson/data/providers/claim_queries.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart'
     show SendMethod, SendMethodToggle;
+import 'package:reactive_forms/reactive_forms.dart';
 
 class ClaimSendTo extends ConsumerStatefulWidget {
   const ClaimSendTo({super.key, required this.data});
@@ -34,6 +33,7 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
 
   Future<void> onClaim() async {
     final method = SendMethod.values[sendMethod.value ?? 0];
+    final shareService = ShareService();
 
     switch (method) {
       case .email:
@@ -44,7 +44,26 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
 
         await _submitClaimViaEmail(ref, id, method);
         break;
-      default:
+      case .sms:
+        final (res, err) = await tryCatch(
+          shareService.sendSms(body: "Claim now"),
+        );
+
+        if (err != null) {
+          context.showErrorSnackBar(err.toString());
+          return;
+        }
+        break;
+      case .share:
+        final (_, err) = await tryCatch(
+          shareService.share("Claim now"),
+        );
+
+        if (err != null) {
+          context.showErrorSnackBar(err.toString());
+          return;
+        }
+        break;
     }
   }
 
@@ -53,7 +72,7 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
     String id,
     SendMethod method,
   ) async {
-    final (err, res) = await tryAwait(
+    final (res, err) = await tryCatch(
       ref
           .read(submitAClaimAction.notifier)
           .submit(
