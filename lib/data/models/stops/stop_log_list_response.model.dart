@@ -26,6 +26,7 @@ enum ClaimStatus implements StatusColorable {
   draft('DRAFT', 'No Claim', ColorManager.subtextColor),
   submitted('SUBMITTED', 'Submitted', ColorManager.warningColor),
   paid('PAID', 'Paid', ColorManager.successColor),
+  unpaid('UNPAID', 'Unpaid', ColorManager.errorColor),
   denied('DENIED', 'Denied', ColorManager.errorColor);
 
   const ClaimStatus(this.value, this.displayName, this.badgeColor);

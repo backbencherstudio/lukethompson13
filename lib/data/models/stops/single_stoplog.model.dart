@@ -8,7 +8,7 @@ import 'package:lukethompson/data/models/stops/claim.model.dart';
 part 'single_stoplog.model.g.dart';
 
 @JsonSerializable()
-class SingleStoplogData {
+class SingleStoplogDetailData {
   final String? id;
 
   @JsonKey(name: 'user_id')
@@ -82,7 +82,7 @@ class SingleStoplogData {
   final String? detention;
   final String? lost;
 
-  SingleStoplogData({
+  SingleStoplogDetailData({
     this.id,
     this.userId,
     this.shipperFacilityId,
@@ -114,10 +114,10 @@ class SingleStoplogData {
     this.lost,
   });
 
-  factory SingleStoplogData.fromJson(Map<String, dynamic> json) =>
-      _$SingleStoplogDataFromJson(json);
+  factory SingleStoplogDetailData.fromJson(Map<String, dynamic> json) =>
+      _$SingleStoplogDetailDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SingleStoplogDataToJson(this);
+  Map<String, dynamic> toJson() => _$SingleStoplogDetailDataToJson(this);
 
   @override
   String toString() => 'SingleStoplogData${toJson()}';
@@ -125,7 +125,7 @@ class SingleStoplogData {
 
 @JsonSerializable()
 class SingleStoplogResponse extends BaseResponse {
-  final SingleStoplogData? data;
+  final SingleStoplogDetailData? data;
 
   SingleStoplogResponse({
     required super.success,

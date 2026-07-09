@@ -121,7 +121,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.claimReview,
-        builder: (context, state) => const ClaimReviewScreen(),
+        builder: (context, state) =>  ClaimReviewScreen(
+          argument: state.extra as ClaimReviewScreenArg?
+        ),
       ),
       GoRoute(
         path: Routes.rateShipper,

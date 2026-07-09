@@ -14,7 +14,7 @@ Map<String, dynamic> _$ClaimEventToJson(ClaimEvent instance) =>
 
 Claim _$ClaimFromJson(Map<String, dynamic> json) => Claim(
   id: json['id'] as String,
-  status: json['status'] as String?,
+  status: $enumDecodeNullable(_$ClaimStatusEnumMap, json['status']),
   amount: json['amount'] as num?,
   paidAmount: json['paid_amount'] as num?,
   sentAt: json['sent_at'] == null
@@ -31,11 +31,13 @@ Claim _$ClaimFromJson(Map<String, dynamic> json) => Claim(
   claimEvents: (json['claim_events'] as List<dynamic>?)
       ?.map((e) => ClaimEvent.fromJson(e as Map<String, dynamic>))
       .toList(),
+  sendMethod: $enumDecodeNullable(_$SendMethodEnumMap, json['send_method']),
 );
 
 Map<String, dynamic> _$ClaimToJson(Claim instance) => <String, dynamic>{
   'id': instance.id,
-  'status': instance.status,
+  'status': _$ClaimStatusEnumMap[instance.status],
+  'send_method': _$SendMethodEnumMap[instance.sendMethod],
   'amount': instance.amount,
   'paid_amount': instance.paidAmount,
   'sent_at': instance.sentAt?.toIso8601String(),
@@ -47,3 +49,13 @@ Map<String, dynamic> _$ClaimToJson(Claim instance) => <String, dynamic>{
   'followup_due_at': instance.followupDueAt?.toIso8601String(),
   'claim_events': instance.claimEvents,
 };
+
+const _$ClaimStatusEnumMap = {
+  ClaimStatus.draft: 'DRAFT',
+  ClaimStatus.submitted: 'SUBMITTED',
+  ClaimStatus.paid: 'PAID',
+  ClaimStatus.unpaid: 'UNPAID',
+  ClaimStatus.denied: 'DENIED',
+};
+
+const _$SendMethodEnumMap = {SendMethod.email: 'EMAIL', SendMethod.sms: 'SMS'};

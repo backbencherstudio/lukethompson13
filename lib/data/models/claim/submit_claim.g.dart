@@ -42,6 +42,7 @@ const _$ClaimStatusEnumMap = {
   ClaimStatus.draft: 'DRAFT',
   ClaimStatus.submitted: 'SUBMITTED',
   ClaimStatus.paid: 'PAID',
+  ClaimStatus.unpaid: 'UNPAID',
   ClaimStatus.denied: 'DENIED',
 };
 

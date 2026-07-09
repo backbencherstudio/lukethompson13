@@ -6,6 +6,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
 
 class StopActionButton extends ConsumerWidget {
   const StopActionButton({super.key, required this.stop});
@@ -72,6 +73,7 @@ StopAction getStopAction(StopLogListItem stop) {
         onPressed: (context, _) {
           context.push(
             Routes.claimReview,
+            extra: ClaimReviewScreenArg(steplogId: stop.id),
           );
         },
       );
@@ -82,11 +84,8 @@ StopAction getStopAction(StopLogListItem stop) {
         label: 'Rate Shipper',
         color: ColorManager.warningColor,
         onPressed: (context, _) {
-          context.push(
-            Routes.rateShipper,
-          );
+          context.push(Routes.rateShipper);
         },
-
       );
 
     default:

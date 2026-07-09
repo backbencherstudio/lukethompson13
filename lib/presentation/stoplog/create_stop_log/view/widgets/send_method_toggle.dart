@@ -1,17 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-
-enum SendMethod {
-  email('Email'),
-  sms('SMS');
-  // share('Share');
-
-  final String label;
-  const SendMethod(this.label);
-
-  String get apiValue => name.toUpperCase();
-}
+import 'package:lukethompson/data/models/models.dart';
 
 class SendMethodToggle extends StatelessWidget {
   final SendMethod selectedMethod;

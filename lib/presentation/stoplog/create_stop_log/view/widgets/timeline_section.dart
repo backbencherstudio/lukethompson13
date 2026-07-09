@@ -23,7 +23,7 @@ class TimelineSection extends ConsumerStatefulWidget {
     required this.activateCalculateBtn,
   });
 
-  final SingleStoplogData? session;
+  final SingleStoplogDetailData? session;
   final void Function(StopLogStep step) onSingleLogComplete;
   final void Function(bool) activateCalculateBtn;
 

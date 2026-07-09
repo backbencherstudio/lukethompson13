@@ -10,6 +10,7 @@ import 'package:lukethompson/core/utils/logger.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/data/models/claim/submit_claim.dart';
+import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
 import 'package:lukethompson/data/providers/claim_queries.dart';
 import 'package:lukethompson/data/providers/stoplog_list_infinite_scroll.dart';
@@ -20,7 +21,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 class ClaimSendTo extends ConsumerStatefulWidget {
   const ClaimSendTo({super.key, required this.data});
 
-  final SingleStoplogData data;
+  final SingleStoplogDetailData data;
 
   @override
   ConsumerState<ClaimSendTo> createState() => _ClaimSendToState();

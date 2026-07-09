@@ -1,6 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
 
 part 'claim.model.g.dart';
+
+@JsonEnum(valueField: 'value')
+enum SendMethod {
+  email('EMAIL', 'Email'),
+  sms('SMS', 'SMS');
+
+  final String label;
+  final String value;
+  const SendMethod(this.value, this.label);
+
+  String get apiValue => value;
+}
 
 @JsonSerializable()
 class ClaimEvent {
@@ -21,7 +34,10 @@ class ClaimEvent {
 class Claim {
   final String id;
 
-  final String? status;
+  final ClaimStatus? status;
+
+  @JsonKey(name: 'send_method')
+  final SendMethod? sendMethod;
 
   final num? amount;
 
@@ -65,6 +81,7 @@ class Claim {
     this.followupCount,
     this.followupDueAt,
     this.claimEvents,
+    this.sendMethod,
   });
 
   factory Claim.fromJson(Map<String, dynamic> json) => _$ClaimFromJson(json);
