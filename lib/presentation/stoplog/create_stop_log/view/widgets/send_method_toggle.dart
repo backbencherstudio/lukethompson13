@@ -4,8 +4,8 @@ import 'package:lukethompson/core/widgets/global_button.dart';
 
 enum SendMethod {
   email('Email'),
-  sms('SMS'),
-  share('Share');
+  sms('SMS');
+  // share('Share');
 
   final String label;
   const SendMethod(this.label);

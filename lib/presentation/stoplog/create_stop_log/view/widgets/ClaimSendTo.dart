@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/platform/share_service.dart';
 import 'package:lukethompson/core/utils/error.dart';
+import 'package:lukethompson/core/utils/logger.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/data/models/claim/submit_claim.dart';
 import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
 import 'package:lukethompson/data/providers/claim_queries.dart';
+import 'package:lukethompson/data/providers/stoplog_list_infinite_scroll.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart'
-    show SendMethod, SendMethodToggle;
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class ClaimSendTo extends ConsumerStatefulWidget {
@@ -35,64 +37,69 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
     final method = SendMethod.values[sendMethod.value ?? 0];
     final shareService = ShareService();
 
+    logger.d(widget.data.id);
+
+    final id = widget.data.id;
+    if (id == null) return;
+
     switch (method) {
       case .email:
         form.markAllAsTouched();
         if (!form.valid) return;
-        final id = widget.data.id;
-        if (id == null) return;
+        final (submitRes, submitErr) = await tryCatch(_submitClaim(id, method));
+        if (submitErr != null) {
+          context.showErrorSnackBar(submitErr.toString());
+          return;
+        }
 
-        await _submitClaimViaEmail(ref, id, method);
+        context.showSuccessSnackBar("Claim Submitted Succefully");
+        context.pop();
+        ref.invalidate(stopLogPaginationProvider);
         break;
       case .sms:
+        final (submitRes, submitErr) = await tryCatch(_submitClaim(id, method));
+
+        if (submitErr != null) {
+          context.showErrorSnackBar(submitErr.toString());
+          return;
+        }
+
         final (res, err) = await tryCatch(
-          shareService.sendSms(body: "Claim now"),
+          shareService.sendSms(
+            body: submitRes?.data.claimMessage ?? "Claim now",
+          ),
         );
 
         if (err != null) {
           context.showErrorSnackBar(err.toString());
           return;
         }
-        break;
-      case .share:
-        final (_, err) = await tryCatch(
-          shareService.share("Claim now"),
-        );
 
-        if (err != null) {
-          context.showErrorSnackBar(err.toString());
-          return;
-        }
+        context.pop();
+        ref.invalidate(stopLogPaginationProvider);
         break;
+      // case .share:
+      //   final (_, err) = await tryCatch(shareService.share("Claim now"));
+      //
+      //   if (err != null) {
+      //     context.showErrorSnackBar(err.toString());
+      //     return;
+      //   }
+      //   break;
     }
   }
 
-  Future<void> _submitClaimViaEmail(
-    WidgetRef ref,
-    String id,
-    SendMethod method,
-  ) async {
-    final (res, err) = await tryCatch(
-      ref
-          .read(submitAClaimAction.notifier)
-          .submit(
-            id,
-            SubmitClaimRequest(
-              claimMethod: method.apiValue,
-              recipientEmail: recipientEmail.value,
-              brokerEmail: brokerEmail.value,
-            ),
+  Future<SubmitClaimResponse> _submitClaim(String id, SendMethod method) {
+    return ref
+        .read(submitAClaimAction.notifier)
+        .submit(
+          id,
+          SubmitClaimRequest(
+            claimMethod: method.apiValue,
+            recipientEmail: recipientEmail.value,
+            brokerEmail: brokerEmail.value,
           ),
-    );
-
-    if (!mounted) return;
-
-    if (err != null) {
-      context.showErrorSnackBar(ErrorHandle.formatErrorMessage(err));
-      return;
-    }
-
-    context.showSuccessSnackBar(res?.message ?? '');
+        );
   }
 
   @override
@@ -111,25 +118,12 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
           24.height,
           const SectionHeader(title: 'Send To'),
           12.height,
+          _buildRecipientEmailField(),
+          16.height,
+          _buildBrokerEmailField(),
+          16.height,
           _buildSendMethodToggle(),
           16.height,
-          ReactiveValueListenableBuilder<int>(
-            formControl: sendMethod,
-            builder: (_, control, _) {
-              final isEmail =
-                  SendMethod.values[control.value ?? 0] == SendMethod.email;
-              if (!isEmail) return const SizedBox.shrink();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildRecipientEmailField(),
-                  16.height,
-                  _buildBrokerEmailField(),
-                  16.height,
-                ],
-              );
-            },
-          ),
           _buildClaimButton(),
         ],
       ),
@@ -183,16 +177,10 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   Widget _buildClaimButton() {
     return ReactiveFormConsumer(
       builder: (_, form, _) {
-        return ReactiveValueListenableBuilder<int>(
-          formControl: sendMethod,
-          builder: (_, control, _) {
-            final isEmail = SendMethod.values[control.value ?? 0] == .email;
-            return GlobalButton(
-              label: 'Claim Now',
-              isDisabled: isEmail && !form.valid,
-              onPressed: onClaim,
-            );
-          },
+        return GlobalButton(
+          label: 'Claim Now',
+          isDisabled: !form.valid,
+          onPressed: onClaim,
         );
       },
     );

@@ -20,13 +20,16 @@ class _ClaimApi implements ClaimApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<BaseResponse> submitAClaim(String id, SubmitClaimRequest body) async {
+  Future<SubmitClaimResponse> submitAClaim(
+    String id,
+    SubmitClaimRequest body,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _options = _setStreamType<BaseResponse>(
+    final _options = _setStreamType<SubmitClaimResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -37,9 +40,9 @@ class _ClaimApi implements ClaimApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse _value;
+    late SubmitClaimResponse _value;
     try {
-      _value = BaseResponse.fromJson(_result.data!);
+      _value = SubmitClaimResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
