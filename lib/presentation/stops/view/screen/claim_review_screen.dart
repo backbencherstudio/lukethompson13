@@ -1,12 +1,20 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
+import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/utils/logger.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/data/models/stops/mark_a_claim_as_paid_request.model.dart';
+import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
+import 'package:lukethompson/data/providers/claim_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_status_card.dart';
 import 'package:lukethompson/presentation/stops/view/widget/full_claim_preview_card.dart';
@@ -38,6 +46,7 @@ class ClaimReviewScreen extends ConsumerWidget {
             skipLoadingOnRefresh: true,
             skipLoadingOnReload: true,
             data: (data) {
+              logger.t(data?.id);
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Column(
@@ -46,14 +55,20 @@ class ClaimReviewScreen extends ConsumerWidget {
                     16.height,
                     FullClaimPreviewCard(data: data),
 
-                    16.height,
-                    GlobalButton.secondary(
-                      label: 'Export PDF',
-                      onPressed: () {},
-                    ),
-
                     24.height,
                     if (data != null) ClaimStatusCard(data: data),
+                    24.height,
+
+                    GlobalButton(
+                      label: 'Mark as Paid',
+                      onPressed: () => _onMarkAsPaidPressed(context, ref, data),
+                    ),
+                    16.height,
+                    GlobalButton.secondary(
+                      label: 'Send Follow-up',
+                      onPressed: () {},
+                    ),
+                    24.height,
                   ],
                 ),
               );
@@ -67,324 +82,29 @@ class ClaimReviewScreen extends ConsumerWidget {
       ),
     );
   }
+
+  Future<void> _onMarkAsPaidPressed(
+    BuildContext context,
+    WidgetRef ref,
+    SingleStoplogDetailData? data,
+  ) async {
+    final id = data?.id;
+    if (id == null) return;
+
+    final (res, err) = await tryCatch(
+      ref
+          .read(markAClaimAsPaid.notifier)
+          .submit(id, const MarkAClaimAsPaidRequest()),
+    );
+    if (!context.mounted) return;
+
+    if (err != null) {
+      context.showErrorSnackBar(ErrorHandle.formatErrorMessage(err));
+      return;
+    }
+
+    if (res != null) {
+      context.showResultSnackBar(res.message, isSuccess: res.success);
+    }
+  }
 }
-
-
-
-          // child: SingleChildScrollView(
-          //   padding: EdgeInsets.symmetric(horizontal: 16.w),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       SizedBox(height: 16.h),
-          //
-          //       Container(
-          //         width: double.infinity,
-          //         padding: EdgeInsets.all(16.r),
-          //         decoration: BoxDecoration(
-          //           gradient: LinearGradient(
-          //             begin: Alignment.topLeft,
-          //             end: Alignment.center,
-          //             colors: [
-          //               ColorManager.secondary,
-          //               const Color.fromARGB(255, 29, 32, 36),
-          //             ],
-          //           ),
-          //           borderRadius: BorderRadius.circular(16.r),
-          //           border: Border.all(color: Colors.white.withOpacity(0.05)),
-          //         ),
-          //         child: Column(
-          //           crossAxisAlignment: CrossAxisAlignment.start,
-          //           children: [
-          //             Container(
-          //               padding: EdgeInsets.all(15.r),
-          //               decoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(12.r),
-          //                 border: Border.all(
-          //                   color: const Color(0xFF32D779).withOpacity(0.5),
-          //                 ),
-          //               ),
-          //               child: Column(
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                     children: [
-          //                       Text(
-          //                         "Claim Amount",
-          //                         style: TextStyle(
-          //                           color: Colors.white54,
-          //                           fontSize: 12.sp,
-          //                         ),
-          //                       ),
-          //                       Text(
-          //                         "Unpaid",
-          //                         style: TextStyle(
-          //                           color: Colors.redAccent.withOpacity(0.7),
-          //                           fontSize: 12.sp,
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                   Text(
-          //                     "\$225.00",
-          //                     style: TextStyle(
-          //                       color: const Color(0xFF32D779),
-          //                       fontSize: 32.sp,
-          //                       fontWeight: FontWeight.bold,
-          //                     ),
-          //                   ),
-          //                   SizedBox(height: 10.h),
-          //                   Divider(
-          //                     color: Colors.white.withOpacity(0.1),
-          //                     thickness: 1,
-          //                   ),
-          //                   SizedBox(height: 10.h),
-          //                   Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                     children: [
-          //                       Column(
-          //                         crossAxisAlignment: CrossAxisAlignment.start,
-          //                         children: [
-          //                           Text(
-          //                             "Sent",
-          //                             style: TextStyle(
-          //                               color: Colors.white38,
-          //                               fontSize: 11.sp,
-          //                             ),
-          //                           ),
-          //                           Text(
-          //                             "Apr 8, 2026",
-          //                             style: TextStyle(
-          //                               color: Colors.white,
-          //                               fontSize: 13.sp,
-          //                               fontWeight: FontWeight.w500,
-          //                             ),
-          //                           ),
-          //                         ],
-          //                       ),
-          //                       Column(
-          //                         crossAxisAlignment: CrossAxisAlignment.start,
-          //                         children: [
-          //                           Text(
-          //                             "Broker CC",
-          //                             style: TextStyle(
-          //                               color: Colors.white38,
-          //                               fontSize: 11.sp,
-          //                             ),
-          //                           ),
-          //                           Text(
-          //                             "dispatch@tql.com",
-          //                             style: TextStyle(
-          //                               color: Colors.white,
-          //                               fontSize: 13.sp,
-          //                               fontWeight: FontWeight.w500,
-          //                             ),
-          //                           ),
-          //                         ],
-          //                       ),
-          //                       Column(
-          //                         crossAxisAlignment: CrossAxisAlignment.start,
-          //                         children: [
-          //                           Text(
-          //                             "Via",
-          //                             style: TextStyle(
-          //                               color: Colors.white38,
-          //                               fontSize: 11.sp,
-          //                             ),
-          //                           ),
-          //                           Text(
-          //                             "Email",
-          //                             style: TextStyle(
-          //                               color: Colors.white,
-          //                               fontSize: 13.sp,
-          //                               fontWeight: FontWeight.w500,
-          //                             ),
-          //                           ),
-          //                         ],
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //
-          //             SizedBox(height: 25.h),
-          //             Text(
-          //               "PROOF PACKAGE",
-          //               style: TextStyle(
-          //                 color: Colors.white,
-          //                 fontSize: 14.sp,
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //             ),
-          //             SizedBox(height: 15.h),
-          //
-          //             Container(
-          //               padding: EdgeInsets.symmetric(horizontal: 16.w),
-          //               decoration: BoxDecoration(
-          //                 color: const Color(0xFF161A20),
-          //                 borderRadius: BorderRadius.circular(12.r),
-          //                 border: Border.all(
-          //                   color: Colors.white.withOpacity(0.05),
-          //                 ),
-          //               ),
-          //               child: Column(
-          //                 children:
-          //                     [
-          //                       "BOL Photo-bol_photo.jpg",
-          //                       "GPS Proof — auto-captured",
-          //                       "Time Calculations PDF",
-          //                       "View Proof Package PDF",
-          //                     ].asMap().entries.map((entry) {
-          //                       int index = entry.key;
-          //                       String item = entry.value;
-          //                       bool isLast = index == 3;
-          //
-          //                       return Container(
-          //                         padding: EdgeInsets.symmetric(vertical: 14.h),
-          //                         decoration: BoxDecoration(
-          //                           border: isLast
-          //                               ? null
-          //                               : Border(
-          //                                   bottom: BorderSide(
-          //                                     color: Colors.white.withOpacity(
-          //                                       0.05,
-          //                                     ),
-          //                                     width: 1,
-          //                                   ),
-          //                                 ),
-          //                         ),
-          //                         child: Row(
-          //                           mainAxisAlignment:
-          //                               MainAxisAlignment.spaceBetween,
-          //                           children: [
-          //                             Expanded(
-          //                               child: Text(
-          //                                 item,
-          //                                 style: TextStyle(
-          //                                   color: Colors.white60,
-          //                                   fontSize: 13.sp,
-          //                                 ),
-          //                               ),
-          //                             ),
-          //                             Icon(
-          //                               Icons.check,
-          //                               color: const Color(0xFF32D779),
-          //                               size: 18.sp,
-          //                             ),
-          //                           ],
-          //                         ),
-          //                       );
-          //                     }).toList(),
-          //               ),
-          //             ),
-          //
-          //             SizedBox(height: 20.h),
-          //             Text(
-          //               "PROOF PACKAGE",
-          //               style: TextStyle(
-          //                 color: Colors.white38,
-          //                 fontSize: 11.sp,
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //             ),
-          //             SizedBox(height: 10.h),
-          //
-          //             ...[
-          //               "00140_4437_0009964.jpg",
-          //               "00140_4437_0009964.pdf",
-          //             ].map((file) {
-          //               return Container(
-          //                 margin: EdgeInsets.only(bottom: 8.h),
-          //                 padding: EdgeInsets.symmetric(
-          //                   horizontal: 12.w,
-          //                   vertical: 12.h,
-          //                 ),
-          //                 decoration: BoxDecoration(
-          //                   color: const Color(0xFF0D1117),
-          //                   borderRadius: BorderRadius.circular(8.r),
-          //                 ),
-          //                 child: Row(
-          //                   children: [
-          //                     Icon(
-          //                       Icons.link,
-          //                       color: const Color(0xFF2196F3),
-          //                       size: 18.sp,
-          //                     ),
-          //                     SizedBox(width: 10.w),
-          //                     Text(
-          //                       file,
-          //                       style: TextStyle(
-          //                         color: const Color(0xFF2196F3),
-          //                         fontSize: 13.sp,
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               );
-          //             }).toList(),
-          //
-          //             SizedBox(height: 20.h),
-          //             Text(
-          //               "FOLLOW-UP",
-          //               style: TextStyle(
-          //                 color: Colors.white38,
-          //                 fontSize: 11.sp,
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //             ),
-          //             SizedBox(height: 10.h),
-          //
-          //             Container(
-          //               width: double.infinity,
-          //               padding: EdgeInsets.all(15.r),
-          //               decoration: BoxDecoration(
-          //                 color: const Color(0xFF0D1117),
-          //                 borderRadius: BorderRadius.circular(12.r),
-          //               ),
-          //               child: Column(
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   Text(
-          //                     "Auto-selected template (follow-up #2)",
-          //                     style: TextStyle(
-          //                       color: Colors.white38,
-          //                       fontSize: 11.sp,
-          //                     ),
-          //                   ),
-          //                   SizedBox(height: 5.h),
-          //                   Text(
-          //                     "Firm Notice",
-          //                     style: TextStyle(
-          //                       color: const Color(0xFFFFB74D),
-          //                       fontSize: 14.sp,
-          //                       fontWeight: FontWeight.bold,
-          //                     ),
-          //                   ),
-          //                   SizedBox(height: 2.h),
-          //                   Text(
-          //                     "Broker CC",
-          //                     style: TextStyle(
-          //                       color: Colors.white38,
-          //                       fontSize: 11.sp,
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //
-          //       SizedBox(height: 35.h),
-          //
-          //       GlobalButton(label: "Mark as Paid", onPressed: () {}),
-          //       SizedBox(height: 12.h),
-          //       GlobalButton.secondary(
-          //         label: "Mark Uncollectable",
-          //         onPressed: () {},
-          //       ),
-          //     ],
-          //   ),
-          // ),

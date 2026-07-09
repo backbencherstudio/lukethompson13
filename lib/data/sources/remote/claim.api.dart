@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/network/api_endpoints.dart';
 import 'package:lukethompson/core/network/providers.dart';
 import 'package:lukethompson/data/models/models.dart';
+import 'package:lukethompson/data/models/stops/mark_a_claim_as_paid_request.model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'claim.api.g.dart';
@@ -15,6 +16,12 @@ abstract class ClaimApi {
   Future<SubmitClaimResponse> submitAClaim(
     @Path('id') String id,
     @Body() SubmitClaimRequest body,
+  );
+
+  @PATCH(ApiEndpoints.markAClaimAsPaid)
+  Future<BaseResponse> markAClaimAsPaid(
+    @Path('id') String id,
+    @Body() MarkAClaimAsPaidRequest body,
   );
 }
 

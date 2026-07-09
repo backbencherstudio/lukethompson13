@@ -9,7 +9,7 @@ part 'stop_log_list_response.model.g.dart';
 @JsonEnum(valueField: 'value')
 enum StopLogStatus implements StatusColorable {
   all('ALL', 'All', ColorManager.infoColor),
-  active('ACTIVE', 'Active', ColorManager.warningColor),
+  active('ACTIVE', 'Active', ColorManager.infoColor),
   completed('COMPLETED', 'Completed', ColorManager.successColor);
 
   const StopLogStatus(this.value, this.displayName, this.badgeColor);
