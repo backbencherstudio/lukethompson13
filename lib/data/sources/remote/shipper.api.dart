@@ -22,6 +22,7 @@ abstract class ShipperApi {
     @Query('cursor') String? cursor,
     @Query('limit') int? limit,
     @Query('status') String? status,
+    @Query('search') String? search,
   );
 }
 

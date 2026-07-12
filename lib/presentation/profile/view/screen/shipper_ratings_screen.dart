@@ -21,13 +21,25 @@ class ShipperRatingsScreen extends ConsumerStatefulWidget {
 }
 
 class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
+  late final TextEditingController _searchController;
   int _selectedTabFilterIndex = 0;
   bool _pageLocked = false;
 
-  final List<String> categories = [
-    "All",
-    ...PayerCategory.values.map((e) => e.label),
-  ];
+  final List<String> categories = PayerCategory.values
+      .map((e) => e.label)
+      .toList();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +69,15 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 spacing: 16,
                 children: [
-                  SizedBox(height: 0),
                   SearchBarWidget(
+                    controller: _searchController,
                     hintText: 'Search facilities...',
                     margin: .symmetric(horizontal: AppPadding.screenPadding),
+                    onChanged: (value) {
+                      ref
+                          .read(shipperRatingsPaginationProvider.notifier)
+                          .updateSearch(value);
+                    },
                   ),
                   FilterChipGroup(
                     titles: categories,

@@ -26,6 +26,7 @@ class StatItem {
 
 @JsonEnum(valueField: 'value')
 enum PayerCategory {
+  all("ALL"),
   good("GOOD_PAYERS"),
   average('AVERAGE'),
   poor('POOR_PAYERS');
@@ -35,6 +36,8 @@ enum PayerCategory {
 
   String get label {
     switch (this) {
+      case PayerCategory.all:
+        return "All";
       case PayerCategory.good:
         return "Good Payers";
       case PayerCategory.average:
@@ -52,17 +55,21 @@ enum PayerCategory {
         return rating >= 35 && rating <= 69;
       case PayerCategory.poor:
         return rating <= 34;
+      case PayerCategory.all:
+        return rating == -1;
     }
   }
 
   Color get color {
     switch (this) {
-      case PayerCategory.good:
-        return ColorManager.successColor;
       case PayerCategory.average:
         return ColorManager.warningColor;
       case PayerCategory.poor:
         return ColorManager.errorColor;
+      case PayerCategory.good:
+        return ColorManager.successColor;
+      default:
+        return ColorManager.whiteColor;
     }
   }
 

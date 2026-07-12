@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:riverpod/riverpod.dart';
 
 import 'package:lukethompson/data/models/models.dart';
@@ -12,6 +14,7 @@ class ShipperRatingsPaginationState {
   final bool hasMore;
   final bool isLoadingMore;
   final PayerCategory? status;
+  final String search;
 
   const ShipperRatingsPaginationState({
     required this.ratings,
@@ -19,6 +22,7 @@ class ShipperRatingsPaginationState {
     required this.hasMore,
     required this.isLoadingMore,
     this.status,
+    required this.search,
   });
 
   ShipperRatingsPaginationState copyWith({
@@ -27,6 +31,7 @@ class ShipperRatingsPaginationState {
     bool? hasMore,
     bool? isLoadingMore,
     PayerCategory? Function()? status,
+    String? search,
   }) {
     return ShipperRatingsPaginationState(
       ratings: ratings ?? this.ratings,
@@ -34,20 +39,28 @@ class ShipperRatingsPaginationState {
       hasMore: hasMore ?? this.hasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       status: status != null ? status() : this.status,
+      search: search ?? this.search,
     );
   }
 }
 
 class ShipperRatingsPaginationNotifier
     extends AsyncNotifier<ShipperRatingsPaginationState> {
+  Timer? _debounceTimer;
+
   @override
   Future<ShipperRatingsPaginationState> build() async {
+    ref.onDispose(() {
+      _debounceTimer?.cancel();
+    });
+
     return _fetchRatings(cursor: null);
   }
 
   Future<ShipperRatingsPaginationState> _fetchRatings({
     required String? cursor,
     PayerCategory? status,
+    String search = '',
   }) async {
     final api = ref.read(shipperApiProvider);
 
@@ -55,6 +68,7 @@ class ShipperRatingsPaginationNotifier
       cursor,
       _limit,
       status?.value,
+      search.isEmpty ? null : search,
     );
 
     final ratings = response.data ?? [];
@@ -66,6 +80,7 @@ class ShipperRatingsPaginationNotifier
       hasMore: nextCursor != null,
       isLoadingMore: false,
       status: status,
+      search: search,
     );
   }
 
@@ -85,6 +100,7 @@ class ShipperRatingsPaginationNotifier
         current.nextCursor,
         _limit,
         current.status?.value,
+        current.search.isEmpty ? null : current.search,
       );
 
       final newRatings = response.data ?? [];
@@ -103,6 +119,25 @@ class ShipperRatingsPaginationNotifier
     }
   }
 
+  void updateSearch(String search) {
+    final current = state.value;
+
+    if (current == null || current.search == search) {
+      return;
+    }
+
+    _debounceTimer?.cancel();
+
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      state = const AsyncLoading();
+
+      state = await AsyncValue.guard(
+        () =>
+            _fetchRatings(cursor: null, status: current.status, search: search),
+      );
+    });
+  }
+
   Future<void> updateStatus(PayerCategory? status) async {
     final current = state.value;
 
@@ -113,7 +148,7 @@ class ShipperRatingsPaginationNotifier
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(
-      () => _fetchRatings(cursor: null, status: status),
+      () => _fetchRatings(cursor: null, status: status, search: current.search),
     );
   }
 }
