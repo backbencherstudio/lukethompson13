@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
@@ -23,10 +24,14 @@ class StatItem {
   });
 }
 
+@JsonEnum(valueField: 'value')
 enum PayerCategory {
-  good,
-  average,
-  poor;
+  good("GOOD_PAYERS"),
+  average('AVERAGE'),
+  poor('POOR_PAYERS');
+
+  final String value;
+  const PayerCategory(this.value);
 
   String get label {
     switch (this) {

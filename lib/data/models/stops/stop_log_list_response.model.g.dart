@@ -57,26 +57,6 @@ const _$ClaimStatusEnumMap = {
   ClaimStatus.denied: 'DENIED',
 };
 
-MetaDataFilters _$MetaDataFiltersFromJson(Map<String, dynamic> json) =>
-    MetaDataFilters(
-      status: $enumDecode(_$StopLogStatusEnumMap, json['status']),
-    );
-
-Map<String, dynamic> _$MetaDataFiltersToJson(MetaDataFilters instance) =>
-    <String, dynamic>{'status': _$StopLogStatusEnumMap[instance.status]!};
-
-MetaData _$MetaDataFromJson(Map<String, dynamic> json) => MetaData(
-  nextCursor: json['next_cursor'] as String?,
-  limit: (json['limit'] as num).toInt(),
-  filters: MetaDataFilters.fromJson(json['filters'] as Map<String, dynamic>),
-);
-
-Map<String, dynamic> _$MetaDataToJson(MetaData instance) => <String, dynamic>{
-  'next_cursor': instance.nextCursor,
-  'limit': instance.limit,
-  'filters': instance.filters,
-};
-
 StopLogListResponse _$StopLogListResponseFromJson(Map<String, dynamic> json) =>
     StopLogListResponse(
       success: json['success'] as bool,
@@ -86,7 +66,9 @@ StopLogListResponse _$StopLogListResponseFromJson(Map<String, dynamic> json) =>
           .toList(),
       metaData: json['meta_data'] == null
           ? null
-          : MetaData.fromJson(json['meta_data'] as Map<String, dynamic>),
+          : ResponseMetaData.fromJson(
+              json['meta_data'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$StopLogListResponseToJson(

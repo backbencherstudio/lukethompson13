@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/status_colorable.dart';
 import 'package:lukethompson/data/models/common/base.model.dart';
+import 'package:lukethompson/data/models/common/meta_data.dart';
 
 part 'stop_log_list_response.model.g.dart';
 
@@ -94,47 +95,14 @@ class StopLogListItem {
   String toString() => 'StopLog${toJson()}';
 }
 
-@JsonSerializable()
-class MetaDataFilters {
-  final StopLogStatus status;
 
-  MetaDataFilters({required this.status});
-
-  factory MetaDataFilters.fromJson(Map<String, dynamic> json) =>
-      _$MetaDataFiltersFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MetaDataFiltersToJson(this);
-
-  @override
-  String toString() => 'MetaDataFilters${toJson()}';
-}
-
-@JsonSerializable()
-class MetaData {
-  @JsonKey(name: 'next_cursor')
-  final String? nextCursor;
-
-  final int limit;
-
-  final MetaDataFilters filters;
-
-  MetaData({this.nextCursor, required this.limit, required this.filters});
-
-  factory MetaData.fromJson(Map<String, dynamic> json) =>
-      _$MetaDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MetaDataToJson(this);
-
-  @override
-  String toString() => 'MetaData${toJson()}';
-}
 
 @JsonSerializable()
 class StopLogListResponse extends BaseResponse {
   final List<StopLogListItem>? data;
 
   @JsonKey(name: 'meta_data')
-  final MetaData? metaData;
+  final ResponseMetaData? metaData;
 
   StopLogListResponse({
     required super.success,

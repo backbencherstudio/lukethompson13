@@ -12,6 +12,7 @@ class SearchBarWidget extends StatelessWidget {
   final double? height;
   final FocusNode? focusNode;
   final VoidCallback? onTap;
+  final EdgeInsetsGeometry? margin;
 
   const SearchBarWidget({
     super.key,
@@ -26,12 +27,14 @@ class SearchBarWidget extends StatelessWidget {
     this.hintStyle,
     this.textStyle,
     this.height = 56,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
+      margin: margin,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -51,7 +54,7 @@ class SearchBarWidget extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-              child: TextField(
+            child: TextField(
               controller: controller,
               focusNode: focusNode,
               onChanged: onChanged,

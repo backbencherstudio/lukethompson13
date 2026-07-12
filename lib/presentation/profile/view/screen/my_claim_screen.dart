@@ -6,7 +6,7 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
-import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
+import 'package:lukethompson/presentation/profile/view/widget/filter_chip_group.dart';
 import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
 
 class MyClaimScreen extends StatefulWidget {
@@ -47,21 +47,14 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
                 const SearchBarWidget(),
                 SizedBox(height: 15.h),
 
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(categories.length, (index) {
-                      return RowContainer(
-                        title: categories[index],
-                        isSelected: selectedIndex == index,
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                      );
-                    }),
-                  ),
+                FilterChipGroup(
+                  titles: categories,
+                  selectedIndex: selectedIndex,
+                  onChanged: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
                 ),
                 SizedBox(height: 15.h),
 

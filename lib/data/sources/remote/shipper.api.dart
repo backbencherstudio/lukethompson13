@@ -16,9 +16,17 @@ abstract class ShipperApi {
     @Path('stop_log_id') String stopLogId,
     @Body() SubmitARatingForAShipperFacilityRequest body,
   );
+
+  @GET(ApiEndpoints.shippersRatings)
+  Future<ShipperRatingsResponse> getAllShippersAndFacilitiesWithRatings(
+    @Query('cursor') String? cursor,
+    @Query('limit') int? limit,
+    @Query('status') String? status,
+  );
 }
 
 final shipperApiProvider = Provider<ShipperApi>((ref) {
   final dio = ref.read(dioClientProvider);
   return ShipperApi(dio);
 });
+

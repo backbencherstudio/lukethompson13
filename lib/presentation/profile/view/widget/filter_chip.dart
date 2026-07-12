@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RowContainer extends StatelessWidget {
+class FilterChipGroupItem extends StatelessWidget {
   final String title;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const RowContainer({
+  const FilterChipGroupItem({
     super.key,
     required this.title,
     required this.isSelected,
@@ -26,11 +26,11 @@ class RowContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.r),
           color: isSelected
               ? Color(0xff33D17A)
-              : Colors.white.withOpacity(0.05),
+              : Colors.white.withValues(alpha: 0.05),
           border: Border.all(
             color: isSelected
                 ? Colors.transparent
-                : Colors.white.withOpacity(0.1),
+                : Colors.white.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -46,4 +46,3 @@ class RowContainer extends StatelessWidget {
     );
   }
 }
-

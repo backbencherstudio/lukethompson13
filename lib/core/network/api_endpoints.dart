@@ -26,4 +26,5 @@ class ApiEndpoints {
 
   static const String submitARatingForAShipperFacility =
       '/shippers/ratings/{stop_log_id}';
+  static const String shippersRatings = "/shippers/ratings";
 }

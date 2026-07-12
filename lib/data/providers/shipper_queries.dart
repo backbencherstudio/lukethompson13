@@ -1,6 +1,7 @@
 import 'package:lukethompson/core/utils/mutation.dart';
 import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/shipper.api.dart';
+import 'package:zenquery/zenquery.dart';
 
 final submitARatingForAShipperFacilityMutation =
     mutationProvider<SubmitARatingForAShipperFacility, BaseResponse>(
