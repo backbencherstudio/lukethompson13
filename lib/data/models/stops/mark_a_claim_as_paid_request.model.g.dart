@@ -14,4 +14,26 @@ MarkAClaimAsPaidRequest _$MarkAClaimAsPaidRequestFromJson(
 
 Map<String, dynamic> _$MarkAClaimAsPaidRequestToJson(
   MarkAClaimAsPaidRequest instance,
-) => <String, dynamic>{'paid_amount': instance.paidAmount};
+) => <String, dynamic>{'paid_amount': ?instance.paidAmount};
+
+MarkAClaimAsDeniedRequest _$MarkAClaimAsDeniedRequestFromJson(
+  Map<String, dynamic> json,
+) => MarkAClaimAsDeniedRequest(
+  deniedBy: json['denied_by'] as String?,
+  denialReason: json['denial_reason'] as String?,
+);
+
+Map<String, dynamic> _$MarkAClaimAsDeniedRequestToJson(
+  MarkAClaimAsDeniedRequest instance,
+) => <String, dynamic>{
+  'denied_by': ?instance.deniedBy,
+  'denial_reason': ?instance.denialReason,
+};
+
+SendClaimFollowUpEmailRequest _$SendClaimFollowUpEmailRequestFromJson(
+  Map<String, dynamic> json,
+) => SendClaimFollowUpEmailRequest(level: (json['level'] as num).toInt());
+
+Map<String, dynamic> _$SendClaimFollowUpEmailRequestToJson(
+  SendClaimFollowUpEmailRequest instance,
+) => <String, dynamic>{'level': instance.level};

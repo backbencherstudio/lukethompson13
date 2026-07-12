@@ -1,0 +1,24 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lukethompson/core/network/api_endpoints.dart';
+import 'package:lukethompson/core/network/providers.dart';
+import 'package:lukethompson/data/models/models.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'shipper.api.g.dart';
+
+@RestApi()
+abstract class ShipperApi {
+  factory ShipperApi(Dio dio) = _ShipperApi;
+
+  @POST(ApiEndpoints.submitARatingForAShipperFacility)
+  Future<BaseResponse> submitARatingForAShipperFacility(
+    @Path('stop_log_id') String stopLogId,
+    @Body() SubmitARatingForAShipperFacilityRequest body,
+  );
+}
+
+final shipperApiProvider = Provider<ShipperApi>((ref) {
+  final dio = ref.read(dioClientProvider);
+  return ShipperApi(dio);
+});

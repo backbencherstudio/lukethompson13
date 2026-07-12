@@ -6,6 +6,14 @@ part of 'stop_log_list_response.model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+Rating _$RatingFromJson(Map<String, dynamic> json) =>
+    Rating(id: json['id'] as String, rating: json['rating'] as String);
+
+Map<String, dynamic> _$RatingToJson(Rating instance) => <String, dynamic>{
+  'id': instance.id,
+  'rating': instance.rating,
+};
+
 StopLogListItem _$StopLogListItemFromJson(Map<String, dynamic> json) =>
     StopLogListItem(
       id: json['id'] as String,
@@ -18,6 +26,9 @@ StopLogListItem _$StopLogListItemFromJson(Map<String, dynamic> json) =>
         _$ClaimStatusEnumMap,
         json['claim_status'],
       ),
+      rating: json['rating'] == null
+          ? null
+          : Rating.fromJson(json['rating'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$StopLogListItemToJson(StopLogListItem instance) =>
@@ -29,6 +40,7 @@ Map<String, dynamic> _$StopLogListItemToJson(StopLogListItem instance) =>
       'amount': instance.amount,
       'status': _$StopLogStatusEnumMap[instance.status],
       'claim_status': _$ClaimStatusEnumMap[instance.claimStatus],
+      'rating': instance.rating,
     };
 
 const _$StopLogStatusEnumMap = {

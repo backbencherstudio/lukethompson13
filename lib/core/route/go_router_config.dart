@@ -28,7 +28,7 @@ import 'package:lukethompson/presentation/start_subscription/view/choose_subscri
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
-import 'package:lukethompson/presentation/stops/view/screen/client_review_screeen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/rate_shipper_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/review_submitted_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -127,7 +127,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.rateShipper,
-        builder: (context, state) => const RateShipperScreen(),
+        builder: (context, state) =>  RateShipperScreen(
+          argument: state.extra as RateShipperScreenArg?
+        ),
       ),
       GoRoute(
         path: Routes.reviewSubmitted,

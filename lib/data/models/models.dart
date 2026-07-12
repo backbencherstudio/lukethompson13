@@ -21,3 +21,4 @@ export 'stops/active_stoplog.model.dart';
 export 'stops/single_stoplog.model.dart';
 export 'stops/stop_log.model.dart';
 export 'claim/submit_claim.dart';
+export 'shipper/shipper.model.dart';

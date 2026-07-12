@@ -39,6 +39,21 @@ enum ClaimStatus implements StatusColorable {
 }
 
 @JsonSerializable()
+class Rating {
+  final String id;
+  final String rating;
+
+  Rating({required this.id, required this.rating});
+
+  factory Rating.fromJson(Map<String, dynamic> json) => _$RatingFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RatingToJson(this);
+
+  @override
+  String toString() => 'Rating${toJson()}';
+}
+
+@JsonSerializable()
 class StopLogListItem {
   final String id;
 
@@ -57,6 +72,8 @@ class StopLogListItem {
   @JsonKey(name: 'claim_status')
   final ClaimStatus? claimStatus;
 
+  final Rating? rating;
+
   StopLogListItem({
     required this.id,
     required this.facilityName,
@@ -65,6 +82,7 @@ class StopLogListItem {
     required this.amount,
     required this.status,
     required this.claimStatus,
+    this.rating,
   });
 
   factory StopLogListItem.fromJson(Map<String, dynamic> json) =>

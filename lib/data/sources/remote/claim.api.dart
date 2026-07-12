@@ -21,7 +21,19 @@ abstract class ClaimApi {
   @PATCH(ApiEndpoints.markAClaimAsPaid)
   Future<BaseResponse> markAClaimAsPaid(
     @Path('id') String id,
-    @Body() MarkAClaimAsPaidRequest body,
+    @Body() MarkAClaimAsPaidRequest? body,
+  );
+
+  @PATCH(ApiEndpoints.markAClaimAsDenied)
+  Future<BaseResponse> markAClaimAsDenied(
+    @Path('id') String id,
+    @Body() MarkAClaimAsDeniedRequest? body,
+  );
+
+  @POST(ApiEndpoints.sendClaimFollowUpEmail)
+  Future<BaseResponse> sendClaimFollowUpEmail(
+    @Path('id') String id,
+    @Body() SendClaimFollowUpEmailRequest? body,
   );
 }
 

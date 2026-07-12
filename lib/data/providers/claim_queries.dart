@@ -18,17 +18,50 @@ class SubmitClaimNotifire extends MutationNotifier<SubmitClaimResponse> {
   }
 }
 
-final markAClaimAsPaid =
-    mutationProvider<MarkAClaimAsPaidNotifire, BaseResponse>(
-      MarkAClaimAsPaidNotifire.new,
+final markAClaimAsPaidMutation =
+    mutationProvider<MarkAClaimAsPaidMutation, BaseResponse>(
+      MarkAClaimAsPaidMutation.new,
     );
 
-class MarkAClaimAsPaidNotifire extends MutationNotifier<BaseResponse> {
-  Future<BaseResponse> submit(String id, MarkAClaimAsPaidRequest body) {
+class MarkAClaimAsPaidMutation extends MutationNotifier<BaseResponse> {
+  Future<BaseResponse> submit(String id, [MarkAClaimAsPaidRequest? body]) {
     final api = ref.read(claimApiProvider);
 
     return mutate(() async {
       return api.markAClaimAsPaid(id, body);
+    });
+  }
+}
+
+final markAClaimAsDeniedMutation =
+    mutationProvider<MarkAClaimAsDeniedMutation, BaseResponse>(
+      MarkAClaimAsDeniedMutation.new,
+    );
+
+class MarkAClaimAsDeniedMutation extends MutationNotifier<BaseResponse> {
+  Future<BaseResponse> submit(String id, [MarkAClaimAsDeniedRequest? body]) {
+    final api = ref.read(claimApiProvider);
+
+    return mutate(() async {
+      return api.markAClaimAsDenied(id, body);
+    });
+  }
+}
+
+final sendClaimFollowUpEmailMutation =
+    mutationProvider<SendClaimFollowUpEmailMutation, BaseResponse>(
+      SendClaimFollowUpEmailMutation.new,
+    );
+
+class SendClaimFollowUpEmailMutation extends MutationNotifier<BaseResponse> {
+  Future<BaseResponse> sendFollowUp(String id, int level) {
+    final api = ref.read(claimApiProvider);
+
+    return mutate(() async {
+      return api.sendClaimFollowUpEmail(
+        id,
+        SendClaimFollowUpEmailRequest(level: level),
+      );
     });
   }
 }

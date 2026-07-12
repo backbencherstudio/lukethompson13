@@ -7,6 +7,7 @@ import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
+import 'package:lukethompson/presentation/stops/view/screen/rate_shipper_screen.dart';
 
 class StopActionButton extends ConsumerWidget {
   const StopActionButton({super.key, required this.stop});
@@ -16,6 +17,9 @@ class StopActionButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final action = getStopAction(stop);
+    if (action.onPressed == null || stop.rating != null) {
+      return SizedBox.shrink();
+    }
 
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
@@ -84,7 +88,13 @@ StopAction getStopAction(StopLogListItem stop) {
         label: 'Rate Shipper',
         color: ColorManager.warningColor,
         onPressed: (context, _) {
-          context.push(Routes.rateShipper);
+          context.push(
+            Routes.rateShipper,
+            extra: RateShipperScreenArg(
+              id: stop.id,
+              facilityName: stop.facilityName,
+            ),
+          );
         },
       );
 
