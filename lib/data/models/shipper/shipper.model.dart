@@ -34,13 +34,13 @@ class ShipperRatingItem {
   final String statusSubtext;
 
   @JsonKey(name: 'claims_count')
-  final int claimsCount;
+  final int? claimsCount;
 
   @JsonKey(name: 'avg_pay_days')
   final int? avgPayDays;
 
   @JsonKey(name: 'paid_claims_count')
-  final int paidClaimsCount;
+  final int? paidClaimsCount;
 
   const ShipperRatingItem({
     required this.id,

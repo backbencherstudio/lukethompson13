@@ -22,9 +22,9 @@ ShipperRatingItem _$ShipperRatingItemFromJson(Map<String, dynamic> json) =>
       facilityName: json['facility_name'] as String,
       rating: (json['rating'] as num).toDouble(),
       statusSubtext: json['status_subtext'] as String,
-      claimsCount: (json['claims_count'] as num).toInt(),
+      claimsCount: (json['claims_count'] as num?)?.toInt(),
       avgPayDays: (json['avg_pay_days'] as num?)?.toInt(),
-      paidClaimsCount: (json['paid_claims_count'] as num).toInt(),
+      paidClaimsCount: (json['paid_claims_count'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ShipperRatingItemToJson(ShipperRatingItem instance) =>

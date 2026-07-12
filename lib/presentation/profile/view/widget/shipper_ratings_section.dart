@@ -41,22 +41,22 @@ class ShipperRatingsSection extends ConsumerWidget {
                 rating: item.rating,
                 stats: [
                   StatItem(
-                    value: '${item.claimsCount}',
+                    value: '${item.claimsCount ?? 0}',
                     label: 'Claims',
                     labelLong: 'Total Claims Submitted',
                   ),
-                  if (item.avgPayDays != null)
-                    StatItem(
-                      value: '${item.avgPayDays} days',
-                      label: 'Avg Pay',
-                    ),
                   StatItem(
-                    value: '${item.paidClaimsCount}',
+                    value: '${item.avgPayDays ?? 0} days',
+                    label: 'Avg Pay',
+                  ),
+                  StatItem(
+                    value: '${item.paidClaimsCount ?? 0}',
                     label: 'Paid',
                     labelLong: 'Total Paid',
                   ),
                   StatItem(
-                    value: '${item.claimsCount - item.paidClaimsCount}',
+                    value:
+                        '${item.claimsCount ?? 0 - (item.paidClaimsCount ?? 0)}',
                     label: 'Denied',
                     labelLong: 'Total Denied',
                     valueColor: ColorManager.errorColor,

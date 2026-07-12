@@ -115,8 +115,8 @@ class ClaimReviewScreen extends ConsumerWidget {
       context.showResultSnackBar(res.message, isSuccess: res.success);
 
       if (res.success) {
-        ref.invalidate(stopLogPaginationProvider);
         context.pop();
+        ref.invalidate(stopLogPaginationProvider);
       }
     }
   }
@@ -142,8 +142,8 @@ class ClaimReviewScreen extends ConsumerWidget {
       context.showResultSnackBar(res.message, isSuccess: res.success);
 
       if (res.success) {
-        ref.invalidate(stopLogPaginationProvider);
         context.pop();
+        ref.invalidate(stopLogPaginationProvider);
       }
     }
   }

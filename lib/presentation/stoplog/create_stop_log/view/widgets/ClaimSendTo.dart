@@ -3,15 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
-import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/platform/share_service.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/utils/logger.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
-import 'package:lukethompson/data/models/claim/submit_claim.dart';
 import 'package:lukethompson/data/models/models.dart';
-import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
 import 'package:lukethompson/data/providers/claim_queries.dart';
 import 'package:lukethompson/data/providers/stoplog_list_infinite_scroll.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -19,9 +16,10 @@ import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/s
 import 'package:reactive_forms/reactive_forms.dart';
 
 class ClaimSendTo extends ConsumerStatefulWidget {
-  const ClaimSendTo({super.key, required this.data});
+  const ClaimSendTo({super.key, required this.data, this.redirectRoute});
 
   final SingleStoplogDetailData data;
+  final String? redirectRoute;
 
   @override
   ConsumerState<ClaimSendTo> createState() => _ClaimSendToState();
@@ -43,6 +41,8 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
     final id = widget.data.id;
     if (id == null) return;
 
+    final redirectRoute = widget.redirectRoute;
+
     switch (method) {
       case .email:
         form.markAllAsTouched();
@@ -54,7 +54,11 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
         }
 
         context.showSuccessSnackBar("Claim Submitted Succefully");
-        context.pop();
+        if (redirectRoute != null) {
+          context.replace(redirectRoute);
+        } else {
+          context.pop();
+        }
         ref.invalidate(stopLogPaginationProvider);
         break;
       case .sms:
@@ -76,7 +80,11 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
           return;
         }
 
-        context.pop();
+        if (redirectRoute != null) {
+          context.replace(redirectRoute);
+        } else {
+          context.pop();
+        }
         ref.invalidate(stopLogPaginationProvider);
         break;
       // case .share:

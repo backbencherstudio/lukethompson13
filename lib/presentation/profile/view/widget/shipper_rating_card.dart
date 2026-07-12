@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
@@ -25,39 +24,28 @@ class StatItem {
 }
 
 @JsonEnum(valueField: 'value')
+class ReviewOption {
+  const ReviewOption(this.label, this.value);
+  final String label;
+  final int value;
+}
+
 enum PayerCategory {
-  all("ALL"),
-  good("GOOD_PAYERS"),
-  average('AVERAGE'),
-  poor('POOR_PAYERS');
+  good("GOOD_PAYERS", "Good Payers", "Good Payer", 80),
+  average('AVERAGE', 'Average', 'Mixed Payer', 50),
+  poor('POOR_PAYERS', 'Poor Payers', 'Poor Payer', 0);
 
   final String value;
-  const PayerCategory(this.value);
+  final String label;
+  final String reviewLabel;
+  final int threshold;
 
-  String get label {
-    switch (this) {
-      case PayerCategory.all:
-        return "All";
-      case PayerCategory.good:
-        return "Good Payers";
-      case PayerCategory.average:
-        return "Average";
-      case PayerCategory.poor:
-        return "Poor Payers";
-    }
-  }
+  const PayerCategory(this.value, this.label, this.reviewLabel, this.threshold);
 
   bool matches(int rating) {
-    switch (this) {
-      case PayerCategory.good:
-        return rating >= 70;
-      case PayerCategory.average:
-        return rating >= 35 && rating <= 69;
-      case PayerCategory.poor:
-        return rating <= 34;
-      case PayerCategory.all:
-        return rating == -1;
-    }
+    if (this == good) return rating >= threshold;
+    if (this == average) return rating >= threshold && rating < good.threshold;
+    return rating < average.threshold;
   }
 
   Color get color {
@@ -68,14 +56,22 @@ enum PayerCategory {
         return ColorManager.errorColor;
       case PayerCategory.good:
         return ColorManager.successColor;
-      default:
-        return ColorManager.whiteColor;
     }
   }
 
   static PayerCategory fromRating(int rating) {
     return PayerCategory.values.firstWhere((c) => c.matches(rating));
   }
+
+  static const int _step = 10;
+  static final List<ReviewOption> reviewOptions = () {
+    final result = <ReviewOption>[];
+    for (var value = 100; value >= _step; value -= _step) {
+      final cat = fromRating(value);
+      result.add(ReviewOption("$value% pay rate - ${cat.reviewLabel}", value));
+    }
+    return result;
+  }();
 }
 
 class ShipperRatingCard extends StatelessWidget {
@@ -176,6 +172,7 @@ class ShipperRatingCard extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       child: Column(
+        crossAxisAlignment: .stretch,
         children: [
           buildCircularProgressBar(payer, size: 100, strokeWidth: 10),
           24.height,
@@ -192,6 +189,7 @@ class ShipperRatingCard extends StatelessWidget {
                 .map(
                   (el) => AppCard(
                     borderRadius: 4,
+                    padding: .all(0),
                     backgroundColor: Colors.white.withValues(alpha: 0.04),
                     child: Column(
                       mainAxisAlignment: .center,
@@ -201,9 +199,11 @@ class ShipperRatingCard extends StatelessWidget {
                           style: getListTitleStyle(color: el.valueColor),
                         ),
                         4.height,
-                        Text(
-                          el.labelLong ?? el.label,
-                          style: getSubtextStyle(),
+                        FittedBox(
+                          child: Text(
+                            el.labelLong ?? el.label,
+                            style: getSubtextStyle(),
+                          ),
                         ),
                       ],
                     ),

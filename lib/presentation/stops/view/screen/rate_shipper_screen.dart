@@ -17,18 +17,13 @@ import 'package:lukethompson/data/providers/stoplog_list_infinite_scroll.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/custom_widget/dropdown_field_widget.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
+import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 
 class RateShipperScreenArg {
   const RateShipperScreenArg({required this.id, required this.facilityName});
 
   final String id;
   final String facilityName;
-}
-
-class ReviewOption {
-  const ReviewOption(this.label, this.value);
-  final String label;
-  final int value;
 }
 
 class RateShipperScreen extends ConsumerStatefulWidget {
@@ -44,7 +39,7 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
   String? selectedCompany;
   String? selectedReview;
 
-  int get _selectedRate => reviewList
+  int get _selectedRate => PayerCategory.reviewOptions
       .firstWhere(
         (e) => e.label == selectedReview,
         orElse: () => const ReviewOption('', 0),
@@ -52,18 +47,7 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
       .value;
 
   final List<String> companyList = ["Google", "Microsoft", "Amazon", "Meta"];
-  final List<ReviewOption> reviewList = [
-    const ReviewOption("100% pay rate - Good Payer", 100),
-    const ReviewOption("90% pay rate  - Good Payer", 90),
-    const ReviewOption("80% pay rate  - Good Payer", 80),
-    const ReviewOption("70%+ pay rate - Mixed Payer", 70),
-    const ReviewOption("60%+ pay rate - Mixed Payer", 60),
-    const ReviewOption("50%+ pay rate - Mixed Payer", 50),
-    const ReviewOption("40%+ pay rate - Poor Payer", 40),
-    const ReviewOption("30%+ pay rate - Poor Payer", 30),
-    const ReviewOption("20%+ pay rate - Poor Payer", 20),
-    const ReviewOption("10%+ pay rate - Poor Payer", 10),
-  ];
+  List<ReviewOption> get reviewList => PayerCategory.reviewOptions;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +88,7 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
                 DropdownFieldWidget(
                   value: selectedReview,
                   hint: "Share your review",
-                  items: reviewList.map((e) => e.label).toList(),
+                  items: PayerCategory.reviewOptions.map((e) => e.label).toList(),
                   onChanged: (value) {
                     setState(() => selectedReview = value);
                   },
@@ -154,8 +138,8 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
     if (res != null) {
       context.showResultSnackBar(res.message, isSuccess: res.success);
       if (res.success) {
-        ref.invalidate(stopLogPaginationProvider);
         context.replace(Routes.reviewSubmitted);
+        ref.invalidate(stopLogPaginationProvider);
       }
     }
   }
