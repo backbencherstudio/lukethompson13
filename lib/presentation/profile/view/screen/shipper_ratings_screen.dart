@@ -6,8 +6,11 @@ import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/data/sources/remote/shipper/shipper_ratings_infinite_scroll.dart';
+import 'package:lukethompson/gen/assets.gen.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_icon.dart';
 import 'package:lukethompson/presentation/profile/view/widget/filter_chip_group.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_ratings_section.dart';
@@ -23,7 +26,7 @@ class ShipperRatingsScreen extends ConsumerStatefulWidget {
 class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
   late final TextEditingController _searchController;
   int _selectedTabFilterIndex = 0;
-  bool _pageLocked = false;
+  bool _pageLocked = true;
 
   final List<String> categories = PayerCategory.values
       .map((e) => e.label)
@@ -94,7 +97,37 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                           .updateStatus(status);
                     },
                   ),
-                  ShipperRatingsSection(isLocked: _pageLocked),
+                  ShipperRatingsSection(
+                    isLocked: _pageLocked,
+
+                    lockedPrompt: Column(
+                      children: [
+                        140.height,
+                        SvgCircleIcon(svgPath: Assets.icons.lockIcon),
+                        12.height,
+                        Text(
+                          'Pro plan unlocks the full database of\nShipper Ratings.',
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                        16.height,
+                        GlobalButton(
+                          width: 144,
+                          height: 40,
+                          label: 'Upgrade to Pro',
+                          textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _pageLocked = false;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   pagination.when(
                     data: (state) {
                       if (state.isLoadingMore) {

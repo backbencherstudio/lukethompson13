@@ -13,17 +13,24 @@ import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_ico
 import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 
 class ShipperRatingsSection extends ConsumerWidget {
-  const ShipperRatingsSection({super.key, required this.isLocked});
+  const ShipperRatingsSection({
+    super.key,
+    required this.isLocked,
+    required this.lockedPrompt,
+  });
 
   final bool isLocked;
+  final Widget lockedPrompt;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagination = ref.watch(shipperRatingsPaginationProvider);
+    final pagination = isLocked
+        ? AsyncValue.data(staticData)
+        : ref.watch(shipperRatingsPaginationProvider);
 
     return LockedSection(
       isLocked: isLocked,
-      lockedChild: _buildLockedMsg(),
+      lockedChild: lockedPrompt,
       child: pagination.when(
         skipLoadingOnRefresh: true,
         skipLoadingOnReload: true,
@@ -70,28 +77,12 @@ class ShipperRatingsSection extends ConsumerWidget {
     );
   }
 
-  Column _buildLockedMsg() {
-    return Column(
-      children: [
-        140.height,
-        SvgCircleIcon(svgPath: Assets.icons.lockIcon),
-        12.height,
-        Text(
-          'Pro plan unlocks the full database of\nShipper Ratings.',
-          style: const TextStyle(fontSize: 16),
-          textAlign: TextAlign.center,
-        ),
-        16.height,
-        GlobalButton(
-          width: 144,
-          height: 40,
-          label: 'Upgrade to Pro',
-          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
+  static const staticData = ShipperRatingsPaginationState(
+    ratings: staticShipperRatingItems,
+    hasMore: false,
+    isLoadingMore: false,
+    search: '',
+  );
 
   static const List<ShipperRatingItem> staticShipperRatingItems = [
     ShipperRatingItem(

@@ -9,6 +9,7 @@ import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
+import 'package:lukethompson/presentation/profile/view/screen/my_claim_detail_screen.dart';
 import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
 
 class ClaimListSection extends StatelessWidget {
@@ -33,7 +34,13 @@ class ClaimListSection extends StatelessWidget {
           ...claims.map(
             (e) => CustomJobCard(
               onTap: () {
-                context.push(Routes.myClaimsDetail);
+                context.push(
+                  Routes.myClaimsDetail,
+                  extra: MyClaimDetailScreenArg(
+                    id: e.id,
+                    facilityName: e.facilityName,
+                  ),
+                );
               },
               title: e.facilityName,
               dateTime: e.date.formatDateWithTime(),

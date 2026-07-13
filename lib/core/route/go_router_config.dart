@@ -162,7 +162,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.myClaimsDetail,
-        builder: (context, state) => const MyClaimDetailScreen(),
+        builder: (context, state) => MyClaimDetailScreen(
+          arguments: state.extra as MyClaimDetailScreenArg?,
+        ),
       ),
       GoRoute(
         path: Routes.manageSubscription,

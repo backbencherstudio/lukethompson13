@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 
 class CustomJobCard extends StatelessWidget {
