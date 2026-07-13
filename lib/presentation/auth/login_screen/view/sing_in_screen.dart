@@ -227,16 +227,16 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                         ),
                       ),
                       SizedBox(width: 14.w),
-                      Expanded(
-                        child: _SocialButton(
-                          label: "Apple",
-                          leading: Icon(
-                            Icons.apple,
-                            color: Colors.white,
-                            size: 24.sp,
-                          ),
-                        ),
-                      ),
+                      // Expanded(
+                      //   child: _SocialButton(
+                      //     label: "Apple",
+                      //     leading: Icon(
+                      //       Icons.apple,
+                      //       color: Colors.white,
+                      //       size: 24.sp,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 24.h),

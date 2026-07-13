@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
-import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/locked_section.dart';
 import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 import 'package:lukethompson/data/sources/remote/shipper/shipper_ratings_infinite_scroll.dart';
-import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_icon.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 
 class ShipperRatingsSection extends ConsumerWidget {
