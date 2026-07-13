@@ -20,6 +20,44 @@ class _ClaimApi implements ClaimApi {
   final ParseErrorLogger? errorLogger;
 
   @override
+  Future<ClaimListResponse> getMyClaims(
+    String? cursor,
+    int? limit,
+    String? search,
+    String? status,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursor': cursor,
+      r'limit': limit,
+      r'search': search,
+      r'status': status,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ClaimListResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/claim',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ClaimListResponse _value;
+    try {
+      _value = ClaimListResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<SubmitClaimResponse> submitAClaim(
     String id,
     SubmitClaimRequest body,

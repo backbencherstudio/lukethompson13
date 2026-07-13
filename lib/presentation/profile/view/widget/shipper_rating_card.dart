@@ -23,7 +23,6 @@ class StatItem {
   });
 }
 
-@JsonEnum(valueField: 'value')
 class ReviewOption {
   const ReviewOption(this.label, this.value);
   final String label;

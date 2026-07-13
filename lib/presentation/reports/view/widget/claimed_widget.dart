@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
+import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class TotalClaimedWidget extends StatelessWidget {
   final String title;
@@ -29,14 +31,8 @@ class TotalClaimedWidget extends StatelessWidget {
         crossAxisAlignment: .start,
         mainAxisAlignment: .spaceBetween,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: titleColor,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          InputLabel(title),
+          4.height,
           Text(
             amount,
             style: TextStyle(

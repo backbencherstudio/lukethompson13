@@ -24,7 +24,7 @@ enum StopLogStatus implements StatusColorable {
 
 @JsonEnum(valueField: 'value')
 enum ClaimStatus implements StatusColorable {
-  draft('DRAFT', 'No Claim', ColorManager.subtextColor),
+  draft('DRAFT', 'Draft', ColorManager.subtextColor),
   submitted('SUBMITTED', 'Submitted', ColorManager.warningColor),
   paid('PAID', 'Paid', ColorManager.successColor),
   unpaid('UNPAID', 'Unpaid', ColorManager.errorColor),

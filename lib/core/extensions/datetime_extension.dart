@@ -6,7 +6,7 @@ extension DateTimeFormatting on DateTime {
 
   String formatTime() => format(formatter: 'hh:mm a');
 
-  String formatDateWithTime() => format(formatter: 'MMM dd, yyyy hh:mm a');
+  String formatDateWithTime() => format(formatter: 'MMM dd, yyyy • hh:mm a');
 }
 
 extension IsoUtcParsing on String {

@@ -11,7 +11,7 @@ import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/data/sources/remote/claim/claim_queries.dart';
+import 'package:lukethompson/data/sources/remote/claim/claim_api_controller.dart';
 import 'package:lukethompson/data/sources/remote/stoplog/stoplog_list_infinite_scroll.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_status_card.dart';

@@ -18,6 +18,7 @@ class Routes {
   static const String editProfile = '/editProfileScreen';
   static const String setRate = '/setRateScreen';
   static const String myClaims = '/myClaimScreen';
+  static const String myClaimsDetail = '/myClaimsDetail';
   static const String manageSubscription = '/manageSubscription';
   static const String shipperRatings = '/shipperRatings';
   static const String helpAndSupport = '/helpAndSupport';

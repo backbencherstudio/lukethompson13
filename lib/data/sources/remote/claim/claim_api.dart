@@ -12,6 +12,14 @@ part 'claim_api.g.dart';
 abstract class ClaimApi {
   factory ClaimApi(Dio dio) = _ClaimApi;
 
+  @GET(ApiEndpoints.claim)
+  Future<ClaimListResponse> getMyClaims(
+    @Query('cursor') String? cursor,
+    @Query('limit') int? limit,
+    @Query('search') String? search,
+    @Query('status') String? status,
+  );
+
   @POST(ApiEndpoints.submitAClaim)
   Future<SubmitClaimResponse> submitAClaim(
     @Path('id') String id,

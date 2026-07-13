@@ -19,6 +19,7 @@ class ApiEndpoints {
   static const String stoplogActive = '/stoplog/active';
   static const String stoplogSingleId = '/stoplog/{id}';
 
+  static const String claim = '/claim';
   static const String submitAClaim = '/claim/{id}/submit';
   static const String markAClaimAsPaid = '/claim/{id}/mark-paid';
   static const String markAClaimAsDenied = '/claim/{id}/mark-denied';

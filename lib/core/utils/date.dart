@@ -1,13 +1,57 @@
+import 'package:intl/intl.dart';
+
 class CurrencyFormatter {
   CurrencyFormatter._();
 
-  static String format(Object? amount, {String symbol = r'$'}) {
-    if (amount == null) return '${symbol}0.00';
+  static String format(
+    Object? amount, {
+    String symbol = r'$',
+    int decimalDigits = 2,
+  }) {
+    final value = _parse(amount);
 
+    return NumberFormat.currency(
+      symbol: symbol,
+      decimalDigits: decimalDigits,
+    ).format(value);
+  }
+
+  static String compact(
+    Object? amount, {
+    String symbol = r'$',
+    int decimalDigits = 2,
+    int compactAfterDigits = 5,
+  }) {
+    final value = _parse(amount);
+
+    final digits = value.abs().truncate().toString().length;
+
+    if (digits < compactAfterDigits) {
+      return NumberFormat.currency(
+        symbol: symbol,
+        decimalDigits: decimalDigits,
+      ).format(value);
+    }
+
+    return NumberFormat.compactCurrency(
+      symbol: symbol,
+      decimalDigits: decimalDigits,
+    ).format(value);
+  }
+
+  static String plain(Object? amount, {int decimalDigits = 2}) {
+    final value = _parse(amount);
+
+    return NumberFormat.decimalPattern().format(
+      double.parse(value.toStringAsFixed(decimalDigits)),
+    );
+  }
+
+  static num _parse(Object? amount) {
     return switch (amount) {
-      num() => '$symbol${amount.toStringAsFixed(2)}',
-      String() => amount.isEmpty ? '${symbol}0.00' : '$symbol$amount',
-      _ => '${symbol}0.00',
+      num() => amount,
+      String() => num.tryParse(amount) ?? 0,
+      _ => 0,
     };
   }
 }

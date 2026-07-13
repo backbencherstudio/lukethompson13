@@ -7,6 +7,7 @@ import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/my_claim_detail_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen2.dart';
@@ -158,6 +159,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.myClaims,
         builder: (context, state) => const MyClaimScreen(),
+      ),
+      GoRoute(
+        path: Routes.myClaimsDetail,
+        builder: (context, state) => const MyClaimDetailScreen(),
       ),
       GoRoute(
         path: Routes.manageSubscription,
