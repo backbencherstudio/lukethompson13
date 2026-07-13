@@ -13,7 +13,7 @@ import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/profile_header.dart';
 import 'package:lukethompson/core/widgets/profile_setting_item.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
-import 'package:lukethompson/data/providers/providers.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

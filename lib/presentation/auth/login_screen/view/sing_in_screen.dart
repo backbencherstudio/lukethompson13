@@ -12,9 +12,9 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/auth_prompt.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
-import 'package:lukethompson/data/providers/providers.dart';
 import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 
 class SingInScreen extends ConsumerStatefulWidget {
   const SingInScreen({super.key});
@@ -23,7 +23,7 @@ class SingInScreen extends ConsumerStatefulWidget {
   ConsumerState<SingInScreen> createState() => _SingInScreenState();
 
   static const defaultUserName = 'User';
-  static const defaultEmail =  'user@example.com';
+  static const defaultEmail = 'user@example.com';
   static const defaultPassword = '12345678';
 }
 

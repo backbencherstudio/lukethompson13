@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/data/models/models.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 
 class SendMethodToggle extends StatelessWidget {
   final SendMethod selectedMethod;

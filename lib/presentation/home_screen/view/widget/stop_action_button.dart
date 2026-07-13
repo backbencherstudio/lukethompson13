@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
-import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';

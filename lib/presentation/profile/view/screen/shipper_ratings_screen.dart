@@ -7,7 +7,7 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
-import 'package:lukethompson/data/providers/shipper_ratings_infinite_scroll.dart';
+import 'package:lukethompson/data/sources/remote/shipper/shipper_ratings_infinite_scroll.dart';
 import 'package:lukethompson/presentation/profile/view/widget/filter_chip_group.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_ratings_section.dart';

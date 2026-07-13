@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
-import 'package:lukethompson/data/models/report/report.model.dart';
+import 'package:lukethompson/data/sources/remote/report/models/report.model.dart';
 
 class RevenueRealizationChart extends StatelessWidget {
   const RevenueRealizationChart({super.key, this.chartData});

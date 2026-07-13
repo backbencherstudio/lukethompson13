@@ -5,11 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
-import 'package:lukethompson/data/models/models.dart';
-import 'package:lukethompson/data/providers/stoplog_queries.dart';
-import 'package:lukethompson/core/platform/gps_service.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 
 import 'attachment_upload_section.dart';

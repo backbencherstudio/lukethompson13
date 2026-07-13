@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/route/route_names.dart';
-import 'package:lukethompson/data/providers/providers.dart';
 import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.dart';
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
@@ -30,6 +29,8 @@ import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dar
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/rate_shipper_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/review_submitted_screen.dart';
+
+import '../../data/sources/remote/remote.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -115,21 +116,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.claimNow,
-        builder: (context, state) => ClaimNowScreen(
-          argument: state.extra as ClaimNowScreenArg?
-        ),
+        builder: (context, state) =>
+            ClaimNowScreen(argument: state.extra as ClaimNowScreenArg?),
       ),
       GoRoute(
         path: Routes.claimReview,
-        builder: (context, state) =>  ClaimReviewScreen(
-          argument: state.extra as ClaimReviewScreenArg?
-        ),
+        builder: (context, state) =>
+            ClaimReviewScreen(argument: state.extra as ClaimReviewScreenArg?),
       ),
       GoRoute(
         path: Routes.rateShipper,
-        builder: (context, state) =>  RateShipperScreen(
-          argument: state.extra as RateShipperScreenArg?
-        ),
+        builder: (context, state) =>
+            RateShipperScreen(argument: state.extra as RateShipperScreenArg?),
       ),
       GoRoute(
         path: Routes.reviewSubmitted,

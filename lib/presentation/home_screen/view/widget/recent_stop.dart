@@ -7,7 +7,7 @@ import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
-import 'package:lukethompson/data/models/stops/stop_log_list_response.model.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';

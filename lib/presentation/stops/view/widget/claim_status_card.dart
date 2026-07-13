@@ -4,7 +4,7 @@ import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
-import 'package:lukethompson/data/models/stops/single_stoplog.model.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_badge.dart';
 
 class ClaimStatusCard extends StatelessWidget {

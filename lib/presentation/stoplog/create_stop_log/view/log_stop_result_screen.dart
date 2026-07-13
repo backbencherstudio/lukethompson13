@@ -10,7 +10,7 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/big_stat_card.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/data/providers/stoplog_queries.dart';
+import 'package:lukethompson/data/sources/remote/stoplog/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/ClaimSendTo.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/breakdown_card.dart';
