@@ -9,8 +9,8 @@ import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
-import 'package:lukethompson/core/widgets/auth_prompt.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/core/widgets/auth_prompt.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
 import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -89,8 +89,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authStateProvider);
-    final isLoading = authState.isLoading;
+    final isLoading = ref.watch(authStateProvider).isLoading;
 
     return Scaffold(
       body: AppGradientBackground(
@@ -192,7 +191,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                   ),
                   SizedBox(height: 42.h),
                   GlobalButton(
-                    isDisabled: isLoading,
+                    isLoading: isLoading,
                     label: "Sign in",
                     onPressed: _handleLogin,
                   ),
@@ -244,7 +243,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                   AuthPrompt(
                     message: "Don't have an account? ",
                     actionText: 'Sign Up Now',
-                    onPressed: () => context.pushReplacement(Routes.signUp),
+                    onPressed: () => context.push(Routes.signUp),
                   ),
                 ],
               ),

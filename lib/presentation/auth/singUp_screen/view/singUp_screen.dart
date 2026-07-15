@@ -177,7 +177,7 @@ class _SingupScreenState extends ConsumerState<SingupScreen> {
                   ),
                   SizedBox(height: 42.h),
                   GlobalButton(
-                    isDisabled: isLoading,
+                    isLoading: isLoading,
                     label: "Register",
                     // onPressed: () {
                     //   context.go(
@@ -195,7 +195,7 @@ class _SingupScreenState extends ConsumerState<SingupScreen> {
                   AuthPrompt(
                     message: "Already Have an account? ",
                     actionText: 'Login',
-                    onPressed: () => context.pushReplacement(Routes.signIn),
+                    onPressed: () => context.go(Routes.signIn),
                   ),
                 ],
               ),

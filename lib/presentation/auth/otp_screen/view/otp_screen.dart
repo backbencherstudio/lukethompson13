@@ -208,9 +208,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 SizedBox(height: 36.h),
                 GlobalButton(
                   label: "Verify",
-                  isDisabled:
-                      enteredOtp.length != OtpScreen.otpLength ||
-                      ref.watch(authStateProvider).isLoading,
+                  isDisabled: enteredOtp.length != OtpScreen.otpLength,
+                  isLoading: ref.watch(authStateProvider).isLoading,
                   onPressed: _handleVerify,
                   // onPressed: () {
                   //   context.push(Routes.resetPassword);
