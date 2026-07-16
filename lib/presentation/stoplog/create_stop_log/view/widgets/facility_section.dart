@@ -1,25 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_search_sheet.dart';
 
-class FacilitySection extends StatefulWidget {
+class FacilitySection extends ConsumerStatefulWidget {
   const FacilitySection({super.key});
 
   @override
-  State<FacilitySection> createState() => _FacilitySectionState();
+  ConsumerState<FacilitySection> createState() => _FacilitySectionState();
 }
 
-class _FacilitySectionState extends State<FacilitySection> {
+class _FacilitySectionState extends ConsumerState<FacilitySection> {
   final _focusNode = FocusNode();
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller;
 
   @override
   void dispose() {
     _focusNode.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = TextEditingController(
+      text: ref.read(facilitySearchTextProvider),
+    );
+    _controller.addListener(() {
+      ref.read(facilitySearchTextProvider.notifier).setText(_controller.text);
+    });
+
+    ref.listenManual<String>(facilitySearchTextProvider, (previous, next) {
+      if (_controller.text != next) {
+        _controller.value = TextEditingValue(
+          text: next,
+          selection: TextSelection.collapsed(offset: next.length),
+        );
+      }
+    });
   }
 
   @override
@@ -37,18 +60,12 @@ class _FacilitySectionState extends State<FacilitySection> {
             final result = await showFacilitySearchSheet(context);
             _focusNode.unfocus();
             if (result != null) {
-              _controller.text = result;
+              ref
+                  .read(facilitySearchTextProvider.notifier)
+                  .setText(result);
             }
           },
         ),
-        // SizedBox(height: 15.h),
-        // InfoBanner(
-        //   icon: Icons.warning_amber_rounded,
-        //   title: "Heads up - Amazon FC Dallas",
-        //   content:
-        //       "8 GetDockPay drivers reported slow or no payment here. Attach your BOL and document everything.",
-        //   titleColor: ColorManager.errorColor,
-        // ),
       ],
     );
   }

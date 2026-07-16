@@ -25,10 +25,16 @@ abstract class ShipperApi {
     @Query('status') String? status,
     @Query('search') String? search,
   );
+
+  @GET(ApiEndpoints.searchShipperFacilities)
+  Future<ShipperSearchFacilitiesResponse> getSearchAllShipperFacilities(
+    @Query('search') String? search,
+    @Query('cursor') String? cursor,
+    @Query('limit') int? limit,
+  );
 }
 
 final shipperApiProvider = Provider<ShipperApi>((ref) {
   final dio = ref.read(dioClientProvider);
   return ShipperApi(dio);
 });
-

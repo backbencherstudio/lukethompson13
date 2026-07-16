@@ -16,7 +16,9 @@ ResponseMetaData _$ResponseMetaDataFromJson(Map<String, dynamic> json) =>
     ResponseMetaData(
       nextCursor: json['next_cursor'] as String?,
       limit: (json['limit'] as num).toInt(),
-      filters: ResponseFilter.fromJson(json['filters'] as Map<String, dynamic>),
+      filters: json['filters'] == null
+          ? null
+          : ResponseFilter.fromJson(json['filters'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ResponseMetaDataToJson(ResponseMetaData instance) =>

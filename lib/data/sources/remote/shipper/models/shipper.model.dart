@@ -4,6 +4,27 @@ import 'package:lukethompson/data/models/common/meta_data.dart';
 
 part 'shipper.model.g.dart';
 
+class ShipperSearchParams {
+  final String? search;
+  final String? cursor;
+  final int? limit;
+
+  const ShipperSearchParams({this.search, this.cursor, this.limit});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+
+    return other is ShipperSearchParams &&
+        other.search == search &&
+        other.cursor == cursor &&
+        other.limit == limit;
+  }
+
+  @override
+  int get hashCode => Object.hash(search, cursor, limit);
+}
+
 @JsonSerializable()
 class SubmitARatingForAShipperFacilityRequest {
   const SubmitARatingForAShipperFacilityRequest({required this.rate});
@@ -59,6 +80,54 @@ class ShipperRatingItem {
 
   @override
   String toString() => 'ShipperRatingItem${toJson()}';
+}
+
+@JsonSerializable()
+class ShipperSearchFacilityItem {
+  final String id;
+  final String name;
+  final String? address;
+  final double rating;
+
+  const ShipperSearchFacilityItem({
+    required this.id,
+    required this.name,
+    this.address,
+    required this.rating,
+  });
+
+  factory ShipperSearchFacilityItem.fromJson(Map<String, dynamic> json) =>
+      _$ShipperSearchFacilityItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ShipperSearchFacilityItemToJson(this);
+
+  @override
+  String toString() => 'ShipperSearchFacilityItem${toJson()}';
+}
+
+@JsonSerializable()
+class ShipperSearchFacilitiesResponse extends BaseResponse {
+  final List<ShipperSearchFacilityItem>? data;
+
+  @JsonKey(name: 'meta_data')
+  final ResponseMetaData? metaData;
+
+  ShipperSearchFacilitiesResponse({
+    required super.success,
+    required super.message,
+    this.data,
+    this.metaData,
+  });
+
+  factory ShipperSearchFacilitiesResponse.fromJson(Map<String, dynamic> json) =>
+      _$ShipperSearchFacilitiesResponseFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$ShipperSearchFacilitiesResponseToJson(this);
+
+  @override
+  String toString() => 'ShipperSearchFacilitiesResponse${toJson()}';
 }
 
 @JsonSerializable()

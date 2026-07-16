@@ -38,6 +38,48 @@ Map<String, dynamic> _$ShipperRatingItemToJson(ShipperRatingItem instance) =>
       'paid_claims_count': instance.paidClaimsCount,
     };
 
+ShipperSearchFacilityItem _$ShipperSearchFacilityItemFromJson(
+  Map<String, dynamic> json,
+) => ShipperSearchFacilityItem(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  address: json['address'] as String?,
+  rating: (json['rating'] as num).toDouble(),
+);
+
+Map<String, dynamic> _$ShipperSearchFacilityItemToJson(
+  ShipperSearchFacilityItem instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'address': instance.address,
+  'rating': instance.rating,
+};
+
+ShipperSearchFacilitiesResponse _$ShipperSearchFacilitiesResponseFromJson(
+  Map<String, dynamic> json,
+) => ShipperSearchFacilitiesResponse(
+  success: json['success'] as bool,
+  message: json['message'] as String,
+  data: (json['data'] as List<dynamic>?)
+      ?.map(
+        (e) => ShipperSearchFacilityItem.fromJson(e as Map<String, dynamic>),
+      )
+      .toList(),
+  metaData: json['meta_data'] == null
+      ? null
+      : ResponseMetaData.fromJson(json['meta_data'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$ShipperSearchFacilitiesResponseToJson(
+  ShipperSearchFacilitiesResponse instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'message': instance.message,
+  'data': instance.data,
+  'meta_data': instance.metaData,
+};
+
 ShipperRatingsResponse _$ShipperRatingsResponseFromJson(
   Map<String, dynamic> json,
 ) => ShipperRatingsResponse(

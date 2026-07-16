@@ -1,6 +1,35 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/utils/mutation.dart';
 import 'package:lukethompson/data/models/models.dart';
-import 'package:lukethompson/data/sources/remote/remote.dart';
+import 'package:lukethompson/data/sources/remote/shipper/models/models.dart';
+import 'package:lukethompson/data/sources/remote/shipper/shipper.api.dart';
+
+class ShipperSearchNotifier
+    extends AsyncNotifier<List<ShipperSearchFacilityItem>?> {
+  @override
+  Future<List<ShipperSearchFacilityItem>?> build() async => null;
+
+  Future<void> search(ShipperSearchParams params) async {
+    // state = const AsyncLoading();
+    try {
+      final api = ref.read(shipperApiProvider);
+      final response = await api.getSearchAllShipperFacilities(
+        params.search,
+        params.cursor,
+        params.limit,
+      );
+      state = AsyncData(response.data);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+}
+
+final getSearchAllShipperFacilitiesProvider =
+    AsyncNotifierProvider<
+      ShipperSearchNotifier,
+      List<ShipperSearchFacilityItem>?
+    >(ShipperSearchNotifier.new);
 
 final submitARatingForAShipperFacilityMutation =
     mutationProvider<SubmitARatingForAShipperFacility, BaseResponse>(

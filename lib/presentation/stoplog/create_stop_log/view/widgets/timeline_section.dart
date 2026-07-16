@@ -61,7 +61,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final s = widget.session;
     if (s == null) {
       setState(() {
-        _arrivalStatus = TimelineItemStatus.active;
+        _arrivalStatus = TimelineItemStatus.idle;
         _dockInStatus = TimelineItemStatus.idle;
         _completedStatus = TimelineItemStatus.idle;
         _departureStatus = TimelineItemStatus.idle;

@@ -1,5 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl = "http://10.10.9.51:2004";
+  // static const String baseUrl = "https://lukethompson.pixelstack.cloud";
   static const String apiURL = "$baseUrl/api";
 
   static const String getMe = '/auth/me';
@@ -28,4 +29,5 @@ class ApiEndpoints {
   static const String submitARatingForAShipperFacility =
       '/shippers/ratings/{stop_log_id}';
   static const String shippersRatings = "/shippers/ratings";
+  static const String searchShipperFacilities = "/shippers/search";
 }

@@ -24,9 +24,9 @@ class ResponseMetaData {
 
   final int limit;
 
-  final ResponseFilter filters;
+  final ResponseFilter? filters;
 
-  ResponseMetaData({this.nextCursor, required this.limit, required this.filters});
+  ResponseMetaData({this.nextCursor, required this.limit, this.filters});
 
   factory ResponseMetaData.fromJson(Map<String, dynamic> json) =>
       _$ResponseMetaDataFromJson(json);
