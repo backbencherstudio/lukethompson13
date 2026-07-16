@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
@@ -6,8 +7,10 @@ import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 import 'package:lukethompson/data/sources/remote/stoplog/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_section.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/timeline_section.dart';
 
@@ -24,6 +27,18 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
   String? _sessionId;
   bool _isActiveSessionLoading = true;
   bool _canCalculateAndPreview = false;
+  bool _loadingActionBtn = false;
+
+  var _logStarted = false;
+  void endCurrentSession() async {
+    setState(() {
+      _logStarted = false;
+      _sessionId = null;
+    });
+
+    await Future.delayed(Duration(milliseconds: 200));
+    ref.read(selectedFacilityProvider.notifier).clear();
+  }
 
   void activateCalculateBtn(bool enabled) {
     setState(() {
@@ -47,10 +62,42 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
 
     ref.listen(getCurrentActiveStoplog, (prev, next) {
       if (!mounted) return;
+
       setState(() {
         _sessionId = next.value?.id;
         _isActiveSessionLoading = next.isLoading;
       });
+    });
+
+    ref.listen(getSingleLogWithId(_sessionId), (prev, next) {
+      if (!mounted) return;
+
+      next.when(
+        data: (data) {
+          setState(() {
+            _logStarted = data?.id != null;
+          });
+
+          if (data?.facilityName != null) {
+            ref
+                .read(selectedFacilityProvider.notifier)
+                .select(
+                  ShipperSearchFacilityItem(
+                    id: data?.id,
+                    name: data!.facilityName!,
+                    address: data.address,
+                  ),
+                );
+          }
+          // Success
+        },
+        loading: () {
+          // Loading
+        },
+        error: (err, stack) {
+          // Error
+        },
+      );
     });
 
     final isLoading =
@@ -88,10 +135,19 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 16.h),
-                      const FacilitySection(),
+                      FacilitySection(
+                        disableSearchField: _logStarted && _sessionId != null,
+                        onFacilitySelect: (f) {
+                          final isEmpty = f == null;
+                          setState(() {
+                            _logStarted = !isEmpty;
+                          });
+                        },
+                      ),
 
                       SizedBox(height: 24.h),
                       TimelineSection(
+                        logStarted: _logStarted,
                         key: _timelineKey,
                         onSingleLogComplete: (_) {},
                         activateCalculateBtn: activateCalculateBtn,
@@ -113,10 +169,21 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
           12,
         ),
         child: GlobalButton(
+          isLoading: _loadingActionBtn,
           isDisabled: !_canCalculateAndPreview,
           label: "Calculate & Preview",
-          onPressed: () {
-            _timelineKey.currentState?.logBolNumberAndAttachment();
+          onPressed: () async {
+            setState(() {
+              _loadingActionBtn = true;
+            });
+            final success = await _timelineKey.currentState
+                ?.logBolNumberAndAttachment();
+
+            setState(() {
+              _loadingActionBtn = false;
+            });
+
+            if (success == true) endCurrentSession();
           },
         ),
       ),

@@ -6,6 +6,27 @@ part of 'single_stoplog.model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+DetensionSummaryPdf _$DetensionSummaryPdfFromJson(Map<String, dynamic> json) =>
+    DetensionSummaryPdf(
+      id: json['id'] as String,
+      fileName: json['file_name'] as String,
+      fileUrl: json['file_url'] as String?,
+      mimeType: json['mime_type'] as String?,
+      type: json['type'] as String,
+      sizeBytes: (json['size_bytes'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$DetensionSummaryPdfToJson(
+  DetensionSummaryPdf instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'file_name': instance.fileName,
+  'file_url': instance.fileUrl,
+  'mime_type': instance.mimeType,
+  'type': instance.type,
+  'size_bytes': instance.sizeBytes,
+};
+
 SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
   Map<String, dynamic> json,
 ) => SingleStoplogDetailData(
@@ -62,6 +83,11 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
   address: json['address'] as String?,
   detention: json['detention'] as String?,
   lost: json['lost'] as String?,
+  detensionSummaryPdf: json['detension_summary_pdf'] == null
+      ? null
+      : DetensionSummaryPdf.fromJson(
+          json['detension_summary_pdf'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$SingleStoplogDetailDataToJson(
@@ -87,6 +113,7 @@ Map<String, dynamic> _$SingleStoplogDetailDataToJson(
   'recipient_email': instance.recipientEmail,
   'claim': instance.claim,
   'current_step': _$StopLogStepEnumMap[instance.currentStep],
+  'detension_summary_pdf': instance.detensionSummaryPdf,
   'gps_coordinates': instance.gpsCoordinates,
   'rate_per_hour': instance.ratePerHour,
   'free_wait_time': instance.freeWaitTime,

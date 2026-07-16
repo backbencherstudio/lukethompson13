@@ -9,6 +9,7 @@ import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 
 import 'attachment_upload_section.dart';
@@ -20,11 +21,13 @@ class TimelineSection extends ConsumerStatefulWidget {
     this.session,
     required this.onSingleLogComplete,
     required this.activateCalculateBtn,
+    required this.logStarted,
   });
 
   final SingleStoplogDetailData? session;
   final void Function(StopLogStep step) onSingleLogComplete;
   final void Function(bool) activateCalculateBtn;
+  final bool logStarted;
 
   @override
   ConsumerState<TimelineSection> createState() => TimelineSectionState();
@@ -37,9 +40,12 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
   var _departureStatus = TimelineItemStatus.idle;
   var _bolNumberStatus = TimelineItemStatus.idle;
   var _attachmentsStatus = TimelineItemStatus.idle;
-  List<XFile> _attachmentFile = [];
 
-  static const String _initialDepartureTime = '01:00 PM';
+  TimelineItemStatus _activateTimelineLogging(TimelineItemStatus status) {
+    return widget.logStarted ? status : .idle;
+  }
+
+  List<XFile> _attachmentFile = [];
 
   final bolNumberController = TextEditingController();
 
@@ -61,7 +67,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final s = widget.session;
     if (s == null) {
       setState(() {
-        _arrivalStatus = TimelineItemStatus.idle;
+        _arrivalStatus = TimelineItemStatus.active;
         _dockInStatus = TimelineItemStatus.idle;
         _completedStatus = TimelineItemStatus.idle;
         _departureStatus = TimelineItemStatus.idle;
@@ -130,6 +136,17 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     super.dispose();
   }
 
+  ShipperSearchFacilityItem? getCurrentFacility() {
+    var currentFacility = ref.read(selectedFacilityProvider);
+
+    if (currentFacility == null) {
+      context.showErrorSnackBar("Select a facility");
+      return null;
+    }
+
+    return currentFacility;
+  }
+
   Future<void> _logArrivalTime() async {
     final activeSessionId = widget.session?.id;
     if (activeSessionId != null) return;
@@ -137,17 +154,21 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final position = await GpsService.getCurrentLocation();
     if (position == null) return;
 
+    final currentFacility = getCurrentFacility();
+    if (currentFacility == null) return;
+
     final params = RecordStopLogParams(
       step: .arrivalTime,
-      facilityName: "Test facility",
+      id: currentFacility.id,
+      facilityName: currentFacility.name,
       location: StopLogLocation(
         city: 'Dhaka',
         state: 'Dhaka Division',
         country: 'BD',
         address: 'Warehouse A, Williamsburg Bridge',
         zip: '10001',
-        lat: 40.7128,
-        lng: -74.006,
+        lat: position.latitude,
+        lng: position.longitude,
       ),
     );
     final res = await ref
@@ -182,11 +203,6 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
       id: activeSessionId,
       step: .dockInTime,
       location: StopLogLocation(
-        city: 'Dhaka',
-        state: 'Dhaka Division',
-        country: 'BD',
-        address: 'Warehouse A, Williamsburg Bridge',
-        zip: '10001',
         lat: position.latitude,
         lng: position.longitude,
       ),
@@ -222,11 +238,6 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
       id: activeSessionId,
       step: .completedTime,
       location: StopLogLocation(
-        city: 'Dhaka',
-        state: 'Dhaka Division',
-        country: 'BD',
-        address: 'Warehouse A, Williamsburg Bridge',
-        zip: '10001',
         lat: position.latitude,
         lng: position.longitude,
       ),
@@ -262,11 +273,6 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
       id: activeSessionId,
       step: .departureTime,
       location: StopLogLocation(
-        city: 'Dhaka',
-        state: 'Dhaka Division',
-        country: 'BD',
-        address: 'Warehouse A, Williamsburg Bridge',
-        zip: '10001',
         lat: position.latitude,
         lng: position.longitude,
       ),
@@ -356,17 +362,18 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     }
   }
 
-  Future<void> logBolNumberAndAttachment() async {
-    await tryCatch(
+  Future<bool> logBolNumberAndAttachment() async {
+    final (res, err) = await tryCatch(
       _logBolNumberAndAttachment(),
       onError: (e, _) => context.showErrorSnackBar(e.toString()),
     );
+
+    return err == null;
   }
 
   @override
   Widget build(BuildContext context) {
     final recordStopLogMutation = ref.watch(recordStopLogProviderAction);
-    print(widget.session?.arrivedAt.runtimeType);
 
     return Column(
       children: [
@@ -379,10 +386,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
             recordStopLogMutation.isPending,
           ),
           label: 'Arrival Time',
-          status: _arrivalStatus,
+          status: _activateTimelineLogging(_arrivalStatus),
           child: TimelineContent(
             value: widget.session?.arrivedAt?.formatTime(),
-            status: _arrivalStatus,
+            status: _activateTimelineLogging(_arrivalStatus),
             isActionPending: _isActionPending(
               null,
               recordStopLogMutation.isPending,
@@ -400,10 +407,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
             recordStopLogMutation.isPending,
           ),
           label: 'Dock In Time',
-          status: _dockInStatus,
+          status: _activateTimelineLogging(_dockInStatus),
           child: TimelineContent(
             value: widget.session?.dockedAt?.formatTime(),
-            status: _dockInStatus,
+            status: _activateTimelineLogging(_dockInStatus),
             isActionPending: _isActionPending(
               .arrivalTime,
               recordStopLogMutation.isPending,
@@ -421,10 +428,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
             recordStopLogMutation.isPending,
           ),
           label: 'Completed Time',
-          status: _completedStatus,
+          status: _activateTimelineLogging(_completedStatus),
           child: TimelineContent(
             value: widget.session?.completedAt?.formatTime(),
-            status: _completedStatus,
+            status: _activateTimelineLogging(_completedStatus),
             isActionPending: _isActionPending(
               .dockInTime,
               recordStopLogMutation.isPending,
@@ -442,10 +449,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
             recordStopLogMutation.isPending,
           ),
           label: 'Departure Time',
-          status: _departureStatus,
+          status: _activateTimelineLogging(_departureStatus),
           child: TimelineContent(
             value: widget.session?.departedAt?.formatTime(),
-            status: _departureStatus,
+            status: _activateTimelineLogging(_departureStatus),
             isActionPending: _isActionPending(
               .completedTime,
               recordStopLogMutation.isPending,
@@ -463,11 +470,11 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
               recordStopLogMutation.isPending,
           label: 'BOL Number',
           labelHint: '(Optional)',
-          status: _bolNumberStatus,
+          status: _activateTimelineLogging(_bolNumberStatus),
           child: TimelineContentField(
             canSkip: true,
             controller: bolNumberController,
-            status: _bolNumberStatus,
+            status: _activateTimelineLogging(_bolNumberStatus),
             isActionPending:
                 _bolNumberStatus == TimelineItemStatus.active &&
                 recordStopLogMutation.isPending,
@@ -483,9 +490,11 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
         TimelineItem(
           isLastStep: true,
           isActionPending:
-              _attachmentsStatus == .active && recordStopLogMutation.isPending,
+              widget.logStarted &&
+              _attachmentsStatus == .active &&
+              recordStopLogMutation.isPending,
           label: 'Attachments',
-          status: _attachmentsStatus,
+          status: _activateTimelineLogging(_attachmentsStatus),
           child: AttachmentUploadSection(
             attachments: _attachmentFile,
             disabled: _attachmentsStatus != .active,

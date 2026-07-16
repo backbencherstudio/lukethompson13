@@ -10,7 +10,15 @@ class ShipperSearchNotifier
   Future<List<ShipperSearchFacilityItem>?> build() async => null;
 
   Future<void> search(ShipperSearchParams params) async {
-    // state = const AsyncLoading();
+    _search(params);
+  }
+
+  Future<void> searchInitialData() async {
+    state = const AsyncLoading();
+    _search(ShipperSearchParams());
+  }
+
+  Future<void> _search(ShipperSearchParams params) async {
     try {
       final api = ref.read(shipperApiProvider);
       final response = await api.getSearchAllShipperFacilities(

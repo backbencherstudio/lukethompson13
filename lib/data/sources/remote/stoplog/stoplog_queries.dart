@@ -22,7 +22,9 @@ final getCurrentActiveStoplog = createQuery((ref) async {
   return response.data;
 });
 
-final getSingleLogWithId = createQueryFamily((ref, String id) async {
+final getSingleLogWithId = createQueryFamily((ref, String? id) async {
+  if (id == null) return null;
+
   final api = ref.read(stoplogApiProvider);
   final response = await api.getSingleStoplog(id);
   return response.data;

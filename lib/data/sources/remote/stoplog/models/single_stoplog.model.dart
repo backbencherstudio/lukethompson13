@@ -5,6 +5,42 @@ import 'package:lukethompson/data/sources/remote/remote.dart';
 part 'single_stoplog.model.g.dart';
 
 @JsonSerializable()
+class DetensionSummaryPdf {
+  final String id;
+
+  @JsonKey(name: 'file_name')
+  final String fileName;
+
+  @JsonKey(name: 'file_url')
+  final String? fileUrl;
+
+  @JsonKey(name: 'mime_type')
+  final String? mimeType;
+
+  final String type;
+
+  @JsonKey(name: 'size_bytes')
+  final int? sizeBytes;
+
+  DetensionSummaryPdf({
+    required this.id,
+    required this.fileName,
+    this.fileUrl,
+    this.mimeType,
+    required this.type,
+    this.sizeBytes,
+  });
+
+  factory DetensionSummaryPdf.fromJson(Map<String, dynamic> json) =>
+      _$DetensionSummaryPdfFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DetensionSummaryPdfToJson(this);
+
+  @override
+  String toString() => 'DetensionSummaryPDF${toJson()}';
+}
+
+@JsonSerializable()
 class SingleStoplogDetailData {
   final String? id;
 
@@ -62,6 +98,9 @@ class SingleStoplogDetailData {
   @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
   final StopLogStep? currentStep;
 
+  @JsonKey(name: 'detension_summary_pdf')
+  final DetensionSummaryPdf? detensionSummaryPdf;
+
   // Available on stoplog completion
   @JsonKey(name: 'gps_coordinates')
   final String? gpsCoordinates;
@@ -109,6 +148,7 @@ class SingleStoplogDetailData {
     this.address,
     this.detention,
     this.lost,
+    this.detensionSummaryPdf,
   });
 
   factory SingleStoplogDetailData.fromJson(Map<String, dynamic> json) =>

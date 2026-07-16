@@ -10,8 +10,10 @@ import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.da
 import 'package:lukethompson/data/sources/remote/shipper/shipper_queries.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 
-Future<String?> showFacilitySearchSheet(BuildContext context) {
-  return showModalBottomSheet<String>(
+Future<ShipperSearchFacilityItem?> showFacilitySearchSheet(
+  BuildContext context,
+) {
+  return showModalBottomSheet<ShipperSearchFacilityItem>(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -39,9 +41,15 @@ class _FacilitySearchSheetContentState
     _focusNode.requestFocus();
 
     _searchController = TextEditingController(
-      text: ref.read(facilitySearchTextProvider),
+      text: ref.read(selectedFacilityProvider)?.name ?? '',
     );
     _searchController.addListener(_onSearchChanged);
+
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      ref
+          .read(getSearchAllShipperFacilitiesProvider.notifier)
+          .searchInitialData();
+    });
   }
 
   @override
@@ -57,7 +65,6 @@ class _FacilitySearchSheetContentState
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       final text = _searchController.text;
-      ref.read(facilitySearchTextProvider.notifier).setText(text);
       if (text.isNotEmpty) {
         ref
             .read(getSearchAllShipperFacilitiesProvider.notifier)
@@ -68,7 +75,7 @@ class _FacilitySearchSheetContentState
 
   @override
   Widget build(BuildContext context) {
-    final searchText = ref.watch(facilitySearchTextProvider);
+    final searchText = _searchController.text;
     final facilities = ref.watch(getSearchAllShipperFacilitiesProvider);
 
     return AppBottomSheet(
@@ -80,6 +87,16 @@ class _FacilitySearchSheetContentState
             hintText: 'Search facilities...',
             controller: _searchController,
             focusNode: _focusNode,
+            suffixIcon: IconButton(
+              onPressed: () {
+                _searchController.clear();
+              },
+              icon: Icon(
+                Icons.close,
+                color: ColorManager.subtextColorGrey,
+                size: 20,
+              ),
+            ),
           ),
           6.height,
         ],
@@ -93,10 +110,6 @@ class _FacilitySearchSheetContentState
           return null;
         },
         data: (items) {
-          if (searchText.isEmpty) {
-            return null;
-          }
-
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -113,15 +126,21 @@ class _FacilitySearchSheetContentState
     );
   }
 
-  ListTile buildAddButton(String searchText, BuildContext context) {
-    return ListTile(
-      title: Text(
-        'Add "$searchText"',
-        style: const TextStyle(color: Colors.white),
+  Widget buildAddButton(String searchText, BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        title: Text(
+          'Add "$searchText"',
+          style: const TextStyle(color: Colors.white),
+        ),
+        onTap: () {
+          Navigator.pop(
+            context,
+            ShipperSearchFacilityItem(id: '', name: searchText, rating: 0),
+          );
+        },
       ),
-      onTap: () {
-        Navigator.pop(context, searchText);
-      },
     );
   }
 
@@ -133,22 +152,25 @@ class _FacilitySearchSheetContentState
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ListTile(
-          title: Text(item.name, style: const TextStyle(color: Colors.white)),
-          subtitle: item.address != null
-              ? Text(
-                  item.address!,
-                  style: const TextStyle(
-                    color: ColorManager.subtextColor,
-                    fontSize: 12,
-                  ),
-                )
-              : null,
-          trailing: const Icon(
-            Icons.chevron_right,
-            color: ColorManager.subtextColor,
+        Material(
+          color: Colors.transparent,
+          child: ListTile(
+            title: Text(item.name, style: const TextStyle(color: Colors.white)),
+            subtitle: item.address != null
+                ? Text(
+                    item.address!,
+                    style: const TextStyle(
+                      color: ColorManager.subtextColor,
+                      fontSize: 12,
+                    ),
+                  )
+                : null,
+            trailing: const Icon(
+              Icons.chevron_right,
+              color: ColorManager.subtextColor,
+            ),
+            onTap: () => Navigator.pop(context, item),
           ),
-          onTap: () => Navigator.pop(context, item.name),
         ),
         if (!isLast)
           Divider(

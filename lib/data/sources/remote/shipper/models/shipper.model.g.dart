@@ -41,10 +41,10 @@ Map<String, dynamic> _$ShipperRatingItemToJson(ShipperRatingItem instance) =>
 ShipperSearchFacilityItem _$ShipperSearchFacilityItemFromJson(
   Map<String, dynamic> json,
 ) => ShipperSearchFacilityItem(
-  id: json['id'] as String,
+  id: json['id'] as String?,
   name: json['name'] as String,
   address: json['address'] as String?,
-  rating: (json['rating'] as num).toDouble(),
+  rating: (json['rating'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$ShipperSearchFacilityItemToJson(

@@ -84,16 +84,16 @@ class ShipperRatingItem {
 
 @JsonSerializable()
 class ShipperSearchFacilityItem {
-  final String id;
+  final String? id;
   final String name;
   final String? address;
-  final double rating;
+  final double? rating;
 
   const ShipperSearchFacilityItem({
-    required this.id,
+    this.id,
     required this.name,
     this.address,
-    required this.rating,
+    this.rating,
   });
 
   factory ShipperSearchFacilityItem.fromJson(Map<String, dynamic> json) =>

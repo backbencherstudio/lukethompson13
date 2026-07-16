@@ -3,11 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
+import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_search_sheet.dart';
 
 class FacilitySection extends ConsumerStatefulWidget {
-  const FacilitySection({super.key});
+  const FacilitySection({
+    super.key,
+    required this.onFacilitySelect,
+    required this.disableSearchField,
+  });
+
+  final bool disableSearchField;
+  final void Function(ShipperSearchFacilityItem? facility) onFacilitySelect;
 
   @override
   ConsumerState<FacilitySection> createState() => _FacilitySectionState();
@@ -29,17 +37,18 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
     super.initState();
 
     _controller = TextEditingController(
-      text: ref.read(facilitySearchTextProvider),
+      text: ref.read(selectedFacilityProvider)?.name ?? '',
     );
-    _controller.addListener(() {
-      ref.read(facilitySearchTextProvider.notifier).setText(_controller.text);
-    });
 
-    ref.listenManual<String>(facilitySearchTextProvider, (previous, next) {
-      if (_controller.text != next) {
+    ref.listenManual<ShipperSearchFacilityItem?>(selectedFacilityProvider, (
+      previous,
+      next,
+    ) {
+      final text = next?.name ?? '';
+      if (_controller.text != text) {
         _controller.value = TextEditingValue(
-          text: next,
-          selection: TextSelection.collapsed(offset: next.length),
+          text: text,
+          selection: TextSelection.collapsed(offset: text.length),
         );
       }
     });
@@ -53,6 +62,7 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
         Text("FACILITY NAME", style: context.labelLarge),
         SizedBox(height: 8.h),
         SearchBarWidget(
+          enabled: !widget.disableSearchField,
           hintText: "Search or enter a facility name...",
           controller: _controller,
           focusNode: _focusNode,
@@ -60,9 +70,8 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
             final result = await showFacilitySearchSheet(context);
             _focusNode.unfocus();
             if (result != null) {
-              ref
-                  .read(facilitySearchTextProvider.notifier)
-                  .setText(result);
+              widget.onFacilitySelect(result);
+              ref.read(selectedFacilityProvider.notifier).select(result);
             }
           },
         ),
