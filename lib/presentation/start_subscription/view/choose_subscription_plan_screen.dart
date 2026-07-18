@@ -73,7 +73,7 @@ class _ChooseSubscriptionPlanScreenState
                   },
                 ),
                 16.height,
-                GlobalButton.secondary(
+                GlobalButton.outlined(
                   label: "Start Free Trial",
                   onPressed: () {
                     context.push(

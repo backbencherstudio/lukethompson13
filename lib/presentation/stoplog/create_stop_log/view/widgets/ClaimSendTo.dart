@@ -8,7 +8,6 @@ import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/utils/logger.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
-import 'package:lukethompson/data/sources/remote/claim/claim_api_controller.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/send_method_toggle.dart';
@@ -84,6 +83,7 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
         } else {
           context.pop();
         }
+
         ref.invalidate(stopLogPaginationProvider);
         break;
       // case .share:

@@ -114,7 +114,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                   },
                 ),
                 16.height,
-                GlobalButton.secondary(
+                GlobalButton.outlined(
                   label: "Skip",
                   onPressed: () {
                     context.push(Routes.signUp);

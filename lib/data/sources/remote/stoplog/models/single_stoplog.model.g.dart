@@ -65,7 +65,7 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
       .toList(),
   detentionSummaryPdf: json['detention_summary_pdf'] == null
       ? null
-      : StopLogAttachment.fromJson(
+      : DetensionSummaryPdf.fromJson(
           json['detention_summary_pdf'] as Map<String, dynamic>,
         ),
   brokerEmail: json['broker_email'] as String?,
@@ -83,11 +83,6 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
   address: json['address'] as String?,
   detention: json['detention'] as String?,
   lost: json['lost'] as String?,
-  detensionSummaryPdf: json['detension_summary_pdf'] == null
-      ? null
-      : DetensionSummaryPdf.fromJson(
-          json['detension_summary_pdf'] as Map<String, dynamic>,
-        ),
 );
 
 Map<String, dynamic> _$SingleStoplogDetailDataToJson(
@@ -108,12 +103,11 @@ Map<String, dynamic> _$SingleStoplogDetailDataToJson(
   'arrival_location': instance.arrivalLocation,
   'facility_address': instance.facilityAddress,
   'attachments': instance.attachments,
-  'detention_summary_pdf': instance.detentionSummaryPdf,
   'broker_email': instance.brokerEmail,
   'recipient_email': instance.recipientEmail,
   'claim': instance.claim,
   'current_step': _$StopLogStepEnumMap[instance.currentStep],
-  'detension_summary_pdf': instance.detensionSummaryPdf,
+  'detention_summary_pdf': instance.detentionSummaryPdf,
   'gps_coordinates': instance.gpsCoordinates,
   'rate_per_hour': instance.ratePerHour,
   'free_wait_time': instance.freeWaitTime,

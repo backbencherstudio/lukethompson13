@@ -28,7 +28,7 @@ class ClaimListSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(title: 'Recent Activity'),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12),
         if (claims.isEmpty) StatusDisplay.muted('No recent activity found yet'),
         if (claims.isNotEmpty)
           ...claims.map(

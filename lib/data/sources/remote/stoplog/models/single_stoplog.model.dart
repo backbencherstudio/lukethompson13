@@ -84,9 +84,6 @@ class SingleStoplogDetailData {
 
   final List<StopLogAttachment>? attachments;
 
-  @JsonKey(name: 'detention_summary_pdf')
-  final StopLogAttachment? detentionSummaryPdf;
-
   @JsonKey(name: 'broker_email')
   final String? brokerEmail;
 
@@ -98,8 +95,8 @@ class SingleStoplogDetailData {
   @JsonKey(name: 'current_step', fromJson: StopLogStep.fromValue, toJson: null)
   final StopLogStep? currentStep;
 
-  @JsonKey(name: 'detension_summary_pdf')
-  final DetensionSummaryPdf? detensionSummaryPdf;
+  @JsonKey(name: 'detention_summary_pdf')
+  final DetensionSummaryPdf? detentionSummaryPdf;
 
   // Available on stoplog completion
   @JsonKey(name: 'gps_coordinates')
@@ -148,7 +145,6 @@ class SingleStoplogDetailData {
     this.address,
     this.detention,
     this.lost,
-    this.detensionSummaryPdf,
   });
 
   factory SingleStoplogDetailData.fromJson(Map<String, dynamic> json) =>

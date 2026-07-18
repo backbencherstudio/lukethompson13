@@ -15,6 +15,7 @@ import 'package:lukethompson/data/sources/remote/claim/claim_api_controller.dart
 import 'package:lukethompson/data/sources/remote/stoplog/stoplog_list_infinite_scroll.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stops/view/widget/claim_status_card.dart';
+import 'package:lukethompson/presentation/stops/view/widget/export_pdf_button.dart';
 import 'package:lukethompson/presentation/stops/view/widget/full_claim_preview_card.dart';
 
 class ClaimReviewScreenArg {
@@ -46,7 +47,7 @@ class ClaimReviewScreen extends ConsumerWidget {
             skipLoadingOnRefresh: true,
             skipLoadingOnReload: true,
             data: (data) {
-              logger.t(data?.id);
+              logger.t(data?.detentionSummaryPdf);
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Column(
@@ -54,6 +55,11 @@ class ClaimReviewScreen extends ConsumerWidget {
                   children: [
                     16.height,
                     FullClaimPreviewCard(data: data),
+                    16.height,
+                    ExportPdfButton(
+                      fileUrl: data?.detentionSummaryPdf?.fileUrl,
+                      fineName: data?.detentionSummaryPdf?.fileName,
+                    ),
 
                     24.height,
                     if (data != null) ClaimStatusCard(data: data),
@@ -66,7 +72,7 @@ class ClaimReviewScreen extends ConsumerWidget {
                           _onMarkAsPaidPressed(context, ref, data?.claim?.id),
                     ),
                     16.height,
-                    GlobalButton.secondary(
+                    GlobalButton.outlined(
                       isLoading: markAClaimAsDeniedState.isPending,
                       label: 'Mark as Denied',
                       onPressed: () =>

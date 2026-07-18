@@ -30,7 +30,7 @@ class SendMethodToggle extends StatelessWidget {
             foregroundColor: isSelected
                 ? ColorManager.primaryButton
                 : ColorManager.subtextColor,
-            color: isSelected
+            backgroundColor: isSelected
                 ? ColorManager.primaryButton.withValues(alpha: 0.12)
                 : ColorManager.subtextColor.withValues(alpha: 0.08),
             label: method.label,

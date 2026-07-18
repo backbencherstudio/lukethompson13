@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
@@ -15,6 +17,7 @@ import 'package:lukethompson/presentation/home_screen/view/widget/status_display
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/ClaimSendTo.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/breakdown_card.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/proof_package_list.dart';
+import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 
 class LogStopResultScreenArg {
   final String? stopLogId;
@@ -94,9 +97,19 @@ class LogStopResultScreen extends ConsumerWidget {
 
                     if (data != null) ClaimSendTo(data: data),
                     16.height,
-                    GlobalButton.secondary(
+                    GlobalButton.outlined(
                       label: 'Export PDF',
-                      onPressed: () {},
+                      onPressed: () {
+                        ref.invalidate(getSingleLogWithId(argument.stopLogId!));
+                        context.push(
+                          Routes.claimNow,
+                          extra: ClaimNowScreenArg(
+                            steplogId: data?.id,
+                            facilityName: data?.facilityName,
+                            shipperFacilityId: data?.shipperFacilityId,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
