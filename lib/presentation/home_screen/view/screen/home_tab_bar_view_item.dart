@@ -15,8 +15,8 @@ import 'package:lukethompson/presentation/home_screen/view/widget/status_display
 import 'package:lukethompson/presentation/home_screen/view/widget/weekly_activity_chart.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 
-class Weeklyscreen extends ConsumerWidget {
-  const Weeklyscreen({super.key, required this.period});
+class HomeTabBarViewItem extends ConsumerWidget {
+  const HomeTabBarViewItem({super.key, required this.period});
 
   final HomeDataPeriod period;
 
@@ -68,29 +68,36 @@ class Weeklyscreen extends ConsumerWidget {
           ),
         ];
 
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              DetentionGrid(data: detentionData),
-              SizedBox(height: 12),
-              WeeklyActivityChart(chartData: d.weeklyActivity),
-              SizedBox(height: 12),
-              SectionHeader(
-                title: 'Recent Stops',
-                action: TextButton(
-                  onPressed: () {
-                    ref.read(parentScreenIndexProvider.notifier).goToStops();
-                  },
-                  style: TextButton.styleFrom(
-                    textStyle: TextStyle(fontWeight: .w700, fontSize: 14.sp),
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(getStoplogHomeOverviewQuery(period));
+            ref.invalidate(getStoplogListQuery(StopLogListParams(limit: 6)));
+          },
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                SizedBox(height: 12.h),
+                DetentionGrid(data: detentionData),
+                SizedBox(height: 12),
+                WeeklyActivityChart(chartData: d.weeklyActivity),
+                SizedBox(height: 12),
+                SectionHeader(
+                  title: 'Recent Stops',
+                  action: TextButton(
+                    onPressed: () {
+                      ref.read(parentScreenIndexProvider.notifier).goToStops();
+                    },
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontWeight: .w700, fontSize: 14.sp),
+                    ),
+                    child: Text('See All'),
                   ),
-                  child: Text('See All'),
                 ),
-              ),
-              RecentStopList(value: recentStops),
-            ],
+                RecentStopList(value: recentStops),
+              ],
+            ),
           ),
         );
       },

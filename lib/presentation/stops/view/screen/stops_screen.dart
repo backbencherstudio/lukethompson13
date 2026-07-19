@@ -47,52 +47,50 @@ class _StopsScreenState extends ConsumerState<StopsScreen> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: Column(
-              children: [
-                16.height,
-                _searchInput(),
-                SizedBox(height: 15.h),
-                Expanded(
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (scrollInfo) {
-                      if (scrollInfo.metrics.pixels >=
-                          scrollInfo.metrics.maxScrollExtent - 200) {
-                        ref
-                            .read(stopLogPaginationProvider.notifier)
-                            .loadNextPage();
-                      }
-                      return false;
-                    },
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          RecentStopList(
-                            value: paginationState.whenData(
-                              (state) => state.stops,
-                            ),
-                          ),
-                          paginationState.when(
-                            data: (state) {
-                              if (state.isLoadingMore) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                                  child: const Center(
-                                    child: ActivityIndicator(),
-                                  ),
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            },
-                            error: (_, _) => const SizedBox.shrink(),
-                            loading: () => const SizedBox.shrink(),
-                          ),
-                        ],
-                      ),
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverPadding(padding: .only(top: 16.h)),
+                SliverToBoxAdapter(child: _searchInput()),
+              ],
+              body: NotificationListener<ScrollNotification>(
+                onNotification: (scrollInfo) {
+                  if (scrollInfo.metrics.pixels >=
+                      scrollInfo.metrics.maxScrollExtent - 200) {
+                    ref.read(stopLogPaginationProvider.notifier).loadNextPage();
+                  }
+                  return false;
+                },
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    ref.invalidate(stopLogPaginationProvider);
+                    await ref.read(stopLogPaginationProvider.future);
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        12.height,
+                        RecentStopList(
+                          value: paginationState.whenData((state) => state.stops),
+                        ),
+                        paginationState.when(
+                          data: (state) {
+                            if (state.isLoadingMore) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                                child: const Center(child: ActivityIndicator()),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                          error: (_, _) => const SizedBox.shrink(),
+                          loading: () => const SizedBox.shrink(),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
