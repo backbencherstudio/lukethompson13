@@ -39,6 +39,7 @@ class ShipperRatingsSection extends ConsumerWidget {
           return Column(
             children: state.ratings.map((item) {
               return ShipperRatingCard(
+                id: item.id,
                 title: item.facilityName,
                 subtitle: item.statusSubtext,
                 rating: item.rating,

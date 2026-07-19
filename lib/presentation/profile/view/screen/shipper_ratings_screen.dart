@@ -83,7 +83,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                     },
                   ),
                   FilterChipGroup(
-                    titles: categories,
+                    titles: PayerCategory.categories,
                     selectedIndex: _selectedTabFilterIndex,
                     onChanged: (index) {
                       setState(() {
@@ -92,6 +92,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                       final status = index == 0
                           ? null
                           : PayerCategory.values[index - 1];
+
                       ref
                           .read(shipperRatingsPaginationProvider.notifier)
                           .updateStatus(status);

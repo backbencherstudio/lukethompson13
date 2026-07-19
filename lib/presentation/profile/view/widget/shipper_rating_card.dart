@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
@@ -8,6 +7,7 @@ import 'package:lukethompson/core/widgets/app_bottom_sheet.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/spaced_row.dart';
+import 'package:lukethompson/presentation/profile/view/widget/circular_progress_bar.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class StatItem {
@@ -40,6 +40,10 @@ enum PayerCategory {
   final int threshold;
 
   const PayerCategory(this.value, this.label, this.reviewLabel, this.threshold);
+
+  static List<String> get categories {
+    return ['All', ...PayerCategory.values.map((e) => e.label)];
+  }
 
   bool matches(int rating) {
     if (this == good) return rating >= threshold;
@@ -74,6 +78,7 @@ enum PayerCategory {
 }
 
 class ShipperRatingCard extends StatelessWidget {
+  final String id;
   final String title;
   final String subtitle;
   final double rating;
@@ -81,6 +86,7 @@ class ShipperRatingCard extends StatelessWidget {
 
   const ShipperRatingCard({
     super.key,
+    required this.id,
     required this.title,
     required this.subtitle,
     required this.rating,
@@ -131,7 +137,11 @@ class ShipperRatingCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  buildCircularProgressBar(payer),
+                  CircularProgressBar(
+                    key: ValueKey(id),
+                    payer: payer,
+                    rating: rating,
+                  ),
                 ],
               ),
               16.height,
@@ -173,7 +183,13 @@ class ShipperRatingCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: .stretch,
         children: [
-          buildCircularProgressBar(payer, size: 100, strokeWidth: 10),
+          CircularProgressBar(
+            key: ValueKey(id),
+            payer: payer,
+            rating: rating,
+            size: 100,
+            strokeWidth: 10,
+          ),
           24.height,
           GridView(
             shrinkWrap: true,
@@ -220,25 +236,6 @@ class ShipperRatingCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  SimpleCircularProgressBar buildCircularProgressBar(
-    PayerCategory payer, {
-    double size = 80,
-    double strokeWidth = 8,
-  }) {
-    return SimpleCircularProgressBar(
-      animationDuration: 0,
-      progressColors: [payer.color],
-      backStrokeWidth: strokeWidth,
-      progressStrokeWidth: strokeWidth,
-      backColor: Color(0xff313234),
-      size: size,
-      valueNotifier: ValueNotifier(rating),
-      onGetText: (double value) {
-        return Text('${value.toInt()}%', style: TextStyle(fontSize: 16));
-      },
     );
   }
 }
