@@ -9,7 +9,9 @@ import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/custom_dialog.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/profile_header.dart';
 import 'package:lukethompson/core/widgets/profile_setting_item.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
@@ -104,23 +106,52 @@ class ProfileScreen extends StatelessWidget {
                   title: "Help & Support",
                   onTap: () => context.push(Routes.helpAndSupport),
                 ),
-                Consumer(
-                  builder: (context, ref, _) => ProfileSettingItem(
-                    icon: Icons.logout,
-                    title: "Log Out",
-                    iconColor: Colors.redAccent,
-                    onTap: () {
-                      ref.read(authStateProvider.notifier).logout();
-                      context.go(Routes.signIn);
-                    },
-                  ),
-                ),
+                buildLoutItem(),
 
                 const SizedBox(height: 30),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Consumer buildLoutItem() {
+    return Consumer(
+      builder: (context, ref, _) => ProfileSettingItem(
+        icon: Icons.logout,
+        title: "Log Out",
+        iconColor: Colors.redAccent,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+              title: 'Log Out',
+              subtitle: 'Are you sure you want to log out?',
+              bottomWidget: Row(
+                spacing: 12,
+                children: [
+                  Expanded(
+                    child: GlobalButton.primary(
+                      label: 'Log Out',
+                      onPressed: () {
+                        ref.read(authStateProvider.notifier).logout();
+                        context.go(Routes.signIn);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GlobalButton.outlined(
+                      label: 'Cancel',
+                      onPressed: () => context.pop(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
