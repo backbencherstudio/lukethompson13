@@ -40,32 +40,29 @@ class _ReportsScreenState extends State<ReportsScreen>
       body: AppGradientBackground(
         child: SafeArea(
           bottom: false,
-          child: Column(
-            children: [
-              SizedBox(height: 10.h),
-
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppPadding.screenPadding,
-                ),
-                child: GlobalTabBar(
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: "Weekly Summary"),
-                    Tab(text: "Tax Report"),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const [WeeklySummaryReport(), TaxReport()],
+          child: NestedScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppPadding.screenPadding,
+                  ),
+                  child: GlobalTabBar(
+                    controller: _tabController,
+                    tabs: const [
+                      Tab(text: "Weekly Summary"),
+                      Tab(text: "Tax Report"),
+                    ],
+                  ),
                 ),
               ),
             ],
+            body: TabBarView(
+              controller: _tabController,
+              children: const [WeeklySummaryReport(), TaxReport()],
+            ),
           ),
         ),
       ),

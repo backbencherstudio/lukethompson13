@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
@@ -9,6 +10,7 @@ import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/data/sources/remote/report/models/report.model.dart';
 import 'package:lukethompson/data/sources/remote/report/report_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
+import 'package:lukethompson/presentation/reports/view/screen/weekly_summary.dart';
 import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
 import 'package:lukethompson/presentation/reports/view/widget/revenue_realization.dart';
 import 'package:lukethompson/presentation/reports/view/widget/tax_period_selector.dart';
@@ -29,78 +31,85 @@ class TaxReport extends ConsumerWidget {
       }),
     );
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-      child: Column(
-        children: [
-          TaxPeriodSelector(
-            selectedType: filter.type,
-            onTypeChanged: (type) =>
-                ref.read(taxReportFilterProvider.notifier).setType(type),
-          ),
-          12.height,
-          taxDataAsync.when(
-            skipLoadingOnRefresh: true,
-            skipLoadingOnReload: true,
-            loading: () => const Center(child: ActivityIndicator()),
-            error: (e, _) => StatusDisplay.error(e.toString()),
-            data: (data) {
-              if (data == null) {
-                return StatusDisplay.muted('No Tax Report data found');
-              }
+    return RefreshIndicator(
+      onRefresh: () async {
+        WeeklySummaryReport.refreshRepostPageData(ref);
+      },
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+        child: Column(
+          children: [
+            SizedBox(height: 12.h),
 
-              return Column(
-                children: [
-                  GridView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 7 / 4,
-                        ),
-                    children: [
-                      TotalClaimedWidget(
-                        title: "Total Claimed",
-                        amount: CurrencyFormatter.format(data.totalClaimed),
-                        amountColor: ColorManager.warningColor,
-                      ),
-                      TotalClaimedWidget(
-                        title: "Total Collection",
-                        amount: CurrencyFormatter.format(data.totalCollected),
-                        amountColor: ColorManager.primaryButton,
-                      ),
-                      TotalClaimedWidget(
-                        title: "Collection Rate",
-                        amount: ValueFormatter.asPercentage(
-                          data.collectionRate,
-                        ),
-                      ),
-                      TotalClaimedWidget(
-                        title: "Avg Days to Pay",
-                        amount: CurrencyFormatter.format(data.avgDaysToPay),
-                      ),
-                    ],
-                  ),
-                  12.height,
-                  WeeklySummaryWidget(
-                    icon: IconManager.revenueIcon,
-                    title: "Revenue Lost",
-                    value: CurrencyFormatter.format(data.revenueLost),
-                    subtitle: "Still Hurting margin",
-                    valueColor: ColorManager.errorColor,
-                  ),
-                  12.height,
-                  RevenueRealizationChart(chartData: data.revenueRealization),
-                ],
-              );
-            },
-          ),
+            TaxPeriodSelector(
+              selectedType: filter.type,
+              onTypeChanged: (type) =>
+                  ref.read(taxReportFilterProvider.notifier).setType(type),
+            ),
+            12.height,
+            taxDataAsync.when(
+              skipLoadingOnRefresh: true,
+              skipLoadingOnReload: true,
+              loading: () => const Center(child: ActivityIndicator()),
+              error: (e, _) => StatusDisplay.error(e.toString()),
+              data: (data) {
+                if (data == null) {
+                  return StatusDisplay.muted('No Tax Report data found');
+                }
 
-          16.height,
-        ],
+                return Column(
+                  children: [
+                    GridView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 7 / 4,
+                          ),
+                      children: [
+                        TotalClaimedWidget(
+                          title: "Total Claimed",
+                          amount: CurrencyFormatter.format(data.totalClaimed),
+                          amountColor: ColorManager.warningColor,
+                        ),
+                        TotalClaimedWidget(
+                          title: "Total Collection",
+                          amount: CurrencyFormatter.format(data.totalCollected),
+                          amountColor: ColorManager.primaryButton,
+                        ),
+                        TotalClaimedWidget(
+                          title: "Collection Rate",
+                          amount: ValueFormatter.asPercentage(
+                            data.collectionRate,
+                          ),
+                        ),
+                        TotalClaimedWidget(
+                          title: "Avg Days to Pay",
+                          amount: CurrencyFormatter.format(data.avgDaysToPay),
+                        ),
+                      ],
+                    ),
+                    12.height,
+                    WeeklySummaryWidget(
+                      icon: IconManager.revenueIcon,
+                      title: "Revenue Lost",
+                      value: CurrencyFormatter.format(data.revenueLost),
+                      subtitle: "Still Hurting margin",
+                      valueColor: ColorManager.errorColor,
+                    ),
+                    12.height,
+                    RevenueRealizationChart(chartData: data.revenueRealization),
+                  ],
+                );
+              },
+            ),
+
+            16.height,
+          ],
+        ),
       ),
     );
   }

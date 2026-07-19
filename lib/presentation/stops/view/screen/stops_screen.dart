@@ -49,7 +49,7 @@ class _StopsScreenState extends ConsumerState<StopsScreen> {
             padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverPadding(padding: .only(top: 16.h)),
+                SliverToBoxAdapter(child: SizedBox(height: 10.h)),
                 SliverToBoxAdapter(child: _searchInput()),
               ],
               body: NotificationListener<ScrollNotification>(
@@ -71,7 +71,9 @@ class _StopsScreenState extends ConsumerState<StopsScreen> {
                       children: [
                         12.height,
                         RecentStopList(
-                          value: paginationState.whenData((state) => state.stops),
+                          value: paginationState.whenData(
+                            (state) => state.stops,
+                          ),
                         ),
                         paginationState.when(
                           data: (state) {

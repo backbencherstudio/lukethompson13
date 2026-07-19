@@ -31,86 +31,97 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: AppGradientBackground(
         child: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 12),
-                const ProfileImage(),
-                const SizedBox(height: 32),
-                SectionHeader(title: 'Profile Setting', fontSize: 16),
-
-                const SizedBox(height: 15),
-                ProfileSettingItem(
-                  icon: Icons.person_outline,
-                  title: "Edit Profile",
-                  onTap: () => context.push(Routes.editProfile),
-                ),
-                ProfileSettingItem(
-                  icon: Icons.attach_money,
-                  title: "Set Your Rate",
-                  onTap: () => context.push(Routes.setRate),
-                ),
-                ProfileSettingItem(
-                  icon: Icons.assignment_outlined,
-                  title: "My Claims",
-                  onTap: () => context.push(Routes.myClaims),
-                ),
-                ProfileSettingItem(
-                  icon: Icons.stars_outlined,
-                  title: "Shipper Ratings",
-                  onTap: () => context.push(Routes.shipperRatings),
-                ),
-                ProfileSettingItem(
-                  icon: Icons.workspace_premium_outlined,
-                  title: "Subscriptions",
-                  onTap: () => context.push(Routes.manageSubscription),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
+          child: Consumer(
+            builder: (context, ref, child) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  ref.invalidate(userQuery);
+                },
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppPadding.screenPadding,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: ColorManager.primaryButton,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          "Upgrade Plan",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      const SizedBox(height: 12),
+                      const ProfileImage(),
+                      const SizedBox(height: 32),
+                      SectionHeader(title: 'Profile Setting', fontSize: 16),
+
+                      const SizedBox(height: 15),
+                      ProfileSettingItem(
+                        icon: Icons.person_outline,
+                        title: "Edit Profile",
+                        onTap: () => context.push(Routes.editProfile),
+                      ),
+                      ProfileSettingItem(
+                        icon: Icons.attach_money,
+                        title: "Set Your Rate",
+                        onTap: () => context.push(Routes.setRate),
+                      ),
+                      ProfileSettingItem(
+                        icon: Icons.assignment_outlined,
+                        title: "My Claims",
+                        onTap: () => context.push(Routes.myClaims),
+                      ),
+                      ProfileSettingItem(
+                        icon: Icons.stars_outlined,
+                        title: "Shipper Ratings",
+                        onTap: () => context.push(Routes.shipperRatings),
+                      ),
+                      ProfileSettingItem(
+                        icon: Icons.workspace_premium_outlined,
+                        title: "Subscriptions",
+                        onTap: () => context.push(Routes.manageSubscription),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorManager.primaryButton,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                "Upgrade Plan",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.white38,
+                              size: 16,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white38,
-                        size: 16,
+                      ProfileSettingItem(
+                        icon: Icons.lock_outline,
+                        title: "Privacy & policy",
+                        onTap: () => context.push(Routes.privacyAndPolicy),
                       ),
+                      ProfileSettingItem(
+                        icon: Icons.help_outline,
+                        title: "Help & Support",
+                        onTap: () => context.push(Routes.helpAndSupport),
+                      ),
+                      buildLoutItem(),
+
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ),
-                ProfileSettingItem(
-                  icon: Icons.lock_outline,
-                  title: "Privacy & policy",
-                  onTap: () => context.push(Routes.privacyAndPolicy),
-                ),
-                ProfileSettingItem(
-                  icon: Icons.help_outline,
-                  title: "Help & Support",
-                  onTap: () => context.push(Routes.helpAndSupport),
-                ),
-                buildLoutItem(),
-
-                const SizedBox(height: 30),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),

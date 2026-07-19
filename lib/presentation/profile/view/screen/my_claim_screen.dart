@@ -67,82 +67,88 @@ class _MyClaimScreenState extends ConsumerState<MyClaimScreen> {
       ),
       body: AppGradientBackground(
         child: SafeArea(
-          child: Column(
-            children: [
-              16.height,
-              SearchBarWidget(
-                margin: EdgeInsets.symmetric(
-                  horizontal: AppPadding.screenPadding,
-                ),
-                controller: _searchController,
-                onChanged: (value) {
-                  ref
-                      .read(claimPaginationProvider.notifier)
-                      .updateSearch(value);
-                },
-              ),
-              SizedBox(height: 16.h),
-              Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (scrollInfo) {
-                    if (scrollInfo.metrics.pixels >=
-                        scrollInfo.metrics.maxScrollExtent - 200) {
-                      ref.read(claimPaginationProvider.notifier).loadNextPage();
-                    }
-                    return false;
-                  },
-                  child: pagination.when(
-                    skipLoadingOnRefresh: true,
-                    skipLoadingOnReload: true,
-                    loading: () => const Center(child: ActivityIndicator()),
-                    error: (e, _) => StatusDisplay.error(e.toString()),
-                    data: (state) {
-                      return FullHeightScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FilterChipGroup(
-                              titles: _buildCategories(state.metaData?.counts),
-                              selectedIndex: selectedIndex,
-                              onChanged: (index) {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                                final status = _statusFilters[index];
-                                ref
-                                    .read(claimPaginationProvider.notifier)
-                                    .updateStatus(status);
-                              },
-                            ),
-                            SizedBox(height: 16.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppPadding.screenPadding,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClaimStatsSection(
-                                    metaData: state.metaData,
-                                  ),
-                                  SizedBox(height: 16.h),
-                                  ClaimListSection(
-                                    claims: state.claims,
-                                    isLoadingMore: state.isLoadingMore,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+              SliverToBoxAdapter(
+                child: SearchBarWidget(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: AppPadding.screenPadding,
                   ),
+                  controller: _searchController,
+                  onChanged: (value) {
+                    ref
+                        .read(claimPaginationProvider.notifier)
+                        .updateSearch(value);
+                  },
                 ),
               ),
             ],
+            body: Expanded(
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollInfo) {
+                  if (scrollInfo.metrics.pixels >=
+                      scrollInfo.metrics.maxScrollExtent - 200) {
+                    ref.read(claimPaginationProvider.notifier).loadNextPage();
+                  }
+                  return false;
+                },
+                child: pagination.when(
+                  skipLoadingOnRefresh: true,
+                  skipLoadingOnReload: true,
+                  loading: () => const Center(child: ActivityIndicator()),
+                  error: (e, _) => StatusDisplay.error(e.toString()),
+                  data: (state) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 12.h),
+                          FilterChipGroup(
+                            titles: _buildCategories(state.metaData?.counts),
+                            selectedIndex: selectedIndex,
+                            onChanged: (index) {
+                              setState(() {
+                                selectedIndex = index;
+                              });
+                              final status = _statusFilters[index];
+                              ref
+                                  .read(claimPaginationProvider.notifier)
+                                  .updateStatus(status);
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppPadding.screenPadding,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClaimStatsSection(metaData: state.metaData),
+                                SizedBox(height: 16.h),
+                                ClaimListSection(
+                                  claims: state.claims,
+                                  isLoadingMore: state.isLoadingMore,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
+          // child: Column(
+          //   children: [
+          //     16.height,
+          // ,
+          //     SizedBox(height: 16.h),
+          //   ],
+          // ),
         ),
       ),
     );

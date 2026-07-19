@@ -23,6 +23,14 @@ class ShipperRatingsPaginationState {
     required this.search,
   });
 
+  const ShipperRatingsPaginationState.empty()
+    : ratings = const [],
+      hasMore = false,
+      isLoadingMore = false,
+      nextCursor = null,
+      status = null,
+      search = '';
+
   ShipperRatingsPaginationState copyWith({
     List<ShipperRatingItem>? ratings,
     String? Function()? nextCursor,

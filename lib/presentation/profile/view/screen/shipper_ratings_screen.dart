@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
@@ -46,7 +47,9 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pagination = ref.watch(shipperRatingsPaginationProvider);
+    final pagination = _pageLocked
+        ? AsyncData(ShipperRatingsPaginationState.empty())
+        : ref.watch(shipperRatingsPaginationProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -54,95 +57,106 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
       body: AppGradientBackground(
         child: SafeArea(
           bottom: false,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (scrollInfo) {
-              if (scrollInfo.metrics.pixels >=
-                  scrollInfo.metrics.maxScrollExtent - 200) {
-                ref
-                    .read(shipperRatingsPaginationProvider.notifier)
-                    .loadNextPage();
-              }
-              return false;
-            },
-            child: FullHeightScrollView(
-              physics: _pageLocked
-                  ? const NeverScrollableScrollPhysics()
-                  : null,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: 16,
-                children: [
-                  SearchBarWidget(
-                    controller: _searchController,
-                    hintText: 'Search facilities...',
-                    margin: .symmetric(horizontal: AppPadding.screenPadding),
-                    onChanged: (value) {
-                      ref
-                          .read(shipperRatingsPaginationProvider.notifier)
-                          .updateSearch(value);
-                    },
-                  ),
-                  FilterChipGroup(
-                    titles: PayerCategory.categories,
-                    selectedIndex: _selectedTabFilterIndex,
-                    onChanged: (index) {
-                      setState(() {
-                        _selectedTabFilterIndex = index;
-                      });
-                      final status = index == 0
-                          ? null
-                          : PayerCategory.values[index - 1];
+          child: NestedScrollView(
+            physics: _pageLocked ? const NeverScrollableScrollPhysics() : null,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+              SliverToBoxAdapter(
+                child: SearchBarWidget(
+                  controller: _searchController,
+                  hintText: 'Search facilities...',
+                  margin: .symmetric(horizontal: AppPadding.screenPadding),
+                  onChanged: (value) {
+                    ref
+                        .read(shipperRatingsPaginationProvider.notifier)
+                        .updateSearch(value);
+                  },
+                ),
+              ),
+            ],
+            body: NotificationListener<ScrollNotification>(
+              onNotification: (scrollInfo) {
+                if (scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent - 200) {
+                  ref
+                      .read(shipperRatingsPaginationProvider.notifier)
+                      .loadNextPage();
+                }
+                return false;
+              },
+              child: FullHeightScrollView(
+                physics: _pageLocked
+                    ? const NeverScrollableScrollPhysics()
+                    : null,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 16,
+                  children: [
+                    0.height,
+                    FilterChipGroup(
+                      titles: PayerCategory.categories,
+                      selectedIndex: _selectedTabFilterIndex,
+                      onChanged: (index) {
+                        if (_pageLocked) return;
 
-                      ref
-                          .read(shipperRatingsPaginationProvider.notifier)
-                          .updateStatus(status);
-                    },
-                  ),
-                  ShipperRatingsSection(
-                    isLocked: _pageLocked,
+                        setState(() {
+                          _selectedTabFilterIndex = index;
+                        });
+                        final status = index == 0
+                            ? null
+                            : PayerCategory.values[index - 1];
 
-                    lockedPrompt: Column(
-                      children: [
-                        140.height,
-                        SvgCircleIcon(svgPath: Assets.icons.lockIcon),
-                        12.height,
-                        Text(
-                          'Pro plan unlocks the full database of\nShipper Ratings.',
-                          style: const TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                        16.height,
-                        GlobalButton(
-                          width: 144,
-                          height: 40,
-                          label: 'Upgrade to Pro',
-                          textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _pageLocked = false;
-                            });
-                          },
-                        ),
-                      ],
+                        ref
+                            .read(shipperRatingsPaginationProvider.notifier)
+                            .updateStatus(status);
+                      },
                     ),
-                  ),
-                  pagination.when(
-                    data: (state) {
-                      if (state.isLoadingMore) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Center(child: ActivityIndicator()),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                    error: (_, _) => const SizedBox.shrink(),
-                    loading: () => const SizedBox.shrink(),
-                  ),
-                ],
+                    ShipperRatingsSection(
+                      isLocked: _pageLocked,
+
+                      lockedPrompt: Column(
+                        children: [
+                          140.height,
+                          SvgCircleIcon(svgPath: Assets.icons.lockIcon),
+                          12.height,
+                          Text(
+                            'Pro plan unlocks the full database of\nShipper Ratings.',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                          16.height,
+                          GlobalButton(
+                            width: 144,
+                            height: 40,
+                            label: 'Upgrade to Pro',
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _pageLocked = false;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    pagination.when(
+                      data: (state) {
+                        if (state.isLoadingMore) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(child: ActivityIndicator()),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                      error: (_, _) => const SizedBox.shrink(),
+                      loading: () => const SizedBox.shrink(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
