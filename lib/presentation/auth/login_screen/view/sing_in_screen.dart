@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ import 'package:lukethompson/core/widgets/heading_section.dart';
 import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
+import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 
 class SingInScreen extends ConsumerStatefulWidget {
   const SingInScreen({super.key});
@@ -24,6 +26,7 @@ class SingInScreen extends ConsumerStatefulWidget {
 
   static const defaultUserName = 'User';
   static const defaultEmail = 'user@example.com';
+  // static const defaultEmail = 'woheli3518@rapplo.com';
   static const defaultPassword = '12345678';
 }
 
@@ -83,6 +86,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
       );
     } else if (authState.isAuthenticated) {
       _persistRememberMe();
+      ref.read(parentScreenIndexProvider.notifier).goToHome();
       router.go(Routes.parent);
     }
   }

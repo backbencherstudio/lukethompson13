@@ -32,7 +32,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         items: [
           BottomNavigationBarItem(icon: Image.asset(IconManager.home), label: "Home"),
           BottomNavigationBarItem(icon: Image.asset(IconManager.stops), label: "Stops"),
-         
+
           BottomNavigationBarItem(icon: Image.asset(IconManager.reports), label: "Reports"),
           BottomNavigationBarItem(icon: Image.asset(IconManager.profile), label: "Profile"),
         ],

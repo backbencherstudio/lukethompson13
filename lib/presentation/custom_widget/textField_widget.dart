@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lukethompson/core/extensions/text_style_extension.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+
+import '../../core/extensions/text_style_extension.dart';
+import '../../core/resource/constants/color_manager.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;

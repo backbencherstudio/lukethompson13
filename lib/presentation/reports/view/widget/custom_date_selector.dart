@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:lukethompson/core/widgets/dropdown_overlay.dart';
-import 'package:lukethompson/presentation/reports/view/widget/tax_period_selector.dart';
 
+import '../../../../core/widgets/dropdown_overlay.dart';
 import 'custom_selection_pop_up.dart';
+import 'tax_period_selector.dart';
 
 class CustomDateSelector extends StatelessWidget {
   final DateTimeRange? selectedRange;

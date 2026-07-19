@@ -91,11 +91,7 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
           const SizedBox(height: 4),
           Text(
             label,
-            style: TextStyle(
-              color: color,
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-            ),
+            style: TextStyle(color: color, fontSize: 12, fontWeight: .w600),
           ),
         ],
       ),

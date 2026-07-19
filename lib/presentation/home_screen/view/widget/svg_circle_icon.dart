@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
 class SvgCircleIcon extends StatelessWidget {
@@ -20,7 +20,7 @@ class SvgCircleIcon extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF2ECC71).withOpacity(0.4),
+                color: const Color(0xFF2ECC71).withValues(alpha: 0.4),
                 blurRadius: 40,
                 spreadRadius: 5,
               ),
