@@ -9,7 +9,7 @@ Future<(T?, Object?)> tryCatch<T>(
   try {
     return (await future, null);
   } catch (e, st) {
-    logger.e('tryAwait failed', error: e, stackTrace: st);
+    logger.e('tryCatch failed', error: e, stackTrace: st);
     onError?.call(e, st);
     return (null, e);
   }
