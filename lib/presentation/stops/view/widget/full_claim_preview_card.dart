@@ -8,6 +8,7 @@ import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_text_logo.dart';
+import 'package:lukethompson/core/widgets/attachment_image_viewer.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/breakdown_card.dart';
@@ -32,7 +33,6 @@ class FullClaimPreviewCard extends StatelessWidget {
           16.height,
           InputLabel('CLAIM DETAILS'),
           8.height,
-
           BreakdownCard(
             color: ColorManager.surfaceBacground,
             borderColor: ColorManager.cardBackground,
@@ -61,6 +61,11 @@ class FullClaimPreviewCard extends StatelessWidget {
           InputLabel('PROOF PACKAGE'),
           8.height,
           ProofPackageList(
+            onItemPressed: (index) => AttachmentImageViewer.show(
+              context,
+              attachments: data?.attachments ?? [],
+              index: index,
+            ),
             fineNames: data?.attachments?.map((e) => e.fileName).toList() ?? [],
           ),
         ],

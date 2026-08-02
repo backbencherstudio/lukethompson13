@@ -4,16 +4,19 @@ import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
+import 'package:lukethompson/core/widgets/touchable_opacity.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
 
 class ProofPackageList extends StatelessWidget {
   final List<String> fineNames;
   final void Function(int index)? onRemoveItem;
+  final void Function(int index)? onItemPressed;
 
   const ProofPackageList({
     super.key,
     required this.fineNames,
     this.onRemoveItem,
+    this.onItemPressed,
   });
 
   @override
@@ -33,38 +36,41 @@ class ProofPackageList extends StatelessWidget {
     void Function(int index)? onRemoveItem,
     int index,
   ) {
-    return AppCard(
-      backgroundColor: ColorManager.surfaceBacground,
-      borderRadius: 12,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-      child: Stack(
-        children: [
-          Positioned(top: 1, child: SvgPicture.asset(Assets.icons.linkAlt)),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              24.width,
-              Expanded(
-                child: Text(
-                  fileName,
-                  style: getSubtextStyle(color: const Color(0xff00A3FF)),
-                ),
-              ),
-              if (onRemoveItem != null)
-                GestureDetector(
-                  onTap: () => onRemoveItem(index),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6, right: 4),
-                    child: Icon(
-                      Icons.close,
-                      size: 20,
-                      color: ColorManager.subtextColor,
-                    ),
+    return TouchableOpacity(
+      onPressed: () => onItemPressed?.call(index),
+      child: AppCard(
+        backgroundColor: ColorManager.surfaceBacground,
+        borderRadius: 12,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        child: Stack(
+          children: [
+            Positioned(top: 1, child: SvgPicture.asset(Assets.icons.linkAlt)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                24.width,
+                Expanded(
+                  child: Text(
+                    fileName,
+                    style: getSubtextStyle(color: const Color(0xff00A3FF)),
                   ),
                 ),
-            ],
-          ),
-        ],
+                if (onRemoveItem != null)
+                  GestureDetector(
+                    onTap: () => onRemoveItem(index),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 6, right: 4),
+                      child: Icon(
+                        Icons.close,
+                        size: 20,
+                        color: ColorManager.subtextColor,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

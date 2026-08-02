@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/attachment_image_viewer.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/link_button.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/proof_package_list.dart';
@@ -71,6 +72,11 @@ class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
         if (widget.attachments.isEmpty) _buildFilePicker(alpha),
         if (widget.attachments.isNotEmpty) ...[
           ProofPackageList(
+            onItemPressed: (index) => AttachmentImageViewer.showFiles(
+              context,
+              files: widget.attachments,
+              index: index,
+            ),
             onRemoveItem: (index) {
               final updated = List<XFile>.from(widget.attachments)..removeAt(index);
               widget.onAttachmentRemoved?.call(updated, index);

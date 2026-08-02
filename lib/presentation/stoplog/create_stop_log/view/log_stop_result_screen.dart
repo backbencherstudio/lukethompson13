@@ -9,6 +9,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/attachment_image_viewer.dart';
 import 'package:lukethompson/core/widgets/big_stat_card.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
@@ -93,6 +94,11 @@ class LogStopResultScreen extends ConsumerWidget {
                       fineNames:
                           data?.attachments?.map((e) => e.fileName).toList() ??
                           [],
+                      onItemPressed: (index) => AttachmentImageViewer.show(
+                        context,
+                        attachments: data?.attachments ?? [],
+                        index: index,
+                      ),
                     ),
 
                     if (data != null) ClaimSendTo(data: data),
