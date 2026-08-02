@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/platform/share_service.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/utils/date.dart';
@@ -50,6 +52,7 @@ class FullClaimPreviewCard extends StatelessWidget {
               ),
               BreakdownItem(label: "BOL Number", value: data?.bolNumber ?? "-"),
               BreakdownItem(
+                onPressed: () => _openMap(context),
                 label: "GPS Coordinates",
                 value: data?.gpsCoordinates ?? '-',
                 valueColor: ColorManager.infoColor,
@@ -71,6 +74,42 @@ class FullClaimPreviewCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _openMap(BuildContext context) async {
+    final coordinates = data?.gpsCoordinates;
+    if (coordinates == null || coordinates.trim().isEmpty) {
+      if (context.mounted) {
+        context.showErrorSnackBar('No GPS coordinates available');
+      }
+      return;
+    }
+
+    final parts = coordinates
+        .split(',')
+        .map((part) => double.tryParse(part.trim()))
+        .toList();
+
+    final latitude = parts.isNotEmpty ? parts[0] : null;
+    final longitude = parts.length > 1 ? parts[1] : null;
+
+    if (latitude == null || longitude == null) {
+      if (context.mounted) {
+        context.showErrorSnackBar('Invalid GPS coordinates');
+      }
+      return;
+    }
+
+    try {
+      await ShareService.openNativeMap(
+        latitude: latitude,
+        longitude: longitude,
+      );
+    } catch (_) {
+      if (context.mounted) {
+        context.showErrorSnackBar('Unable to open map. Please try again.');
+      }
+    }
   }
 
   static AsyncValue<SingleStoplogDetailData?> getSession(

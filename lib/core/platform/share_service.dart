@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,6 +21,19 @@ class ShareService {
 
     if (!await launchUrl(uri)) {
       throw Exception('Could not launch SMS app');
+    }
+  }
+
+  static Future<void> openNativeMap({
+    required double latitude,
+    required double longitude,
+  }) async {
+    final uri = Platform.isIOS
+        ? Uri.parse('http://maps.apple.com/?ll=$latitude,$longitude')
+        : Uri.parse('geo:$latitude,$longitude');
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not open map.');
     }
   }
 }

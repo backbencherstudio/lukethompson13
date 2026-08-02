@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
+import 'package:lukethompson/core/widgets/touchable_opacity.dart';
 
 class BreakdownCard extends StatelessWidget {
   final List<BreakdownItem> items;
@@ -32,6 +34,7 @@ class BreakdownCard extends StatelessWidget {
               item.value,
               isLastItem: isLast,
               valueColor: item.valueColor,
+              onPressed: item.onPressed,
             );
           }),
         ],
@@ -44,6 +47,7 @@ class BreakdownCard extends StatelessWidget {
     String value, {
     bool isLastItem = false,
     Color? valueColor,
+    void Function()? onPressed,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -61,10 +65,19 @@ class BreakdownCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: getSubtextStyle()),
-          Text(
-            value,
-            style: getListTitleStyle(
-              color: valueColor ?? ColorManager.whiteColor,
+          12.width,
+          Flexible(
+            child: TouchableOpacity(
+              onPressed: onPressed,
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: .ellipsis,
+                // value,
+                style: getListTitleStyle(
+                  color: valueColor ?? ColorManager.whiteColor,
+                ),
+              ),
             ),
           ),
         ],
@@ -77,10 +90,12 @@ class BreakdownItem {
   final String label;
   final String value;
   final Color? valueColor;
+  final void Function()? onPressed;
 
   const BreakdownItem({
     required this.label,
     required this.value,
     this.valueColor,
+    this.onPressed,
   });
 }
