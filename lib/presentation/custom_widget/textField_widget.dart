@@ -11,6 +11,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final bool? obsecure;
   final VoidCallback? onTap;
   final TextInputType? keyboardType;
+  final FocusNode? focusNode;
 
   const CustomTextFieldWidget({
     super.key,
@@ -21,12 +22,14 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.obsecure,
     this.onTap,
     this.keyboardType,
+    this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      focusNode: focusNode,
       keyboardType: keyboardType,
       style: const TextStyle(color: Colors.white, fontSize: 18),
       cursorColor: Colors.white,

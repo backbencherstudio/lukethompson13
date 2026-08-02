@@ -193,56 +193,58 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 42.h),
+
+                  SizedBox(height: 32.h),
                   GlobalButton(
                     isLoading: isLoading,
                     label: "Sign in",
                     onPressed: _handleLogin,
                   ),
-                  SizedBox(height: 34.h),
-                  Row(
-                    children: [
-                      Expanded(child: _divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: Text(
-                          "Or Sign In with",
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: ColorManager.subtextColor,
-                          ),
-                        ),
-                      ),
-                      Expanded(child: _divider()),
-                    ],
-                  ),
-                  SizedBox(height: 18.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _SocialButton(
-                          label: "google",
-                          leading: Image.asset(
-                            IconManager.google,
-                            width: 24.w,
-                            height: 24.h,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 14.w),
-                      // Expanded(
-                      //   child: _SocialButton(
-                      //     label: "Apple",
-                      //     leading: Icon(
-                      //       Icons.apple,
-                      //       color: Colors.white,
-                      //       size: 24.sp,
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
+
+                  // SizedBox(height: 34.h),
+                  // Row(
+                  //   children: [
+                  //     Expanded(child: _divider()),
+                  //     Padding(
+                  //       padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  //       child: Text(
+                  //         "Or Sign In with",
+                  //         style: TextStyle(
+                  //           fontSize: 14.sp,
+                  //           color: ColorManager.subtextColor,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Expanded(child: _divider()),
+                  //   ],
+                  // ),
+                  // SizedBox(height: 18.h),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: _SocialButton(
+                  //         label: "google",
+                  //         leading: Image.asset(
+                  //           IconManager.google,
+                  //           width: 24.w,
+                  //           height: 24.h,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 14.w),
+                  //     // Expanded(
+                  //     //   child: _SocialButton(
+                  //     //     label: "Apple",
+                  //     //     leading: Icon(
+                  //     //       Icons.apple,
+                  //     //       color: Colors.white,
+                  //     //       size: 24.sp,
+                  //     //     ),
+                  //     //   ),
+                  //     // ),
+                  //   ],
+                  // ),
+                  SizedBox(height: 16.h),
 
                   AuthPrompt(
                     message: "Don't have an account? ",
