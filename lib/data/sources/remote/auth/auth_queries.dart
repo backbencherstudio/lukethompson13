@@ -35,6 +35,15 @@ final verifyEmailMutation =
       return await repo.verifyEmail(email: params.email, token: params.token);
     });
 
+final resendRegistrationVerificationOTPMutation =
+    createMutationWithParam<BaseResponse, ForgotPasswordRequest>((
+      tsx,
+      params,
+    ) async {
+      final repo = tsx.get(authRepositoryProvider);
+      return await repo.resendRegistrationVerificationOTP(email: params.email);
+    });
+
 final checkOtpMutation = createMutationWithParam<BaseResponse, CheckOtpRequest>(
   (tsx, params) async {
     final repo = tsx.get(authRepositoryProvider);

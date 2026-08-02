@@ -21,6 +21,12 @@ class AuthRepository {
     VerifyEmailRequest(email: email, token: token),
   );
 
+  Future<BaseResponse> resendRegistrationVerificationOTP({
+    required String email,
+  }) => _authApi.resendRegistrationVerificationOTP(
+    ForgotPasswordRequest(email: email),
+  );
+
   Future<BaseResponse> forgotPassword({required String email}) =>
       _authApi.forgotPassword(ForgotPasswordRequest(email: email));
 
@@ -31,10 +37,9 @@ class AuthRepository {
     required String email,
     required String token,
     required String password,
-  }) =>
-      _authApi.resetForgottenPassword(
-        ResetPasswordRequest(email: email, token: token, password: password),
-      );
+  }) => _authApi.resetForgottenPassword(
+    ResetPasswordRequest(email: email, token: token, password: password),
+  );
 
   Future<GetMeResponse> getMe() => _authApi.getMe();
 

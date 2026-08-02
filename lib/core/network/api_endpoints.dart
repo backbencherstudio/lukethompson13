@@ -9,9 +9,11 @@ class ApiEndpoints {
   static const String login = '/auth/login';
   static const String register = '/auth/register';
   static const String verifyUserEmailAddress = '/auth/verify-email';
+  static const String resendRegistrationVerificationOTP =
+      '/auth/resend-verification-email';
 
   static const String forgotPassword = '/auth/forgot-password';
-  static const String verifyOtp = '/auth/check-otp';
+  static const String checkOtp = '/auth/check-otp';
   static const String resetForgottenPassword = '/auth/reset-password';
 
   static const String stoplogReport = '/stoplog/report';

@@ -12,6 +12,9 @@ class CustomTextFieldWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final String? Function(String?)? validator;
+  final ValueChanged<String>? onFieldSubmitted;
 
   const CustomTextFieldWidget({
     super.key,
@@ -23,11 +26,15 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.onTap,
     this.keyboardType,
     this.focusNode,
+    this.textInputAction,
+    this.validator,
+    this.onFieldSubmitted,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      textInputAction: textInputAction,
       controller: controller,
       focusNode: focusNode,
       keyboardType: keyboardType,
@@ -36,6 +43,8 @@ class CustomTextFieldWidget extends StatelessWidget {
       readOnly: readonly ?? false,
       obscureText: obsecure ?? false,
       onTap: onTap,
+      validator: validator,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         filled: true,
         hintText: hintText,

@@ -21,6 +21,11 @@ abstract class AuthApi {
   @POST(ApiEndpoints.verifyUserEmailAddress)
   Future<BaseResponse> verifyUserEmailAddress(@Body() VerifyEmailRequest body);
 
+  @POST(ApiEndpoints.resendRegistrationVerificationOTP)
+  Future<BaseResponse> resendRegistrationVerificationOTP(
+    @Body() ForgotPasswordRequest body,
+  );
+
   @GET(ApiEndpoints.getMe)
   Future<GetMeResponse> getMe();
 
@@ -37,9 +42,11 @@ abstract class AuthApi {
   @POST(ApiEndpoints.forgotPassword)
   Future<BaseResponse> forgotPassword(@Body() ForgotPasswordRequest body);
 
-  @POST(ApiEndpoints.verifyOtp)
+  @POST(ApiEndpoints.checkOtp)
   Future<BaseResponse> checkOtp(@Body() CheckOtpRequest body);
 
   @POST(ApiEndpoints.resetForgottenPassword)
-  Future<BaseResponse> resetForgottenPassword(@Body() ResetPasswordRequest body);
+  Future<BaseResponse> resetForgottenPassword(
+    @Body() ResetPasswordRequest body,
+  );
 }

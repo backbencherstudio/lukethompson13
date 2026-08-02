@@ -3,13 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
-import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
@@ -71,18 +72,30 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       return;
     }
 
-    final mutation = ref.read(resetForgottenPasswordMutation);
-    final response = await mutation.run(
-      ResetPasswordRequest(email: email, token: token, password: password),
+    final (res, err) = await tryCatch(
+      ref
+          .read(resetForgottenPasswordMutation)
+          .run(
+            ResetPasswordRequest(
+              email: email,
+              token: token,
+              password: password,
+            ),
+          ),
     );
 
     if (!mounted) return;
 
-    if (response.success) {
+    if (res != null && res.success) {
       context.showSuccessSnackBar("Password reset successfully");
       context.go(Routes.signIn);
     } else {
-      context.showErrorSnackBar(response.message);
+      final msg = ErrorHandle.formatErrorMessage(
+        err,
+        defaultMessage:
+            res?.message ?? "Unable to reset password. Please try again.",
+      );
+      context.showErrorSnackBar(msg);
     }
   }
 

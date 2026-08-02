@@ -61,7 +61,10 @@ class ErrorHandle {
     return error.toString();
   }
 
-  static String formatErrorMessage(Object error) {
+  static String formatErrorMessage(
+    Object? error, {
+    String defaultMessage = "Something went wrong, please try again later.",
+  }) {
     if (error is DioException) {
       return handleDioError(error);
     }
@@ -85,6 +88,6 @@ class ErrorHandle {
       return "No data found.";
     }
 
-    return rawMessage;
+    return rawMessage.isEmpty ? defaultMessage : rawMessage;
   }
 }

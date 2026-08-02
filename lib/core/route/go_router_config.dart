@@ -6,15 +6,14 @@ import 'package:lukethompson/presentation/auth/forgot_screen/view/forget_screen.
 import 'package:lukethompson/presentation/auth/login_screen/view/sing_in_screen.dart';
 import 'package:lukethompson/presentation/auth/otp_screen/view/otp_screen.dart';
 import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
-import 'package:lukethompson/presentation/auth/singUp_screen/view/singUp_screen.dart';
-import 'package:lukethompson/presentation/profile/view/screen/my_claim_detail_screen.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
+import 'package:lukethompson/presentation/auth/sing_up_screen/view/sing_up_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:lukethompson/presentation/onboarding_screen/onboarding_screen2.dart';
 import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/edit_profile_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/help_and_support_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/manage_subscription_screen.dart';
+import 'package:lukethompson/presentation/profile/view/screen/my_claim_detail_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/my_claim_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/privacy_and_policy_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/profile_landing_screen.dart';
@@ -26,6 +25,7 @@ import 'package:lukethompson/presentation/start_subscription/view/add_card_scree
 import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/rate_shipper_screen.dart';

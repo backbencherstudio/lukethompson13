@@ -1,17 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/extensions/text_style_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/link_button.dart';
 import 'package:lukethompson/presentation/auth/reset_password/view/reset_password_screen.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/heading_section.dart';
-import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
@@ -26,6 +31,7 @@ class OtpScreenArgument {
 
 class OtpScreen extends ConsumerStatefulWidget {
   static const otpLength = 6;
+  static const resendCooldownSeconds = 120;
 
   final OtpScreenArgument? argument;
 
@@ -39,7 +45,50 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   final _otpPinFieldController = GlobalKey<OtpPinFieldState>();
   String enteredOtp = '';
 
-  String get _email => widget.argument?.email ?? '';
+  Timer? _resendTimer;
+  int _resendSecondsRemaining = OtpScreen.resendCooldownSeconds;
+
+  bool get _isResendLocked => _resendSecondsRemaining > 0;
+
+  String get _formattedResendTime {
+    final minutes = _resendSecondsRemaining ~/ 60;
+    final seconds = _resendSecondsRemaining % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startResendTimer();
+  }
+
+  @override
+  void dispose() {
+    _resendTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startResendTimer() {
+    _resendTimer?.cancel();
+    setState(() {
+      _resendSecondsRemaining = OtpScreen.resendCooldownSeconds;
+    });
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        _resendSecondsRemaining--;
+        if (_resendSecondsRemaining <= 0) {
+          timer.cancel();
+          _resendSecondsRemaining = 0;
+        }
+      });
+    });
+  }
+
+  String? get _email => widget.argument?.email;
   OtpType? get _otpType => widget.argument?.otpType;
 
   Future<void> _handleVerify() async {
@@ -49,25 +98,41 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       context.showErrorSnackBar("Invalid OTP type");
       return;
     }
+    if (email == null) {
+      context.showErrorSnackBar("Invalid Email");
+      return;
+    }
+
+    if (enteredOtp.isNotEmpty && enteredOtp.length != OtpScreen.otpLength) {
+      context.showErrorSnackBar("Please enter the complete OTP");
+      return;
+    }
 
     final ctx = context;
-    late final BaseResponse response;
 
-    switch (otpType) {
-      case OtpType.forgetPassword:
-        response = await ref
-            .read(checkOtpMutation)
-            .run(CheckOtpRequest(email: email, otp: enteredOtp));
-      case OtpType.register:
-        response = await ref
-            .read(verifyEmailMutation)
-            .run(VerifyEmailRequest(email: email, token: enteredOtp));
-    }
+    final (res, err) = await tryCatch(() async {
+      switch (otpType) {
+        case OtpType.forgetPassword:
+          return ref
+              .read(checkOtpMutation)
+              .run(CheckOtpRequest(email: email, otp: enteredOtp));
+        case OtpType.register:
+          return ref
+              .read(verifyEmailMutation)
+              .run(VerifyEmailRequest(email: email, token: enteredOtp));
+      }
+    }());
 
     if (!ctx.mounted) return;
 
-    if (!response.success) {
-      ctx.showErrorSnackBar(response.message);
+    if (res == null || !res.success) {
+      final msg = ErrorHandle.formatErrorMessage(
+        err,
+        defaultMessage:
+            res?.message ?? "Unable to verify OTP. Please try again.",
+      );
+      ctx.showErrorSnackBar(msg);
+      return;
     }
 
     switch (otpType) {
@@ -81,6 +146,54 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         ctx.go(Routes.signIn);
         ctx.showSuccessSnackBar("Account Created successfully");
     }
+  }
+
+  Future<void> _resendCode() async {
+    if (_isResendLocked) return;
+
+    final otpType = _otpType;
+    final email = _email;
+    if (otpType == null) {
+      context.showErrorSnackBar("Invalid OTP type");
+      return;
+    }
+    if (email == null) {
+      context.showErrorSnackBar("Invalid Email");
+      return;
+    }
+
+    _otpPinFieldController.currentState?.clearOtp();
+    setState(() => enteredOtp = '');
+
+    final ctx = context;
+
+    final (res, err) = await tryCatch(() async {
+      switch (otpType) {
+        case OtpType.forgetPassword:
+          return ref
+              .read(forgotPasswordMutation)
+              .run(ForgotPasswordRequest(email: email));
+        case OtpType.register:
+          return ref
+              .read(resendRegistrationVerificationOTPMutation)
+              .run(ForgotPasswordRequest(email: email));
+      }
+    }());
+
+    if (!ctx.mounted) return;
+
+    if (res == null || !res.success) {
+      final msg = ErrorHandle.formatErrorMessage(
+        err,
+        defaultMessage:
+            res?.message ?? "Unable to verify OTP. Please try again.",
+      );
+      ctx.showErrorSnackBar(msg);
+      return;
+    }
+
+    _startResendTimer();
+    ctx.showSuccessSnackBar("We have sent an OTP code to your email");
   }
 
   @override
@@ -186,24 +299,25 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 ),
                 SizedBox(height: 6.h),
                 Center(
-                  child: InkWell(
-                    onTap: () {
-                      _otpPinFieldController.currentState?.clearOtp();
-                      setState(() {
-                        enteredOtp = '';
-                      });
-                    },
-                    child: Text(
-                      "Resend Code",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFF39D77A),
-                        decoration: TextDecoration.underline,
-                        decorationColor: const Color(0xFF39D77A),
-                      ),
-                    ),
-                  ),
+                  child: _isResendLocked
+                      ? Text(
+                          "Resend Code in $_formattedResendTime",
+                          style: context.titleLarge.copyWith(
+                            color: ColorManager.subtextColor,
+                          ),
+                        )
+                      : LinkButton(
+                          onPressed: _resendCode,
+                          decoration: TextDecoration.none,
+                          child: Text(
+                            "Resend Code",
+                            style: context.titleLarge.copyWith(
+                              color: ColorManager.primaryButton,
+                              decorationColor: ColorManager.primaryButton,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
                 ),
                 SizedBox(height: 36.h),
                 GlobalButton(
@@ -211,9 +325,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   isDisabled: enteredOtp.length != OtpScreen.otpLength,
                   isLoading: ref.watch(authStateProvider).isLoading,
                   onPressed: _handleVerify,
-                  // onPressed: () {
-                  //   context.push(Routes.resetPassword);
-                  // },
                 ),
               ],
             ),
