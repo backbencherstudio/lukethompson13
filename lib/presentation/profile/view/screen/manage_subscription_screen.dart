@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
@@ -10,7 +9,6 @@ import 'package:lukethompson/core/widgets/app_switch.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
 import 'package:lukethompson/presentation/profile/view/widget/subscription_info_card.dart';
 
 class ManageSubscriptionScreen extends StatelessWidget {
@@ -20,6 +18,7 @@ class ManageSubscriptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: GlobalAppBar(title: 'Manage Subscription'),
       body: AppGradientBackground(
         child: SafeArea(
@@ -87,12 +86,9 @@ class ManageSubscriptionScreen extends StatelessWidget {
         ),
       ),
 
-      persistentFooterButtons: [
-        PersistentFooterButtonWrapper(
-          child: GlobalButton(label: 'Manage Subscription', onPressed: () {}),
-        ),
-      ],
-      persistentFooterDecoration: PersistentFooterButtonWrapper.decoration(),
+      bottomNavigationBar: PersistentFooterButtonWrapper(
+        child: GlobalButton(label: 'Manage Subscription', onPressed: () {}),
+      ),
     );
   }
 }

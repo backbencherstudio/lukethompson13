@@ -119,12 +119,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ),
         ),
       ),
-      persistentFooterButtons: [
-        PersistentFooterButtonWrapper(
-          child: GlobalButton(label: "Update", onPressed: _handleUpdate),
-        ),
-      ],
-      persistentFooterDecoration: PersistentFooterButtonWrapper.decoration(),
+      bottomNavigationBar: PersistentFooterButtonWrapper(
+        child: GlobalButton(label: "Update", onPressed: _handleUpdate),
+      ),
     );
   }
 }

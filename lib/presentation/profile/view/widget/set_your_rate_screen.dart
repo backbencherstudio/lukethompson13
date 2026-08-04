@@ -85,8 +85,8 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: GlobalAppBar(title: 'Set Your Rate'),
       body: AppGradientBackground(
         child: SafeArea(
@@ -131,12 +131,9 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
         ),
       ),
 
-      persistentFooterButtons: [
-        PersistentFooterButtonWrapper(
-          child: GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
-        ),
-      ],
-      persistentFooterDecoration: PersistentFooterButtonWrapper.decoration(),
+      bottomNavigationBar: PersistentFooterButtonWrapper(
+        child: GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
+      ),
     );
   }
 }

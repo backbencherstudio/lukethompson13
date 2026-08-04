@@ -167,8 +167,8 @@ class PersistentFooterButtonWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
+    return SafeArea(
+      minimum: EdgeInsets.only(
         left: AppPadding.screenPadding,
         right: AppPadding.screenPadding,
         bottom: AppPadding.screenPadding,
