@@ -20,12 +20,15 @@ class WeeklyActivityChart extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Weekly Activity",
-                style: TextStyle(
-                  color: ColorManager.whiteColor,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: Text(
+                  "Weekly Activity",
+                  style: TextStyle(
+                    color: ColorManager.whiteColor,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    overflow: TextOverflow.ellipsis
+                  ),
                 ),
               ),
               Text(
