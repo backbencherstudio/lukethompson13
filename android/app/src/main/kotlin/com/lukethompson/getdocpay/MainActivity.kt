@@ -1,4 +1,4 @@
-package com.example.lukethompson
+package com.lukethompson.getdocpay
 
 import io.flutter.embedding.android.FlutterActivity
 
