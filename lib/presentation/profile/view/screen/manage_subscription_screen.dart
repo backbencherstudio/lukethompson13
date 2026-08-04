@@ -81,13 +81,18 @@ class ManageSubscriptionScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Spacer(),
-                GlobalButton(label: 'Manage Subscription', onPressed: () {}),
               ],
             ),
           ),
         ),
       ),
+
+      persistentFooterButtons: [
+        PersistentFooterButtonWrapper(
+          child: GlobalButton(label: 'Manage Subscription', onPressed: () {}),
+        ),
+      ],
+      persistentFooterDecoration: PersistentFooterButtonWrapper.decoration(),
     );
   }
 }

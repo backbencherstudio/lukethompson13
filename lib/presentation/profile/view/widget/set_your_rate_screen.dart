@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -130,11 +131,12 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
         ),
       ),
 
-      floatingActionButtonLocation: .centerDocked,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-        child: GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
-      ),
+      persistentFooterButtons: [
+        PersistentFooterButtonWrapper(
+          child: GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
+        ),
+      ],
+      persistentFooterDecoration: PersistentFooterButtonWrapper.decoration(),
     );
   }
 }

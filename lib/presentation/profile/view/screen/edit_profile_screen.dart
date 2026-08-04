@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -79,8 +80,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: GlobalAppBar(title: 'Edit Profile'),
       body: AppGradientBackground(
         child: SafeArea(
@@ -118,11 +119,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ),
         ),
       ),
-      floatingActionButtonLocation: .centerDocked,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-        child: GlobalButton(label: "Update", onPressed: _handleUpdate),
-      ),
+      persistentFooterButtons: [
+        PersistentFooterButtonWrapper(
+          child: GlobalButton(label: "Update", onPressed: _handleUpdate),
+        ),
+      ],
+      persistentFooterDecoration: PersistentFooterButtonWrapper.decoration(),
     );
   }
 }

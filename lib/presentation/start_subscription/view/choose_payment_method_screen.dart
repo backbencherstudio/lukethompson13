@@ -38,7 +38,7 @@ class _ChooseSubscriptionPlanScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                12.height,
+                32.height,
                 GetPremiumIcon(),
                 24.height,
 
@@ -74,6 +74,7 @@ class _ChooseSubscriptionPlanScreenState
                     context.push(Routes.subscriptionAddCard);
                   },
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),

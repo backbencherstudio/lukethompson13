@@ -62,7 +62,11 @@ class _ClaimNowScreenState extends ConsumerState<ClaimNowScreen> {
                       fineName: data?.detentionSummaryPdf?.fileName,
                     ),
 
-                    if (data != null) ClaimSendTo(data: data),
+                    if (data != null)
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: ClaimSendTo(data: data),
+                      ),
                   ],
                 ),
               );

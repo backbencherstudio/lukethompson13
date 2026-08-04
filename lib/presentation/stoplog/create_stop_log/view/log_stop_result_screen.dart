@@ -117,6 +117,8 @@ class LogStopResultScreen extends ConsumerWidget {
                         );
                       },
                     ),
+
+                    SizedBox(height: 20),
                   ],
                 ),
               );

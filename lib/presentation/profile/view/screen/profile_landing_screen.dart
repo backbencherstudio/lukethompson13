@@ -60,11 +60,11 @@ class ProfileScreen extends StatelessWidget {
                         title: "Set Your Rate",
                         onTap: () => context.push(Routes.setRate),
                       ),
-                      ProfileSettingItem(
-                        icon: Icons.assignment_outlined,
-                        title: "My Claims",
-                        onTap: () => context.push(Routes.myClaims),
-                      ),
+                      // ProfileSettingItem(
+                      //   icon: Icons.assignment_outlined,
+                      //   title: "My Claims",
+                      //   onTap: () => context.push(Routes.myClaims),
+                      // ),
                       ProfileSettingItem(
                         icon: Icons.stars_outlined,
                         title: "Shipper Ratings",

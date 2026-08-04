@@ -29,8 +29,8 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
   final _formKey = GlobalKey<FormState>();
   bool rememberMe = false;
   bool isPasswordHidden = true;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: Testing.testUsserEmail);
+  final _pwController = TextEditingController(text: Testing.testUsserPassword);
 
   @override
   void initState() {
@@ -59,7 +59,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
+    _pwController.dispose();
     super.dispose();
   }
 
@@ -72,7 +72,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
         .read(authStateProvider.notifier)
         .login(
           email: _emailController.text.trim(),
-          password: _passwordController.text,
+          password: _pwController.text,
         );
 
     if (!mounted) return;
@@ -130,7 +130,7 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                     SizedBox(height: 8.h),
                     CustomTextFieldWidget(
                       textInputAction: TextInputAction.done,
-                      controller: _passwordController,
+                      controller: _pwController,
                       hintText: "Enter your password",
                       obsecure: isPasswordHidden,
                       validator: Validators.password,

@@ -38,10 +38,12 @@ class _ChooseSubscriptionPlanScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                12.height,
+                32.height,
                 GetPremiumIcon(),
                 24.height,
-                FeatureListCard(features: getFeaturedPlanItems(state.selectedPlanId)),
+                FeatureListCard(
+                  features: getFeaturedPlanItems(state.selectedPlanId),
+                ),
                 32.height,
                 Center(
                   child: SizedBox.square(
@@ -82,6 +84,7 @@ class _ChooseSubscriptionPlanScreenState
                     );
                   },
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),
