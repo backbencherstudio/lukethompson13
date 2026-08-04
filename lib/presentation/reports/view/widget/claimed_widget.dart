@@ -31,7 +31,15 @@ class TotalClaimedWidget extends StatelessWidget {
         crossAxisAlignment: .start,
         mainAxisAlignment: .spaceBetween,
         children: [
-          InputLabel(title),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: ColorManager.textColor,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
           4.height,
           Text(
             amount,
@@ -40,6 +48,7 @@ class TotalClaimedWidget extends StatelessWidget {
               color: amountColor,
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

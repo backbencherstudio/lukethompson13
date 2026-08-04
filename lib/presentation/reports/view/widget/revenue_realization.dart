@@ -40,27 +40,32 @@ class RevenueRealizationChart extends StatelessWidget {
 
   Widget _buildHeader() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Revenue Realization',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'Revenue Realization',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Claimed vs. Collected monthly\nperformance',
-              style: TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-          ],
+              SizedBox(height: 8),
+              Text(
+                'Claimed vs. Collected monthly performance',
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+                softWrap: true,
+              ),
+            ],
+          ),
         ),
+
+        const SizedBox(width: 16),
+
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

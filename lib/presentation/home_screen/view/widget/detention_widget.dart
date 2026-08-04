@@ -86,6 +86,7 @@ class DetentionWidget extends StatelessWidget {
                     fontSize: 24.sp,
                     color: data.valueColor ?? ColorManager.primaryButton,
                     fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -94,6 +95,7 @@ class DetentionWidget extends StatelessWidget {
                   style: TextStyle(
                     color: data.subtitleColor ?? ColorManager.greyText,
                     fontSize: 12,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
