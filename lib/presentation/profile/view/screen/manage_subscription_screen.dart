@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
@@ -22,6 +21,7 @@ class ManageSubscriptionScreen extends StatelessWidget {
       appBar: GlobalAppBar(title: 'Manage Subscription'),
       body: AppGradientBackground(
         child: SafeArea(
+          minimum: EdgeInsets.only(bottom: 12),
           child: FullHeightScrollView(
             padding: .symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
@@ -80,14 +80,13 @@ class ManageSubscriptionScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+
+                Spacer(),
+                GlobalButton(label: 'Manage Subscription', onPressed: () {}),
               ],
             ),
           ),
         ),
-      ),
-
-      bottomNavigationBar: PersistentFooterButtonWrapper(
-        child: GlobalButton(label: 'Manage Subscription', onPressed: () {}),
       ),
     );
   }

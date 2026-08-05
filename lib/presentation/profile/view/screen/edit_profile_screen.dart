@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
-import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
@@ -85,7 +86,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       appBar: GlobalAppBar(title: 'Edit Profile'),
       body: AppGradientBackground(
         child: SafeArea(
-          child: SingleChildScrollView(
+          minimum: EdgeInsets.only(bottom: 12),
+          child: FullHeightScrollView(
             padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,6 +99,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 CustomTextFieldWidget(
                   hintText: "Enter your full name",
                   controller: _nameController,
+                  textInputAction: .next,
+                  autofocus: true,
                 ),
 
                 // SizedBox(height: 16.h),
@@ -114,13 +118,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   hintText: "Enter your phone number",
                   controller: _phoneController,
                 ),
+
+                Spacer(),
+                GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
               ],
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: PersistentFooterButtonWrapper(
-        child: GlobalButton(label: "Update", onPressed: _handleUpdate),
       ),
     );
   }

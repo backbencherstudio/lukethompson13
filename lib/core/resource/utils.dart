@@ -77,4 +77,9 @@ class Utils {
   static double fullHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
+
+  static bool isKeyboartVisible(BuildContext context) {
+    return MediaQuery.viewInsetsOf(context).bottom > 0;
+  }
 }
+

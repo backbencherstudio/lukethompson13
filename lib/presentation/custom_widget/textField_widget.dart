@@ -15,6 +15,8 @@ class CustomTextFieldWidget extends StatelessWidget {
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
   final ValueChanged<String>? onFieldSubmitted;
+  final void Function()? onEditingComplete;
+  final bool autofocus;
 
   const CustomTextFieldWidget({
     super.key,
@@ -29,11 +31,14 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.textInputAction,
     this.validator,
     this.onFieldSubmitted,
+    this.autofocus = false,
+    this.onEditingComplete,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: autofocus,
       textInputAction: textInputAction,
       controller: controller,
       focusNode: focusNode,
@@ -42,6 +47,7 @@ class CustomTextFieldWidget extends StatelessWidget {
       cursorColor: Colors.white,
       readOnly: readonly ?? false,
       obscureText: obsecure ?? false,
+      onEditingComplete: onEditingComplete,
       onTap: onTap,
       validator: validator,
       onFieldSubmitted: onFieldSubmitted,

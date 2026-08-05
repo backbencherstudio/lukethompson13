@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/resource/constants/style_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
@@ -90,7 +90,8 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
       appBar: GlobalAppBar(title: 'Set Your Rate'),
       body: AppGradientBackground(
         child: SafeArea(
-          child: SingleChildScrollView(
+          minimum: EdgeInsets.only(bottom: 12),
+          child: FullHeightScrollView(
             padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +103,9 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
                 CustomTextFieldWidget(
                   hintText: "\$50",
                   controller: _rateController,
+                  autofocus: true,
                   keyboardType: TextInputType.number,
+                  textInputAction: .next,
                 ),
 
                 SizedBox(height: 16.h),
@@ -113,6 +116,7 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
                   hintText: "2",
                   controller: _timeController,
                   keyboardType: TextInputType.number,
+                  textInputAction: .done,
                 ),
 
                 SizedBox(height: 6.h),
@@ -125,14 +129,12 @@ class _SetYourRateScreenState extends ConsumerState<SetYourRateScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
+                Spacer(),
+                GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
               ],
             ),
           ),
         ),
-      ),
-
-      bottomNavigationBar: PersistentFooterButtonWrapper(
-        child: GlobalButton(label: "Save Changes", onPressed: _handleUpdate),
       ),
     );
   }
