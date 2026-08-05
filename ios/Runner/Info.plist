@@ -32,6 +32,8 @@
 	<string>Used to take photos to attach to your stop logs.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Used to log your location when creating and updating stop logs.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Used to log your location when creating and updating stop logs.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Used to log your location when creating and updating stop logs.</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -59,12 +61,13 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>location</string>
 	</array>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

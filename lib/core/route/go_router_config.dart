@@ -25,6 +25,7 @@ import 'package:lukethompson/presentation/start_subscription/view/add_card_scree
 import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_now_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/claim_review_screen.dart';
@@ -193,6 +194,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.subscriptionAddCard,
         builder: (context, state) => const SubcriptionAddCardScreen(),
+      ),
+      GoRoute(
+        path: Routes.createFacility,
+        builder: (context, state) => const CreateFacilityScreen(),
       ),
       GoRoute(
         path: Routes.subscriptionSuccess,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
@@ -61,19 +64,39 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
       children: [
         Text("FACILITY NAME", style: context.labelLarge),
         SizedBox(height: 8.h),
-        SearchBarWidget(
-          enabled: !widget.disableSearchField,
-          hintText: "Search or enter a facility name...",
-          controller: _controller,
-          focusNode: _focusNode,
-          onTap: () async {
-            final result = await showFacilitySearchSheet(context);
-            _focusNode.unfocus();
-            if (result != null) {
-              widget.onFacilitySelect(result);
-              ref.read(selectedFacilityProvider.notifier).select(result);
-            }
-          },
+        Row(
+          spacing: 8,
+          children: [
+            Expanded(
+              child: SearchBarWidget(
+                enabled: !widget.disableSearchField,
+                hintText: "Search or enter a facility name...",
+                controller: _controller,
+                focusNode: _focusNode,
+                onTap: () async {
+                  final result = await showFacilitySearchSheet(context);
+                  _focusNode.unfocus();
+                  if (result != null) {
+                    widget.onFacilitySelect(result);
+                    ref.read(selectedFacilityProvider.notifier).select(result);
+                  }
+                },
+              ),
+            ),
+
+            IconButton.filled(
+              onPressed: () => context.push(Routes.createFacility),
+              icon: const Icon(Icons.add_rounded, size: 26),
+              style: IconButton.styleFrom(
+                fixedSize: Size.square(54),
+                backgroundColor: ColorManager.primaryButton,
+                foregroundColor: Colors.white, // Icon color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

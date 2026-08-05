@@ -27,4 +27,5 @@ class Routes {
   static const String chooseSubscriptionPaymentMethod = '/chooseSubscriptionPaymentMethod';
   static const String subscriptionAddCard = '/subscriptionAddCard';
   static const String subscriptionSuccess = '/subscriptionSuccessful';
+  static const String createFacility = '/createFacility';
 }
