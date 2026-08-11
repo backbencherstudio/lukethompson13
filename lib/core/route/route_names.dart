@@ -28,4 +28,5 @@ class Routes {
   static const String subscriptionAddCard = '/subscriptionAddCard';
   static const String subscriptionSuccess = '/subscriptionSuccessful';
   static const String createFacility = '/createFacility';
+  static const String createFacilityEditMap = '/createFacilityEditMap';
 }

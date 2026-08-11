@@ -85,7 +85,10 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
             ),
 
             IconButton.filled(
-              onPressed: () => context.push(Routes.createFacility),
+              onPressed: () async {
+                if (!context.mounted) return;
+                context.push(Routes.createFacility);
+              },
               icon: const Icon(Icons.add_rounded, size: 26),
               style: IconButton.styleFrom(
                 fixedSize: Size.square(54),

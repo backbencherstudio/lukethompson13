@@ -33,7 +33,7 @@ class _CreateFacilityMapviewState extends State<CreateFacilityMapview> {
   @override
   void initState() {
     super.initState();
-    GpsService.getCurrentLocation().then((pos) {
+    GpsService.getCurrentPosition().then((pos) {
       setState(() {
         updateLocation(pos?.latitude, pos?.longitude, centerLocation: true);
       });

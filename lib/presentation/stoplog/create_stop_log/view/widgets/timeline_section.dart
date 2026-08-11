@@ -151,7 +151,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final activeSessionId = widget.session?.id;
     if (activeSessionId != null) return;
 
-    final position = await GpsService.getCurrentLocation();
+    final position = await GpsService.getCurrentPosition();
     if (position == null) return;
 
     final currentFacility = getCurrentFacility();
@@ -196,7 +196,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final activeSessionId = widget.session?.id;
     if (activeSessionId == null) return;
 
-    final position = await GpsService.getCurrentLocation();
+    final position = await GpsService.getCurrentPosition();
     if (position == null) return;
 
     final params = RecordStopLogParams(
@@ -231,7 +231,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final activeSessionId = widget.session?.id;
     if (activeSessionId == null) return;
 
-    final position = await GpsService.getCurrentLocation();
+    final position = await GpsService.getCurrentPosition();
     if (position == null) return;
 
     final params = RecordStopLogParams(
@@ -266,7 +266,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final activeSessionId = widget.session?.id;
     if (activeSessionId == null) return;
 
-    final position = await GpsService.getCurrentLocation();
+    final position = await GpsService.getCurrentPosition();
     if (position == null) return;
 
     final params = RecordStopLogParams(
