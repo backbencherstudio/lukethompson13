@@ -153,3 +153,133 @@ class ShipperRatingsResponse extends BaseResponse {
   @override
   String toString() => 'ShipperRatingsResponse${toJson()}';
 }
+
+@JsonSerializable()
+class CreateShippperRequest {
+  final String name;
+  final String address;
+  final double? lat;
+  final double? lng;
+  final String? city;
+  final String? state;
+  final String? zip;
+  final String? country;
+
+  CreateShippperRequest({
+    required this.name,
+    required this.address,
+    this.lat,
+    this.lng,
+    this.city,
+    this.state,
+    this.zip,
+    this.country,
+  });
+
+  factory CreateShippperRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateShippperRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateShippperRequestToJson(this);
+
+  @override
+  String toString() => 'CreateShippperRequest${toJson()}';
+}
+
+@JsonSerializable()
+class CreateShipperResponse extends BaseResponse {
+  final ShipperLocationItem? data;
+
+  CreateShipperResponse({
+    required super.success,
+    required super.message,
+    this.data,
+  });
+
+  factory CreateShipperResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateShipperResponseFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$CreateShipperResponseToJson(this);
+
+  @override
+  String toString() => 'CreateShipperResponse${toJson()}';
+}
+
+@JsonSerializable()
+class ShipperLocationItem {
+  final String? id;
+
+  @JsonKey(name: 'created_at')
+  final String? createdAt;
+
+  @JsonKey(name: 'updated_at')
+  final String? updatedAt;
+
+  final String? name;
+
+  @JsonKey(name: 'normalized_name')
+  final String? normalizedName;
+
+  @JsonKey(name: 'location_id')
+  final String? locationId;
+
+  final ShipperLocationDataModel? location;
+
+  ShipperLocationItem({
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.name,
+    this.normalizedName,
+    this.locationId,
+    this.location,
+  });
+
+  factory ShipperLocationItem.fromJson(Map<String, dynamic> json) =>
+      _$ShipperLocationItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ShipperLocationItemToJson(this);
+
+  @override
+  String toString() => 'ShipperLocationItem${toJson()}';
+}
+
+@JsonSerializable()
+class ShipperLocationDataModel {
+  final String? id;
+
+  @JsonKey(name: 'created_at')
+  final String? createdAt;
+
+  @JsonKey(name: 'updated_at')
+  final String? updatedAt;
+
+  final String? city;
+  final String? state;
+  final String? country;
+  final String? address;
+  final String? zip;
+  final String? lat;
+  final String? lng;
+
+  ShipperLocationDataModel({
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.city,
+    this.state,
+    this.country,
+    this.address,
+    this.zip,
+    this.lat,
+    this.lng,
+  });
+
+  factory ShipperLocationDataModel.fromJson(Map<String, dynamic> json) =>
+      _$ShipperLocationDataModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ShipperLocationDataModelToJson(this);
+
+  @override
+  String toString() => 'ShipperLocationDataModel${toJson()}';
+}

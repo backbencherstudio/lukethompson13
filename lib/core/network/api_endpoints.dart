@@ -1,6 +1,8 @@
 class ApiEndpoints {
   // static const String baseUrl = "http://10.10.9.51:2004";
-  static const String baseUrl = "https://lukethompson.pixelstack.cloud";
+  // static const String baseUrl = "https://lukethompson.pixelstack.cloud";
+  static const String baseUrl =
+      "https://moral-kick-editor-welfare.trycloudflare.com";
   static const String apiURL = "$baseUrl/api";
 
   static const String getMe = '/auth/me';
@@ -32,4 +34,5 @@ class ApiEndpoints {
       '/shippers/ratings/{stop_log_id}';
   static const String shippersRatings = "/shippers/ratings";
   static const String searchShipperFacilities = "/shippers/search";
+  static const String shippers = "/shippers";
 }

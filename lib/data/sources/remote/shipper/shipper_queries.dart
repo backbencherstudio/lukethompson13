@@ -56,3 +56,19 @@ class SubmitARatingForAShipperFacility extends MutationNotifier<BaseResponse> {
     });
   }
 }
+
+final createANewShipperFacilityMutation =
+    mutationProvider<CreateANewShipperFacility, CreateShipperResponse>(
+      CreateANewShipperFacility.new,
+    );
+
+class CreateANewShipperFacility
+    extends MutationNotifier<CreateShipperResponse> {
+  Future<CreateShipperResponse> create(CreateShippperRequest body) {
+    final api = ref.read(shipperApiProvider);
+
+    return mutate(() async {
+      return api.createANewShipperFacility(body);
+    });
+  }
+}

@@ -32,6 +32,11 @@ abstract class ShipperApi {
     @Query('cursor') String? cursor,
     @Query('limit') int? limit,
   );
+
+  @POST(ApiEndpoints.shippers)
+  Future<CreateShipperResponse> createANewShipperFacility(
+    @Body() CreateShippperRequest body,
+  );
 }
 
 final shipperApiProvider = Provider<ShipperApi>((ref) {

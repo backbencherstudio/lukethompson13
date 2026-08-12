@@ -8,6 +8,7 @@ import 'package:lukethompson/core/widgets/app_bottom_sheet.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 import 'package:lukethompson/data/sources/remote/shipper/shipper_queries.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 
 Future<ShipperSearchFacilityItem?> showFacilitySearchSheet(
@@ -105,7 +106,8 @@ class _FacilitySearchSheetContentState
         loading: () => null,
         error: (_, _) {
           if (searchText.isNotEmpty) {
-            return buildAddButton(searchText, context);
+            return StatusDisplay.error("No Item found");
+            // return buildAddButton(searchText, context);
           }
           return null;
         },
@@ -113,7 +115,8 @@ class _FacilitySearchSheetContentState
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (searchText.isNotEmpty) buildAddButton(searchText, context),
+              if (searchText.isNotEmpty && items != null && items.isEmpty)
+                StatusDisplay.error("No Item found"),
 
               if (items != null)
                 for (final (index, item) in items.indexed) ...[

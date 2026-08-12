@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
+import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/core/widgets/link_button.dart';
 import 'package:lukethompson/core/widgets/tinted_outlined_button.dart';
+import 'package:lukethompson/data/sources/remote/shipper/models/models.dart';
+import 'package:lukethompson/data/sources/remote/shipper/shipper_queries.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_edit_map_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/location_search_sheet.dart';
 
-class CreateFacilityScreen extends StatefulWidget {
+class CreateFacilityScreen extends ConsumerStatefulWidget {
   const CreateFacilityScreen({super.key});
 
   @override
-  State<CreateFacilityScreen> createState() => _CreateFacilityScreenState();
+  ConsumerState<CreateFacilityScreen> createState() =>
+      _CreateFacilityScreenState();
 }
 
-class _CreateFacilityScreenState extends State<CreateFacilityScreen> {
-  final MapController fieldMapController = MapController();
+class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
+  late final fieldMapController = MapController();
   late final _facilityNameController = TextEditingController();
   String? choosenLocationAddress;
   LatLng? choosenPosition;
@@ -46,8 +53,68 @@ class _CreateFacilityScreenState extends State<CreateFacilityScreen> {
     super.dispose();
   }
 
+  void onUseCurrentLocation() async {
+    final pos = await GpsService.getCurrentPosition();
+
+    if (pos == null) return;
+
+    final address = await GpsService().getAddressFromLatLng(
+      latitude: pos.latitude,
+      longitude: pos.latitude,
+    );
+
+    final latlng = LatLng(pos.latitude, pos.longitude);
+    fieldMapController.move(latlng, 15);
+
+    setState(() {
+      choosenLocationAddress = address;
+      choosenPosition = latlng;
+    });
+  }
+
+  void onSearchLocation(BuildContext context) async {
+    final loc = await showLocationSearchSheet(context);
+
+    if (!context.mounted) return;
+    editAndUpdateLocation(context, loc);
+  }
+
+  void editAndUpdateLocation(
+    BuildContext context,
+    LocationDataModel? loc,
+  ) async {
+    if (loc != null && context.mounted) {
+      final savedRes = await context.push<CurrentLocationArgs?>(
+        Routes.createFacilityEditMap,
+        extra: CurrentLocationArgs(
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+          address: loc.address,
+        ),
+      );
+
+      if (savedRes == null) return;
+
+      final latitude = savedRes.latitude;
+      final longitude = savedRes.longitude;
+      final address = savedRes.address;
+
+      if (latitude != null && longitude != null && address != null) {
+        fieldMapController.move(LatLng(latitude, longitude), 15);
+
+        setState(() {
+          choosenLocationAddress = address;
+          choosenPosition = LatLng(latitude, longitude);
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final addressIsEmpty =
+        choosenPosition == null || choosenLocationAddress == null;
+    final createMutationState = ref.watch(createANewShipperFacilityMutation);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlobalAppBar(
@@ -73,63 +140,84 @@ class _CreateFacilityScreenState extends State<CreateFacilityScreen> {
                 ),
 
                 SizedBox(height: 8.h),
-                Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Text("Facility address", style: context.labelLarge),
-                    LinkButton(
-                      child: Text("Use current location"),
-                      onPressed: () {},
-                    ),
-                  ],
+                Text("Facility address", style: context.labelLarge),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 0),
+                  child: Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(
+                        child: TintedOutlinedButton(
+                          color: ColorManager.primaryButton,
+                          label: 'Current location',
+                          onPressed: onUseCurrentLocation,
+                        ),
+                      ),
+                      Expanded(
+                        child: TintedOutlinedButton(
+                          color: ColorManager.warningColor,
+                          label: 'Search location',
+                          onPressed: () => onSearchLocation(context),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+
                 FormFieldMapView(
                   location: choosenPosition,
                   label: choosenLocationAddress ?? "Select Location",
                   mapController: fieldMapController,
-                  onEditPressed: () async {
-                    final loc = await showLocationSearchSheet(context);
+                  labelActtion: addressIsEmpty
+                      ? SizedBox(height: 40)
+                      : TintedOutlinedButton(
+                          label: 'Edit',
+                          onPressed: () {
+                            if (addressIsEmpty) {
+                              return;
+                            }
 
-                    if (loc != null && context.mounted) {
-                      final savedRes = await context.push<CurrentLocationArgs?>(
-                        Routes.createFacilityEditMap,
-                        extra: CurrentLocationArgs(
-                          latitude: loc.latitude,
-                          longitude: loc.longitude,
-                          address: loc.address,
+                            final loc = LocationDataModel(
+                              latitude: choosenPosition!.latitude,
+                              longitude: choosenPosition!.longitude,
+                              address: choosenLocationAddress!,
+                            );
+                            editAndUpdateLocation(context, loc);
+                          },
                         ),
-                      );
-
-                      if (savedRes == null) return;
-
-                      final latitude = savedRes.latitude;
-                      final longitude = savedRes.longitude;
-                      final address = savedRes.address;
-
-                      if (latitude != null &&
-                          longitude != null &&
-                          address != null) {
-                        fieldMapController.move(
-                          LatLng(latitude, longitude),
-                          15,
-                        );
-
-                        setState(() {
-                          choosenLocationAddress = address;
-                          choosenPosition = LatLng(latitude, longitude);
-                        });
-                      }
-                    }
-                  },
                 ),
+
                 Spacer(),
                 GlobalButton(
+                  isLoading: createMutationState.isPending,
                   isDisabled:
-                      choosenLocationAddress == null ||
-                      choosenPosition == null ||
-                      _facilityNameController.text.isEmpty,
+                      addressIsEmpty || _facilityNameController.text.isEmpty,
                   label: 'Create',
-                  onPressed: () {},
+                  onPressed: () async {
+                    final (res, err) = await tryCatch(
+                      ref
+                          .read(createANewShipperFacilityMutation.notifier)
+                          .create(
+                            CreateShippperRequest(
+                              name: _facilityNameController.text,
+                              address: choosenLocationAddress ?? '',
+                              lat: choosenPosition?.latitude,
+                              lng: choosenPosition?.longitude,
+                            ),
+                          ),
+                    );
+                    if (err != null) {
+                      Utils.showErrorToast(
+                        message: ErrorHandle.formatErrorMessage(err),
+                      );
+                      return;
+                    }
+
+                    if (context.mounted) {
+                      context.pop(res?.data);
+                    }
+                  },
                 ),
               ],
             ),
@@ -143,15 +231,15 @@ class _CreateFacilityScreenState extends State<CreateFacilityScreen> {
 class FormFieldMapView extends StatelessWidget {
   final MapController mapController;
   final String label;
-  final void Function()? onEditPressed;
+  final Widget? labelActtion;
   final LatLng? location;
 
   const FormFieldMapView({
     super.key,
     required this.label,
     required this.mapController,
-    this.onEditPressed,
     required this.location,
+    this.labelActtion,
   });
 
   @override
@@ -215,7 +303,7 @@ class FormFieldMapView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                TintedOutlinedButton(label: 'Edit', onPressed: onEditPressed),
+                ?labelActtion,
               ],
             ),
           ),

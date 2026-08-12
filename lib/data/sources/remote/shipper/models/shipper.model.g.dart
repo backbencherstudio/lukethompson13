@@ -101,3 +101,104 @@ Map<String, dynamic> _$ShipperRatingsResponseToJson(
   'data': instance.data,
   'meta_data': instance.metaData,
 };
+
+CreateShippperRequest _$CreateShippperRequestFromJson(
+  Map<String, dynamic> json,
+) => CreateShippperRequest(
+  name: json['name'] as String,
+  address: json['address'] as String,
+  lat: (json['lat'] as num?)?.toDouble(),
+  lng: (json['lng'] as num?)?.toDouble(),
+  city: json['city'] as String?,
+  state: json['state'] as String?,
+  zip: json['zip'] as String?,
+  country: json['country'] as String?,
+);
+
+Map<String, dynamic> _$CreateShippperRequestToJson(
+  CreateShippperRequest instance,
+) => <String, dynamic>{
+  'name': instance.name,
+  'address': instance.address,
+  'lat': instance.lat,
+  'lng': instance.lng,
+  'city': instance.city,
+  'state': instance.state,
+  'zip': instance.zip,
+  'country': instance.country,
+};
+
+CreateShipperResponse _$CreateShipperResponseFromJson(
+  Map<String, dynamic> json,
+) => CreateShipperResponse(
+  success: json['success'] as bool,
+  message: json['message'] as String,
+  data: json['data'] == null
+      ? null
+      : ShipperLocationItem.fromJson(json['data'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$CreateShipperResponseToJson(
+  CreateShipperResponse instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'message': instance.message,
+  'data': instance.data,
+};
+
+ShipperLocationItem _$ShipperLocationItemFromJson(Map<String, dynamic> json) =>
+    ShipperLocationItem(
+      id: json['id'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      name: json['name'] as String?,
+      normalizedName: json['normalized_name'] as String?,
+      locationId: json['location_id'] as String?,
+      location: json['location'] == null
+          ? null
+          : ShipperLocationDataModel.fromJson(
+              json['location'] as Map<String, dynamic>,
+            ),
+    );
+
+Map<String, dynamic> _$ShipperLocationItemToJson(
+  ShipperLocationItem instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'created_at': instance.createdAt,
+  'updated_at': instance.updatedAt,
+  'name': instance.name,
+  'normalized_name': instance.normalizedName,
+  'location_id': instance.locationId,
+  'location': instance.location,
+};
+
+ShipperLocationDataModel _$ShipperLocationDataModelFromJson(
+  Map<String, dynamic> json,
+) => ShipperLocationDataModel(
+  id: json['id'] as String?,
+  createdAt: json['created_at'] as String?,
+  updatedAt: json['updated_at'] as String?,
+  city: json['city'] as String?,
+  state: json['state'] as String?,
+  country: json['country'] as String?,
+  address: json['address'] as String?,
+  zip: json['zip'] as String?,
+  lat: json['lat'] as String?,
+  lng: json['lng'] as String?,
+);
+
+Map<String, dynamic> _$ShipperLocationDataModelToJson(
+  ShipperLocationDataModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'created_at': instance.createdAt,
+  'updated_at': instance.updatedAt,
+  'city': instance.city,
+  'state': instance.state,
+  'country': instance.country,
+  'address': instance.address,
+  'zip': instance.zip,
+  'lat': instance.lat,
+  'lng': instance.lng,
+};

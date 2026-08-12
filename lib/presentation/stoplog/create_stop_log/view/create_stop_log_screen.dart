@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -43,6 +46,16 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     setState(() {
       _canCalculateAndPreview = enabled;
     });
+  }
+
+  void onCreateFactility() async {
+    if (!context.mounted) return;
+    final newFacility = await context.push<ShipperLocationItem?>(
+      Routes.createFacility,
+    );
+    print("====================================================");
+    print(newFacility);
+    print("====================================================");
   }
 
   @override

@@ -53,7 +53,7 @@ class _CreateFacilityEditMapScreenState
     return locAddress;
   }
 
-  void onSave() async {
+  void onConfirm() async {
     final (foundAddress, err) = await tryCatch(getCurrentLocationAddress());
     if (err != null) {
       Utils.showErrorToast(message: "Failed to save location");
@@ -82,7 +82,7 @@ class _CreateFacilityEditMapScreenState
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: GlobalButton(label: 'Save', onPressed: onSave),
+          child: GlobalButton(label: 'Confirm', onPressed: onConfirm),
         ),
       ),
       body: AppGradientBackground(

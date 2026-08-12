@@ -31,6 +31,8 @@ class AppSize {
 
 class Testing {
   static const testUserName = kDebugMode ? 'User' : '';
-  static const testUsserEmail = kDebugMode ? 'user@example.com' : '';
-  static const testUsserPassword = kDebugMode ? '12345678' : '';
+  // static const testUsserEmail = kDebugMode ? 'user@example.com' : '';
+  // static const testUsserPassword = kDebugMode ? '12345678' : '';
+  static const testUsserEmail = kDebugMode ? 'john@example.com' : '';
+  static const testUsserPassword = kDebugMode ? 'password123' : '';
 }

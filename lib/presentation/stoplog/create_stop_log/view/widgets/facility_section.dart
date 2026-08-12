@@ -87,7 +87,21 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
             IconButton.filled(
               onPressed: () async {
                 if (!context.mounted) return;
-                context.push(Routes.createFacility);
+                final newFacility = await context.push<ShipperLocationItem?>(
+                  Routes.createFacility,
+                );
+
+                if (newFacility != null) {
+                  final fac = ShipperSearchFacilityItem(
+                    id: newFacility.id,
+                    name: newFacility.name!,
+                    address: newFacility.location?.address,
+                    rating: 0,
+                  );
+
+                  widget.onFacilitySelect(fac);
+                  ref.read(selectedFacilityProvider.notifier).select(fac);
+                }
               },
               icon: const Icon(Icons.add_rounded, size: 26),
               style: IconButton.styleFrom(
