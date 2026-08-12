@@ -97,6 +97,8 @@ class _FacilitySectionState extends ConsumerState<FacilitySection> {
                     name: newFacility.name!,
                     address: newFacility.location?.address,
                     rating: 0,
+                    lat: newFacility.location?.lat,
+                    lng: newFacility.location?.lng,
                   );
 
                   widget.onFacilitySelect(fac);

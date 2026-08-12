@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
@@ -30,12 +32,16 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
   bool _isActiveSessionLoading = true;
   bool _canCalculateAndPreview = false;
   bool _loadingActionBtn = false;
+  bool _isWithinArrivalRadius = false;
+  Timer? _arrivalRadiusTimer;
 
   var _logStarted = false;
   void endCurrentSession() async {
+    _arrivalRadiusTimer?.cancel();
     setState(() {
       _logStarted = false;
       _sessionId = null;
+      _isWithinArrivalRadius = false;
     });
 
     await Future.delayed(Duration(milliseconds: 200));
@@ -64,10 +70,55 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     final activeSession = ref.read(getCurrentActiveStoplog);
     _sessionId = activeSession.value?.id;
     _isActiveSessionLoading = activeSession.isLoading;
+    _startArrivalRadiusCheck();
+  }
+
+  @override
+  void dispose() {
+    _arrivalRadiusTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startArrivalRadiusCheck() {
+    _arrivalRadiusTimer?.cancel();
+    if (_sessionId == null) return;
+    _arrivalRadiusTimer = Timer.periodic(Duration(seconds: 3), (_) async {
+      if (!mounted) return;
+      final within = await truckIsWithinArrivalRadius();
+      if (mounted) {
+        setState(() => _isWithinArrivalRadius = within);
+      }
+    });
+  }
+
+  Future<bool> truckIsWithinArrivalRadius() async {
+    final selectedFacility = ref.read(selectedFacilityProvider);
+    final pos = await GpsService.getCurrentPosition();
+    if (pos == null || selectedFacility == null) {
+      return false;
+    }
+
+    final lat = double.tryParse(selectedFacility.lat ?? '');
+    final lon = double.tryParse(selectedFacility.lng ?? '');
+    if (lat == null || lon == null) return false;
+
+    return GpsService.isWithinArrivalRadius(
+      currentLat: pos.latitude,
+      currentLon: pos.longitude,
+      destinationLat: lat,
+      destinationLon: lon,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedFacility = ref.watch(selectedFacilityProvider);
+    // ref.listen(selectedFacilityProvider, (prev, next) {
+    //   print(prev);
+    // });
+
+    // print("_sessionId $_sessionId");
+
     final session = _sessionId != null && _sessionId!.isNotEmpty
         ? ref.watch(getSingleLogWithId(_sessionId!))
         : const AsyncValue.data(null);
@@ -79,6 +130,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
         _sessionId = next.value?.id;
         _isActiveSessionLoading = next.isLoading;
       });
+      _startArrivalRadiusCheck();
     });
 
     ref.listen(getSingleLogWithId(_sessionId), (prev, next) {

@@ -87,6 +87,8 @@ class ShipperSearchFacilityItem {
   final String? id;
   final String name;
   final String? address;
+  final String? lat;
+  final String? lng;
   final double? rating;
 
   const ShipperSearchFacilityItem({
@@ -94,6 +96,8 @@ class ShipperSearchFacilityItem {
     required this.name,
     this.address,
     this.rating,
+    this.lat,
+    this.lng,
   });
 
   factory ShipperSearchFacilityItem.fromJson(Map<String, dynamic> json) =>

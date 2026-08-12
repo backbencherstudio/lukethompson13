@@ -45,6 +45,8 @@ ShipperSearchFacilityItem _$ShipperSearchFacilityItemFromJson(
   name: json['name'] as String,
   address: json['address'] as String?,
   rating: (json['rating'] as num?)?.toDouble(),
+  lat: json['lat'] as String?,
+  lng: json['lng'] as String?,
 );
 
 Map<String, dynamic> _$ShipperSearchFacilityItemToJson(
@@ -53,6 +55,8 @@ Map<String, dynamic> _$ShipperSearchFacilityItemToJson(
   'id': instance.id,
   'name': instance.name,
   'address': instance.address,
+  'lat': instance.lat,
+  'lng': instance.lng,
   'rating': instance.rating,
 };
 
