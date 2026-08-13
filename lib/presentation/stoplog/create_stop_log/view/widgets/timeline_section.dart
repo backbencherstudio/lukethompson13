@@ -1,14 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
+import 'package:lukethompson/core/widgets/custom_dialog.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
@@ -23,7 +27,6 @@ class TimelineSection extends ConsumerStatefulWidget {
     required this.onSingleLogComplete,
     required this.activateCalculateBtn,
     required this.logStarted,
-    required this.isWithinArrivalRadius,
     this.arrivalDestinationDistance,
   });
 
@@ -31,7 +34,6 @@ class TimelineSection extends ConsumerStatefulWidget {
   final void Function(StopLogStep step) onSingleLogComplete;
   final void Function(bool) activateCalculateBtn;
   final bool logStarted;
-  final bool isWithinArrivalRadius;
   final double? arrivalDestinationDistance;
 
   @override
@@ -162,16 +164,33 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final currentFacility = getCurrentFacility();
     if (currentFacility == null) return;
 
+    final (
+      withinRadius,
+      distance,
+    ) = await GpsService.isTruckWithinArrivalRadius(
+      selectedFacility: currentFacility,
+      currentPosition: position,
+      mock: false,
+    );
+
+    final ctx = context;
+
+    if (!withinRadius) {
+      if (!ctx.mounted) return;
+      openNowReachedMsg(ctx, distance);
+      return;
+    }
+
     final params = RecordStopLogParams(
       step: .arrivalTime,
       id: currentFacility.id,
       facilityName: currentFacility.name,
       location: StopLogLocation(
-        city: 'Dhaka',
-        state: 'Dhaka Division',
-        country: 'BD',
-        address: 'Warehouse A, Williamsburg Bridge',
-        zip: '10001',
+        // city: 'Dhaka',
+        // state: 'Dhaka Division',
+        // country: 'BD',
+        // zip: '10001',
+        address: currentFacility.address,
         lat: position.latitude,
         lng: position.longitude,
       ),
@@ -195,6 +214,28 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
       widget.onSingleLogComplete(.arrivalTime);
       _refetchSession();
     }
+  }
+
+  Future<dynamic> openNowReachedMsg(BuildContext ctx, double? distance) {
+    return showDialog(
+      context: ctx,
+      builder: (context) => CustomDialog(
+        title: 'Destination not reached',
+        subtitle:
+            'You’re ${_formatDistance(distance ?? 0)} away from the destination. Please move closer to continue.',
+        bottomWidget: Row(
+          spacing: 12,
+          children: [
+            Expanded(
+              child: GlobalButton.outlined(
+                label: 'Close',
+                onPressed: () => context.pop(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _logDockedInTime() async {
@@ -379,10 +420,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
   @override
   Widget build(BuildContext context) {
     final recordStopLogMutation = ref.watch(recordStopLogProviderAction);
-    final validatedArrivalStatus =
-        _arrivalStatus == .active && !widget.isWithinArrivalRadius
-        ? TimelineItemStatus.idle
-        : _arrivalStatus;
+    // final validatedArrivalStatus =
+    //     _arrivalStatus == .active && !widget.isWithinArrivalRadius
+    //     ? TimelineItemStatus.idle
+    //     : _arrivalStatus;
 
     return Column(
       children: [
@@ -404,10 +445,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
                     color: ColorManager.subtextColor.withValues(alpha: 0.8),
                   ),
                 ),
-          status: _activateTimelineLogging(validatedArrivalStatus),
+          status: _activateTimelineLogging(_arrivalStatus),
           child: TimelineContent(
             value: widget.session?.arrivedAt?.formatTime(),
-            status: _activateTimelineLogging(validatedArrivalStatus),
+            status: _activateTimelineLogging(_arrivalStatus),
             isActionPending: _isActionPending(
               null,
               recordStopLogMutation.isPending,

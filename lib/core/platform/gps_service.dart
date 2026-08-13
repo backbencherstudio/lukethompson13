@@ -206,14 +206,14 @@ class GpsService {
     return (distance <= arrivalRadius, distance);
   }
 
-  static Future<(bool, double?)> isTruckWithinArrivalRadius(
-    ShipperSearchFacilityItem? selectedFacility, {
+  static Future<(bool, double?)> isTruckWithinArrivalRadius({
+    required Position? currentPosition,
+    required ShipperSearchFacilityItem? selectedFacility,
     bool mock = false,
   }) async {
     if (mock) return _truckIsWithinArrivalRadiusMock();
 
-    final pos = await GpsService.getCurrentPosition();
-    if (pos == null || selectedFacility == null) {
+    if (currentPosition == null || selectedFacility == null) {
       return (false, null);
     }
 
@@ -222,8 +222,8 @@ class GpsService {
     if (lat == null || lon == null) return (false, null);
 
     return GpsService.isWithinArrivalRadius(
-      currentLat: pos.latitude,
-      currentLon: pos.longitude,
+      currentLat: currentPosition.latitude,
+      currentLon: currentPosition.longitude,
       destinationLat: lat,
       destinationLon: lon,
     );

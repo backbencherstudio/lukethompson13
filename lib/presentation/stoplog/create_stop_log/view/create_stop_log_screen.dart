@@ -32,18 +32,12 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
   bool _isActiveSessionLoading = true;
   bool _canCalculateAndPreview = false;
   bool _loadingActionBtn = false;
-  bool _isWithinArrivalRadius = false;
-  double? _arrivalDestinationDistance;
-  Timer? _arrivalRadiusTimer;
 
   var _logStarted = false;
   void endCurrentSession() async {
-    _arrivalRadiusTimer?.cancel();
-    ref.read(selectedFacilityProvider.notifier).clear();
     setState(() {
       _logStarted = false;
       _sessionId = null;
-      _isWithinArrivalRadius = false;
     });
 
     await Future.delayed(Duration(milliseconds: 200));
@@ -56,7 +50,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     });
   }
 
-  void onCreateFactility() async {
+  void _onCreateFactility() async {
     if (!context.mounted) return;
     final newFacility = await context.push<ShipperLocationItem?>(
       Routes.createFacility,
@@ -72,49 +66,16 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     final activeSession = ref.read(getCurrentActiveStoplog);
     _sessionId = activeSession.value?.id;
     _isActiveSessionLoading = activeSession.isLoading;
-    _startArrivalRadiusCheck();
   }
 
   @override
   void dispose() {
-    _arrivalRadiusTimer?.cancel();
     super.dispose();
-  }
-
-  void _startArrivalRadiusCheck() {
-    _arrivalRadiusTimer?.cancel();
-    if (_sessionId != null) return;
-    if (ref.read(selectedFacilityProvider) == null) return;
-
-    _arrivalRadiusTimer = Timer.periodic(Duration(seconds: 3), (_) async {
-      debugPrint("heart beat");
-      if (!mounted) return;
-      final (within, disance) = await checkIsTruckWithinArrivalRadius();
-      debugPrint("within $within");
-      if (mounted) {
-        setState(() {
-          _isWithinArrivalRadius = within;
-          _arrivalDestinationDistance = disance;
-        });
-      }
-    });
-  }
-
-  Future<(bool, double?)> checkIsTruckWithinArrivalRadius() async {
-    final selectedFacility = ref.read(selectedFacilityProvider);
-    return await GpsService.isTruckWithinArrivalRadius(
-      selectedFacility,
-      mock: false,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final selectedFacility = ref.watch(selectedFacilityProvider);
-    // ref.listen(selectedFacilityProvider, (prev, next) {
-    //   print(prev);
-    // });
-
     // print("_sessionId $_sessionId");
 
     final session = _sessionId != null && _sessionId!.isNotEmpty
@@ -128,12 +89,6 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
         _sessionId = next.value?.id;
         _isActiveSessionLoading = next.isLoading;
       });
-      _startArrivalRadiusCheck();
-    });
-
-    ref.listen(selectedFacilityProvider, (prev, next) {
-      if (!mounted) return;
-      _startArrivalRadiusCheck();
     });
 
     ref.listen(getSingleLogWithId(_sessionId), (prev, next) {
@@ -213,23 +168,11 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                         },
                       ),
 
-                      Text("_logStarted = ${_logStarted ? "true" : "false"}"),
-                      Text(
-                        "_isWithinArrivalRadius = ${_isWithinArrivalRadius ? "true" : "false"}",
-                      ),
-                      Text("$_sessionId"),
                       SizedBox(height: 24.h),
                       TimelineSection(
-                        arrivalDestinationDistance: _arrivalDestinationDistance,
                         logStarted: _logStarted,
-                        isWithinArrivalRadius: _isWithinArrivalRadius,
                         key: _timelineKey,
-                        onSingleLogComplete: (_) {
-                          if (_arrivalRadiusTimer != null &&
-                              _arrivalRadiusTimer!.isActive) {
-                            _arrivalRadiusTimer?.cancel();
-                          }
-                        },
+                        onSingleLogComplete: (_) {},
                         activateCalculateBtn: activateCalculateBtn,
                         session: session.value,
                       ),
