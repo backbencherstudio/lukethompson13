@@ -11,6 +11,7 @@ class SelectedFacilityNotifier extends Notifier<ShipperSearchFacilityItem?> {
 }
 
 final selectedFacilityProvider =
-    NotifierProvider<SelectedFacilityNotifier, ShipperSearchFacilityItem?>(
-      SelectedFacilityNotifier.new,
-    );
+    NotifierProvider.autoDispose<
+      SelectedFacilityNotifier,
+      ShipperSearchFacilityItem?
+    >(SelectedFacilityNotifier.new);

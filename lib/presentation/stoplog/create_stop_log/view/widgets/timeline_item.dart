@@ -12,6 +12,7 @@ enum TimelineItemStatus { idle, active, completed }
 
 class TimelineItem extends StatelessWidget {
   final String label;
+  final Widget? labelTail;
   final String? labelHint;
   final bool isLastStep;
   final TimelineItemStatus status;
@@ -28,6 +29,7 @@ class TimelineItem extends StatelessWidget {
     required this.child,
     required this.isActionPending,
     this.lineHeight = 92,
+    this.labelTail,
   });
 
   @override
@@ -79,7 +81,13 @@ class TimelineItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InputLabel(label, color: statusColor, hint: labelHint),
+                Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    InputLabel(label, color: statusColor, hint: labelHint),
+                    ?labelTail,
+                  ],
+                ),
                 SizedBox(height: 8.h),
                 child,
               ],

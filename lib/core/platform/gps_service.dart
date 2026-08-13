@@ -1,6 +1,11 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' show Placemark, Geocoding;
 import 'package:geolocator/geolocator.dart';
-import 'dart:math' as math;
+import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
+
+const arrivalRadius = 50.0; // meters
 
 String joinNonEmptyStrings(List<String?> values, {String separator = ", "}) {
   return values
@@ -19,8 +24,6 @@ class LocationDataModel {
     required this.address,
   });
 }
-
-const arrivalRadius = 50.0; // meters
 
 class GpsService {
   late final _geocoading = Geocoding();
@@ -181,7 +184,7 @@ class GpsService {
     return earthRadius * c;
   }
 
-  static bool isWithinArrivalRadius({
+  static (bool, double) isWithinArrivalRadius({
     required double currentLat,
     required double currentLon,
     required double destinationLat,
@@ -194,6 +197,50 @@ class GpsService {
       destinationLon: destinationLon,
     );
 
-    return distance <= arrivalRadius;
+    debugPrint("distance = $distance");
+    debugPrint("currentLat = $currentLat, currentLon =$currentLon");
+    debugPrint(
+      "destinationLat = $destinationLat, destinationLon =$destinationLon",
+    );
+
+    return (distance <= arrivalRadius, distance);
+  }
+
+  static Future<(bool, double?)> isTruckWithinArrivalRadius(
+    ShipperSearchFacilityItem? selectedFacility, {
+    bool mock = false,
+  }) async {
+    if (mock) return _truckIsWithinArrivalRadiusMock();
+
+    final pos = await GpsService.getCurrentPosition();
+    if (pos == null || selectedFacility == null) {
+      return (false, null);
+    }
+
+    final lat = double.tryParse(selectedFacility.lat ?? '');
+    final lon = double.tryParse(selectedFacility.lng ?? '');
+    if (lat == null || lon == null) return (false, null);
+
+    return GpsService.isWithinArrivalRadius(
+      currentLat: pos.latitude,
+      currentLon: pos.longitude,
+      destinationLat: lat,
+      destinationLon: lon,
+    );
   }
 }
+
+final _truckIsWithinArrivalRadiusMock = (() {
+  var count = 0;
+
+  return () async {
+    count++;
+
+    if (count == 4) {
+      count = 0;
+      return (true, 5.0);
+    }
+
+    return (false, null);
+  };
+})();

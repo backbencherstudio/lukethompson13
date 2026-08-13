@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/platform/gps_service.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
@@ -22,12 +23,16 @@ class TimelineSection extends ConsumerStatefulWidget {
     required this.onSingleLogComplete,
     required this.activateCalculateBtn,
     required this.logStarted,
+    required this.isWithinArrivalRadius,
+    this.arrivalDestinationDistance,
   });
 
   final SingleStoplogDetailData? session;
   final void Function(StopLogStep step) onSingleLogComplete;
   final void Function(bool) activateCalculateBtn;
   final bool logStarted;
+  final bool isWithinArrivalRadius;
+  final double? arrivalDestinationDistance;
 
   @override
   ConsumerState<TimelineSection> createState() => TimelineSectionState();
@@ -374,6 +379,10 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
   @override
   Widget build(BuildContext context) {
     final recordStopLogMutation = ref.watch(recordStopLogProviderAction);
+    final validatedArrivalStatus =
+        _arrivalStatus == .active && !widget.isWithinArrivalRadius
+        ? TimelineItemStatus.idle
+        : _arrivalStatus;
 
     return Column(
       children: [
@@ -386,10 +395,19 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
             recordStopLogMutation.isPending,
           ),
           label: 'Arrival Time',
-          status: _activateTimelineLogging(_arrivalStatus),
+          labelTail: widget.arrivalDestinationDistance == null
+              ? null
+              : Text(
+                  _formatDistance(widget.arrivalDestinationDistance ?? 0.0),
+                  style: TextStyle(
+                    fontWeight: .w700,
+                    color: ColorManager.subtextColor.withValues(alpha: 0.8),
+                  ),
+                ),
+          status: _activateTimelineLogging(validatedArrivalStatus),
           child: TimelineContent(
             value: widget.session?.arrivedAt?.formatTime(),
-            status: _activateTimelineLogging(_arrivalStatus),
+            status: _activateTimelineLogging(validatedArrivalStatus),
             isActionPending: _isActionPending(
               null,
               recordStopLogMutation.isPending,
@@ -513,4 +531,11 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
       ],
     );
   }
+}
+
+String _formatDistance(double meters) {
+  if (meters >= 1000) {
+    return '${(meters / 1000).toStringAsFixed(2)} km';
+  }
+  return '${meters.toStringAsFixed(1)} m';
 }

@@ -33,11 +33,13 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
   bool _canCalculateAndPreview = false;
   bool _loadingActionBtn = false;
   bool _isWithinArrivalRadius = false;
+  double? _arrivalDestinationDistance;
   Timer? _arrivalRadiusTimer;
 
   var _logStarted = false;
   void endCurrentSession() async {
     _arrivalRadiusTimer?.cancel();
+    ref.read(selectedFacilityProvider.notifier).clear();
     setState(() {
       _logStarted = false;
       _sessionId = null;
@@ -81,32 +83,28 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
 
   void _startArrivalRadiusCheck() {
     _arrivalRadiusTimer?.cancel();
-    if (_sessionId == null) return;
+    if (_sessionId != null) return;
+    if (ref.read(selectedFacilityProvider) == null) return;
+
     _arrivalRadiusTimer = Timer.periodic(Duration(seconds: 3), (_) async {
+      debugPrint("heart beat");
       if (!mounted) return;
-      final within = await truckIsWithinArrivalRadius();
+      final (within, disance) = await checkIsTruckWithinArrivalRadius();
+      debugPrint("within $within");
       if (mounted) {
-        setState(() => _isWithinArrivalRadius = within);
+        setState(() {
+          _isWithinArrivalRadius = within;
+          _arrivalDestinationDistance = disance;
+        });
       }
     });
   }
 
-  Future<bool> truckIsWithinArrivalRadius() async {
+  Future<(bool, double?)> checkIsTruckWithinArrivalRadius() async {
     final selectedFacility = ref.read(selectedFacilityProvider);
-    final pos = await GpsService.getCurrentPosition();
-    if (pos == null || selectedFacility == null) {
-      return false;
-    }
-
-    final lat = double.tryParse(selectedFacility.lat ?? '');
-    final lon = double.tryParse(selectedFacility.lng ?? '');
-    if (lat == null || lon == null) return false;
-
-    return GpsService.isWithinArrivalRadius(
-      currentLat: pos.latitude,
-      currentLon: pos.longitude,
-      destinationLat: lat,
-      destinationLon: lon,
+    return await GpsService.isTruckWithinArrivalRadius(
+      selectedFacility,
+      mock: false,
     );
   }
 
@@ -133,6 +131,11 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
       _startArrivalRadiusCheck();
     });
 
+    ref.listen(selectedFacilityProvider, (prev, next) {
+      if (!mounted) return;
+      _startArrivalRadiusCheck();
+    });
+
     ref.listen(getSingleLogWithId(_sessionId), (prev, next) {
       if (!mounted) return;
 
@@ -143,6 +146,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
           });
 
           if (data?.facilityName != null) {
+            // TODO: update lat,lon from here
             ref
                 .read(selectedFacilityProvider.notifier)
                 .select(
@@ -209,11 +213,23 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                         },
                       ),
 
+                      Text("_logStarted = ${_logStarted ? "true" : "false"}"),
+                      Text(
+                        "_isWithinArrivalRadius = ${_isWithinArrivalRadius ? "true" : "false"}",
+                      ),
+                      Text("$_sessionId"),
                       SizedBox(height: 24.h),
                       TimelineSection(
+                        arrivalDestinationDistance: _arrivalDestinationDistance,
                         logStarted: _logStarted,
+                        isWithinArrivalRadius: _isWithinArrivalRadius,
                         key: _timelineKey,
-                        onSingleLogComplete: (_) {},
+                        onSingleLogComplete: (_) {
+                          if (_arrivalRadiusTimer != null &&
+                              _arrivalRadiusTimer!.isActive) {
+                            _arrivalRadiusTimer?.cancel();
+                          }
+                        },
                         activateCalculateBtn: activateCalculateBtn,
                         session: session.value,
                       ),
