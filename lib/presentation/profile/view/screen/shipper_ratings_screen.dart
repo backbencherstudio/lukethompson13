@@ -53,7 +53,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: GlobalAppBar(title: 'Shipper Ratings'),
+      appBar: GlobalAppBar(title: 'Broker & Doc Scores'),
       body: AppGradientBackground(
         child: SafeArea(
           bottom: false,

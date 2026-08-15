@@ -267,9 +267,8 @@ class FormFieldMapView extends StatelessWidget {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: AppConfig.bundleId,
+                    urlTemplate: AppConfig.mapProvider,
+                    userAgentPackageName: AppConfig.bundleId
                   ),
                   MarkerLayer(
                     markers: [

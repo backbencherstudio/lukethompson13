@@ -183,7 +183,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
 
     final params = RecordStopLogParams(
       step: .arrivalTime,
-      id: currentFacility.id,
+      shipperId: currentFacility.id,
       facilityName: currentFacility.name,
       location: StopLogLocation(
         // city: 'Dhaka',

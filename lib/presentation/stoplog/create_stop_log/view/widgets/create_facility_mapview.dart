@@ -64,7 +64,7 @@ class _CreateFacilityMapviewState extends State<CreateFacilityMapview> {
       ),
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate: AppConfig.bundleId,
           userAgentPackageName: AppConfig.bundleId,
         ),
         MarkerLayer(
