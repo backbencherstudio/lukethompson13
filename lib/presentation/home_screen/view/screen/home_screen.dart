@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/image_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_tab_bar.dart';
 import 'package:lukethompson/data/sources/remote/auth/user_queries.dart';
@@ -22,27 +23,10 @@ class Homescreen extends ConsumerStatefulWidget {
 
 class _HomescreenState extends ConsumerState<Homescreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-
-    Future.delayed(const Duration(seconds: 15), () {
-      if (mounted) {
-        showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => UnlockDialog(
-            onSubscribe: () {
-              context.push(Routes.chooseSubscriptionPlan);
-            },
-          ),
-        );
-      }
-    });
-  }
+  late final TabController _tabController = TabController(
+    length: 2,
+    vsync: this,
+  );
 
   @override
   void dispose() {
@@ -70,6 +54,19 @@ class _HomescreenState extends ConsumerState<Homescreen>
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(child: CustomCarouselSlider()),
               SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: .center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        context.push(Routes.chooseSubscriptionPlan);
+                      },
+                      child: Text("test"),
+                    ),
+                  ],
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(

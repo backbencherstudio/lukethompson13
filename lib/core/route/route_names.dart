@@ -24,8 +24,6 @@ class Routes {
   static const String helpAndSupport = '/helpAndSupport';
   static const String privacyAndPolicy = '/privacyAndPolicy';
   static const String chooseSubscriptionPlan = '/chooseSubscriptionPlan';
-  static const String chooseSubscriptionPaymentMethod = '/chooseSubscriptionPaymentMethod';
-  static const String subscriptionAddCard = '/subscriptionAddCard';
   static const String subscriptionSuccess = '/subscriptionSuccessful';
   static const String createFacility = '/createFacility';
   static const String createFacilityEditMap = '/createFacilityEditMap';

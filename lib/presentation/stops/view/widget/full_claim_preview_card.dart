@@ -18,8 +18,13 @@ import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/p
 
 class FullClaimPreviewCard extends StatelessWidget {
   final SingleStoplogDetailData? data;
+  final bool canEditTimes;
 
-  const FullClaimPreviewCard({super.key, required this.data});
+  const FullClaimPreviewCard({
+    super.key,
+    required this.data,
+    this.canEditTimes = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +46,20 @@ class FullClaimPreviewCard extends StatelessWidget {
             items: [
               BreakdownItem(label: 'Facility', value: data?.facilityName ?? ""),
               BreakdownItem(
-                label: "Arrival - Departure",
-                value:
-                    "${data?.arrivedAt?.formatTime()} -> ${data?.departedAt?.formatTime()}",
+                label: "Arrived at",
+                value: "${data?.arrivedAt?.formatTime()}",
+              ),
+              BreakdownItem(
+                label: "Docked at",
+                value: "${data?.dockedAt?.formatTime()}",
+              ),
+              BreakdownItem(
+                label: "Completed at",
+                value: "${data?.completedAt?.formatTime()}",
+              ),
+              BreakdownItem(
+                label: "Departed at",
+                value: "${data?.departedAt?.formatTime()}",
               ),
               BreakdownItem(
                 label: "Billable Detention",

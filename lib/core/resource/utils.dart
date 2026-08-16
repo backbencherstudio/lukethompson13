@@ -46,6 +46,14 @@ class Utils {
     );
   }
 
+  static Future<bool?> showSuccessToast({required String message}) {
+    return Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
+
   static void showToast({
     required String message,
     required Color backgroundColor,
@@ -82,4 +90,3 @@ class Utils {
     return MediaQuery.viewInsetsOf(context).bottom > 0;
   }
 }
-

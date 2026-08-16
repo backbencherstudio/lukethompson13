@@ -3,9 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/route/go_router_config.dart';
 import 'package:lukethompson/core/resource/theme_manager.dart';
+import 'package:lukethompson/core/services/revenuecat_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await RevenueCatService().configure();
+  } catch (error) {
+    debugPrint('RevenueCat configure failed: $error');
+  }
   runApp(ProviderScope(child: MyApp()));
 }
 

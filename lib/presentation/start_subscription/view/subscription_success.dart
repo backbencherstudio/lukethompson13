@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/route/route_names.dart';
@@ -11,11 +9,7 @@ import 'package:lukethompson/core/resource/constants/font_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
-import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
-import 'package:lukethompson/presentation/start_subscription/state/choose_subscription_plan_state.dart';
-import 'package:lukethompson/presentation/start_subscription/widgets/get_premium_icon.dart';
-import 'package:lukethompson/presentation/start_subscription/widgets/payment_option.dart';
 
 class SubscriptionSuccess extends StatefulWidget {
   const SubscriptionSuccess({super.key, this.isFree = false});
@@ -114,6 +108,5 @@ class _SubscriptionSuccessState extends State<SubscriptionSuccess> {
         ),
       ),
     );
-    ;
   }
 }

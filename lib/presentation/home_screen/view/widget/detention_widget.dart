@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 
 class DetentionData {
@@ -23,15 +25,17 @@ class DetentionData {
   });
 }
 
-class DetentionWidget extends StatelessWidget {
+class DetentionWidget extends ConsumerWidget {
   final DetentionData data;
 
   const DetentionWidget({super.key, required this.data});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isProSubscription = ref.watch(isProSubscriptionProvider);
     return GestureDetector(
       onTap: () async {
+        if (isProSubscription) return;
         await showDialog(
           context: context,
           barrierDismissible: true,

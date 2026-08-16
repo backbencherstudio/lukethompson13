@@ -5,7 +5,14 @@ import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_icon.dart';
 
 class GetPremiumIcon extends StatelessWidget {
-  const GetPremiumIcon({super.key});
+  final String title;
+  final String description;
+
+  const GetPremiumIcon({
+    super.key,
+    required this.title,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,28 +21,32 @@ class GetPremiumIcon extends StatelessWidget {
       crossAxisAlignment: .center,
       children: [
         SvgCircleIcon(svgPath: Assets.icons.crownAlt),
-        SizedBox(height: 12.h),
+        SizedBox(height: 4.h),
+
         // Title
         Text(
-          'Get Premium',
+          title,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 24.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.5,
           ),
         ),
 
-        SizedBox(height: 4.h),
+        SizedBox(height: 2.h),
 
-        Text(
-          'Unlock premium features',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: ColorManager.subtextColor,
-            fontSize: 16.sp,
-            height: 1.5,
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 250.w),
+          child: Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: ColorManager.subtextColor,
+              fontSize: 12.sp,
+              height: 1.4,
+            ),
           ),
         ),
       ],

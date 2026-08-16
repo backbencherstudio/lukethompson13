@@ -14,8 +14,8 @@ class SvgCircleIcon extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          height: 90.w,
-          width: 90.w,
+          height: 80.w,
+          width: 80.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
@@ -28,8 +28,8 @@ class SvgCircleIcon extends StatelessWidget {
           ),
         ),
         Container(
-          height: 84.w,
-          width: 84.w,
+          height: 80.w,
+          width: 80.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white.withValues(alpha: 0.05),

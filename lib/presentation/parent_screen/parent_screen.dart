@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/home_screen.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_stop_log_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/profile_landing_screen.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
@@ -34,6 +39,30 @@ class ParentScreen extends ConsumerStatefulWidget {
 }
 
 class _ParentScreenState extends ConsumerState<ParentScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(
+      const Duration(seconds: AppConfig.subscriptionDialogDelay),
+      () {
+        if (!mounted) return;
+        final isProSubscription = ref.read(isProSubscriptionProvider);
+        if (isProSubscription) return;
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => UnlockDialog(
+            onSubscribe: () {
+              Navigator.of(context).pop();
+              context.push(Routes.chooseSubscriptionPlan);
+            },
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildBody(int index) {
     if (index == 2) {
       return const CreateStopLogScreen();

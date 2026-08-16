@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
@@ -27,7 +30,6 @@ class ShipperRatingsScreen extends ConsumerStatefulWidget {
 class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
   late final TextEditingController _searchController;
   int _selectedTabFilterIndex = 0;
-  bool _pageLocked = true;
 
   final List<String> categories = PayerCategory.values
       .map((e) => e.label)
@@ -47,7 +49,9 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pagination = _pageLocked
+    final isProSubscription = ref.watch(isProSubscriptionProvider);
+    final isPageLocked = !isProSubscription;
+    final pagination = isPageLocked
         ? AsyncData(ShipperRatingsPaginationState.empty())
         : ref.watch(shipperRatingsPaginationProvider);
 
@@ -58,7 +62,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
         child: SafeArea(
           bottom: false,
           child: NestedScrollView(
-            physics: _pageLocked ? const NeverScrollableScrollPhysics() : null,
+            physics: isPageLocked ? const NeverScrollableScrollPhysics() : null,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(child: SizedBox(height: 6.h)),
               SliverToBoxAdapter(
@@ -85,7 +89,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                 return false;
               },
               child: FullHeightScrollView(
-                physics: _pageLocked
+                physics: isPageLocked
                     ? const NeverScrollableScrollPhysics()
                     : null,
                 child: Column(
@@ -97,7 +101,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                       titles: PayerCategory.categories,
                       selectedIndex: _selectedTabFilterIndex,
                       onChanged: (index) {
-                        if (_pageLocked) return;
+                        if (isPageLocked) return;
 
                         setState(() {
                           _selectedTabFilterIndex = index;
@@ -112,8 +116,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                       },
                     ),
                     ShipperRatingsSection(
-                      isLocked: _pageLocked,
-
+                      isLocked: isPageLocked,
                       lockedPrompt: Column(
                         children: [
                           140.height,
@@ -134,9 +137,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                             onPressed: () {
-                              setState(() {
-                                _pageLocked = false;
-                              });
+                              context.push(Routes.chooseSubscriptionPlan);
                             },
                           ),
                         ],

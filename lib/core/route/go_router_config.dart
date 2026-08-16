@@ -21,8 +21,6 @@ import 'package:lukethompson/presentation/profile/view/screen/shipper_ratings_sc
 import 'package:lukethompson/presentation/profile/view/widget/set_your_rate_screen.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
-import 'package:lukethompson/presentation/start_subscription/view/add_card_screen.dart';
-import 'package:lukethompson/presentation/start_subscription/view/choose_payment_method_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_edit_map_screen.dart';
@@ -187,14 +185,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.chooseSubscriptionPlan,
         builder: (context, state) => const ChooseSubscriptionPlanScreen(),
-      ),
-      GoRoute(
-        path: Routes.chooseSubscriptionPaymentMethod,
-        builder: (context, state) => const ChoosePaymentMethodScreen(),
-      ),
-      GoRoute(
-        path: Routes.subscriptionAddCard,
-        builder: (context, state) => const SubcriptionAddCardScreen(),
       ),
       GoRoute(
         path: Routes.createFacility,
