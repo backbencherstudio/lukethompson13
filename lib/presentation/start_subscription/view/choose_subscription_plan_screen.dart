@@ -15,11 +15,10 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_tab_bar.dart';
-import 'package:lukethompson/core/widgets/shimmer_loading.dart';
 import 'package:lukethompson/presentation/start_subscription/state/choose_subscription_plan_state.dart';
 import 'package:lukethompson/presentation/start_subscription/widgets/feature_list_card.dart';
 import 'package:lukethompson/presentation/start_subscription/widgets/get_premium_icon.dart';
-import 'package:lukethompson/presentation/start_subscription/widgets/plan_card.dart';
+import 'package:lukethompson/presentation/start_subscription/widgets/plan_cards_row.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class ChooseSubscriptionPlanScreen extends ConsumerStatefulWidget {
@@ -81,7 +80,23 @@ class _ChooseSubscriptionPlanScreenState
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
-        appBar: GlobalAppBar(title: 'Back'),
+        appBar: GlobalAppBar(
+          title: 'Back',
+          actions: [
+            TextButton(
+              onPressed: _isRestoring ? null : _restorePurchases,
+              child: Text(
+                _isRestoring ? '.......' : 'Restore',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: ColorManager.subtextColor,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            4.width,
+          ],
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -144,24 +159,23 @@ class _ChooseSubscriptionPlanScreenState
                 //   ),
                 // ),
                 12.height,
-                Center(
-                  child: Text(
-                    'Choose your plan',
-                    textAlign: .center,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: .w700,
-                      color: Colors.white,
-                    ),
+                Text(
+                  'Choose your plan',
+                  textAlign: .center,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: .w700,
+                    color: Colors.white,
                   ),
                 ),
 
                 12.height,
-                _buildCardsRow(
+                PlanCardsRow(
                   selectedPlanId: state.selectedPlanId,
                   packagesAsync: packagesAsync,
                   monthlyPrice: monthlyPrice,
                   yearlyPrice: yearlyPrice,
+                  onSelectPlan: _selectPlan,
                 ),
 
                 16.height,
@@ -183,19 +197,8 @@ class _ChooseSubscriptionPlanScreenState
                   },
                 ),
                 12.height,
-                Center(
-                  child: TextButton(
-                    onPressed: _isRestoring ? null : _restorePurchases,
-                    child: Text(
-                      _isRestoring ? 'Restoring...' : 'Restore Purchases',
-                      style: TextStyle(
-                        color: ColorManager.subtextColor,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
+
+                // SizedBox(height: 20),
               ],
             ),
           ),
@@ -210,76 +213,6 @@ class _ChooseSubscriptionPlanScreenState
             AppConfig.revenueCatYearlyPackageId
         ? packages.yearly
         : packages.monthly;
-  }
-
-  Widget _buildCardsRow({
-    required String selectedPlanId,
-    required AsyncValue<SubscriptionPackages> packagesAsync,
-    required String monthlyPrice,
-    required String yearlyPrice,
-  }) {
-    return Container(
-      padding: .all(12.w),
-      decoration: BoxDecoration(
-        color: ColorManager.surfaceBacground,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: packagesAsync.isLoading
-          ? Row(
-              children: [
-                Expanded(
-                  child: ShimmerBox(height: 150.w, borderRadius: 12.r),
-                ),
-                12.width,
-                Expanded(
-                  child: ShimmerBox(height: 150.w, borderRadius: 12.r),
-                ),
-              ],
-            )
-          : packagesAsync.hasError
-          ? Column(
-              children: [
-                Text(
-                  'Could not load prices. Check your connection and retry.',
-                  textAlign: .center,
-                  style: TextStyle(
-                    color: ColorManager.subtextColor,
-                    fontSize: 14.sp,
-                  ),
-                ),
-                8.height,
-                TextButton(
-                  onPressed: () => ref.invalidate(offeringPackagesProvider),
-                  child: const Text('Retry'),
-                ),
-              ],
-            )
-          : Row(
-              children: [
-                PlanCard(
-                  isSelected:
-                      selectedPlanId == AppConfig.revenueCatMonthlyPackageId,
-                  title: 'Pro Monthly',
-                  duration: 'month',
-                  planType: 'Standard',
-                  price: monthlyPrice,
-                  onTap: () =>
-                      _selectPlan(AppConfig.revenueCatMonthlyPackageId),
-                ),
-                12.width,
-                PlanCard(
-                  isSelected:
-                      selectedPlanId == AppConfig.revenueCatYearlyPackageId,
-                  title: 'Pro Yearly',
-                  titleColor: ColorManager.warningColor,
-                  duration: 'year',
-                  planType: 'Premium',
-                  price: yearlyPrice,
-                  onTap: () => _selectPlan(AppConfig.revenueCatYearlyPackageId),
-                ),
-              ],
-            ),
-    );
   }
 
   Future<void> _purchase(Package? package, {required bool isTrial}) async {
