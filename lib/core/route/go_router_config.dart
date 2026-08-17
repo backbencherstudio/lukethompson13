@@ -184,7 +184,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.chooseSubscriptionPlan,
-        builder: (context, state) => const ChooseSubscriptionPlanScreen(),
+        pageBuilder: (context, state) => SlideUpPage(
+          key: state.pageKey,
+          child: const ChooseSubscriptionPlanScreen(),
+        ),
+        // builder: (context, state) => const ChooseSubscriptionPlanScreen(),
       ),
       GoRoute(
         path: Routes.createFacility,
@@ -213,4 +217,25 @@ class _AuthChangeNotifier extends ChangeNotifier {
   void notify() {
     notifyListeners();
   }
+}
+
+class SlideUpPage<T> extends CustomTransitionPage<T> {
+  SlideUpPage({required LocalKey super.key, required super.child})
+    : super(
+        transitionDuration: const Duration(milliseconds: 350),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+          );
+
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(curvedAnimation),
+            child: child,
+          );
+        },
+      );
 }

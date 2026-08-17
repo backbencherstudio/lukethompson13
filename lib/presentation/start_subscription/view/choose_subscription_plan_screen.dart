@@ -70,6 +70,8 @@ class _ChooseSubscriptionPlanScreenState
 
     final monthlyPrice = packages?.monthly.storeProduct.priceString ?? '';
     final yearlyPrice = packages?.yearly.storeProduct.priceString ?? '';
+    // final monthlyPrice = '19.99';
+    // final yearlyPrice = '179.00';
     final canPurchase = packages != null && !_isSubscribing;
 
     if (packagesAsync.hasError) {
@@ -81,7 +83,13 @@ class _ChooseSubscriptionPlanScreenState
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
         appBar: GlobalAppBar(
-          title: 'Back',
+          backButtonIcon: const Icon(
+            Icons.close,
+            size: 24,
+            color: ColorManager.subtextColor,
+          ),
+          backButtonBackgroundColor: Colors.transparent,
+          // title: 'Back',
           actions: [
             TextButton(
               onPressed: _isRestoring ? null : _restorePurchases,

@@ -63,6 +63,8 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool hideBackButton;
   final bool centerTitle;
   final VoidCallback? onBackPressed;
+  final Widget backButtonIcon;
+  final Color backButtonBackgroundColor;
 
   const GlobalAppBar({
     super.key,
@@ -73,6 +75,8 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.hideBackButton = false,
     this.centerTitle = false,
     this.onBackPressed,
+    this.backButtonIcon = const Icon(Icons.arrow_back_rounded, size: 24),
+    this.backButtonBackgroundColor = Colors.white12,
   });
 
   @override
@@ -96,10 +100,10 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: onBackPressed ?? () => context.pop(),
                   style: FilledButton.styleFrom(
                     padding: EdgeInsets.zero,
-                    backgroundColor: Colors.white12,
+                    backgroundColor: backButtonBackgroundColor,
                     minimumSize: Size.square(40),
                   ),
-                  child: const Icon(Icons.arrow_back_rounded, size: 24),
+                  child: backButtonIcon,
                 ),
               ),
             )
