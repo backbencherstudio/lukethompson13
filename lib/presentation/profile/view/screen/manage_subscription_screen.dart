@@ -8,6 +8,7 @@ import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/services/revenuecat_service.dart';
+import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/app_switch.dart';
@@ -112,14 +113,14 @@ class ManageSubscriptionScreen extends ConsumerWidget {
         SubscriptionInfoCard.nextBilling(
           startingDate: subscription!.expiresDate!,
           billingDuration: _billingDuration(storeProduct),
-          amount: storeProduct?.price ?? 0,
+          amount: CurrencyFormatter.format(storeProduct?.price ?? 0),
         ),
-      16.height,
+      // 16.height,
       // TODO: Implement local notification
-      SubscriptionInfoCard.yourPlanIncludes(
-        items: ['Notify me 2 days before renewal'],
-        trailing: AppSwitch(value: true, onChanged: (value) {}),
-      ),
+      // SubscriptionInfoCard.yourPlanIncludes(
+      //   items: ['Notify me 2 days before renewal'],
+      //   trailing: AppSwitch(value: true, onChanged: (value) {}),
+      // ),
       16.height,
       FeatureListCard(
         features: RevenueCatService.getFeaturedPlanItems(productId),

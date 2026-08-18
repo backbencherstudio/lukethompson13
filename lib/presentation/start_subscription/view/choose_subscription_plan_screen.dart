@@ -21,6 +21,8 @@ import 'package:lukethompson/presentation/start_subscription/widgets/get_premium
 import 'package:lukethompson/presentation/start_subscription/widgets/plan_cards_row.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
+enum _PurchaseAction { subscribe, trial }
+
 class ChooseSubscriptionPlanScreen extends ConsumerStatefulWidget {
   const ChooseSubscriptionPlanScreen({super.key});
 
@@ -38,8 +40,8 @@ class _ChooseSubscriptionPlanScreenState
     vsync: this,
   );
 
-  bool _isSubscribing = false;
   bool _isRestoring = false;
+  _PurchaseAction? _purchaseAction;
 
   @override
   void initState() {
@@ -72,7 +74,7 @@ class _ChooseSubscriptionPlanScreenState
     final yearlyPrice = packages?.yearly.storeProduct.priceString ?? '';
     // final monthlyPrice = '19.99';
     // final yearlyPrice = '179.00';
-    final canPurchase = packages != null && !_isSubscribing;
+    final canPurchase = packages != null && _purchaseAction == null;
 
     if (packagesAsync.hasError) {
       logger.e(packagesAsync.error.toString());
@@ -189,7 +191,7 @@ class _ChooseSubscriptionPlanScreenState
                 16.height,
                 GlobalButton(
                   label: "Subscribe Now",
-                  isLoading: _isSubscribing,
+                  isLoading: _purchaseAction == _PurchaseAction.subscribe,
                   isDisabled: !canPurchase,
                   onPressed: () {
                     _purchase(_selectedPackage(packages), isTrial: false);
@@ -198,7 +200,7 @@ class _ChooseSubscriptionPlanScreenState
                 16.height,
                 GlobalButton.outlined(
                   label: "Start Free Trial",
-                  isLoading: _isSubscribing,
+                  isLoading: _purchaseAction == _PurchaseAction.trial,
                   isDisabled: !canPurchase,
                   onPressed: () {
                     _purchase(_selectedPackage(packages), isTrial: true);
@@ -218,7 +220,7 @@ class _ChooseSubscriptionPlanScreenState
   Package? _selectedPackage(SubscriptionPackages? packages) {
     if (packages == null) return null;
     return ref.read(selectedPlanIdProvider).selectedPlanId ==
-            AppConfig.revenueCatYearlyPackageId
+            AppConfig.revenueCatProYearlyPackageId
         ? packages.yearly
         : packages.monthly;
   }
@@ -228,10 +230,14 @@ class _ChooseSubscriptionPlanScreenState
     final service = ref.read(revenueCatServiceProvider);
 
     try {
-      setState(() => _isSubscribing = true);
+      setState(
+        () => _purchaseAction = isTrial
+            ? _PurchaseAction.trial
+            : _PurchaseAction.subscribe,
+      );
       final result = await service.purchase(package);
       if (!mounted) return;
-      setState(() => _isSubscribing = false);
+      setState(() => _purchaseAction = null);
 
       if (service.isEntitled(result.customerInfo)) {
         context.push(Routes.subscriptionSuccess, extra: {'isFree': isTrial});
@@ -242,7 +248,7 @@ class _ChooseSubscriptionPlanScreenState
       }
     } on PlatformException catch (error) {
       if (!mounted) return;
-      setState(() => _isSubscribing = false);
+      setState(() => _purchaseAction = null);
       if (!service.isPurchaseCancelled(error)) {
         Utils.showErrorToast(
           message: 'Something went wrong. Please try again.',
@@ -250,7 +256,7 @@ class _ChooseSubscriptionPlanScreenState
       }
     } catch (error) {
       if (!mounted) return;
-      setState(() => _isSubscribing = false);
+      setState(() => _purchaseAction = null);
       Utils.showErrorToast(message: 'Something went wrong. Please try again.');
     }
   }

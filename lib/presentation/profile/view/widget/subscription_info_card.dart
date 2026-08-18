@@ -103,7 +103,7 @@ class SubscriptionInfoCard extends StatelessWidget {
 
   factory SubscriptionInfoCard.nextBilling({
     Key? key,
-    required double amount,
+    required String amount,
     required String startingDate,
     required String billingDuration,
   }) {
@@ -113,10 +113,7 @@ class SubscriptionInfoCard extends StatelessWidget {
         mainAxisAlignment: .spaceBetween,
         children: [
           Text('Next Billing'),
-          Text(
-            '\$$amount',
-            style: TextStyle(color: ColorManager.primaryButton),
-          ),
+          Text(amount, style: TextStyle(color: ColorManager.primaryButton)),
         ],
       ),
       subtitleWidget: Row(

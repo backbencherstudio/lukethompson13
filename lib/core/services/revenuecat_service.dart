@@ -45,7 +45,7 @@ class RevenueCatService {
   }
 
   bool isEntitled(CustomerInfo customerInfo, {String? entitlementId}) {
-    final id = entitlementId ?? AppConfig.revenueCatEntitlementId;
+    final id = entitlementId ?? AppConfig.revenueCatProEntitlementId;
     return customerInfo.entitlements.active.containsKey(id);
   }
 
@@ -62,9 +62,9 @@ class RevenueCatService {
 
   static List<String> getFeaturedPlanItems(String? selectedPlanId) {
     switch (selectedPlanId) {
-      case AppConfig.revenueCatMonthlyPackageId:
+      case AppConfig.revenueCatProMonthlyPackageId:
         return _monthlyFeatures;
-      case AppConfig.revenueCatYearlyPackageId:
+      case AppConfig.revenueCatProYearlyPackageId:
         return _yearlyFeatures;
       default:
         return [];

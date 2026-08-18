@@ -66,25 +66,25 @@ class PlanCardsRow extends ConsumerWidget {
               children: [
                 PlanCard(
                   isSelected:
-                      selectedPlanId == AppConfig.revenueCatMonthlyPackageId,
+                      selectedPlanId == AppConfig.revenueCatProMonthlyPackageId,
                   title: 'Pro Monthly',
                   duration: 'month',
                   planType: 'Standard',
                   price: monthlyPrice,
                   onTap: () =>
-                      onSelectPlan(AppConfig.revenueCatMonthlyPackageId),
+                      onSelectPlan(AppConfig.revenueCatProMonthlyPackageId),
                 ),
                 12.width,
                 PlanCard(
                   isSelected:
-                      selectedPlanId == AppConfig.revenueCatYearlyPackageId,
+                      selectedPlanId == AppConfig.revenueCatProYearlyPackageId,
                   title: 'Pro Yearly',
                   titleColor: ColorManager.warningColor,
                   duration: 'year',
                   planType: 'Premium',
                   price: yearlyPrice,
                   onTap: () =>
-                      onSelectPlan(AppConfig.revenueCatYearlyPackageId),
+                      onSelectPlan(AppConfig.revenueCatProYearlyPackageId),
                 ),
               ],
             ),

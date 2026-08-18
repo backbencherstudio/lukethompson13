@@ -33,13 +33,13 @@ class OfferingPackagesNotifier extends AsyncNotifier<SubscriptionPackages> {
 
     final monthly = _packageFor(
       offering,
-      configuredId: AppConfig.revenueCatMonthlyPackageId,
+      configuredId: AppConfig.revenueCatProMonthlyPackageId,
       predefined: offering.monthly,
       packageType: PackageType.monthly,
     );
     final yearly = _packageFor(
       offering,
-      configuredId: AppConfig.revenueCatYearlyPackageId,
+      configuredId: AppConfig.revenueCatProYearlyPackageId,
       predefined: offering.annual,
       packageType: PackageType.annual,
     );

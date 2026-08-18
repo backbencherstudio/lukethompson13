@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 class Routes {
   static const String splash = '/';
   static const String onboarding1 = '/onboardingScreen1';
@@ -27,4 +30,8 @@ class Routes {
   static const String subscriptionSuccess = '/subscriptionSuccessful';
   static const String createFacility = '/createFacility';
   static const String createFacilityEditMap = '/createFacilityEditMap';
+
+  static Uri currentRouteUri(BuildContext context) {
+    return GoRouter.of(context).routerDelegate.currentConfiguration.uri;
+  }
 }

@@ -3,7 +3,7 @@ import 'package:lukethompson/core/resource/constants/config.dart';
 
 class SubscriptionPlanState {
   const SubscriptionPlanState({
-    this.selectedPlanId = AppConfig.revenueCatMonthlyPackageId,
+    this.selectedPlanId = AppConfig.revenueCatProMonthlyPackageId,
   });
 
   final String selectedPlanId;

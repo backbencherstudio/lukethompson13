@@ -13,11 +13,12 @@ class AppConfig {
   static const mapProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   // RevenueCat **************************************************************
-  static const revenueCatEntitlementId = 'GetDockPay Pro';
   static const revenueCatOfferingId = 'default';
-  static const revenueCatMonthlyPackageId = 'monthly';
-  static const revenueCatYearlyPackageId = 'yearly';
   static const subscriptionDialogDelay = 30;
+
+  static const revenueCatProEntitlementId = 'GetDockPay Pro';
+  static const revenueCatProMonthlyPackageId = 'getdocpay_pro';
+  static const revenueCatProYearlyPackageId = 'getdocpay_pro_yearly';
 
   static final revenueCatApiKey = _required(
     Platform.isIOS ? 'REVENUECAT_API_KEY_IOS' : 'REVENUECAT_API_KEY_TEST',

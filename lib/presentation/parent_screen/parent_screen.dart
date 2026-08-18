@@ -47,8 +47,18 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
       const Duration(seconds: AppConfig.subscriptionDialogDelay),
       () {
         if (!mounted) return;
-        final isProSubscription = ref.read(isProSubscriptionProvider);
-        if (isProSubscription) return;
+        final customerInfo = ref.read(customerInfoProvider).value;
+
+        if (customerInfo != null &&
+            ref.read(revenueCatServiceProvider).isEntitled(customerInfo)) {
+          return;
+        }
+
+        if (Routes.currentRouteUri(context).path ==
+            Routes.chooseSubscriptionPlan) {
+          return;
+        }
+
         showDialog(
           context: context,
           barrierDismissible: true,
