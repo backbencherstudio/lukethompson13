@@ -24,6 +24,7 @@ class RevenueCatService {
     if (kDebugMode) {
       await Purchases.setLogLevel(LogLevel.debug);
     }
+
     await Purchases.configure(
       PurchasesConfiguration(AppConfig.revenueCatApiKey),
     );

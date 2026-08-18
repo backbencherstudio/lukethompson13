@@ -93,4 +93,3 @@ final isProSubscriptionProvider = Provider<bool>((ref) {
   if (customerInfo == null) return false;
   return ref.watch(revenueCatServiceProvider).isEntitled(customerInfo);
 });
-

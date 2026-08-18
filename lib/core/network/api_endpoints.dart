@@ -1,7 +1,8 @@
+import 'package:lukethompson/core/resource/constants/config.dart';
+
 class ApiEndpoints {
-  // static const String baseUrl = "https://moral-kick-editor-welfare.trycloudflare.com";
-    static const String baseUrl = "https://lukethompson.pixelstack.cloud";
-  static const String apiURL = "$baseUrl/api";
+  static final String baseUrl = AppConfig.serverBaseUrl;
+  static final String apiURL = "$baseUrl/api";
 
   static const String getMe = '/auth/me';
   static const String updateUserProfile = '/auth/update';
