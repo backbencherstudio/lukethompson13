@@ -54,19 +54,7 @@ class _HomescreenState extends ConsumerState<Homescreen>
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(child: CustomCarouselSlider()),
               SliverToBoxAdapter(child: SizedBox(height: 10.h)),
-              SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: .center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        context.push(Routes.chooseSubscriptionPlan);
-                      },
-                      child: Text("test"),
-                    ),
-                  ],
-                ),
-              ),
+
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(

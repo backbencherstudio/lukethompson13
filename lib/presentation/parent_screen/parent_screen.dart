@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -144,6 +145,11 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
 
   Widget _buildAddButton(int index) {
     return InkWell(
+      onLongPress: index == 2 && kDebugMode
+          ? () {
+              context.push(Routes.chooseSubscriptionPlan);
+            }
+          : null,
       onTap: () => _onTap(index),
       borderRadius: BorderRadius.circular(30),
       child: Container(
