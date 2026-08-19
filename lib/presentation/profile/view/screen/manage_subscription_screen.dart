@@ -77,7 +77,7 @@ class ManageSubscriptionScreen extends ConsumerWidget {
       16.height,
       GlobalButton(
         label: 'Subscribe Now',
-        onPressed: () => context.push(Routes.chooseSubscriptionPlan),
+        onPressed: () => RevenueCatService.showPayWall(context),
       ),
       16.height,
       _restoreButton(ref),

@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/platform/share_service.dart';
+import 'package:lukethompson/core/services/revenuecat_providers.dart';
+import 'package:lukethompson/core/services/revenuecat_service.dart';
 import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/utils/logger.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
@@ -30,7 +32,9 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   FormControl<String> get brokerEmail => form.brokerEmail;
   FormControl<int> get sendMethod => form.sendMethod;
 
-  Future<void> onClaim() async {
+  Future<void> onClaim(BuildContext context, bool isProSubscription) async {
+    if (!isProSubscription) RevenueCatService.showPayWallDialog(context);
+
     final method = SendMethod.values[sendMethod.value ?? 0];
     final shareService = ShareService();
 
@@ -118,6 +122,8 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
 
   @override
   Widget build(BuildContext context) {
+    final isProSubscription = ref.watch(isProSubscriptionProvider);
+
     return ReactiveForm(
       formGroup: form,
       child: Column(
@@ -132,7 +138,15 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
           16.height,
           _buildSendMethodToggle(),
           16.height,
-          _buildClaimButton(),
+          ReactiveFormConsumer(
+            builder: (_, form, _) {
+              return GlobalButton(
+                label: 'Claim Now',
+                isDisabled: !form.valid,
+                onPressed: () => onClaim(context, isProSubscription),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -177,18 +191,6 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
         return SendMethodToggle(
           selectedMethod: SendMethod.values[control.value ?? 0],
           onChanged: (method) => control.updateValue(method.index),
-        );
-      },
-    );
-  }
-
-  Widget _buildClaimButton() {
-    return ReactiveFormConsumer(
-      builder: (_, form, _) {
-        return GlobalButton(
-          label: 'Claim Now',
-          isDisabled: !form.valid,
-          onPressed: onClaim,
         );
       },
     );

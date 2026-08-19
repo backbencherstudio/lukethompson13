@@ -8,6 +8,7 @@ import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
+import 'package:lukethompson/core/services/revenuecat_service.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/home_screen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_stop_log_screen.dart';
@@ -46,32 +47,28 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
 
     Future.delayed(
       const Duration(seconds: AppConfig.subscriptionDialogDelay),
-      () {
+      () async {
         if (!mounted) return;
-        final customerInfo = ref.read(customerInfoProvider).value;
 
-        if (customerInfo != null &&
-            ref.read(revenueCatServiceProvider).isEntitled(customerInfo)) {
-          return;
-        }
-
+        final isPro = await _isProSubscriber();
+        if (!mounted || isPro) return;
         if (Routes.currentRouteUri(context).path ==
             Routes.chooseSubscriptionPlan) {
           return;
         }
 
-        showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => UnlockDialog(
-            onSubscribe: () {
-              Navigator.of(context).pop();
-              context.push(Routes.chooseSubscriptionPlan);
-            },
-          ),
-        );
+        RevenueCatService.showPayWallDialog(context);
       },
     );
+  }
+
+  Future<bool> _isProSubscriber() async {
+    try {
+      final info = await ref.read(customerInfoProvider.future);
+      return ref.read(revenueCatServiceProvider).isEntitled(info);
+    } catch (_) {
+      return false;
+    }
   }
 
   Widget _buildBody(int index) {
@@ -146,9 +143,7 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
   Widget _buildAddButton(int index) {
     return InkWell(
       onLongPress: index == 2 && kDebugMode
-          ? () {
-              context.push(Routes.chooseSubscriptionPlan);
-            }
+          ? () => RevenueCatService.showPayWall(context)
           : null,
       onTap: () => _onTap(index),
       borderRadius: BorderRadius.circular(30),

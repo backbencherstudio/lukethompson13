@@ -6,6 +6,7 @@ import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
+import 'package:lukethompson/core/services/revenuecat_service.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
@@ -136,9 +137,8 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
-                            onPressed: () {
-                              context.push(Routes.chooseSubscriptionPlan);
-                            },
+                            onPressed: () =>
+                                RevenueCatService.showPayWall(context),
                           ),
                         ],
                       ),

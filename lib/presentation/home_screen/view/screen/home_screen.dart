@@ -54,7 +54,6 @@ class _HomescreenState extends ConsumerState<Homescreen>
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(child: CustomCarouselSlider()),
               SliverToBoxAdapter(child: SizedBox(height: 10.h)),
-
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(

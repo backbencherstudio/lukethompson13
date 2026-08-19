@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
+import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 const _monthlyFeatures = [
@@ -62,12 +66,29 @@ class RevenueCatService {
 
   static List<String> getFeaturedPlanItems(String? selectedPlanId) {
     switch (selectedPlanId) {
-      case AppConfig.revenueCatProMonthlyPackageId:
-        return _monthlyFeatures;
-      case AppConfig.revenueCatProYearlyPackageId:
+      case AppConfig.revenueCatProYearlyPackageId || 'monthly':
         return _yearlyFeatures;
+      case AppConfig.revenueCatProMonthlyPackageId || 'yearly':
+        return _monthlyFeatures;
       default:
         return [];
     }
+  }
+
+  static Future<T?> showPayWallDialog<T>(BuildContext context) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => UnlockDialog(
+        onSubscribe: () {
+          Navigator.of(context).pop();
+          RevenueCatService.showPayWall(context);
+        },
+      ),
+    );
+  }
+
+  static Future<T?> showPayWall<T extends Object?>(BuildContext context) async {
+    return context.push(Routes.chooseSubscriptionPlan);
   }
 }

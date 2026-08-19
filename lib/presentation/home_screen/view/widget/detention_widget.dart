@@ -32,80 +32,69 @@ class DetentionWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isProSubscription = ref.watch(isProSubscriptionProvider);
-    return GestureDetector(
-      onTap: () async {
-        if (isProSubscription) return;
-        await showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => const UnlockDialog(),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            width: 1,
-            color: ColorManager.backgroundColorgreen1.withValues(alpha: .2),
+    return Container(
+      padding: EdgeInsets.all(12.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+          width: 1,
+          color: ColorManager.backgroundColorgreen1.withValues(alpha: .2),
+        ),
+        color: ColorManager.boxColor,
+      ),
+      child: Column(
+        crossAxisAlignment: .start,
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          Row(
+            children: [
+              if (data.imagePath != null && data.imagePath!.isNotEmpty) ...[
+                Image.asset(
+                  data.imagePath!,
+                  width: 20.w,
+                  height: 20.h,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(Icons.error, size: 20.sp, color: Colors.red),
+                ),
+                SizedBox(width: 8.w),
+              ],
+              Expanded(
+                child: Text(
+                  data.title ?? "Detention",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: data.titleColor ?? ColorManager.textColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
-          color: ColorManager.boxColor,
-        ),
-        child: Column(
-          crossAxisAlignment: .start,
-          mainAxisAlignment: .spaceBetween,
-          children: [
-            Row(
-              children: [
-                if (data.imagePath != null && data.imagePath!.isNotEmpty) ...[
-                  Image.asset(
-                    data.imagePath!,
-                    width: 20.w,
-                    height: 20.h,
-                    errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error, size: 20.sp, color: Colors.red),
-                  ),
-                  SizedBox(width: 8.w),
-                ],
-                Expanded(
-                  child: Text(
-                    data.title ?? "Detention",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: data.titleColor ?? ColorManager.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+          Column(
+            crossAxisAlignment: .start,
+            children: [
+              Text(
+                data.value ?? "\$0",
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  color: data.valueColor ?? ColorManager.primaryButton,
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(
-                  data.value ?? "\$0",
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    color: data.valueColor ?? ColorManager.primaryButton,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              ),
+              SizedBox(height: 2.h),
+              Text(
+                data.subtitle ?? "",
+                style: TextStyle(
+                  color: data.subtitleColor ?? ColorManager.greyText,
+                  fontSize: 12,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 2.h),
-                Text(
-                  data.subtitle ?? "",
-                  style: TextStyle(
-                    color: data.subtitleColor ?? ColorManager.greyText,
-                    fontSize: 12,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
