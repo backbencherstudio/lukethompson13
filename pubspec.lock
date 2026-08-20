@@ -321,6 +321,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  dart_mcp:
+    dependency: transitive
+    description:
+      name: dart_mcp
+      sha256: "852b51da915d679be8d051e2e3b6c68ed19fe685f1c676bb35272a2d73ceac7a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.2"
   dart_polylabel2:
     dependency: transitive
     description:
@@ -821,6 +829,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.12.0"
+  json_rpc_2:
+    dependency: transitive
+    description:
+      name: json_rpc_2
+      sha256: "82dfd37d3b2e5030ae4729e1d7f5538cbc45eb1c73d618b9272931facac3bec1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   json_serializable:
     dependency: "direct dev"
     description:
@@ -1237,6 +1253,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0-dev.10"
+  riverpod_devtools:
+    dependency: "direct main"
+    description:
+      name: riverpod_devtools
+      sha256: "8bd86bf9adce7eabce9f2ed1f9c2a74a79dfbb8344516c957c3dea3c56883e94"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   riverpod_lint:
     dependency: "direct dev"
     description:

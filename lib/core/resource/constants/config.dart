@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
@@ -7,7 +8,9 @@ class AppConfig {
   static const appName = 'GetDocPay';
   static const bundleId = 'com.lukethompson.getdocpay';
 
-  static final serverBaseUrl = _required('SERVER_BASE_URL');
+  static final serverBaseUrl = _required(
+    kDebugMode ? 'SERVER_BASE_URL_DEV' : 'SERVER_BASE_URL',
+  );
 
   // Maps **************************************************************
   static const mapProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
