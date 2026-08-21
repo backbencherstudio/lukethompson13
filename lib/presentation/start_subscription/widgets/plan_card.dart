@@ -56,26 +56,28 @@ class PlanCard extends StatelessWidget {
                       ),
                     ),
                     4.height,
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: price,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: .w700,
+                    FittedBox(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: price,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: .w700,
+                              ),
                             ),
-                          ),
-                          TextSpan(
-                            text: '/$duration',
-                            style: TextStyle(
-                              color: ColorManager.subtextColor,
-                              fontSize: 14,
-                              fontWeight: .w700,
+                            TextSpan(
+                              text: '/$duration',
+                              style: TextStyle(
+                                color: ColorManager.subtextColor,
+                                fontSize: 14,
+                                fontWeight: .w700,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     const Spacer(),

@@ -19,14 +19,15 @@ class AppConfig {
   static const revenueCatOfferingId = 'default';
   static const subscriptionDialogDelay = 30;
 
-  static final isRevenueCatEnabled = !Platform.isAndroid;
+  static final isRevenueCatEnabled = true;
+  // static final isRevenueCatEnabled = !Platform.isAndroid;
 
   static const revenueCatProEntitlementId = 'GetDockPay Pro';
   static const revenueCatProMonthlyPackageId = 'getdocpay_pro';
   static const revenueCatProYearlyPackageId = 'getdocpay_pro_yearly';
 
   static final revenueCatApiKey = _required(
-    Platform.isIOS ? 'REVENUECAT_API_KEY_IOS' : 'REVENUECAT_API_KEY_TEST',
+    Platform.isIOS ? 'REVENUECAT_API_KEY_IOS' : 'REVENUECAT_API_KEY_ANDROID',
   );
 
   static String _required(String key) {
