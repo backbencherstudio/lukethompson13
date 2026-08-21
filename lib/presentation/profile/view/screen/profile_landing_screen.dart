@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
@@ -71,40 +72,42 @@ class ProfileScreen extends StatelessWidget {
                         onTap: () => context.push(Routes.shipperRatings),
                       ),
 
-                      ProfileSettingItem(
-                        icon: Icons.workspace_premium_outlined,
-                        title: "Subscriptions",
-                        onTap: () => context.push(Routes.manageSubscription),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: ColorManager.primaryButton,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                "Upgrade Plan",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                      if (AppConfig.isRevenueCatEnabled)
+                        ProfileSettingItem(
+                          icon: Icons.workspace_premium_outlined,
+                          title: "Subscriptions",
+                          onTap: () => context.push(Routes.manageSubscription),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: ColorManager.primaryButton,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Text(
+                                  "Upgrade Plan",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white38,
-                              size: 16,
-                            ),
-                          ],
+                              const SizedBox(width: 10),
+                              const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.white38,
+                                size: 16,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+
                       ProfileSettingItem(
                         icon: Icons.lock_outline,
                         title: "Privacy & policy",

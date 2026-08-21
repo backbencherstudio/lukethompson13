@@ -15,6 +15,7 @@ import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/global_tab_bar.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/start_subscription/state/choose_subscription_plan_state.dart';
 import 'package:lukethompson/presentation/start_subscription/widgets/feature_list_card.dart';
 import 'package:lukethompson/presentation/start_subscription/widgets/get_premium_icon.dart';
@@ -66,6 +67,28 @@ class _ChooseSubscriptionPlanScreenState
 
   @override
   Widget build(BuildContext context) {
+    if (!AppConfig.isRevenueCatEnabled) {
+      return AppGradientBackground(
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          backgroundColor: Colors.transparent,
+          appBar: GlobalAppBar(
+            backButtonIcon: const Icon(
+              Icons.close,
+              size: 24,
+              color: ColorManager.subtextColor,
+            ),
+            backButtonBackgroundColor: Colors.transparent,
+          ),
+          body: SafeArea(
+            child: Center(
+              child: StatusDisplay.muted('Subscriptions are not available right now'),
+            ),
+          ),
+        ),
+      );
+    }
+
     final state = ref.watch(selectedPlanIdProvider);
     final packagesAsync = ref.watch(offeringPackagesProvider);
     final packages = packagesAsync.value;

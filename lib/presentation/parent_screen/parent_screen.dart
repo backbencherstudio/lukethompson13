@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
@@ -10,11 +9,9 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/services/revenuecat_service.dart';
 import 'package:lukethompson/presentation/home_screen/view/screen/home_screen.dart';
-import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_stop_log_screen.dart';
 import 'package:lukethompson/presentation/profile/view/screen/profile_landing_screen.dart';
 import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/demo.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_stop_log_screen.dart';
 import 'package:lukethompson/presentation/stops/view/screen/stops_screen.dart';
 
 class ParentScreenNotifier extends Notifier<int> {
@@ -63,6 +60,7 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
   }
 
   Future<bool> _isProSubscriber() async {
+    if (!AppConfig.isRevenueCatEnabled) return true;
     try {
       final info = await ref.read(customerInfoProvider.future);
       return ref.read(revenueCatServiceProvider).isEntitled(info);

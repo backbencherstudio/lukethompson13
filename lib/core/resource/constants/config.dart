@@ -19,6 +19,8 @@ class AppConfig {
   static const revenueCatOfferingId = 'default';
   static const subscriptionDialogDelay = 30;
 
+  static final isRevenueCatEnabled = !Platform.isAndroid;
+
   static const revenueCatProEntitlementId = 'GetDockPay Pro';
   static const revenueCatProMonthlyPackageId = 'getdocpay_pro';
   static const revenueCatProYearlyPackageId = 'getdocpay_pro_yearly';

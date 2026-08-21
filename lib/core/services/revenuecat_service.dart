@@ -25,6 +25,8 @@ const _yearlyFeatures = [
 
 class RevenueCatService {
   Future<void> configure() async {
+    if (!AppConfig.isRevenueCatEnabled) return;
+
     if (kDebugMode) {
       await Purchases.setLogLevel(LogLevel.debug);
     }
@@ -76,6 +78,7 @@ class RevenueCatService {
   }
 
   static Future<T?> showPayWallDialog<T>(BuildContext context) async {
+    if (!AppConfig.isRevenueCatEnabled) return null;
     return showDialog(
       context: context,
       barrierDismissible: true,
@@ -89,6 +92,7 @@ class RevenueCatService {
   }
 
   static Future<T?> showPayWall<T extends Object?>(BuildContext context) async {
+    if (!AppConfig.isRevenueCatEnabled) return null;
     return context.push(Routes.chooseSubscriptionPlan);
   }
 }

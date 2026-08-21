@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
@@ -15,6 +16,7 @@ import 'package:lukethompson/core/widgets/app_switch.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/profile/view/widget/subscription_info_card.dart';
 import 'package:lukethompson/presentation/start_subscription/widgets/feature_list_card.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -25,6 +27,22 @@ class ManageSubscriptionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (!AppConfig.isRevenueCatEnabled) {
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GlobalAppBar(title: 'Manage Subscription'),
+        body: AppGradientBackground(
+          child: SafeArea(
+            child: Center(
+              child: StatusDisplay.muted(
+                'Subscription management is not available on Android.',
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     final customerInfoAsync = ref.watch(customerInfoProvider);
     final isProSubscription = ref.watch(isProSubscriptionProvider);
     final offeringsAsync = ref.watch(offeringPackagesProvider);
