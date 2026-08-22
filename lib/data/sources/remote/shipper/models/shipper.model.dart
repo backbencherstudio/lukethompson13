@@ -4,12 +4,20 @@ import 'package:lukethompson/data/models/common/meta_data.dart';
 
 part 'shipper.model.g.dart';
 
+enum FacilityType {
+  shipper,
+  broker;
+
+  String toJson() => name;
+}
+
 class ShipperSearchParams {
   final String? search;
   final String? cursor;
   final int? limit;
+  final FacilityType? type;
 
-  const ShipperSearchParams({this.search, this.cursor, this.limit});
+  const ShipperSearchParams({this.search, this.cursor, this.limit, this.type});
 
   @override
   bool operator ==(Object other) {
@@ -18,11 +26,12 @@ class ShipperSearchParams {
     return other is ShipperSearchParams &&
         other.search == search &&
         other.cursor == cursor &&
-        other.limit == limit;
+        other.limit == limit &&
+        other.type == type;
   }
 
   @override
-  int get hashCode => Object.hash(search, cursor, limit);
+  int get hashCode => Object.hash(search, cursor, limit, type);
 }
 
 @JsonSerializable()
@@ -90,6 +99,8 @@ class ShipperSearchFacilityItem {
   final String? lat;
   final String? lng;
   final double? rating;
+  final String? email;
+  final int? totalShippers;
 
   const ShipperSearchFacilityItem({
     this.id,
@@ -98,6 +109,8 @@ class ShipperSearchFacilityItem {
     this.rating,
     this.lat,
     this.lng,
+    this.email,
+    this.totalShippers,
   });
 
   factory ShipperSearchFacilityItem.fromJson(Map<String, dynamic> json) =>
@@ -168,6 +181,9 @@ class CreateShippperRequest {
   final String? state;
   final String? zip;
   final String? country;
+  final String? brokerId;
+  final String? brokerName;
+  final String? brokerEmail;
 
   CreateShippperRequest({
     required this.name,
@@ -178,6 +194,10 @@ class CreateShippperRequest {
     this.state,
     this.zip,
     this.country,
+
+    this.brokerId,
+    this.brokerName,
+    this.brokerEmail,
   });
 
   factory CreateShippperRequest.fromJson(Map<String, dynamic> json) =>

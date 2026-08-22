@@ -7,7 +7,7 @@ part of 'meta_data.dart';
 // **************************************************************************
 
 ResponseFilter _$ResponseFilterFromJson(Map<String, dynamic> json) =>
-    ResponseFilter(status: json['status'] as String);
+    ResponseFilter(status: json['status'] as String?);
 
 Map<String, dynamic> _$ResponseFilterToJson(ResponseFilter instance) =>
     <String, dynamic>{'status': instance.status};

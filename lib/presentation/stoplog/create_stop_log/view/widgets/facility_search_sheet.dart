@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_bottom_sheet.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
 import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
@@ -12,18 +13,21 @@ import 'package:lukethompson/presentation/home_screen/view/widget/status_display
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 
 Future<ShipperSearchFacilityItem?> showFacilitySearchSheet(
-  BuildContext context,
-) {
+  BuildContext context, {
+  FacilityType facilityType = FacilityType.shipper,
+}) {
   return showModalBottomSheet<ShipperSearchFacilityItem>(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
-    builder: (_) => const _FacilitySearchSheetContent(),
+    builder: (_) => _FacilitySearchSheetContent(facilityType: facilityType),
   );
 }
 
 class _FacilitySearchSheetContent extends ConsumerStatefulWidget {
-  const _FacilitySearchSheetContent();
+  const _FacilitySearchSheetContent({required this.facilityType});
+
+  final FacilityType facilityType;
 
   @override
   ConsumerState<_FacilitySearchSheetContent> createState() =>
@@ -36,20 +40,24 @@ class _FacilitySearchSheetContentState
   final _focusNode = FocusNode();
   Timer? _debounce;
 
+  bool get isBrokerSearch => widget.facilityType == .broker;
+
   @override
   void initState() {
     super.initState();
     _focusNode.requestFocus();
 
     _searchController = TextEditingController(
-      text: ref.read(selectedFacilityProvider)?.name ?? '',
+      text: widget.facilityType == .shipper
+          ? ref.read(selectedFacilityProvider)?.name ?? ''
+          : '',
     );
     _searchController.addListener(_onSearchChanged);
 
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       ref
           .read(getSearchAllShipperFacilitiesProvider.notifier)
-          .searchInitialData();
+          .searchInitialData(widget.facilityType);
     });
   }
 
@@ -69,28 +77,34 @@ class _FacilitySearchSheetContentState
       if (text.isNotEmpty) {
         ref
             .read(getSearchAllShipperFacilitiesProvider.notifier)
-            .search(ShipperSearchParams(search: text));
+            .search(
+              ShipperSearchParams(search: text, type: widget.facilityType),
+            );
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final searchText = _searchController.text;
-    final facilities = ref.watch(getSearchAllShipperFacilitiesProvider);
+    final facilitiesState = ref.watch(getSearchAllShipperFacilitiesProvider);
 
     return AppBottomSheet(
-      title: 'Select Facility',
+      title: isBrokerSearch ? 'Select Broker' : 'Select Facility',
       heightRatio: 0.9,
       fixedHeader: Column(
         children: [
           SearchBarWidget(
-            hintText: 'Search facilities...',
+            hintText: isBrokerSearch
+                ? 'Search broker...'
+                : 'Search facilities...',
             controller: _searchController,
             focusNode: _focusNode,
             suffixIcon: IconButton(
               onPressed: () {
                 _searchController.clear();
+                ref
+                    .read(getSearchAllShipperFacilitiesProvider.notifier)
+                    .searchInitialData(widget.facilityType);
               },
               icon: Icon(
                 Icons.close,
@@ -102,20 +116,19 @@ class _FacilitySearchSheetContentState
           6.height,
         ],
       ),
-      child: facilities.when(
-        loading: () => null,
-        error: (_, _) {
-          if (searchText.isNotEmpty) {
-            return StatusDisplay.error("No Item found");
-            // return buildAddButton(searchText, context);
-          }
-          return null;
+      child: facilitiesState.when(
+        loading: () => Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: ActivityIndicator(),
+        ),
+        error: (err, st) {
+          return StatusDisplay.error("something went wrong");
         },
         data: (items) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (searchText.isNotEmpty && items != null && items.isEmpty)
+              if (items != null && items.isEmpty)
                 StatusDisplay.error("No Item found"),
 
               if (items != null)
@@ -161,11 +174,12 @@ class _FacilitySearchSheetContentState
             title: Text(item.name, style: const TextStyle(color: Colors.white)),
             subtitle: item.address != null
                 ? Text(
-                    item.address!,
+                    isBrokerSearch ? item.email ?? '' : item.address ?? '',
                     style: const TextStyle(
                       color: ColorManager.subtextColor,
                       fontSize: 12,
                     ),
+                    overflow: .ellipsis,
                   )
                 : null,
             trailing: const Icon(

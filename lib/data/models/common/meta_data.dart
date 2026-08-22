@@ -4,9 +4,9 @@ part 'meta_data.g.dart';
 
 @JsonSerializable()
 class ResponseFilter {
-  final String status;
+  final String? status;
 
-  ResponseFilter({required this.status});
+  ResponseFilter({this.status});
 
   factory ResponseFilter.fromJson(Map<String, dynamic> json) =>
       _$ResponseFilterFromJson(json);

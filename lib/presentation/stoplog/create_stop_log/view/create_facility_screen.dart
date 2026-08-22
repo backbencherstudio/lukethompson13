@@ -25,6 +25,8 @@ import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_edit_map_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/location_search_sheet.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/create_broker_section.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_search_sheet.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class CreateFacilityScreen extends ConsumerStatefulWidget {
   const CreateFacilityScreen({super.key});
@@ -36,21 +38,19 @@ class CreateFacilityScreen extends ConsumerStatefulWidget {
 
 class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
   late final fieldMapController = MapController();
-  late final _facilityNameController = TextEditingController();
   String? choosenLocationAddress;
   LatLng? choosenPosition;
+  String? _existingBrokerId;
 
-  @override
-  void initState() {
-    super.initState();
-    _facilityNameController.addListener(() {
-      setState(() {});
-    });
-  }
+  final form = CreateFacilityForm();
+
+  FormControl<String> get facilityName => form.facilityName;
+  FormControl<String> get brokerName => form.brokerName;
+  FormControl<String> get brokerEmail => form.brokerEmail;
 
   @override
   void dispose() {
-    _facilityNameController.dispose();
+    form.dispose();
     super.dispose();
   }
 
@@ -116,119 +116,153 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
     final addressIsEmpty =
         choosenPosition == null || choosenLocationAddress == null;
     final createMutationState = ref.watch(createANewShipperFacilityMutation);
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: GlobalAppBar(
-        title: 'Create facility',
-        // subTitle: session.value?.address,
-      ),
-      body: AppGradientBackground(
-        child: SafeArea(
-          child: FullHeightScrollView(
-            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
-            child: Column(
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 8.h),
-                Text("Facility Name", style: context.labelLarge),
-                CustomTextFieldWidget(
-                  hintText: "Enter facility name",
-                  controller: _facilityNameController,
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  textInputAction: .next,
-                ),
-
-                SizedBox(height: 8.h),
-                Text("Facility address", style: context.labelLarge),
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 0),
-                  child: Row(
-                    spacing: 12,
-                    children: [
-                      Expanded(
-                        child: TintedOutlinedButton(
-                          color: ColorManager.primaryButton,
-                          label: 'Current location',
-                          onPressed: onUseCurrentLocation,
-                        ),
-                      ),
-                      Expanded(
-                        child: TintedOutlinedButton(
-                          color: ColorManager.warningColor,
-                          label: 'Search location',
-                          onPressed: () => onSearchLocation(context),
-                        ),
-                      ),
-                    ],
+    return ReactiveForm(
+      formGroup: form,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GlobalAppBar(title: 'Create facility'),
+        body: AppGradientBackground(
+          child: SafeArea(
+            child: FullHeightScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppPadding.screenPadding,
+              ),
+              child: Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8.h),
+                  const InputLabel('Facility Name'),
+                  ReactiveTextField<String>(
+                    formControl: facilityName,
+                    validationMessages: {
+                      ValidationMessage.required: (_) =>
+                          'Facility name is required',
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Enter facility name',
+                    ),
                   ),
-                ),
 
-                FormFieldMapView(
-                  location: choosenPosition,
-                  label: choosenLocationAddress ?? "Select Location",
-                  mapController: fieldMapController,
-                  labelActtion: addressIsEmpty
-                      ? SizedBox(height: 40)
-                      : TintedOutlinedButton(
-                          label: 'Edit',
-                          onPressed: () {
-                            if (addressIsEmpty) {
-                              return;
-                            }
+                  SizedBox(height: 8.h),
+                  const InputLabel('Facility Address'),
 
-                            final loc = LocationDataModel(
-                              latitude: choosenPosition!.latitude,
-                              longitude: choosenPosition!.longitude,
-                              address: choosenLocationAddress!,
-                            );
-                            editAndUpdateLocation(context, loc);
-                          },
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0),
+                    child: Row(
+                      spacing: 12,
+                      children: [
+                        Expanded(
+                          child: TintedOutlinedButton(
+                            color: ColorManager.primaryButton,
+                            label: 'Current location',
+                            onPressed: onUseCurrentLocation,
+                          ),
                         ),
-                ),
+                        Expanded(
+                          child: TintedOutlinedButton(
+                            color: ColorManager.warningColor,
+                            label: 'Search location',
+                            onPressed: () => onSearchLocation(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-                SizedBox(height: 8.h),
-                CreateBrokerSection(),
-                SizedBox(height: 8.h),
-              ],
+                  FormFieldMapView(
+                    location: choosenPosition,
+                    label: choosenLocationAddress ?? "Select Location",
+                    mapController: fieldMapController,
+                    labelActtion: addressIsEmpty
+                        ? SizedBox(height: 40)
+                        : TintedOutlinedButton(
+                            label: 'Edit',
+                            onPressed: () {
+                              if (addressIsEmpty) {
+                                return;
+                              }
+
+                              final loc = LocationDataModel(
+                                latitude: choosenPosition!.latitude,
+                                longitude: choosenPosition!.longitude,
+                                address: choosenLocationAddress!,
+                              );
+                              editAndUpdateLocation(context, loc);
+                            },
+                          ),
+                  ),
+
+                  SizedBox(height: 8.h),
+                  CreateBrokerSection(
+                    brokerNameControl: brokerName,
+                    brokerEmailControl: brokerEmail,
+                    onSelectPress: () async {
+                      final choosenBroker = await showFacilitySearchSheet(
+                        context,
+                        facilityType: .broker,
+                      );
+
+                      if (choosenBroker == null) return;
+
+                      if (choosenBroker.id?.isNotEmpty == true) {
+                        setState(() {
+                          brokerName.value = choosenBroker.name;
+                          brokerEmail.value = choosenBroker.email;
+                          _existingBrokerId = choosenBroker.id;
+                        });
+                      }
+                    },
+                  ),
+                  SizedBox(height: 8.h),
+                ],
+              ),
             ),
           ),
         ),
-      ),
 
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: GlobalButton(
-            isLoading: createMutationState.isPending,
-            isDisabled: addressIsEmpty || _facilityNameController.text.isEmpty,
-            label: 'Create',
-            onPressed: () async {
-              final (res, err) = await tryCatch(
-                ref
-                    .read(createANewShipperFacilityMutation.notifier)
-                    .create(
-                      CreateShippperRequest(
-                        name: _facilityNameController.text,
-                        address: choosenLocationAddress ?? '',
-                        lat: choosenPosition?.latitude,
-                        lng: choosenPosition?.longitude,
-                      ),
-                    ),
-              );
-              if (err != null) {
-                Utils.showErrorToast(
-                  message: ErrorHandle.formatErrorMessage(err),
+        bottomNavigationBar: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+            child: ReactiveFormConsumer(
+              builder: (_, form, _) {
+                return GlobalButton(
+                  isLoading: createMutationState.isPending,
+                  isDisabled: addressIsEmpty || !form.valid,
+                  label: 'Create',
+                  onPressed: () async {
+                    form.markAllAsTouched();
+                    if (!form.valid) return;
+
+                    final (res, err) = await tryCatch(
+                      ref
+                          .read(createANewShipperFacilityMutation.notifier)
+                          .create(
+                            CreateShippperRequest(
+                              name: facilityName.value ?? '',
+                              address: choosenLocationAddress ?? '',
+                              lat: choosenPosition?.latitude,
+                              lng: choosenPosition?.longitude,
+                              brokerId: _existingBrokerId,
+                              brokerName: brokerName.value,
+                              brokerEmail: brokerEmail.value,
+                            ),
+                          ),
+                    );
+                    if (err != null) {
+                      Utils.showErrorToast(
+                        message: ErrorHandle.formatErrorMessage(err),
+                      );
+                      return;
+                    }
+
+                    if (context.mounted) {
+                      context.pop(res?.data);
+                    }
+                  },
                 );
-                return;
-              }
-
-              if (context.mounted) {
-                context.pop(res?.data);
-              }
-            },
+              },
+            ),
           ),
         ),
       ),
@@ -318,4 +352,22 @@ class FormFieldMapView extends StatelessWidget {
       ),
     );
   }
+}
+
+class CreateFacilityForm extends FormGroup {
+  CreateFacilityForm()
+    : super({
+        'facilityName': FormControl<String>(validators: [Validators.required]),
+        'brokerName': FormControl<String>(),
+        'brokerEmail': FormControl<String>(validators: [Validators.email]),
+      });
+
+  FormControl<String> get facilityName =>
+      control('facilityName') as FormControl<String>;
+
+  FormControl<String> get brokerName =>
+      control('brokerName') as FormControl<String>;
+
+  FormControl<String> get brokerEmail =>
+      control('brokerEmail') as FormControl<String>;
 }

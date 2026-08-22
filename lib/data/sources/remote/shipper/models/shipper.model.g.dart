@@ -47,6 +47,8 @@ ShipperSearchFacilityItem _$ShipperSearchFacilityItemFromJson(
   rating: (json['rating'] as num?)?.toDouble(),
   lat: json['lat'] as String?,
   lng: json['lng'] as String?,
+  email: json['email'] as String?,
+  totalShippers: (json['totalShippers'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$ShipperSearchFacilityItemToJson(
@@ -58,6 +60,8 @@ Map<String, dynamic> _$ShipperSearchFacilityItemToJson(
   'lat': instance.lat,
   'lng': instance.lng,
   'rating': instance.rating,
+  'email': instance.email,
+  'totalShippers': instance.totalShippers,
 };
 
 ShipperSearchFacilitiesResponse _$ShipperSearchFacilitiesResponseFromJson(
@@ -117,6 +121,9 @@ CreateShippperRequest _$CreateShippperRequestFromJson(
   state: json['state'] as String?,
   zip: json['zip'] as String?,
   country: json['country'] as String?,
+  brokerId: json['brokerId'] as String?,
+  brokerName: json['brokerName'] as String?,
+  brokerEmail: json['brokerEmail'] as String?,
 );
 
 Map<String, dynamic> _$CreateShippperRequestToJson(
@@ -130,6 +137,9 @@ Map<String, dynamic> _$CreateShippperRequestToJson(
   'state': instance.state,
   'zip': instance.zip,
   'country': instance.country,
+  'brokerId': instance.brokerId,
+  'brokerName': instance.brokerName,
+  'brokerEmail': instance.brokerEmail,
 };
 
 CreateShipperResponse _$CreateShipperResponseFromJson(

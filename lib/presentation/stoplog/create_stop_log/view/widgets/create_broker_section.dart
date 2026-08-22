@@ -2,35 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/widgets/tinted_outlined_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_search_sheet.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class CreateBrokerSection extends StatefulWidget {
-  const CreateBrokerSection({super.key});
+class CreateBrokerSection extends StatelessWidget {
+  const CreateBrokerSection({
+    super.key,
+    required this.brokerNameControl,
+    required this.brokerEmailControl,
+    required this.onSelectPress,
+  });
 
-  @override
-  State<CreateBrokerSection> createState() => _CreateBrokerSectionState();
-}
-
-class _CreateBrokerSectionState extends State<CreateBrokerSection> {
-  late final _facilityNameController = TextEditingController();
+  final FormControl<String> brokerNameControl;
+  final FormControl<String> brokerEmailControl;
+  final VoidCallback onSelectPress;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       spacing: 8,
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: .spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Broker Name", style: context.labelLarge),
+            const InputLabel('Broker Name'),
             TextButton(
-              style: TextButton.styleFrom(padding: .zero),
-              onPressed: () {
-                showFacilitySearchSheet(context);
-              },
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              onPressed: onSelectPress,
               child: Row(
                 children: [
                   Text(
@@ -47,22 +46,19 @@ class _CreateBrokerSectionState extends State<CreateBrokerSection> {
             ),
           ],
         ),
-        CustomTextFieldWidget(
-          hintText: "Enter broker name",
-          controller: _facilityNameController,
-          autofocus: true,
-          keyboardType: TextInputType.text,
-          textInputAction: .next,
+        ReactiveTextField<String>(
+          formControl: brokerNameControl,
+          decoration: const InputDecoration(hintText: 'Enter broker name'),
         ),
 
         SizedBox(height: 8.h),
-        Text("Broker Email", style: context.labelLarge),
-        CustomTextFieldWidget(
-          hintText: "Enter broker Email",
-          controller: _facilityNameController,
-          autofocus: true,
-          keyboardType: TextInputType.text,
-          textInputAction: .next,
+        const InputLabel('Broker Email'),
+        ReactiveTextField<String>(
+          formControl: brokerEmailControl,
+          validationMessages: {
+            ValidationMessage.email: (_) => 'Please enter a valid email',
+          },
+          decoration: const InputDecoration(hintText: 'Enter broker Email'),
         ),
       ],
     );

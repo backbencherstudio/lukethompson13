@@ -93,12 +93,14 @@ class _ShipperApi implements ShipperApi {
     String? search,
     String? cursor,
     int? limit,
+    String? type,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'search': search,
       r'cursor': cursor,
       r'limit': limit,
+      r'type': type,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

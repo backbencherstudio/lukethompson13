@@ -31,6 +31,7 @@ abstract class ShipperApi {
     @Query('search') String? search,
     @Query('cursor') String? cursor,
     @Query('limit') int? limit,
+    @Query('type') String? type,
   );
 
   @POST(ApiEndpoints.shippers)

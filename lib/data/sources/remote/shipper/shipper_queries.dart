@@ -13,9 +13,9 @@ class ShipperSearchNotifier
     _search(params);
   }
 
-  Future<void> searchInitialData() async {
+  Future<void> searchInitialData(FacilityType facilityType) async {
     state = const AsyncLoading();
-    _search(ShipperSearchParams());
+    _search(ShipperSearchParams(type: facilityType));
   }
 
   Future<void> _search(ShipperSearchParams params) async {
@@ -25,6 +25,7 @@ class ShipperSearchNotifier
         params.search,
         params.cursor,
         params.limit,
+        params.type?.toJson(),
       );
       state = AsyncData(response.data);
     } catch (e, st) {
