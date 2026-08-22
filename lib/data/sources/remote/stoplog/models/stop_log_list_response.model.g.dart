@@ -14,10 +14,14 @@ Map<String, dynamic> _$RatingToJson(Rating instance) => <String, dynamic>{
   'rating': instance.rating,
 };
 
-Broker _$BrokerFromJson(Map<String, dynamic> json) =>
-    Broker(name: json['name'] as String?, email: json['email'] as String?);
+Broker _$BrokerFromJson(Map<String, dynamic> json) => Broker(
+  id: json['id'] as String?,
+  name: json['name'] as String?,
+  email: json['email'] as String?,
+);
 
 Map<String, dynamic> _$BrokerToJson(Broker instance) => <String, dynamic>{
+  'id': instance.id,
   'name': instance.name,
   'email': instance.email,
 };

@@ -34,7 +34,7 @@ class ClaimNowScreen extends ConsumerStatefulWidget {
 class _ClaimNowScreenState extends ConsumerState<ClaimNowScreen> {
   @override
   Widget build(BuildContext context) {
-    final session = FullClaimPreviewCard.getSession(
+    final singleStopLogState = FullClaimPreviewCard.getSession(
       ref,
       widget.argument?.steplogId,
     );
@@ -44,7 +44,7 @@ class _ClaimNowScreenState extends ConsumerState<ClaimNowScreen> {
         backgroundColor: Colors.transparent,
         appBar: GlobalAppBar(title: 'Claim Detail'),
         body: SafeArea(
-          child: session.when(
+          child: singleStopLogState.when(
             skipLoadingOnRefresh: true,
             skipLoadingOnReload: true,
             data: (data) {

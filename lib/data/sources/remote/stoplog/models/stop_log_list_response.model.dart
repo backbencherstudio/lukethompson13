@@ -56,10 +56,11 @@ class Rating {
 
 @JsonSerializable()
 class Broker {
+  final String? id;
   final String? name;
   final String? email;
 
-  Broker({this.name, this.email});
+  Broker({this.id, this.name, this.email});
 
   factory Broker.fromJson(Map<String, dynamic> json) => _$BrokerFromJson(json);
 

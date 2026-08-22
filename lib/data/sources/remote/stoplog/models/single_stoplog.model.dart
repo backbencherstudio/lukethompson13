@@ -115,6 +115,8 @@ class SingleStoplogDetailData {
   final String? detention;
   final String? lost;
 
+  final Broker? broker;
+
   SingleStoplogDetailData({
     this.id,
     this.userId,
@@ -145,6 +147,7 @@ class SingleStoplogDetailData {
     this.address,
     this.detention,
     this.lost,
+    this.broker,
   });
 
   factory SingleStoplogDetailData.fromJson(Map<String, dynamic> json) =>

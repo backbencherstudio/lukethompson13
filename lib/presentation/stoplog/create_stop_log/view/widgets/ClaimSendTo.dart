@@ -28,6 +28,15 @@ class ClaimSendTo extends ConsumerStatefulWidget {
 class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   final form = ClaimSendToForm();
 
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.data.broker?.email != null) {
+      form.brokerEmail.value = widget.data.broker?.email;
+    }
+  }
+
   FormControl<String> get recipientEmail => form.recipientEmail;
   FormControl<String> get brokerEmail => form.brokerEmail;
   FormControl<int> get sendMethod => form.sendMethod;

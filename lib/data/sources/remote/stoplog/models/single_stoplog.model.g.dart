@@ -83,6 +83,9 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
   address: json['address'] as String?,
   detention: json['detention'] as String?,
   lost: json['lost'] as String?,
+  broker: json['broker'] == null
+      ? null
+      : Broker.fromJson(json['broker'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$SingleStoplogDetailDataToJson(
@@ -117,6 +120,7 @@ Map<String, dynamic> _$SingleStoplogDetailDataToJson(
   'address': instance.address,
   'detention': instance.detention,
   'lost': instance.lost,
+  'broker': instance.broker,
 };
 
 const _$SingleStoplogStatusEnumMap = {
