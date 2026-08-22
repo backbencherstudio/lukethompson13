@@ -23,8 +23,7 @@ class TintedOutlinedButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       onPressed: onPressed,
-      child: Text(label),
+      child: Text(label, textAlign: .center),
     );
   }
 }
-

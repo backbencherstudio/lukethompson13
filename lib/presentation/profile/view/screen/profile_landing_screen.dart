@@ -118,6 +118,7 @@ class ProfileScreen extends StatelessWidget {
                         title: "Help & Support",
                         onTap: () => context.push(Routes.helpAndSupport),
                       ),
+                      buildDeleteAccoutItem(),
                       buildLoutItem(),
 
                       const SizedBox(height: 30),
@@ -128,6 +129,45 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Consumer buildDeleteAccoutItem() {
+    return Consumer(
+      builder: (context, ref, _) => ProfileSettingItem(
+        icon: Icons.person,
+        title: "Delete Account",
+        titleColor: Colors.redAccent,
+        iconColor: Colors.redAccent,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+              title: 'Delete Account',
+              subtitle: 'Are you sure you want to delete your account?',
+              bottomWidget: Row(
+                spacing: 12,
+                children: [
+                  Expanded(
+                    child: GlobalButton.primary(
+                      label: 'Delete Account',
+                      onPressed: () {
+                        context.go(Routes.signIn);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GlobalButton.outlined(
+                      label: 'Cancel',
+                      onPressed: () => context.pop(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

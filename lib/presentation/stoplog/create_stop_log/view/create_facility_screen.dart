@@ -24,6 +24,7 @@ import 'package:lukethompson/data/sources/remote/shipper/shipper_queries.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_edit_map_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/location_search_sheet.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/create_broker_section.dart';
 
 class CreateFacilityScreen extends ConsumerStatefulWidget {
   const CreateFacilityScreen({super.key});
@@ -188,39 +189,46 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
                         ),
                 ),
 
-                Spacer(),
-                GlobalButton(
-                  isLoading: createMutationState.isPending,
-                  isDisabled:
-                      addressIsEmpty || _facilityNameController.text.isEmpty,
-                  label: 'Create',
-                  onPressed: () async {
-                    final (res, err) = await tryCatch(
-                      ref
-                          .read(createANewShipperFacilityMutation.notifier)
-                          .create(
-                            CreateShippperRequest(
-                              name: _facilityNameController.text,
-                              address: choosenLocationAddress ?? '',
-                              lat: choosenPosition?.latitude,
-                              lng: choosenPosition?.longitude,
-                            ),
-                          ),
-                    );
-                    if (err != null) {
-                      Utils.showErrorToast(
-                        message: ErrorHandle.formatErrorMessage(err),
-                      );
-                      return;
-                    }
-
-                    if (context.mounted) {
-                      context.pop(res?.data);
-                    }
-                  },
-                ),
+                SizedBox(height: 8.h),
+                CreateBrokerSection(),
+                SizedBox(height: 8.h),
               ],
             ),
+          ),
+        ),
+      ),
+
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+          child: GlobalButton(
+            isLoading: createMutationState.isPending,
+            isDisabled: addressIsEmpty || _facilityNameController.text.isEmpty,
+            label: 'Create',
+            onPressed: () async {
+              final (res, err) = await tryCatch(
+                ref
+                    .read(createANewShipperFacilityMutation.notifier)
+                    .create(
+                      CreateShippperRequest(
+                        name: _facilityNameController.text,
+                        address: choosenLocationAddress ?? '',
+                        lat: choosenPosition?.latitude,
+                        lng: choosenPosition?.longitude,
+                      ),
+                    ),
+              );
+              if (err != null) {
+                Utils.showErrorToast(
+                  message: ErrorHandle.formatErrorMessage(err),
+                );
+                return;
+              }
+
+              if (context.mounted) {
+                context.pop(res?.data);
+              }
+            },
           ),
         ),
       ),
@@ -262,13 +270,13 @@ class FormFieldMapView extends StatelessWidget {
                   initialCenter: location ?? const LatLng(50.5, 30.51),
                   initialZoom: 15,
                   interactionOptions: const InteractionOptions(
-                    flags: InteractiveFlag.all,
+                    flags: InteractiveFlag.none,
                   ),
                 ),
                 children: [
                   TileLayer(
                     urlTemplate: AppConfig.mapProvider,
-                    userAgentPackageName: AppConfig.bundleId
+                    userAgentPackageName: AppConfig.bundleId,
                   ),
                   MarkerLayer(
                     markers: [
