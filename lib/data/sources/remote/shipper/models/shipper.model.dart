@@ -36,9 +36,13 @@ class ShipperSearchParams {
 
 @JsonSerializable()
 class SubmitARatingForAShipperFacilityRequest {
-  const SubmitARatingForAShipperFacilityRequest({required this.rate});
+  const SubmitARatingForAShipperFacilityRequest({
+    required this.rate,
+    required this.brokerRate,
+  });
 
   final int rate;
+  final int brokerRate;
 
   factory SubmitARatingForAShipperFacilityRequest.fromJson(
     Map<String, dynamic> json,

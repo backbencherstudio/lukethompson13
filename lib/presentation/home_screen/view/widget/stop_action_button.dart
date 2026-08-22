@@ -81,7 +81,7 @@ StopAction getStopAction(StopLogListItem stop) {
     case ClaimStatus.paid:
     case ClaimStatus.denied:
       return StopAction(
-        label: 'Rate Shipper',
+        label: 'Rate Broker & Doc',
         color: ColorManager.warningColor,
         onPressed: (context, _) {
           context.push(
@@ -89,6 +89,7 @@ StopAction getStopAction(StopLogListItem stop) {
             extra: RateShipperScreenArg(
               id: stop.id,
               facilityName: stop.facilityName,
+              brokerName: stop.broker?.name,
             ),
           );
         },

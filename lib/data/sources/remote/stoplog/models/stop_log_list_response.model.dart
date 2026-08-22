@@ -55,6 +55,21 @@ class Rating {
 }
 
 @JsonSerializable()
+class Broker {
+  final String? name;
+  final String? email;
+
+  Broker({this.name, this.email});
+
+  factory Broker.fromJson(Map<String, dynamic> json) => _$BrokerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BrokerToJson(this);
+
+  @override
+  String toString() => 'Broker${toJson()}';
+}
+
+@JsonSerializable()
 class StopLogListItem {
   final String id;
 
@@ -75,6 +90,8 @@ class StopLogListItem {
 
   final Rating? rating;
 
+  final Broker? broker;
+
   StopLogListItem({
     required this.id,
     required this.facilityName,
@@ -84,6 +101,7 @@ class StopLogListItem {
     required this.status,
     required this.claimStatus,
     this.rating,
+    this.broker,
   });
 
   factory StopLogListItem.fromJson(Map<String, dynamic> json) =>
@@ -94,8 +112,6 @@ class StopLogListItem {
   @override
   String toString() => 'StopLog${toJson()}';
 }
-
-
 
 @JsonSerializable()
 class StopLogListResponse extends BaseResponse {

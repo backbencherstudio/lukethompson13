@@ -10,11 +10,15 @@ SubmitARatingForAShipperFacilityRequest
 _$SubmitARatingForAShipperFacilityRequestFromJson(Map<String, dynamic> json) =>
     SubmitARatingForAShipperFacilityRequest(
       rate: (json['rate'] as num).toInt(),
+      brokerRate: (json['brokerRate'] as num).toInt(),
     );
 
 Map<String, dynamic> _$SubmitARatingForAShipperFacilityRequestToJson(
   SubmitARatingForAShipperFacilityRequest instance,
-) => <String, dynamic>{'rate': instance.rate};
+) => <String, dynamic>{
+  'rate': instance.rate,
+  'brokerRate': instance.brokerRate,
+};
 
 ShipperRatingItem _$ShipperRatingItemFromJson(Map<String, dynamic> json) =>
     ShipperRatingItem(

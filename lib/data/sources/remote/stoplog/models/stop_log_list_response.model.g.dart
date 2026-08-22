@@ -14,6 +14,14 @@ Map<String, dynamic> _$RatingToJson(Rating instance) => <String, dynamic>{
   'rating': instance.rating,
 };
 
+Broker _$BrokerFromJson(Map<String, dynamic> json) =>
+    Broker(name: json['name'] as String?, email: json['email'] as String?);
+
+Map<String, dynamic> _$BrokerToJson(Broker instance) => <String, dynamic>{
+  'name': instance.name,
+  'email': instance.email,
+};
+
 StopLogListItem _$StopLogListItemFromJson(Map<String, dynamic> json) =>
     StopLogListItem(
       id: json['id'] as String,
@@ -29,6 +37,9 @@ StopLogListItem _$StopLogListItemFromJson(Map<String, dynamic> json) =>
       rating: json['rating'] == null
           ? null
           : Rating.fromJson(json['rating'] as Map<String, dynamic>),
+      broker: json['broker'] == null
+          ? null
+          : Broker.fromJson(json['broker'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$StopLogListItemToJson(StopLogListItem instance) =>
@@ -41,6 +52,7 @@ Map<String, dynamic> _$StopLogListItemToJson(StopLogListItem instance) =>
       'status': _$StopLogStatusEnumMap[instance.status],
       'claim_status': _$ClaimStatusEnumMap[instance.claimStatus],
       'rating': instance.rating,
+      'broker': instance.broker,
     };
 
 const _$StopLogStatusEnumMap = {

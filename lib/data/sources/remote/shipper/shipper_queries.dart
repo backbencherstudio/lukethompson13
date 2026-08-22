@@ -46,13 +46,13 @@ final submitARatingForAShipperFacilityMutation =
     );
 
 class SubmitARatingForAShipperFacility extends MutationNotifier<BaseResponse> {
-  Future<BaseResponse> submit(String id, int rate) {
+  Future<BaseResponse> submit(String id, int rate, int brokerRate) {
     final api = ref.read(shipperApiProvider);
 
     return mutate(() async {
       return api.submitARatingForAShipperFacility(
         id,
-        SubmitARatingForAShipperFacilityRequest(rate: rate),
+        SubmitARatingForAShipperFacilityRequest(rate: rate, brokerRate: brokerRate),
       );
     });
   }

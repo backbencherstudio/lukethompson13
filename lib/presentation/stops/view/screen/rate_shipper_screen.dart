@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
-import 'package:lukethompson/core/utils/logger.dart';
+import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -20,10 +22,15 @@ import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 
 class RateShipperScreenArg {
-  const RateShipperScreenArg({required this.id, required this.facilityName});
+  const RateShipperScreenArg({
+    required this.id,
+    required this.facilityName,
+    this.brokerName,
+  });
 
   final String id;
   final String facilityName;
+  final String? brokerName;
 }
 
 class RateShipperScreen extends ConsumerStatefulWidget {
@@ -36,22 +43,27 @@ class RateShipperScreen extends ConsumerStatefulWidget {
 }
 
 class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
-  String? selectedCompany;
-  String? selectedReview;
+  String? _selectedReview;
+  String? _brokerReview;
 
   int get _selectedRate => PayerCategory.reviewOptions
       .firstWhere(
-        (e) => e.label == selectedReview,
+        (e) => e.label == _selectedReview,
         orElse: () => const ReviewOption('', 0),
       )
       .value;
 
-  final List<String> companyList = ["Google", "Microsoft", "Amazon", "Meta"];
+  int get _brokerRate => PayerCategory.reviewOptions
+      .firstWhere(
+        (e) => e.label == _brokerReview,
+        orElse: () => const ReviewOption('', 0),
+      )
+      .value;
+
   List<ReviewOption> get reviewList => PayerCategory.reviewOptions;
 
   @override
   Widget build(BuildContext context) {
-    logger.d(widget.argument?.id);
     final submitStatus = ref.watch(submitARatingForAShipperFacilityMutation);
 
     return AppGradientBackground(
@@ -70,34 +82,75 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
                   child: Assets.icons.clientReviewLogo.image(height: 80.w),
                 ),
 
-                SizedBox(height: 35.h),
+                SizedBox(height: 24.h),
 
-                InputLabel('Select Company'),
-                SizedBox(height: 8.h),
-                DropdownFieldWidget(
-                  value: widget.argument?.facilityName ?? "...",
-                  hint: "Select a company",
-                  items: [widget.argument?.facilityName ?? "..."],
-                  readonly: true,
-                  onChanged: (s) {},
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      InputLabel('Facility:'),
+                      SizedBox(height: 2.h),
+                      Text(
+                        widget.argument?.facilityName ?? '',
+                        style: context.bodyLarge,
+                        maxLines: 2,
+                        overflow: .ellipsis,
+                      ),
+
+                      SizedBox(height: 15.h),
+                      InputLabel('Facility review'),
+                      SizedBox(height: 8.h),
+                      DropdownFieldWidget(
+                        value: _selectedReview,
+                        hint: "Share your facility review",
+                        items: PayerCategory.reviewOptions
+                            .map((e) => e.label)
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() => _selectedReview = value);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
 
-                SizedBox(height: 15.h),
-                InputLabel('Share your review'),
-                SizedBox(height: 8.h),
-                DropdownFieldWidget(
-                  value: selectedReview,
-                  hint: "Share your review",
-                  items: PayerCategory.reviewOptions.map((e) => e.label).toList(),
-                  onChanged: (value) {
-                    setState(() => selectedReview = value);
-                  },
-                ),
+                16.height,
+
+                if (widget.argument?.brokerName != null)
+                  AppCard(
+                    child: Column(
+                      crossAxisAlignment: .start,
+                      children: [
+                        InputLabel('Broker'),
+                        SizedBox(height: 2.h),
+                        Text(
+                          widget.argument?.brokerName ?? '',
+                          style: context.bodyLarge,
+                          maxLines: 2,
+                          overflow: .ellipsis,
+                        ),
+
+                        SizedBox(height: 15.h),
+                        InputLabel('Broker review'),
+                        SizedBox(height: 8.h),
+                        DropdownFieldWidget(
+                          value: _brokerReview,
+                          hint: "Share your broker review",
+                          items: PayerCategory.reviewOptions
+                              .map((e) => e.label)
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() => _brokerReview = value);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
 
                 const Spacer(),
 
                 GlobalButton(
-                  isDisabled: selectedReview == null,
+                  isDisabled: _selectedReview == null || _brokerReview == null,
                   isLoading: submitStatus.isPending,
                   label: "Submit",
                   onPressed: () => _onSubmit(
@@ -105,6 +158,7 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
                     ref,
                     widget.argument?.id,
                     _selectedRate,
+                    _brokerRate,
                   ),
                 ),
               ],
@@ -120,13 +174,14 @@ class _RateShipperScreenState extends ConsumerState<RateShipperScreen> {
     WidgetRef ref,
     String? stopLogId,
     int rate,
+    int brokerRate,
   ) async {
     if (stopLogId == null) return;
 
     final (res, err) = await tryCatch(
       ref
           .read(submitARatingForAShipperFacilityMutation.notifier)
-          .submit(stopLogId, rate),
+          .submit(stopLogId, rate, brokerRate),
     );
     if (!context.mounted) return;
 

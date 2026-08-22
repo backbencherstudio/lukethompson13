@@ -142,8 +142,9 @@ class RecentStopList extends StatelessWidget {
       skipLoadingOnRefresh: true,
       skipLoadingOnReload: true,
       loading: () => const Center(child: ActivityIndicator()),
-      error: (e, _) =>
-          StatusDisplay.error('Something went wrong. Please try again.'),
+      error: (e, st) {
+        return StatusDisplay.error('Something went wrong. Please try again.');
+      },
       data: (stops) {
         if (stops == null || stops.isEmpty) {
           return StatusDisplay.muted('No stops found');
