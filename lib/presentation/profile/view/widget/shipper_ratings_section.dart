@@ -24,6 +24,8 @@ class ShipperRatingsSection extends ConsumerWidget {
         ? AsyncValue.data(staticData)
         : ref.watch(shipperRatingsPaginationProvider);
 
+    final isBrokerType = pagination.value?.type == .broker;
+
     return LockedSection(
       isLocked: isLocked,
       lockedChild: lockedPrompt,
@@ -40,32 +42,46 @@ class ShipperRatingsSection extends ConsumerWidget {
             children: state.ratings.map((item) {
               return ShipperRatingCard(
                 id: item.id,
-                title: item.facilityName,
+                title: isBrokerType ? item.name : item.facilityName,
                 subtitle: item.statusSubtext,
-                rating: item.rating,
-                stats: [
-                  StatItem(
-                    value: '${item.claimsCount ?? 0}',
-                    label: 'Claims',
-                    labelLong: 'Total Claims Submitted',
-                  ),
-                  StatItem(
-                    value: '${item.avgPayDays ?? 0} days',
-                    label: 'Avg Pay',
-                  ),
-                  StatItem(
-                    value: '${item.paidClaimsCount ?? 0}',
-                    label: 'Paid',
-                    labelLong: 'Total Paid',
-                  ),
-                  StatItem(
-                    value:
-                        '${item.claimsCount ?? 0 - (item.paidClaimsCount ?? 0)}',
-                    label: 'Denied',
-                    labelLong: 'Total Denied',
-                    valueColor: ColorManager.errorColor,
-                  ),
-                ],
+                rating: isBrokerType ? item.avgRating ?? 0 : item.rating ?? 0,
+                stats: isBrokerType
+                    ? [
+                        StatItem(
+                          value: '${item.totalShippers ?? 0}',
+                          label: 'Total Shippers',
+                          labelLong: 'Total Shippers',
+                        ),
+                  
+                        StatItem(
+                          value: '${item.totalRatings ?? 0}',
+                          label: 'Total Ratings',
+                          labelLong: 'Total Ratings',
+                        ),
+                      ]
+                    : [
+                        StatItem(
+                          value: '${item.claimsCount ?? 0}',
+                          label: 'Claims',
+                          labelLong: 'Total Claims Submitted',
+                        ),
+                        StatItem(
+                          value: '${item.avgPayDays ?? 0} days',
+                          label: 'Avg Pay',
+                        ),
+                        StatItem(
+                          value: '${item.paidClaimsCount ?? 0}',
+                          label: 'Paid',
+                          labelLong: 'Total Paid',
+                        ),
+                        StatItem(
+                          value:
+                              '${item.claimsCount ?? 0 - (item.paidClaimsCount ?? 0)}',
+                          label: 'Denied',
+                          labelLong: 'Total Denied',
+                          valueColor: ColorManager.errorColor,
+                        ),
+                      ],
               );
             }).toList(),
           );

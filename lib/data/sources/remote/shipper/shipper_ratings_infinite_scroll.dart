@@ -13,6 +13,7 @@ class ShipperRatingsPaginationState {
   final bool isLoadingMore;
   final PayerCategory? status;
   final String search;
+  final FacilityType? type;
 
   const ShipperRatingsPaginationState({
     required this.ratings,
@@ -21,6 +22,7 @@ class ShipperRatingsPaginationState {
     required this.isLoadingMore,
     this.status,
     required this.search,
+    this.type,
   });
 
   const ShipperRatingsPaginationState.empty()
@@ -29,7 +31,8 @@ class ShipperRatingsPaginationState {
       isLoadingMore = false,
       nextCursor = null,
       status = null,
-      search = '';
+      search = '',
+      type = null;
 
   ShipperRatingsPaginationState copyWith({
     List<ShipperRatingItem>? ratings,
@@ -38,6 +41,7 @@ class ShipperRatingsPaginationState {
     bool? isLoadingMore,
     PayerCategory? Function()? status,
     String? search,
+    FacilityType? Function()? type,
   }) {
     return ShipperRatingsPaginationState(
       ratings: ratings ?? this.ratings,
@@ -46,6 +50,7 @@ class ShipperRatingsPaginationState {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       status: status != null ? status() : this.status,
       search: search ?? this.search,
+      type: type != null ? type() : this.type,
     );
   }
 }
@@ -67,6 +72,7 @@ class ShipperRatingsPaginationNotifier
     required String? cursor,
     PayerCategory? status,
     String search = '',
+    FacilityType? type,
   }) async {
     final api = ref.read(shipperApiProvider);
 
@@ -75,6 +81,7 @@ class ShipperRatingsPaginationNotifier
       _limit,
       status?.value,
       search.isEmpty ? null : search,
+      type,
     );
 
     final ratings = response.data ?? [];
@@ -87,6 +94,7 @@ class ShipperRatingsPaginationNotifier
       isLoadingMore: false,
       status: status,
       search: search,
+      type: type,
     );
   }
 
@@ -107,6 +115,7 @@ class ShipperRatingsPaginationNotifier
         _limit,
         current.status?.value,
         current.search.isEmpty ? null : current.search,
+        current.type,
       );
 
       final newRatings = response.data ?? [];
@@ -120,7 +129,7 @@ class ShipperRatingsPaginationNotifier
           isLoadingMore: false,
         ),
       );
-    } catch (_, __) {
+    } catch (_, _) {
       state = AsyncData(current.copyWith(isLoadingMore: false));
     }
   }
@@ -138,8 +147,12 @@ class ShipperRatingsPaginationNotifier
       state = const AsyncLoading();
 
       state = await AsyncValue.guard(
-        () =>
-            _fetchRatings(cursor: null, status: current.status, search: search),
+        () => _fetchRatings(
+          cursor: null,
+          status: current.status,
+          search: search,
+          type: current.type,
+        ),
       );
     });
   }
@@ -154,7 +167,31 @@ class ShipperRatingsPaginationNotifier
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(
-      () => _fetchRatings(cursor: null, status: status, search: current.search),
+      () => _fetchRatings(
+        cursor: null,
+        status: status,
+        search: current.search,
+        type: current.type,
+      ),
+    );
+  }
+
+  Future<void> updateType(FacilityType? type) async {
+    final current = state.value;
+
+    if (current == null || current.type == type) {
+      return;
+    }
+
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(
+      () => _fetchRatings(
+        cursor: null,
+        status: current.status,
+        search: current.search,
+        type: type,
+      ),
     );
   }
 }

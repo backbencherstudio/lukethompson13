@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
@@ -13,6 +14,7 @@ import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
+import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 import 'package:lukethompson/data/sources/remote/shipper/shipper_ratings_infinite_scroll.dart';
 import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_icon.dart';
@@ -31,6 +33,8 @@ class ShipperRatingsScreen extends ConsumerStatefulWidget {
 class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
   late final TextEditingController _searchController;
   int _selectedTabFilterIndex = 0;
+
+  FacilityType _selectedType = FacilityType.shipper;
 
   final List<String> categories = PayerCategory.values
       .map((e) => e.label)
@@ -51,14 +55,30 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
   @override
   Widget build(BuildContext context) {
     final isProSubscription = ref.watch(isProSubscriptionProvider);
-    final isPageLocked = !isProSubscription;
+    // final isPageLocked = !isProSubscription;
+    final isPageLocked = false;
     final pagination = isPageLocked
         ? AsyncData(ShipperRatingsPaginationState.empty())
         : ref.watch(shipperRatingsPaginationProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: GlobalAppBar(title: 'Broker & Doc Scores'),
+      appBar: GlobalAppBar(
+        titleWidget: SizedBox(
+          width: .infinity,
+          child: TypeSelector(
+            selectedType: _selectedType,
+            onChanged: (type) {
+              setState(() {
+                _selectedType = type;
+              });
+              ref
+                  .read(shipperRatingsPaginationProvider.notifier)
+                  .updateType(type);
+            },
+          ),
+        ),
+      ),
       body: AppGradientBackground(
         child: SafeArea(
           bottom: false,
@@ -66,16 +86,25 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
             physics: isPageLocked ? const NeverScrollableScrollPhysics() : null,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+
               SliverToBoxAdapter(
-                child: SearchBarWidget(
-                  controller: _searchController,
-                  hintText: 'Search facilities...',
-                  margin: .symmetric(horizontal: AppPadding.screenPadding),
-                  onChanged: (value) {
-                    ref
-                        .read(shipperRatingsPaginationProvider.notifier)
-                        .updateSearch(value);
-                  },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SearchBarWidget(
+                        controller: _searchController,
+                        hintText: 'Search facilities...',
+                        margin: .symmetric(
+                          horizontal: AppPadding.screenPadding,
+                        ),
+                        onChanged: (value) {
+                          ref
+                              .read(shipperRatingsPaginationProvider.notifier)
+                              .updateSearch(value);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -116,6 +145,14 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
                             .updateStatus(status);
                       },
                     ),
+                    // TextButton(
+                    //   onPressed: () {
+                    //     ref
+                    //         .read(shipperRatingsPaginationProvider.notifier)
+                    //         .updateType(.broker);
+                    //   },
+                    //   child: Text("broker"),
+                    // ),
                     ShipperRatingsSection(
                       isLocked: isPageLocked,
                       lockedPrompt: Column(
@@ -162,6 +199,61 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TypeSelector extends StatelessWidget {
+  const TypeSelector({
+    super.key,
+    required this.selectedType,
+    required this.onChanged,
+  });
+
+  final FacilityType selectedType;
+  final ValueChanged<FacilityType> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton<FacilityType>(
+      segments: const [
+        ButtonSegment(
+          value: FacilityType.shipper,
+          label: Text('Doc'),
+          icon: Icon(Icons.local_shipping),
+        ),
+        ButtonSegment(
+          value: FacilityType.broker,
+          label: Text('Broker'),
+          icon: Icon(Icons.business),
+        ),
+      ],
+      selected: {selectedType},
+      onSelectionChanged: (selected) {
+        onChanged(selected.first);
+      },
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+
+          return Colors.black;
+        }),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return ColorManager.primaryButton.withValues(alpha: 0.3);
+          }
+
+          return Colors.white38;
+        }),
+        side: WidgetStateProperty.resolveWith((states) {
+          return BorderSide(
+            color: Colors.white.withValues(alpha: 0.05),
+            width: 1.5,
+          );
+        }),
       ),
     );
   }

@@ -56,6 +56,7 @@ class _ShipperApi implements ShipperApi {
     int? limit,
     String? status,
     String? search,
+    FacilityType? type,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -63,6 +64,7 @@ class _ShipperApi implements ShipperApi {
       r'limit': limit,
       r'status': status,
       r'search': search,
+      r'type': type?.toJson(),
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

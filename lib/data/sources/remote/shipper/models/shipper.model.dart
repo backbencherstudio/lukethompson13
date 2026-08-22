@@ -60,12 +60,12 @@ class ShipperRatingItem {
   final String id;
 
   @JsonKey(name: 'facility_name')
-  final String facilityName;
+  final String? facilityName;
 
-  final double rating;
+  final double? rating;
 
   @JsonKey(name: 'status_subtext')
-  final String statusSubtext;
+  final String? statusSubtext;
 
   @JsonKey(name: 'claims_count')
   final int? claimsCount;
@@ -76,14 +76,43 @@ class ShipperRatingItem {
   @JsonKey(name: 'paid_claims_count')
   final int? paidClaimsCount;
 
+  // Broker object ======================================
+
+  final String? name;
+  final String? email;
+
+  @JsonKey(name: 'avg_rating')
+  final double? avgRating;
+
+  @JsonKey(name: 'rating_category')
+  final String? ratingCategory;
+
+  @JsonKey(name: 'total_ratings')
+  final int? totalRatings;
+
+  @JsonKey(name: 'total_shippers')
+  final int? totalShippers;
+
+  @JsonKey(name: 'recent_shippers')
+  final List<BrokerRecentShipperItem>? recentShippers;
+
   const ShipperRatingItem({
     required this.id,
-    required this.facilityName,
-    required this.rating,
-    required this.statusSubtext,
-    required this.claimsCount,
+
+    this.facilityName,
+    this.rating,
+    this.statusSubtext,
+    this.claimsCount,
     this.avgPayDays,
-    required this.paidClaimsCount,
+    this.paidClaimsCount,
+
+    this.name,
+    this.email,
+    this.avgRating,
+    this.ratingCategory,
+    this.totalRatings,
+    this.totalShippers,
+    this.recentShippers,
   });
 
   factory ShipperRatingItem.fromJson(Map<String, dynamic> json) =>
@@ -270,6 +299,44 @@ class ShipperLocationItem {
 
   @override
   String toString() => 'ShipperLocationItem${toJson()}';
+}
+
+@JsonSerializable()
+class BrokerRecentShipperItem {
+  final String id;
+  final String name;
+  final RecentShipperLocation? location;
+
+  const BrokerRecentShipperItem({
+    required this.id,
+    required this.name,
+    this.location,
+  });
+
+  factory BrokerRecentShipperItem.fromJson(Map<String, dynamic> json) =>
+      _$BrokerRecentShipperItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BrokerRecentShipperItemToJson(this);
+
+  @override
+  String toString() => 'BrokerRecentShipperItem${toJson()}';
+}
+
+@JsonSerializable()
+class RecentShipperLocation {
+  final String? address;
+  final String? city;
+  final String? state;
+
+  const RecentShipperLocation({this.address, this.city, this.state});
+
+  factory RecentShipperLocation.fromJson(Map<String, dynamic> json) =>
+      _$RecentShipperLocationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RecentShipperLocationToJson(this);
+
+  @override
+  String toString() => 'RecentShipperLocation${toJson()}';
 }
 
 @JsonSerializable()

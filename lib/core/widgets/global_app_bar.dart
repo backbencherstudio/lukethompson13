@@ -57,6 +57,7 @@ class AppBackButton extends StatelessWidget {
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
+  final Widget? titleWidget;
   final String? subTitle;
   final List<Widget>? actions;
   final Color? backgroundColor;
@@ -77,6 +78,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackPressed,
     this.backButtonIcon = const Icon(Icons.arrow_back_rounded, size: 24),
     this.backButtonBackgroundColor = Colors.white12,
+    this.titleWidget,
   });
 
   @override
@@ -108,24 +110,26 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null, // Hides the button entirely if it is the first/root screen
-      title: Column(
-        crossAxisAlignment: .start,
-        children: [
-          if (title != null) Text(title!),
-          if (subTitle != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(
-                subTitle!,
-                style: TextStyle(
-                  color: ColorManager.subtextColor,
-                  fontSize: 16,
-                  fontWeight: .normal,
+      title:
+          titleWidget ??
+          Column(
+            crossAxisAlignment: .start,
+            children: [
+              if (title != null) Text(title!),
+              if (subTitle != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    subTitle!,
+                    style: TextStyle(
+                      color: ColorManager.subtextColor,
+                      fontSize: 16,
+                      fontWeight: .normal,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-        ],
-      ),
+            ],
+          ),
       actions: actions,
       backgroundColor: backgroundColor,
     );

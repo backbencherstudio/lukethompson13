@@ -24,6 +24,7 @@ abstract class ShipperApi {
     @Query('limit') int? limit,
     @Query('status') String? status,
     @Query('search') String? search,
+    @Query('type') FacilityType? type,
   );
 
   @GET(ApiEndpoints.searchShipperFacilities)

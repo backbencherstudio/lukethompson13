@@ -79,8 +79,8 @@ enum PayerCategory {
 
 class ShipperRatingCard extends StatelessWidget {
   final String id;
-  final String title;
-  final String subtitle;
+  final String? title;
+  final String? subtitle;
   final double rating;
   final List<StatItem> stats;
 
@@ -125,10 +125,10 @@ class ShipperRatingCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: getListTitleStyle()),
+                      Text(title ?? '', style: getListTitleStyle()),
                       8.height,
                       Text(
-                        subtitle,
+                        subtitle ?? '',
                         style: getSubtextStyle(
                           color: payer == PayerCategory.poor
                               ? payer.color

@@ -23,12 +23,23 @@ Map<String, dynamic> _$SubmitARatingForAShipperFacilityRequestToJson(
 ShipperRatingItem _$ShipperRatingItemFromJson(Map<String, dynamic> json) =>
     ShipperRatingItem(
       id: json['id'] as String,
-      facilityName: json['facility_name'] as String,
-      rating: (json['rating'] as num).toDouble(),
-      statusSubtext: json['status_subtext'] as String,
+      facilityName: json['facility_name'] as String?,
+      rating: (json['rating'] as num?)?.toDouble(),
+      statusSubtext: json['status_subtext'] as String?,
       claimsCount: (json['claims_count'] as num?)?.toInt(),
       avgPayDays: (json['avg_pay_days'] as num?)?.toInt(),
       paidClaimsCount: (json['paid_claims_count'] as num?)?.toInt(),
+      name: json['name'] as String?,
+      email: json['email'] as String?,
+      avgRating: (json['avg_rating'] as num?)?.toDouble(),
+      ratingCategory: json['rating_category'] as String?,
+      totalRatings: (json['total_ratings'] as num?)?.toInt(),
+      totalShippers: (json['total_shippers'] as num?)?.toInt(),
+      recentShippers: (json['recent_shippers'] as List<dynamic>?)
+          ?.map(
+            (e) => BrokerRecentShipperItem.fromJson(e as Map<String, dynamic>),
+          )
+          .toList(),
     );
 
 Map<String, dynamic> _$ShipperRatingItemToJson(ShipperRatingItem instance) =>
@@ -40,6 +51,13 @@ Map<String, dynamic> _$ShipperRatingItemToJson(ShipperRatingItem instance) =>
       'claims_count': instance.claimsCount,
       'avg_pay_days': instance.avgPayDays,
       'paid_claims_count': instance.paidClaimsCount,
+      'name': instance.name,
+      'email': instance.email,
+      'avg_rating': instance.avgRating,
+      'rating_category': instance.ratingCategory,
+      'total_ratings': instance.totalRatings,
+      'total_shippers': instance.totalShippers,
+      'recent_shippers': instance.recentShippers,
     };
 
 ShipperSearchFacilityItem _$ShipperSearchFacilityItemFromJson(
@@ -189,6 +207,42 @@ Map<String, dynamic> _$ShipperLocationItemToJson(
   'normalized_name': instance.normalizedName,
   'location_id': instance.locationId,
   'location': instance.location,
+};
+
+BrokerRecentShipperItem _$BrokerRecentShipperItemFromJson(
+  Map<String, dynamic> json,
+) => BrokerRecentShipperItem(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  location: json['location'] == null
+      ? null
+      : RecentShipperLocation.fromJson(
+          json['location'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$BrokerRecentShipperItemToJson(
+  BrokerRecentShipperItem instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'location': instance.location,
+};
+
+RecentShipperLocation _$RecentShipperLocationFromJson(
+  Map<String, dynamic> json,
+) => RecentShipperLocation(
+  address: json['address'] as String?,
+  city: json['city'] as String?,
+  state: json['state'] as String?,
+);
+
+Map<String, dynamic> _$RecentShipperLocationToJson(
+  RecentShipperLocation instance,
+) => <String, dynamic>{
+  'address': instance.address,
+  'city': instance.city,
+  'state': instance.state,
 };
 
 ShipperLocationDataModel _$ShipperLocationDataModelFromJson(
