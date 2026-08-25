@@ -220,7 +220,7 @@ class TypeSelector extends StatelessWidget {
       segments: const [
         ButtonSegment(
           value: FacilityType.shipper,
-          label: Text('Doc'),
+          label: Text('Dock'),
           icon: Icon(Icons.local_shipping),
         ),
         ButtonSegment(

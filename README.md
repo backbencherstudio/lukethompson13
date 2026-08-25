@@ -1,4 +1,4 @@
-# GetDocPay
+# GetDockPay
 
 A Flutter application for GetDockPay LLC.
 

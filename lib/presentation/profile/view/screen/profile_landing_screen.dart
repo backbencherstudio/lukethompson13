@@ -68,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       ProfileSettingItem(
                         icon: Icons.stars_outlined,
-                        title: "Broker & Doc Scores",
+                        title: "Broker & Dock Scores",
                         onTap: () => context.push(Routes.shipperRatings),
                       ),
 

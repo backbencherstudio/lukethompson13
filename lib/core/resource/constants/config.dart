@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
   static const minPassLength = 8;
-  static const appName = 'GetDocPay';
+  static const appName = 'GetDockPay';
   static const bundleId = 'com.lukethompson.getdocpay';
 
   static final serverBaseUrl = _required(

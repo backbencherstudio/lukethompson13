@@ -27,7 +27,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
       },
     },
     {
-      "title": "Broker &\nDoc Scores",
+      "title": "Broker &\nDock Scores",
       "desc": "Get insights into your broker pay and doc scores.",
       "image": Assets.images.pickUp.path,
       "onPress": (BuildContext context, WidgetRef ref) {

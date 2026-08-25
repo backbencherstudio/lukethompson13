@@ -473,7 +473,7 @@
 				DEVELOPMENT_TEAM = WQ964NQB8Q;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GetDocPay;
+				INFOPLIST_KEY_CFBundleDisplayName = GetDockPay;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -662,7 +662,7 @@
 				DEVELOPMENT_TEAM = WQ964NQB8Q;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GetDocPay;
+				INFOPLIST_KEY_CFBundleDisplayName = GetDockPay;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -688,7 +688,7 @@
 				DEVELOPMENT_TEAM = WQ964NQB8Q;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GetDocPay;
+				INFOPLIST_KEY_CFBundleDisplayName = GetDockPay;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (

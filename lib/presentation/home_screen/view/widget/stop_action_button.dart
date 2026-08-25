@@ -81,7 +81,7 @@ StopAction getStopAction(StopLogListItem stop) {
     case ClaimStatus.paid:
     case ClaimStatus.denied:
       return StopAction(
-        label: 'Rate Broker & Doc',
+        label: 'Rate Broker & Dock',
         color: ColorManager.warningColor,
         onPressed: (context, _) {
           context.push(
