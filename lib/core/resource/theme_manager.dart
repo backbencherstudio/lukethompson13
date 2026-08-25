@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/font_manager.dart';
 import 'package:lukethompson/core/resource/constants/style_manager.dart';
@@ -7,7 +6,6 @@ import 'package:lukethompson/core/resource/constants/values_manager.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
-    useMaterial3: false, // set true if using Material 3
     // ===== Main colors =====
     primaryColor: ColorManager.primary,
     primaryColorLight: ColorManager.primary,
@@ -73,6 +71,10 @@ ThemeData getApplicationTheme() {
           vertical: AppPadding.p12,
         ),
       ),
+    ),
+
+    checkboxTheme: CheckboxThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
 
     // ===== Text Theme =====
@@ -153,9 +155,9 @@ ThemeData getApplicationTheme() {
 
     // ===== Cursor & Selection Colors =====
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: ColorManager.primary,
-      selectionColor: ColorManager.primary.withValues(alpha: 0.1),
-      selectionHandleColor: ColorManager.primary,
+      cursorColor: ColorManager.primaryButton,
+      // selectionColor: ColorManager..withValues(alpha: 0.1),
+      // selectionHandleColor: ColorManager.primary,
     ),
 
     // ===== Input Field Theme =====

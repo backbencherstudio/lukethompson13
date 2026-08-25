@@ -1,84 +1,259 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/services/revenuecat_providers.dart';
+import 'package:lukethompson/core/services/revenuecat_service.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
+import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
-import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
+import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
+import 'package:lukethompson/data/sources/remote/shipper/shipper_ratings_infinite_scroll.dart';
+import 'package:lukethompson/gen/assets.gen.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/svg_circle_icon.dart';
+import 'package:lukethompson/presentation/profile/view/widget/filter_chip_group.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_rating_card.dart';
 import 'package:lukethompson/presentation/profile/view/widget/shipper_ratings_section.dart';
 
-class ShipperRatingsScreen extends StatefulWidget {
+class ShipperRatingsScreen extends ConsumerStatefulWidget {
   const ShipperRatingsScreen({super.key});
 
   @override
-  State<ShipperRatingsScreen> createState() => _ShipperRatingsScreenState();
+  ConsumerState<ShipperRatingsScreen> createState() =>
+      _ShipperRatingsScreenState();
 }
 
-class _ShipperRatingsScreenState extends State<ShipperRatingsScreen> {
+class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
+  late final TextEditingController _searchController;
   int _selectedTabFilterIndex = 0;
-  bool _pageLocked = true;
 
-  final List<String> categories = [
-    "All",
-    ...PayerCategory.values.map((e) => e.label),
-  ];
+  FacilityType _selectedType = FacilityType.shipper;
+
+  final List<String> categories = PayerCategory.values
+      .map((e) => e.label)
+      .toList();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isProSubscription = ref.watch(isProSubscriptionProvider);
+    // final isPageLocked = !isProSubscription;
+    final isPageLocked = false;
+    final pagination = isPageLocked
+        ? AsyncData(ShipperRatingsPaginationState.empty())
+        : ref.watch(shipperRatingsPaginationProvider);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: GlobalAppBar(title: 'Shipper Ratings'),
+      appBar: GlobalAppBar(
+        titleWidget: SizedBox(
+          width: .infinity,
+          child: TypeSelector(
+            selectedType: _selectedType,
+            onChanged: (type) {
+              setState(() {
+                _selectedType = type;
+              });
+              ref
+                  .read(shipperRatingsPaginationProvider.notifier)
+                  .updateType(type);
+            },
+          ),
+        ),
+      ),
       body: AppGradientBackground(
         child: SafeArea(
           bottom: false,
-          child: FullHeightScrollView(
-            physics: _pageLocked ? const NeverScrollableScrollPhysics() : null,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 16.h),
-                Padding(
-                  padding: .symmetric(horizontal: AppPadding.screenPadding),
-                  child: const SearchBarWidget(
-                    hintText: 'Search facilities...',
-                  ),
-                ),
-                SizedBox(height: 16.h),
+          child: NestedScrollView(
+            physics: isPageLocked ? const NeverScrollableScrollPhysics() : null,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(child: SizedBox(height: 6.h)),
 
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: .only(left: AppPadding.screenPadding),
-                  child: Row(
-                    children: List.generate(categories.length, (index) {
-                      return RowContainer(
-                        title: categories[index],
-                        isSelected: _selectedTabFilterIndex == index,
-                        onTap: () {
-                          setState(() {
-                            _selectedTabFilterIndex = index;
-                          });
+              SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SearchBarWidget(
+                        controller: _searchController,
+                        hintText: 'Search facilities...',
+                        margin: .symmetric(
+                          horizontal: AppPadding.screenPadding,
+                        ),
+                        onChanged: (value) {
+                          ref
+                              .read(shipperRatingsPaginationProvider.notifier)
+                              .updateSearch(value);
                         },
-                      );
-                    }),
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 16.h),
-                ShipperRatingsSection(
-                  isLocked: _pageLocked,
-                  onUpgradeTap: () {
-                    setState(() {
-                      _pageLocked = false;
-                    });
-                  },
+              ),
+            ],
+            body: NotificationListener<ScrollNotification>(
+              onNotification: (scrollInfo) {
+                if (scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent - 200) {
+                  ref
+                      .read(shipperRatingsPaginationProvider.notifier)
+                      .loadNextPage();
+                }
+                return false;
+              },
+              child: FullHeightScrollView(
+                physics: isPageLocked
+                    ? const NeverScrollableScrollPhysics()
+                    : null,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 16,
+                  children: [
+                    0.height,
+                    FilterChipGroup(
+                      titles: PayerCategory.categories,
+                      selectedIndex: _selectedTabFilterIndex,
+                      onChanged: (index) {
+                        if (isPageLocked) return;
+
+                        setState(() {
+                          _selectedTabFilterIndex = index;
+                        });
+                        final status = index == 0
+                            ? null
+                            : PayerCategory.values[index - 1];
+
+                        ref
+                            .read(shipperRatingsPaginationProvider.notifier)
+                            .updateStatus(status);
+                      },
+                    ),
+                    // TextButton(
+                    //   onPressed: () {
+                    //     ref
+                    //         .read(shipperRatingsPaginationProvider.notifier)
+                    //         .updateType(.broker);
+                    //   },
+                    //   child: Text("broker"),
+                    // ),
+                    ShipperRatingsSection(
+                      isLocked: isPageLocked,
+                      lockedPrompt: Column(
+                        children: [
+                          140.height,
+                          SvgCircleIcon(svgPath: Assets.icons.lockIcon),
+                          12.height,
+                          Text(
+                            'Pro plan unlocks the full database of\nShipper Ratings.',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                          16.height,
+                          GlobalButton(
+                            width: 144,
+                            height: 40,
+                            label: 'Upgrade to Pro',
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () =>
+                                RevenueCatService.showPayWall(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                    pagination.when(
+                      data: (state) {
+                        if (state.isLoadingMore) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(child: ActivityIndicator()),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                      error: (_, _) => const SizedBox.shrink(),
+                      loading: () => const SizedBox.shrink(),
+                    ),
+                  ],
                 ),
-                16.height,
-              ],
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TypeSelector extends StatelessWidget {
+  const TypeSelector({
+    super.key,
+    required this.selectedType,
+    required this.onChanged,
+  });
+
+  final FacilityType selectedType;
+  final ValueChanged<FacilityType> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton<FacilityType>(
+      segments: const [
+        ButtonSegment(
+          value: FacilityType.shipper,
+          label: Text('Doc'),
+          icon: Icon(Icons.local_shipping),
+        ),
+        ButtonSegment(
+          value: FacilityType.broker,
+          label: Text('Broker'),
+          icon: Icon(Icons.business),
+        ),
+      ],
+      selected: {selectedType},
+      onSelectionChanged: (selected) {
+        onChanged(selected.first);
+      },
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+
+          return Colors.black;
+        }),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return ColorManager.primaryButton.withValues(alpha: 0.3);
+          }
+
+          return Colors.white38;
+        }),
+        side: WidgetStateProperty.resolveWith((states) {
+          return BorderSide(
+            color: Colors.white.withValues(alpha: 0.05),
+            width: 1.5,
+          );
+        }),
       ),
     );
   }

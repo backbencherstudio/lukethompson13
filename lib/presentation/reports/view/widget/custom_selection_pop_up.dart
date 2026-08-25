@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lukethompson/presentation/reports/view/widget/tax_period_selector.dart';
 
 class CustomSelectionPopup extends StatelessWidget {
-  final String? selectedType;
-  final ValueChanged<String> onSelect;
+  final DateRangeType? selectedType;
+  final ValueChanged<DateRangeType?> onSelect;
 
   const CustomSelectionPopup({
     super.key,
@@ -25,21 +26,21 @@ class CustomSelectionPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildOption("Monthly"),
+          _buildOption(DateRangeType.monthly),
           const SizedBox(height: 4),
-          _buildOption("Yearly"),
+          _buildOption(DateRangeType.yearly),
         ],
       ),
     );
   }
 
-  Widget _buildOption(String title) {
-    final bool isActive = selectedType == title;
+  Widget _buildOption(DateRangeType type) {
+    final bool isActive = selectedType == type;
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () => onSelect(title),
+        onTap: () => onSelect(type),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -48,7 +49,7 @@ class CustomSelectionPopup extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            title,
+            type.name,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: isActive ? Colors.white : Colors.white60,

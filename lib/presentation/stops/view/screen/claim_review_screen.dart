@@ -1,342 +1,180 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
+import 'package:lukethompson/core/utils/error.dart';
+import 'package:lukethompson/core/utils/logger.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/data/sources/remote/claim/claim_api_controller.dart';
+import 'package:lukethompson/data/sources/remote/stoplog/stoplog_list_infinite_scroll.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
+import 'package:lukethompson/presentation/stops/view/widget/claim_status_card.dart';
+import 'package:lukethompson/presentation/stops/view/widget/export_pdf_button.dart';
+import 'package:lukethompson/presentation/stops/view/widget/full_claim_preview_card.dart';
 
-class ClaimReviewScreen extends StatelessWidget {
-  const ClaimReviewScreen({super.key});
+class ClaimReviewScreenArg {
+  const ClaimReviewScreenArg({this.steplogId});
+
+  final String? steplogId;
+}
+
+class ClaimReviewScreen extends ConsumerWidget {
+  const ClaimReviewScreen({super.key, this.argument});
+
+  final ClaimReviewScreenArg? argument;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = FullClaimPreviewCard.getSession(ref, argument?.steplogId);
+    final markAClaimAsPaidState = ref.watch(markAClaimAsPaidMutation);
+    final markAClaimAsDeniedState = ref.watch(markAClaimAsDeniedMutation);
+
     return AppGradientBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: GlobalAppBar(
           title: 'Claim Review',
-          subTitle: 'Review details before sending - cannot edit after',
+          subTitle: 'Review details - Cannot edit after sending',
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16.h),
-
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16.r),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.center,
-                      colors: [
-                        ColorManager.secondary,
-                        const Color.fromARGB(255, 29, 32, 36),
-                      ],
+          child: session.when(
+            skipLoadingOnRefresh: true,
+            skipLoadingOnReload: true,
+            data: (data) {
+              logger.t(data?.detentionSummaryPdf);
+              return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    16.height,
+                    FullClaimPreviewCard(data: data),
+                    16.height,
+                    ExportPdfButton(
+                      fileUrl: data?.detentionSummaryPdf?.fileUrl,
+                      fineName: data?.detentionSummaryPdf?.fileName,
                     ),
-                    borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(15.r),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(
-                            color: const Color(0xFF32D779).withOpacity(0.5),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Claim Amount",
-                                  style: TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 12.sp,
-                                  ),
-                                ),
-                                Text(
-                                  "Unpaid",
-                                  style: TextStyle(
-                                    color: Colors.redAccent.withOpacity(0.7),
-                                    fontSize: 12.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "\$225.00",
-                              style: TextStyle(
-                                color: const Color(0xFF32D779),
-                                fontSize: 32.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            Divider(
-                              color: Colors.white.withOpacity(0.1),
-                              thickness: 1,
-                            ),
-                            SizedBox(height: 10.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Sent",
-                                      style: TextStyle(
-                                        color: Colors.white38,
-                                        fontSize: 11.sp,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Apr 8, 2026",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Broker CC",
-                                      style: TextStyle(
-                                        color: Colors.white38,
-                                        fontSize: 11.sp,
-                                      ),
-                                    ),
-                                    Text(
-                                      "dispatch@tql.com",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Via",
-                                      style: TextStyle(
-                                        color: Colors.white38,
-                                        fontSize: 11.sp,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Email",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
 
-                      SizedBox(height: 25.h),
-                      Text(
-                        "PROOF PACKAGE",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 15.h),
+                    24.height,
+                    if (data != null) ClaimStatusCard(data: data),
+                    24.height,
 
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF161A20),
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.05),
-                          ),
-                        ),
-                        child: Column(
-                          children:
-                              [
-                                "BOL Photo-bol_photo.jpg",
-                                "GPS Proof — auto-captured",
-                                "Time Calculations PDF",
-                                "View Proof Package PDF",
-                              ].asMap().entries.map((entry) {
-                                int index = entry.key;
-                                String item = entry.value;
-                                bool isLast = index == 3;
-
-                                return Container(
-                                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                                  decoration: BoxDecoration(
-                                    border: isLast
-                                        ? null
-                                        : Border(
-                                            bottom: BorderSide(
-                                              color: Colors.white.withOpacity(
-                                                0.05,
-                                              ),
-                                              width: 1,
-                                            ),
-                                          ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            color: Colors.white60,
-                                            fontSize: 13.sp,
-                                          ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.check,
-                                        color: const Color(0xFF32D779),
-                                        size: 18.sp,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                        ),
-                      ),
-
-                      SizedBox(height: 20.h),
-                      Text(
-                        "PROOF PACKAGE",
-                        style: TextStyle(
-                          color: Colors.white38,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10.h),
-
-                      ...[
-                        "00140_4437_0009964.jpg",
-                        "00140_4437_0009964.pdf",
-                      ].map((file) {
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 8.h),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12.w,
-                            vertical: 12.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF0D1117),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.link,
-                                color: const Color(0xFF2196F3),
-                                size: 18.sp,
-                              ),
-                              SizedBox(width: 10.w),
-                              Text(
-                                file,
-                                style: TextStyle(
-                                  color: const Color(0xFF2196F3),
-                                  fontSize: 13.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-
-                      SizedBox(height: 20.h),
-                      Text(
-                        "FOLLOW-UP",
-                        style: TextStyle(
-                          color: Colors.white38,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10.h),
-
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(15.r),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF0D1117),
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Auto-selected template (follow-up #2)",
-                              style: TextStyle(
-                                color: Colors.white38,
-                                fontSize: 11.sp,
-                              ),
-                            ),
-                            SizedBox(height: 5.h),
-                            Text(
-                              "Firm Notice",
-                              style: TextStyle(
-                                color: const Color(0xFFFFB74D),
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 2.h),
-                            Text(
-                              "Broker CC",
-                              style: TextStyle(
-                                color: Colors.white38,
-                                fontSize: 11.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    GlobalButton(
+                      isLoading: markAClaimAsPaidState.isPending,
+                      label: 'Mark as Paid',
+                      onPressed: () =>
+                          _onMarkAsPaidPressed(context, ref, data?.claim?.id),
+                    ),
+                    16.height,
+                    GlobalButton.outlined(
+                      isLoading: markAClaimAsDeniedState.isPending,
+                      label: 'Mark as Denied',
+                      onPressed: () =>
+                          _onMarkAsDeniedPressed(context, ref, data?.claim?.id),
+                    ),
+                    // 16.height,
+                    // TODO: this page should navigate the user to claim details
+                    // page & show current follow up section
+                    // GlobalButton.secondary(
+                    //   label: 'Send Follow-up',
+                    //   onPressed: () => _onFollowUp(context, ref, data?.claim?.id),
+                    // ),
+                    24.height,
+                  ],
                 ),
-
-                SizedBox(height: 35.h),
-
-                GlobalButton(label: "Mark as Paid", onPressed: () {}),
-                SizedBox(height: 12.h),
-                GlobalButton.secondary(
-                  label: "Mark Uncollectable",
-                  onPressed: () {},
-                ),
-              ],
-            ),
+              );
+            },
+            loading: () => const Center(child: ActivityIndicator()),
+            error: (e, st) {
+              return StatusDisplay.error(e.toString());
+            },
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _onMarkAsPaidPressed(
+    BuildContext context,
+    WidgetRef ref,
+    String? claimId,
+  ) async {
+    if (claimId == null) return;
+
+    final (res, err) = await tryCatch(
+      ref.read(markAClaimAsPaidMutation.notifier).submit(claimId),
+    );
+    if (!context.mounted) return;
+
+    if (err != null) {
+      context.showErrorSnackBar(ErrorHandle.formatErrorMessage(err));
+      return;
+    }
+
+    if (res != null) {
+      context.showResultSnackBar(res.message, isSuccess: res.success);
+
+      if (res.success) {
+        context.pop();
+        ref.invalidate(stopLogPaginationProvider);
+      }
+    }
+  }
+
+  Future<void> _onMarkAsDeniedPressed(
+    BuildContext context,
+    WidgetRef ref,
+    String? claimId,
+  ) async {
+    if (claimId == null) return;
+
+    final (res, err) = await tryCatch(
+      ref.read(markAClaimAsDeniedMutation.notifier).submit(claimId),
+    );
+    if (!context.mounted) return;
+
+    if (err != null) {
+      context.showErrorSnackBar(ErrorHandle.formatErrorMessage(err));
+      return;
+    }
+
+    if (res != null) {
+      context.showResultSnackBar(res.message, isSuccess: res.success);
+
+      if (res.success) {
+        context.pop();
+        ref.invalidate(stopLogPaginationProvider);
+      }
+    }
+  }
+
+  Future<void> _onFollowUp(
+    BuildContext context,
+    WidgetRef ref,
+    String? claimId,
+  ) async {
+    if (claimId == null) return;
+
+    final (res, err) = await tryCatch(
+      ref
+          .read(sendClaimFollowUpEmailMutation.notifier)
+          .sendFollowUp(claimId, 1),
+    );
+    if (!context.mounted) return;
+
+    if (err != null) {
+      context.showErrorSnackBar(ErrorHandle.formatErrorMessage(err));
+      return;
+    }
+
+    if (res != null) {
+      context.showResultSnackBar(res.message, isSuccess: res.success);
+    }
   }
 }

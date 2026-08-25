@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/app_card.dart';
+import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 
 class TotalClaimedWidget extends StatelessWidget {
   final String title;
@@ -15,45 +18,41 @@ class TotalClaimedWidget extends StatelessWidget {
     this.amount = "",
     this.backgroundColor = ColorManager.cardBackground,
     this.titleColor = Colors.white,
-    this.amountColor = const Color(0xFFF6A23E),
+    this.amountColor = Colors.white,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16.h),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 12.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: titleColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
+    return AppCard(
+      padding: EdgeInsets.all(16),
+      backgroundColor: backgroundColor,
+      child: Column(
+        mainAxisSize: .max,
+        crossAxisAlignment: .start,
+        mainAxisAlignment: .spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: ColorManager.textColor,
+              fontWeight: FontWeight.w500,
             ),
-            const SizedBox(height: 20),
-            Text(
-              amount,
-              style: TextStyle(
-                color: amountColor,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-              ),
+            overflow: TextOverflow.ellipsis,
+          ),
+          4.height,
+          Text(
+            amount,
+            style: TextStyle(
+              height: 1,
+              color: amountColor,
+              fontSize: 24.sp,
+              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
-

@@ -1,3 +1,6 @@
+# Env files
+.env
+
 # Miscellaneous
 *.class
 *.log
@@ -43,3 +46,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Keystore / signing config
+/android/key.properties
+/android/app/upload-keystore.jks
+# Widget Preview related
+.widget_preview/

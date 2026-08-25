@@ -1,0 +1,1 @@
+export 'shipper.model.dart';

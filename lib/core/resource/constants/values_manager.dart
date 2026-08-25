@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppMargin {
@@ -26,4 +27,12 @@ class AppSize {
   static const double s12 = 12.0;
   static const double s16 = 16.0;
   static const double s24 = 24.0;
+}
+
+class Testing {
+  static const testUserName = kDebugMode ? 'User' : '';
+  // static const testUsserEmail = kDebugMode ? 'user@example.com' : '';
+  // static const testUsserPassword = kDebugMode ? '12345678' : '';
+  static const testUsserEmail = kDebugMode ? 'john@example.com' : '';
+  static const testUsserPassword = kDebugMode ? 'password123' : '';
 }

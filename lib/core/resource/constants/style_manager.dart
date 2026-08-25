@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 
 import 'font_manager.dart';
 
@@ -158,4 +159,25 @@ TextStyle getSemiBold600Style12({
   Color? color,
 }) {
   return _getTextStyle(fontSize, FontConstants.fontFamily, fontWeight, color);
+}
+
+class PersistentFooterButtonWrapper extends StatelessWidget {
+  const PersistentFooterButtonWrapper({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      minimum: EdgeInsets.only(
+        left: AppPadding.screenPadding,
+        right: AppPadding.screenPadding,
+        bottom: AppPadding.screenPadding,
+      ),
+      child: child,
+    );
+  }
+
+  static BoxDecoration decoration() {
+    return BoxDecoration(color: Colors.transparent);
+  }
 }

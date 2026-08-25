@@ -1,7 +1,7 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 
 class AppBottomSheet extends StatelessWidget {
@@ -9,6 +9,7 @@ class AppBottomSheet extends StatelessWidget {
   final String? subtitle;
   final Widget? child;
   final Widget? fixedHeader;
+  final double headerSpace;
   final double? heightRatio;
 
   const AppBottomSheet({
@@ -18,6 +19,7 @@ class AppBottomSheet extends StatelessWidget {
     this.child,
     this.fixedHeader,
     this.heightRatio,
+    this.headerSpace = 12,
   });
 
   @override
@@ -28,31 +30,26 @@ class AppBottomSheet extends StatelessWidget {
         : null;
 
     final sheet = Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+      padding: EdgeInsets.only(
+        left: 20.w,
+        right: 20.w,
+        bottom: 15.h,
+        top: 12.h,
+      ),
       decoration: BoxDecoration(
         color: ColorManager.cardBackground,
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
       ),
       child: Column(
         mainAxisSize: useFixedHeight ? MainAxisSize.max : MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Stack(
             clipBehavior: Clip.none,
+            alignment: .topCenter,
             children: [
-              Center(
-                child: Container(
-                  width: 48,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: Colors.white10,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: -4,
-                right: -8,
+              Align(
+                alignment: .centerRight,
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Container(
@@ -64,15 +61,23 @@ class AppBottomSheet extends StatelessWidget {
                     child: Icon(
                       Icons.close,
                       color: ColorManager.subtextColor,
-                      size: 18.sp,
+                      size: 20,
                     ),
                   ),
+                ),
+              ),
+              Container(
+                margin: .only(top: 4),
+                width: 48,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: Colors.white10,
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ],
           ),
           if (title != null) ...[
-            16.height,
             Text(
               title!,
               style: TextStyle(
@@ -83,15 +88,17 @@ class AppBottomSheet extends StatelessWidget {
             ),
           ],
           if (subtitle != null) ...[
-            8.height,
             Text(
               subtitle!,
               style: TextStyle(color: ColorManager.subtextColor, fontSize: 16),
             ),
           ],
-          if (fixedHeader != null) ...[12.height, fixedHeader!],
+          if (fixedHeader != null) ...[
+            SizedBox(height: headerSpace),
+            fixedHeader!,
+          ],
           if (child != null) ...[
-            16.height,
+            SizedBox(height: headerSpace),
             useFixedHeight
                 ? Expanded(child: SingleChildScrollView(child: child!))
                 : child!,

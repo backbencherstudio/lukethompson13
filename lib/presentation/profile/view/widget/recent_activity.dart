@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/widgets/app_card.dart';
 
 class CustomJobCard extends StatelessWidget {
   final String? title;
   final String? dateTime;
   final String? amount;
-  final String? statusText;
+  final Widget? statusWidget;
   final Color? amountColor;
   final Color? statusTextColor;
   final Color? statusBgColor;
@@ -19,7 +19,7 @@ class CustomJobCard extends StatelessWidget {
     this.title,
     this.dateTime,
     this.amount,
-    this.statusText,
+    this.statusWidget,
     this.amountColor,
     this.statusTextColor,
     this.statusBgColor,
@@ -33,17 +33,9 @@ class CustomJobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+      child: AppCard(
+        margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: ColorManager.cardBackground,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: borderColor ?? Colors.white10,
-            width: 1.5,
-          ),
-        ),
         child: Column(
           children: [
             Row(
@@ -52,7 +44,7 @@ class CustomJobCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey.withOpacity(0.1),
+                    color: Colors.blueGrey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -96,25 +88,7 @@ class CustomJobCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (statusText != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: statusBgColor ?? Colors.white.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      statusText!,
-                      style: TextStyle(
-                        color: statusTextColor ?? Colors.grey,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+                ?statusWidget,
               ],
             ),
           ],

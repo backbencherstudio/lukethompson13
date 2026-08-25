@@ -1,46 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-const planIdMonthly = 'monthly';
-const planIdYearly = 'yearly';
-const paymentMethodCard = 'card';
-const paymentMethodApple = 'apple';
-
-const _monthlyFeatures = [
-  'Unlimited stop logging',
-  'Invoice Export & Send',
-  'Advanced analytics',
-  'Debt Collection & Legal Services',
-  'Ad-free experience',
-];
-
-const _yearlyFeatures = [
-  'Unlimited stop logging',
-  'Invoice Export & Send',
-  'Advanced analytics',
-  'Debt Collection & Legal Services',
-  'Ad-free experience',
-];
-
-List<String> getFeaturedPlanItems(String selectedPlanId) {
-  return selectedPlanId == planIdMonthly ? _monthlyFeatures : _yearlyFeatures;
-}
+import 'package:lukethompson/core/resource/constants/config.dart';
 
 class SubscriptionPlanState {
   const SubscriptionPlanState({
-    this.selectedPlanId = planIdMonthly,
-    this.paymentMethod = '',
+    this.selectedPlanId = AppConfig.revenueCatProMonthlyPackageId,
   });
 
   final String selectedPlanId;
-  final String paymentMethod;
 
-  SubscriptionPlanState copyWith({
-    String? selectedPlanId,
-    String? paymentMethod,
-  }) {
+  SubscriptionPlanState copyWith({String? selectedPlanId}) {
     return SubscriptionPlanState(
       selectedPlanId: selectedPlanId ?? this.selectedPlanId,
-      paymentMethod: paymentMethod ?? this.paymentMethod,
     );
   }
 }
@@ -56,9 +26,5 @@ class ChooseSubscriptionPlanNotifier extends Notifier<SubscriptionPlanState> {
 
   void selectPlan(String planId) {
     state = state.copyWith(selectedPlanId: planId);
-  }
-
-  void selectPaymentMethod(String method) {
-    state = state.copyWith(paymentMethod: method);
   }
 }

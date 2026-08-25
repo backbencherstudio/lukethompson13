@@ -16,13 +16,13 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initial = name.trim().isNotEmpty ? name.trim()[0].toUpperCase() : '?';
+    final initial = name.trim().isNotEmpty ? name.trim()[0].toUpperCase() : '';
 
     if (imageUrl == null || imageUrl!.isEmpty) {
       return CircleAvatar(
         radius: radius,
-        backgroundColor: ColorManager.primary,
-        child: Text(initial),
+        backgroundColor: ColorManager.primaryButtonDark,
+        child: Text(initial, style: TextStyle(fontSize: radius * 0.8)),
       );
     }
 
@@ -35,7 +35,7 @@ class UserAvatar extends StatelessWidget {
         child: const CircularProgressIndicator(strokeWidth: 2),
       ),
       errorWidget: (context, url, error) =>
-          CircleAvatar(radius: radius, child: Text(initial)),
+          CircleAvatar(radius: radius, child: Text(initial, style: TextStyle(fontSize: radius * 0.8))),
     );
   }
 }

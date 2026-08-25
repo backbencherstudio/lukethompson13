@@ -1,35 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/search_bar_widget.dart';
-import 'package:lukethompson/core/widgets/section_header.dart';
-import 'package:lukethompson/presentation/profile/view/widget/recent_activity.dart';
-import 'package:lukethompson/presentation/profile/view/widget/row_container.dart';
-import 'package:lukethompson/presentation/reports/view/widget/claimed_widget.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
+import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
+import 'package:lukethompson/presentation/profile/view/widget/claim_list_section.dart';
+import 'package:lukethompson/presentation/profile/view/widget/claim_stats_section.dart';
+import 'package:lukethompson/presentation/profile/view/widget/filter_chip_group.dart';
 
-class MyClaimScreen extends StatefulWidget {
+class MyClaimScreen extends ConsumerStatefulWidget {
   const MyClaimScreen({super.key});
 
   @override
-  State<MyClaimScreen> createState() => _MyClaimScreenState();
+  ConsumerState<MyClaimScreen> createState() => _MyClaimScreenState();
 }
 
-class _MyClaimScreenState extends State<MyClaimScreen> {
+class _MyClaimScreenState extends ConsumerState<MyClaimScreen> {
+  late final TextEditingController _searchController;
   int selectedIndex = 0;
-  int isAmazonSelected = -1;
 
-  final List<String> categories = [
-    "All(12)",
-    "Submitted (4)",
-    "Draft (2)",
-    "Paid",
-    "Rejected",
+  List<String> _buildCategories(ClaimCounts? counts) {
+    return [
+      "All${counts != null ? ' (${counts.all})' : ''}",
+      "Submitted${counts != null ? ' (${counts.submitted})' : ''}",
+      "Draft${counts != null ? ' (${counts.draft})' : ''}",
+      "Paid${counts != null ? ' (${counts.paid})' : ''}",
+      "Denied${counts != null ? ' (${counts.denied})' : ''}",
+    ];
+  }
+
+  final List<ClaimStatus?> _statusFilters = [
+    null,
+    ClaimStatus.submitted,
+    ClaimStatus.draft,
+    ClaimStatus.paid,
+    ClaimStatus.denied,
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final pagination = ref.watch(claimPaginationProvider);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlobalAppBar(
@@ -38,109 +67,88 @@ class _MyClaimScreenState extends State<MyClaimScreen> {
       ),
       body: AppGradientBackground(
         child: SafeArea(
-          child: SingleChildScrollView(
-            padding: .symmetric(horizontal: AppPadding.screenPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16.h),
-                const SearchBarWidget(),
-                SizedBox(height: 15.h),
-
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(categories.length, (index) {
-                      return RowContainer(
-                        title: categories[index],
-                        isSelected: selectedIndex == index,
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                      );
-                    }),
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+              SliverToBoxAdapter(
+                child: SearchBarWidget(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: AppPadding.screenPadding,
                   ),
+                  controller: _searchController,
+                  onChanged: (value) {
+                    ref
+                        .read(claimPaginationProvider.notifier)
+                        .updateSearch(value);
+                  },
                 ),
-                SizedBox(height: 15.h),
-
-                // --- Stats Widgets ---
-                Row(
-                  children: [
-                    const Expanded(
-                      child: TotalClaimedWidget(
-                        title: "Pending Claims",
-                        amount: "\$1,240.50",
-                        amountColor: Color(0xffFFB547),
+              ),
+            ],
+            body: Expanded(
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollInfo) {
+                  if (scrollInfo.metrics.pixels >=
+                      scrollInfo.metrics.maxScrollExtent - 200) {
+                    ref.read(claimPaginationProvider.notifier).loadNextPage();
+                  }
+                  return false;
+                },
+                child: pagination.when(
+                  skipLoadingOnRefresh: true,
+                  skipLoadingOnReload: true,
+                  loading: () => const Center(child: ActivityIndicator()),
+                  error: (e, _) => StatusDisplay.error(e.toString()),
+                  data: (state) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 12.h),
+                          FilterChipGroup(
+                            titles: _buildCategories(state.metaData?.counts),
+                            selectedIndex: selectedIndex,
+                            onChanged: (index) {
+                              setState(() {
+                                selectedIndex = index;
+                              });
+                              final status = _statusFilters[index];
+                              ref
+                                  .read(claimPaginationProvider.notifier)
+                                  .updateStatus(status);
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppPadding.screenPadding,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClaimStatsSection(metaData: state.metaData),
+                                SizedBox(height: 16.h),
+                                ClaimListSection(
+                                  claims: state.claims,
+                                  isLoadingMore: state.isLoadingMore,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: 12),
-                    const Expanded(
-                      child: TotalClaimedWidget(
-                        title: "Settled This Week",
-                        amount: "\$4,892.00",
-                        amountColor: Color(0xff33D17A),
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-                SizedBox(height: 15.h),
-
-                SectionHeader(title: 'Recent Activity'),
-                SizedBox(height: 16.h),
-
-                CustomJobCard(
-                  title: "Walmart DC Shelbyville. TN",
-                  dateTime: "Oct 24, 2026 • 08:30 AM",
-                  amount: "\$135",
-                  amountColor: Colors.greenAccent,
-                  statusText: "PAID",
-                  statusTextColor: Colors.greenAccent,
-                  statusBgColor: Colors.greenAccent.withOpacity(0.1),
-                  iconColor: Colors.blueAccent,
-                  // onTap: () {
-                  //   setState(() {
-                  //     isAmazonSelected = (isAmazonSelected == 0) ? -1 : 0;
-                  //   });
-                  // },
-                ),
-
-                CustomJobCard(
-                  title: "Amazon Distribution DC4",
-                  dateTime: "Oct 23, 2026 • 11:45 AM",
-                  amount: "\$225",
-                  amountColor: Colors.orangeAccent,
-                  statusText: "Submitted",
-                  statusTextColor: Colors.orangeAccent,
-                  statusBgColor: Colors.orangeAccent.withOpacity(0.1),
-                  iconColor: Colors.orangeAccent,
-                  // onTap: () {
-                  //   setState(() {
-                  //     isAmazonSelected = (isAmazonSelected == 1) ? -1 : 1;
-                  //   });
-                  // },
-                ),
-
-                // --- Job Card 3 (Cold Storage) ---
-                CustomJobCard(
-                  title: "Cold Storage Solutions",
-                  dateTime: "Oct 22, 2026 • 11:45 AM",
-                  amount: "\$220",
-                  amountColor: Colors.redAccent,
-                  statusText: "Denied",
-                  statusTextColor: Colors.redAccent,
-                  statusBgColor: Colors.redAccent.withOpacity(0.1),
-                  iconColor: Colors.blueAccent,
-                  // onTap: () {
-                  //   setState(() {
-                  //     isAmazonSelected = (isAmazonSelected == 2) ? -1 : 2;
-                  //   });
-                  // },
-                ),
-              ],
+              ),
             ),
           ),
+          // child: Column(
+          //   children: [
+          //     16.height,
+          // ,
+          //     SizedBox(height: 16.h),
+          //   ],
+          // ),
         ),
       ),
     );

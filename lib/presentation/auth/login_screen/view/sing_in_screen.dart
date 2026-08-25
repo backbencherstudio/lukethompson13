@@ -1,246 +1,268 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/route/route_names.dart';
+import 'package:lukethompson/core/utils/validators.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
-import 'package:lukethompson/core/route/routes_names.dart';
+import 'package:lukethompson/core/widgets/auth_prompt.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/core/widgets/heading_section.dart';
+import 'package:lukethompson/data/sources/local/shared_preference/shared_preference.dart';
+import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
+import 'package:lukethompson/presentation/parent_screen/parent_screen.dart';
 
-class SingInScreen extends StatefulWidget {
+class SingInScreen extends ConsumerStatefulWidget {
   const SingInScreen({super.key});
 
   @override
-  State<SingInScreen> createState() => _SingInScreenState();
+  ConsumerState<SingInScreen> createState() => _SingInScreenState();
 }
 
-class _SingInScreenState extends State<SingInScreen> {
+class _SingInScreenState extends ConsumerState<SingInScreen> {
+  final _formKey = GlobalKey<FormState>();
   bool rememberMe = false;
   bool isPasswordHidden = true;
+  final _emailController = TextEditingController(text: Testing.testUsserEmail);
+  final _pwController = TextEditingController(text: Testing.testUsserPassword);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberMe();
+  }
+
+  Future<void> _loadRememberMe() async {
+    final email = await SharedPreferenceData.getRememberMeEmail();
+    if (mounted) {
+      setState(() {
+        rememberMe = email != null;
+      });
+      if (email != null) _emailController.text = email;
+    }
+  }
+
+  void _persistRememberMe() {
+    if (rememberMe) {
+      SharedPreferenceData.setRememberMeEmail(_emailController.text.trim());
+    } else {
+      SharedPreferenceData.setRememberMeEmail(null);
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _pwController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final router = GoRouter.of(context);
+
+    await ref
+        .read(authStateProvider.notifier)
+        .login(
+          email: _emailController.text.trim(),
+          password: _pwController.text,
+        );
+
+    if (!mounted) return;
+
+    final authState = ref.read(authStateProvider);
+    if (authState.error != null) {
+      context.showErrorSnackBar(
+        ErrorHandle.formatErrorMessage(Exception(authState.error)),
+      );
+    } else if (authState.isAuthenticated) {
+      _persistRememberMe();
+      ref.read(parentScreenIndexProvider.notifier).goToHome();
+      router.go(Routes.parent);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authStateProvider).isLoading;
+
     return Scaffold(
       body: AppGradientBackground(
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+            padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 24.h),
-                  Center(
-                    child: Text(
-                      "Welcome Back",
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w700,
-                        color: ColorManager.textColor,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: 24.h),
+                    HeadingSection(
+                      title: "Welcome Back",
+                      subtitle: "Log in to your account",
+                    ),
+                    SizedBox(height: 34.h),
+                    InputLabel("Email Address"),
+                    SizedBox(height: 8.h),
+                    CustomTextFieldWidget(
+                      textInputAction: TextInputAction.next,
+                      controller: _emailController,
+                      hintText: "Enter your email address",
+                      keyboardType: TextInputType.emailAddress,
+                      validator: Validators.email,
+                      suffix: Image.asset(
+                        IconManager.email,
+                        width: 20.w,
+                        height: 20.h,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 10.h),
-                  Center(
-                    child: Text(
-                      "Log in to your account",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: ColorManager.subtextColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 34.h),
-                  _buildLabel("Email Address"),
-                  SizedBox(height: 14.h),
-                  CustomTextFieldWidget(
-                    hintText: "Enter your email address",
-                    suffix: Image.asset(
-                      IconManager.email,
-                      width: 20.w,
-                      height: 20.h,
-                    ),
-                  ),
-                  SizedBox(height: 18.h),
-                  _buildLabel("Password"),
-                  SizedBox(height: 14.h),
-                  CustomTextFieldWidget(
-                    hintText: "Enter your password",
-                    obsecure: isPasswordHidden,
-                    suffix: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        setState(() {
-                          isPasswordHidden = !isPasswordHidden;
-                        });
-                      },
-                      child: Icon(
-                        isPasswordHidden
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: const Color(0xFFA8B7C7),
-                        size: 22.sp,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 14.h),
-                  Row(
-                    children: [
-                      InkWell(
+                    SizedBox(height: 18.h),
+                    InputLabel("Password"),
+                    SizedBox(height: 8.h),
+                    CustomTextFieldWidget(
+                      textInputAction: TextInputAction.done,
+                      controller: _pwController,
+                      hintText: "Enter your password",
+                      obsecure: isPasswordHidden,
+                      validator: Validators.password,
+                      onFieldSubmitted: (_) => _handleLogin(),
+                      suffix: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           setState(() {
-                            rememberMe = !rememberMe;
+                            isPasswordHidden = !isPasswordHidden;
                           });
                         },
-                        borderRadius: BorderRadius.circular(6.r),
-                        child: Container(
-                          width: 18.w,
-                          height: 18.w,
-                          decoration: BoxDecoration(
-                            color: rememberMe
-                                ? const Color(0xFF39D77A)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(4.r),
-                            border: Border.all(
-                              color: rememberMe
-                                  ? const Color(0xFF39D77A)
-                                  : Colors.white70,
-                            ),
-                          ),
-                          child: rememberMe
-                              ? Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 14.sp,
-                                )
-                              : null,
+                        child: Icon(
+                          isPasswordHidden
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: const Color(0xFFA8B7C7),
+                          size: 22.sp,
                         ),
                       ),
-                      SizedBox(width: 10.w),
-                      Text(
-                        "Remember Me",
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          color: ColorManager.subtextColor,
-                        ),
-                      ),
-                      const Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, RoutesName.forgetScreen);
-                        },
-                        child: Text(
-                          "Forgot Password",
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            color: const Color(0xFFFF4C45),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 42.h),
-                  GlobalButton(
-                    isDisabled: false,
-                    label: "Sign in",
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        RoutesName.parentScreen,
-                      );
-                    },
-                  ),
-                  SizedBox(height: 34.h),
-                  Row(
-                    children: [
-                      Expanded(child: _divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: Text(
-                          "Or Sign In with",
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: ColorManager.subtextColor,
-                          ),
-                        ),
-                      ),
-                      Expanded(child: _divider()),
-                    ],
-                  ),
-                  SizedBox(height: 18.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _SocialButton(
-                          label: "google",
-                          leading: Image.asset(
-                            IconManager.google,
-                            width: 24.w,
-                            height: 24.h,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 14.w),
-                      Expanded(
-                        child: _SocialButton(
-                          label: "Apple",
-                          leading: Icon(
-                            Icons.apple,
-                            color: Colors.white,
-                            size: 24.sp,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 18.h),
-                  Center(
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                    ),
+                    SizedBox(height: 14.h),
+                    Row(
                       children: [
-                        Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: ColorManager.subtextColor,
+                        Transform.translate(
+                          offset: Offset(-10, 0),
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: rememberMe,
+                                onChanged: (v) => setState(() {
+                                  rememberMe = v!;
+                                  _persistRememberMe();
+                                }),
+                                activeColor: const Color(0xFF39D77A),
+                                checkColor: Colors.white,
+                                side: const BorderSide(color: Colors.white70),
+                              ),
+                              GestureDetector(
+                                onTap: () => setState(() {
+                                  rememberMe = !rememberMe;
+                                  _persistRememberMe();
+                                }),
+                                child: Text(
+                                  "Remember Me",
+                                  style: TextStyle(
+                                    fontSize: 15.sp,
+                                    color: ColorManager.subtextColor,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        const Spacer(),
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesName.singupScreen,
-                            );
+                            context.push(Routes.forgotPassword);
                           },
                           child: Text(
-                            "Create",
+                            "Forgot Password",
                             style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF39D77A),
+                              fontSize: 15.sp,
+                              color: const Color(0xFFFF4C45),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+
+                    SizedBox(height: 32.h),
+                    GlobalButton(
+                      isLoading: isLoading,
+                      label: "Sign in",
+                      onPressed: _handleLogin,
+                    ),
+
+                    // SizedBox(height: 34.h),
+                    // Row(
+                    //   children: [
+                    //     Expanded(child: _divider()),
+                    //     Padding(
+                    //       padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    //       child: Text(
+                    //         "Or Sign In with",
+                    //         style: TextStyle(
+                    //           fontSize: 14.sp,
+                    //           color: ColorManager.subtextColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Expanded(child: _divider()),
+                    //   ],
+                    // ),
+                    // SizedBox(height: 18.h),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: _SocialButton(
+                    //         label: "google",
+                    //         leading: Image.asset(
+                    //           IconManager.google,
+                    //           width: 24.w,
+                    //           height: 24.h,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 14.w),
+                    //     // Expanded(
+                    //     //   child: _SocialButton(
+                    //     //     label: "Apple",
+                    //     //     leading: Icon(
+                    //     //       Icons.apple,
+                    //     //       color: Colors.white,
+                    //     //       size: 24.sp,
+                    //     //     ),
+                    //     //   ),
+                    //     // ),
+                    //   ],
+                    // ),
+                    SizedBox(height: 16.h),
+
+                    AuthPrompt(
+                      message: "Don't have an account? ",
+                      actionText: 'Sign Up Now',
+                      onPressed: () => context.push(Routes.signUp),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildLabel(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: ColorManager.textColor,
-        fontWeight: FontWeight.w700,
       ),
     );
   }

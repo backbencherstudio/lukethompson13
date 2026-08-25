@@ -14,6 +14,7 @@ class DioClient {
            baseUrl: baseUrl,
            connectTimeout: connectTimeout ?? const Duration(seconds: 10),
            receiveTimeout: receiveTimeout ?? const Duration(seconds: 10),
+           validateStatus: (status) => status != null && status < 500,
          ),
        ) {
     if (interceptors != null) {
@@ -22,10 +23,43 @@ class DioClient {
   }
 }
 
-final dioClientProvider = Provider<Dio>((ref) {
-  final client = DioClient(
-    baseUrl: "https://jsonplaceholder.typicode.com",
-    interceptors: [LogInterceptor(requestBody: true, responseBody: true)],
-  );
-  return client.dio;
-});
+class AuthInterceptor extends Interceptor {
+  final String? Function() getToken;
+
+  AuthInterceptor({required this.getToken});
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final token = getToken();
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    handler.next(options);
+  }
+}
+
+class ApiSuccessInterceptor extends Interceptor {
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    final data = response.data;
+    if (data is Map<String, dynamic> && data['success'] == false) {
+      handler.reject(
+        DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          message: data['message'] as String? ?? 'Request failed',
+          type: DioExceptionType.badResponse,
+        ),
+      );
+    } else {
+      handler.next(response);
+    }
+  }
+}
+
+class CachedTokenNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void setToken(String? token) => state = token;
+}

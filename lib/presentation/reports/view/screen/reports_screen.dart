@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
@@ -17,13 +16,10 @@ class ReportsScreen extends StatefulWidget {
 
 class _ReportsScreenState extends State<ReportsScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
+  late final TabController _tabController = TabController(
+    length: 2,
+    vsync: this,
+  );
 
   @override
   void dispose() {
@@ -44,32 +40,29 @@ class _ReportsScreenState extends State<ReportsScreen>
       body: AppGradientBackground(
         child: SafeArea(
           bottom: false,
-          child: Column(
-            children: [
-              SizedBox(height: 10.h),
-
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppPadding.screenPadding,
-                ),
-                child: GlobalTabBar(
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: "Weekly Summary"),
-                    Tab(text: "Tax Report"),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const [WeeklySummary(), TaxReport()],
+          child: NestedScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppPadding.screenPadding,
+                  ),
+                  child: GlobalTabBar(
+                    controller: _tabController,
+                    tabs: const [
+                      Tab(text: "Weekly Summary"),
+                      Tab(text: "Tax Report"),
+                    ],
+                  ),
                 ),
               ),
             ],
+            body: TabBarView(
+              controller: _tabController,
+              children: const [WeeklySummaryReport(), TaxReport()],
+            ),
           ),
         ),
       ),
