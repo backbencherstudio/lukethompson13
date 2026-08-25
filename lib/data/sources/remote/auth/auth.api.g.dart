@@ -167,6 +167,7 @@ class _AuthApi implements AuthApi {
     int? freeWaitTime,
     int? ratePerHour,
     File? image,
+    String? company,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -195,6 +196,9 @@ class _AuthApi implements AuthApi {
           ),
         ),
       );
+    }
+    if (company != null) {
+      _data.fields.add(MapEntry('company', company));
     }
     final _options = _setStreamType<GetMeResponse>(
       Options(

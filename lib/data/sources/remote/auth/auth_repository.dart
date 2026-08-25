@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,12 +68,14 @@ class AuthRepository {
     int? freeWaitTime,
     int? ratePerHour,
     File? image,
+    CreateCompanyRequest? company,
   }) => _authApi.updateUserProfile(
     name,
     phoneNumber,
     freeWaitTime,
     ratePerHour,
     image,
+    company != null ? jsonEncode(company.toJson()) : null,
   );
 }
 

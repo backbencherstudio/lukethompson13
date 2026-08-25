@@ -37,6 +37,7 @@ abstract class AuthApi {
     @Part(name: 'free_wait_time') int? freeWaitTime,
     @Part(name: 'rate_per_hour') int? ratePerHour,
     @Part(name: 'image') File? image,
+    @Part(name: 'company') String? company,
   );
 
   @POST(ApiEndpoints.forgotPassword)

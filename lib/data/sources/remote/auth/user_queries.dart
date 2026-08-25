@@ -16,6 +16,7 @@ class UpdateUserProfileParams {
   final int? freeWaitTime;
   final int? ratePerHour;
   final File? image;
+  final CreateCompanyRequest? company;
 
   const UpdateUserProfileParams({
     this.name,
@@ -23,6 +24,7 @@ class UpdateUserProfileParams {
     this.freeWaitTime,
     this.ratePerHour,
     this.image,
+    this.company,
   });
 }
 
@@ -38,6 +40,7 @@ final updateUserProfileMutation =
         freeWaitTime: params.freeWaitTime,
         ratePerHour: params.ratePerHour,
         image: params.image,
+        company: params.company,
       );
       return response;
     });

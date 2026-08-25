@@ -48,7 +48,7 @@ class _FacilitySearchSheetContentState
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       ref
           .read(getSearchAllShipperFacilitiesProvider.notifier)
-          .searchInitialData();
+          .searchInitialData(FacilityType.shipper);
     });
   }
 

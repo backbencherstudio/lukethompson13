@@ -36,6 +36,8 @@ class User {
   @JsonKey(name: 'free_wait_time')
   final int? freeWaitTime;
 
+  final Company? company;
+
   User({
     required this.id,
     required this.name,
@@ -46,6 +48,7 @@ class User {
     required this.type,
     this.ratePerHour,
     this.freeWaitTime,
+    this.company,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -172,6 +175,107 @@ class LoginResponse extends BaseResponse {
 
   @override
   String toString() => 'LoginResponse${toJson()}';
+}
+
+@JsonSerializable()
+class Company {
+  @JsonKey(name: 'company_name')
+  final String companyName;
+
+  @JsonKey(name: 'contact_name')
+  final String contactName;
+
+  @JsonKey(name: 'phone_number')
+  final String phoneNumber;
+
+  final String email;
+
+  final Address address;
+
+  const Company({
+    required this.companyName,
+    required this.contactName,
+    required this.phoneNumber,
+    required this.email,
+    required this.address,
+  });
+
+  factory Company.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompanyToJson(this);
+}
+
+@JsonSerializable()
+class Address {
+  @JsonKey(name: 'address_line1')
+  final String addressLine1;
+
+  @JsonKey(name: 'address_line2')
+  final String? addressLine2;
+
+  final String city;
+  final String state;
+
+  @JsonKey(name: 'postal_code')
+  final String postalCode;
+
+  final String country;
+
+  const Address({
+    required this.addressLine1,
+    this.addressLine2,
+    required this.city,
+    required this.state,
+    required this.postalCode,
+    required this.country,
+  });
+
+  factory Address.fromJson(Map<String, dynamic> json) =>
+      _$AddressFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AddressToJson(this);
+}
+
+@JsonSerializable()
+class CreateCompanyRequest {
+  @JsonKey(name: 'company_name')
+  final String? companyName;
+  @JsonKey(name: 'contact_name')
+  final String? contactName;
+  @JsonKey(name: 'address_line1')
+  final String? addressLine1;
+  @JsonKey(name: 'address_line2')
+  final String? addressLine2;
+  final String? city;
+  final String? state;
+  @JsonKey(name: 'postal_code')
+  final String? postalCode;
+  final String? country;
+  @JsonKey(name: 'phone_number')
+  final String? phoneNumber;
+  final String? email;
+
+  CreateCompanyRequest({
+    this.companyName,
+    this.contactName,
+    this.addressLine1,
+    this.addressLine2,
+    this.city,
+    this.state,
+    this.postalCode,
+    this.country,
+    this.phoneNumber,
+    this.email,
+  });
+
+  factory CreateCompanyRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateCompanyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateCompanyRequestToJson(this);
+
+  @override
+  String toString() => 'CreateCompanyRequest${toJson()}';
 }
 
 @JsonSerializable()
