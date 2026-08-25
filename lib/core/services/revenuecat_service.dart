@@ -7,19 +7,21 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-const _monthlyFeatures = [
+const _monthlyProFeatures = [
   'Unlimited stop logging',
-  'Invoice Export & Send',
+  'Proof package / invoice export & send',
+  'Auto follow-ups until paid',
+  'Dock & Shipper ratings',
   'Advanced analytics',
-  'Debt Collection & Legal Services',
   'Ad-free experience',
 ];
 
 const _yearlyFeatures = [
   'Unlimited stop logging',
-  'Invoice Export & Send',
+  'Proof package / invoice export & send',
+  'Auto follow-ups until paid',
+  'Dock & Shipper ratings',
   'Advanced analytics',
-  'Debt Collection & Legal Services',
   'Ad-free experience',
 ];
 
@@ -71,7 +73,7 @@ class RevenueCatService {
       case AppConfig.revenueCatProYearlyPackageId || 'monthly':
         return _yearlyFeatures;
       case AppConfig.revenueCatProMonthlyPackageId || 'yearly':
-        return _monthlyFeatures;
+        return _monthlyProFeatures;
       default:
         return [];
     }
