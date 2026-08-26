@@ -84,9 +84,6 @@ class SingleStoplogDetailData {
 
   final List<StopLogAttachment>? attachments;
 
-  @JsonKey(name: 'broker_email')
-  final String? brokerEmail;
-
   @JsonKey(name: 'recipient_email')
   final String? recipientEmail;
 
@@ -115,7 +112,7 @@ class SingleStoplogDetailData {
   final String? detention;
   final String? lost;
 
-  final Broker? broker;
+  final StopLogBroker? broker;
 
   SingleStoplogDetailData({
     this.id,
@@ -134,7 +131,6 @@ class SingleStoplogDetailData {
     this.facilityAddress,
     this.attachments,
     this.detentionSummaryPdf,
-    this.brokerEmail,
     this.recipientEmail,
     this.claim,
     this.currentStep,
@@ -186,4 +182,32 @@ enum SingleStoplogStatus {
   completed,
   @JsonValue('PROGRESS')
   progress,
+}
+
+@JsonSerializable()
+class StopLogBroker {
+  final String? id;
+  final String? name;
+  final String? email;
+  final String? phone;
+  final String? brokerId;
+  final String? locationId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  const StopLogBroker({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.brokerId,
+    this.locationId,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory StopLogBroker.fromJson(Map<String, dynamic> json) =>
+      _$StopLogBrokerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StopLogBrokerToJson(this);
 }

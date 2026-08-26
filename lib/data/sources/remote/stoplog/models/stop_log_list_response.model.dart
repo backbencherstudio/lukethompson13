@@ -55,16 +55,17 @@ class Rating {
 }
 
 @JsonSerializable()
-class Broker {
+class StopLogBrokerListItem {
   final String? id;
   final String? name;
   final String? email;
 
-  Broker({this.id, this.name, this.email});
+  const StopLogBrokerListItem({this.id, this.name, this.email});
 
-  factory Broker.fromJson(Map<String, dynamic> json) => _$BrokerFromJson(json);
+  factory StopLogBrokerListItem.fromJson(Map<String, dynamic> json) =>
+      _$StopLogBrokerListItemFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BrokerToJson(this);
+  Map<String, dynamic> toJson() => _$StopLogBrokerListItemToJson(this);
 
   @override
   String toString() => 'Broker${toJson()}';
@@ -91,7 +92,7 @@ class StopLogListItem {
 
   final Rating? rating;
 
-  final Broker? broker;
+  final StopLogBrokerListItem? broker;
 
   StopLogListItem({
     required this.id,

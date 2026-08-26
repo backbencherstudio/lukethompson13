@@ -68,7 +68,6 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
       : DetensionSummaryPdf.fromJson(
           json['detention_summary_pdf'] as Map<String, dynamic>,
         ),
-  brokerEmail: json['broker_email'] as String?,
   recipientEmail: json['recipient_email'] as String?,
   claim: json['claim'] == null
       ? null
@@ -85,7 +84,7 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
   lost: json['lost'] as String?,
   broker: json['broker'] == null
       ? null
-      : Broker.fromJson(json['broker'] as Map<String, dynamic>),
+      : StopLogBroker.fromJson(json['broker'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$SingleStoplogDetailDataToJson(
@@ -106,7 +105,6 @@ Map<String, dynamic> _$SingleStoplogDetailDataToJson(
   'arrival_location': instance.arrivalLocation,
   'facility_address': instance.facilityAddress,
   'attachments': instance.attachments,
-  'broker_email': instance.brokerEmail,
   'recipient_email': instance.recipientEmail,
   'claim': instance.claim,
   'current_step': _$StopLogStepEnumMap[instance.currentStep],
@@ -154,3 +152,31 @@ Map<String, dynamic> _$SingleStoplogResponseToJson(
   'message': instance.message,
   'data': instance.data,
 };
+
+StopLogBroker _$StopLogBrokerFromJson(Map<String, dynamic> json) =>
+    StopLogBroker(
+      id: json['id'] as String?,
+      name: json['name'] as String?,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      brokerId: json['brokerId'] as String?,
+      locationId: json['locationId'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
+    );
+
+Map<String, dynamic> _$StopLogBrokerToJson(StopLogBroker instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'email': instance.email,
+      'phone': instance.phone,
+      'brokerId': instance.brokerId,
+      'locationId': instance.locationId,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
+    };

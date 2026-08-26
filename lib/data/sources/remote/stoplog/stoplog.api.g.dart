@@ -204,6 +204,7 @@ class _StoplogApi implements StoplogApi {
     StopLogStep? step,
     required String? id,
     String? shipperId,
+    String? brokerId,
     String? facilityName,
     String? location,
     List<MultipartFile>? attachments,
@@ -222,6 +223,9 @@ class _StoplogApi implements StoplogApi {
     }
     if (shipperId != null) {
       _data.fields.add(MapEntry('shipper_id', shipperId));
+    }
+    if (brokerId != null) {
+      _data.fields.add(MapEntry('broker_id', brokerId));
     }
     if (facilityName != null) {
       _data.fields.add(MapEntry('facility_name', facilityName));

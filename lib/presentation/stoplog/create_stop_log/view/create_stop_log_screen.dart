@@ -226,6 +226,18 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                   ),
                 );
           }
+
+          if (data?.broker != null) {
+            ref
+                .read(selectedFacilityProvider.notifier)
+                .selectBroker(
+                  ShipperSearchFacilityItem(
+                    id: data?.broker?.id,
+                    name: data!.broker!.name!,
+                    email: data.broker?.email,
+                  ),
+                );
+          }
           // Success
         },
         loading: () {

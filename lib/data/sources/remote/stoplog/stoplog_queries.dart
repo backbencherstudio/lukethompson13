@@ -50,6 +50,7 @@ class RecordStopLogParams {
   final String? id;
   final StopLogStep step;
   final String? shipperId;
+  final String? brokerId;
   final String? facilityName;
   final StopLogLocation? location;
   final List<MultipartFile>? attachments;
@@ -63,6 +64,7 @@ class RecordStopLogParams {
     this.location,
     this.attachments,
     this.bolNumber,
+    this.brokerId,
   });
 
   @override
@@ -73,6 +75,7 @@ class RecordStopLogParams {
         other.id == id &&
         other.step == step &&
         other.shipperId == shipperId &&
+        other.brokerId == brokerId &&
         other.facilityName == facilityName &&
         other.location == location &&
         listEquals(other.attachments, attachments) &&
@@ -80,8 +83,15 @@ class RecordStopLogParams {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, step, shipperId, facilityName, location, bolNumber);
+  int get hashCode => Object.hash(
+    id,
+    step,
+    shipperId,
+    brokerId,
+    facilityName,
+    location,
+    bolNumber,
+  );
 }
 
 final recordStopLogProviderAction =
@@ -98,6 +108,7 @@ class RecordStopLogNotifier extends MutationNotifier<StopLogRecordResponse> {
         id: params.id,
         step: params.step,
         shipperId: params.shipperId,
+        brokerId: params.brokerId,
         facilityName: params.facilityName,
         location: params.location != null
             ? jsonEncode(params.location!.toJson())

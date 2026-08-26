@@ -44,13 +44,22 @@ class ClaimStatusCard extends StatelessWidget {
           SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 8.w,
             children: [
-              VerticalInfo(label: "Sent", value: data.claim?.sentAt?.format() ?? '-'),
               VerticalInfo(
-                label: "Broker CC",
-                value: data.brokerEmail ?? '-',
+                label: "Sent",
+                value: data.claim?.sentAt?.format() ?? '-',
               ),
-              VerticalInfo(label: "Via", value: data.claim?.sendMethod?.label ?? '-'),
+              Expanded(
+                child: VerticalInfo(
+                  label: "Broker CC",
+                  value: data.broker?.email ?? '-',
+                ),
+              ),
+              VerticalInfo(
+                label: "Via",
+                value: data.claim?.sendMethod?.label ?? '-',
+              ),
             ],
           ),
         ],
@@ -79,6 +88,7 @@ class VerticalInfo extends StatelessWidget {
             color: Colors.white,
             fontSize: 13.sp,
             fontWeight: FontWeight.w500,
+            overflow: .ellipsis,
           ),
         ),
       ],

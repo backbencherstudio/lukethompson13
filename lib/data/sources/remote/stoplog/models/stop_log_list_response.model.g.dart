@@ -14,37 +14,39 @@ Map<String, dynamic> _$RatingToJson(Rating instance) => <String, dynamic>{
   'rating': instance.rating,
 };
 
-Broker _$BrokerFromJson(Map<String, dynamic> json) => Broker(
+StopLogBrokerListItem _$StopLogBrokerListItemFromJson(
+  Map<String, dynamic> json,
+) => StopLogBrokerListItem(
   id: json['id'] as String?,
   name: json['name'] as String?,
   email: json['email'] as String?,
 );
 
-Map<String, dynamic> _$BrokerToJson(Broker instance) => <String, dynamic>{
+Map<String, dynamic> _$StopLogBrokerListItemToJson(
+  StopLogBrokerListItem instance,
+) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,
   'email': instance.email,
 };
 
-StopLogListItem _$StopLogListItemFromJson(Map<String, dynamic> json) =>
-    StopLogListItem(
-      id: json['id'] as String,
-      facilityName: json['facility_name'] as String,
-      shipperFacilityId: json['shipper_facility_id'] as String,
-      date: json['date'] as String,
-      amount: json['amount'] as String,
-      status: $enumDecodeNullable(_$StopLogStatusEnumMap, json['status']),
-      claimStatus: $enumDecodeNullable(
-        _$ClaimStatusEnumMap,
-        json['claim_status'],
-      ),
-      rating: json['rating'] == null
-          ? null
-          : Rating.fromJson(json['rating'] as Map<String, dynamic>),
-      broker: json['broker'] == null
-          ? null
-          : Broker.fromJson(json['broker'] as Map<String, dynamic>),
-    );
+StopLogListItem _$StopLogListItemFromJson(
+  Map<String, dynamic> json,
+) => StopLogListItem(
+  id: json['id'] as String,
+  facilityName: json['facility_name'] as String,
+  shipperFacilityId: json['shipper_facility_id'] as String,
+  date: json['date'] as String,
+  amount: json['amount'] as String,
+  status: $enumDecodeNullable(_$StopLogStatusEnumMap, json['status']),
+  claimStatus: $enumDecodeNullable(_$ClaimStatusEnumMap, json['claim_status']),
+  rating: json['rating'] == null
+      ? null
+      : Rating.fromJson(json['rating'] as Map<String, dynamic>),
+  broker: json['broker'] == null
+      ? null
+      : StopLogBrokerListItem.fromJson(json['broker'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$StopLogListItemToJson(StopLogListItem instance) =>
     <String, dynamic>{

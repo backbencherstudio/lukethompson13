@@ -154,6 +154,17 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     return currentFacility;
   }
 
+  ShipperSearchFacilityItem? getCurrentBroker() {
+    final currentBroker = ref.read(selectedFacilityProvider)?.choosenBroker;
+
+    if (currentBroker == null) {
+      context.showErrorSnackBar("Select a Broker");
+      return null;
+    }
+
+    return currentBroker;
+  }
+
   Future<void> _logArrivalTime() async {
     final activeSessionId = widget.session?.id;
     if (activeSessionId != null) return;
@@ -162,7 +173,9 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     if (position == null) return;
 
     final currentFacility = getCurrentFacility();
-    if (currentFacility == null) return;
+    final currentBroker = getCurrentBroker();
+
+    if (currentFacility == null || currentBroker == null) return;
 
     final (
       withinRadius,
@@ -184,6 +197,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     final params = RecordStopLogParams(
       step: .arrivalTime,
       shipperId: currentFacility.id,
+      brokerId: currentBroker.id,
       facilityName: currentFacility.name,
       location: StopLogLocation(
         // city: 'Dhaka',

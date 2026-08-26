@@ -47,6 +47,7 @@ abstract class StoplogApi {
     @Part() StopLogStep? step,
     @Part() required String? id,
     @Part(name: 'shipper_id') String? shipperId,
+    @Part(name: 'broker_id') String? brokerId,
     @Part(name: 'facility_name') String? facilityName,
     @Part() String? location,
     @Part() List<MultipartFile>? attachments,
