@@ -13,6 +13,7 @@ import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
+import 'package:lukethompson/core/widgets/activity_indicator.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
@@ -37,14 +38,21 @@ class CreateFacilityScreen extends ConsumerStatefulWidget {
 class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
   late final fieldMapController = MapController();
   String? choosenLocationAddress;
+
   LatLng? choosenPosition;
-  String? _existingBrokerId;
+  bool locatinIsLoading = true;
 
   final form = CreateFacilityForm();
 
   FormControl<String> get facilityName => form.facilityName;
-  FormControl<String> get brokerName => form.brokerName;
-  FormControl<String> get brokerEmail => form.brokerEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      onUseCurrentLocation();
+    });
+  }
 
   @override
   void dispose() {
@@ -53,6 +61,9 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
   }
 
   void onUseCurrentLocation() async {
+    setState(() {
+      locatinIsLoading = true;
+    });
     final pos = await GpsService.getCurrentPosition();
 
     if (pos == null) return;
@@ -68,6 +79,7 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
     setState(() {
       choosenLocationAddress = address;
       choosenPosition = latlng;
+      locatinIsLoading = false;
     });
   }
 
@@ -169,6 +181,7 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
                   ),
 
                   FormFieldMapView(
+                    isLoading: locatinIsLoading,
                     location: choosenPosition,
                     label: choosenLocationAddress ?? "Select Location",
                     mapController: fieldMapController,
@@ -218,9 +231,6 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
                               address: choosenLocationAddress ?? '',
                               lat: choosenPosition?.latitude,
                               lng: choosenPosition?.longitude,
-                              brokerId: _existingBrokerId,
-                              brokerName: brokerName.value,
-                              brokerEmail: brokerEmail.value,
                             ),
                           ),
                     );
@@ -250,6 +260,7 @@ class FormFieldMapView extends StatelessWidget {
   final String label;
   final Widget? labelActtion;
   final LatLng? location;
+  final bool isLoading;
 
   const FormFieldMapView({
     super.key,
@@ -257,6 +268,7 @@ class FormFieldMapView extends StatelessWidget {
     required this.mapController,
     required this.location,
     this.labelActtion,
+    this.isLoading = false,
   });
 
   @override
@@ -273,33 +285,38 @@ class FormFieldMapView extends StatelessWidget {
             ),
             child: SizedBox(
               height: 300,
-              child: FlutterMap(
-                mapController: mapController,
-                options: MapOptions(
-                  initialCenter: location ?? const LatLng(50.5, 30.51),
-                  initialZoom: 15,
-                  interactionOptions: const InteractionOptions(
-                    flags: InteractiveFlag.none,
-                  ),
-                ),
+              child: Stack(
                 children: [
-                  TileLayer(
-                    urlTemplate: AppConfig.mapProvider,
-                    userAgentPackageName: AppConfig.bundleId,
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      if (location != null)
-                        Marker(
-                          point: location!,
-                          child: Icon(
-                            Icons.location_on,
-                            color: ColorManager.errorColor,
-                            size: 40.sp,
-                          ),
-                        ),
+                  FlutterMap(
+                    mapController: mapController,
+                    options: MapOptions(
+                      initialCenter: location ?? const LatLng(50.5, 30.51),
+                      initialZoom: 15,
+                      interactionOptions: const InteractionOptions(
+                        flags: InteractiveFlag.none,
+                      ),
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate: AppConfig.mapProvider,
+                        userAgentPackageName: AppConfig.bundleId,
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          if (location != null)
+                            Marker(
+                              point: location!,
+                              child: Icon(
+                                Icons.location_on,
+                                color: ColorManager.errorColor,
+                                size: 40.sp,
+                              ),
+                            ),
+                        ],
+                      ),
                     ],
                   ),
+                  if (isLoading) Center(child: ActivityIndicator()),
                 ],
               ),
             ),
@@ -333,16 +350,8 @@ class CreateFacilityForm extends FormGroup {
   CreateFacilityForm()
     : super({
         'facilityName': FormControl<String>(validators: [Validators.required]),
-        'brokerName': FormControl<String>(),
-        'brokerEmail': FormControl<String>(validators: [Validators.email]),
       });
 
   FormControl<String> get facilityName =>
       control('facilityName') as FormControl<String>;
-
-  FormControl<String> get brokerName =>
-      control('brokerName') as FormControl<String>;
-
-  FormControl<String> get brokerEmail =>
-      control('brokerEmail') as FormControl<String>;
 }
