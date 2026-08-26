@@ -154,7 +154,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
     return currentFacility;
   }
 
-  ShipperSearchFacilityItem? getCurrentBroker() {
+  CurrentBrokerInfo? getCurrentBroker() {
     final currentBroker = ref.read(selectedFacilityProvider)?.choosenBroker;
 
     if (currentBroker == null) {

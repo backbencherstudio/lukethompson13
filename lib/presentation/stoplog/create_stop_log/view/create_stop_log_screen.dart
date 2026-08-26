@@ -154,7 +154,13 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     _brokerFocusNode.unfocus();
     if (choosenBroker == null) return;
 
-    ref.read(selectedFacilityProvider.notifier).selectBroker(choosenBroker);
+    ref
+        .read(selectedFacilityProvider.notifier)
+        .selectBroker(
+          id: choosenBroker.id!,
+          name: choosenBroker.name,
+          email: choosenBroker.email!,
+        );
 
     final choosenShipper = ref.read(selectedFacilityProvider)?.choosenShipper;
     if (choosenShipper == null) return;
@@ -172,26 +178,17 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
 
     if (newBroker == null) return;
 
-    final broker = ShipperSearchFacilityItem(
-      id: newBroker.id,
-      name: newBroker.name!,
-      address: newBroker.location?.address,
-      rating: 0,
-      lat: newBroker.location?.lat,
-      lng: newBroker.location?.lng,
-      email: newBroker.email,
-      totalShippers: 0,
-    );
-
-    ref.read(selectedFacilityProvider.notifier).selectBroker(broker);
+    ref
+        .read(selectedFacilityProvider.notifier)
+        .selectBroker(
+          id: newBroker.id!,
+          email: newBroker.email!,
+          name: newBroker.name!,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedFacility = ref.watch(selectedFacilityProvider);
-    print(selectedFacility?.choosenBroker);
-    // print("_sessionId $_sessionId");
-
     final session = _sessionId != null && _sessionId!.isNotEmpty
         ? ref.watch(getSingleLogWithId(_sessionId!))
         : const AsyncValue.data(null);
@@ -227,15 +224,14 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                 );
           }
 
-          if (data?.broker != null) {
+          final broker = data?.broker;
+          if (broker != null && broker.id != null) {
             ref
                 .read(selectedFacilityProvider.notifier)
                 .selectBroker(
-                  ShipperSearchFacilityItem(
-                    id: data?.broker?.id,
-                    name: data!.broker!.name!,
-                    email: data.broker?.email,
-                  ),
+                  id: broker.id!,
+                  email: broker.email!,
+                  name: broker.name!,
                 );
           }
           // Success

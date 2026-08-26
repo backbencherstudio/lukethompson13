@@ -1,10 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.dart';
 
+class CurrentBrokerInfo {
+  const CurrentBrokerInfo({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
+  final String id;
+  final String name;
+  final String email;
+}
+
 class CurrentStopLogState {
   const CurrentStopLogState({this.choosenShipper, this.choosenBroker});
   final ShipperSearchFacilityItem? choosenShipper;
-  final ShipperSearchFacilityItem? choosenBroker;
+  final CurrentBrokerInfo? choosenBroker;
 }
 
 class CurrentStopLogStateNotifier extends Notifier<CurrentStopLogState?> {
@@ -18,10 +29,14 @@ class CurrentStopLogStateNotifier extends Notifier<CurrentStopLogState?> {
     );
   }
 
-  void selectBroker(ShipperSearchFacilityItem item) {
+  void selectBroker({
+    required String id,
+    required String name,
+    required String email,
+  }) {
     state = CurrentStopLogState(
       choosenShipper: state?.choosenShipper,
-      choosenBroker: item,
+      choosenBroker: CurrentBrokerInfo(id: id, name: name, email: email),
     );
   }
 
