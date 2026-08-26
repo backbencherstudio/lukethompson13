@@ -243,6 +243,82 @@ class CreateShippperRequest {
 }
 
 @JsonSerializable()
+class CreateBrokerRequest {
+  final String name;
+  final String email;
+  final String phone;
+  final String brokerId;
+  final String address;
+  final String city;
+  final String state;
+  final String zip;
+  final String country;
+
+  CreateBrokerRequest({
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.brokerId,
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.zip,
+    required this.country,
+  });
+
+  factory CreateBrokerRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateBrokerRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateBrokerRequestToJson(this);
+
+  @override
+  String toString() => 'CreateBrokerRequest${toJson()}';
+}
+
+@JsonSerializable()
+class CreateBrokerResponseData {
+  final String? id;
+
+  @JsonKey(name: 'created_at')
+  final String? createdAt;
+
+  @JsonKey(name: 'updated_at')
+  final String? updatedAt;
+
+  final String? name;
+  final String? email;
+  final String? phone;
+
+  @JsonKey(name: 'brokerId')
+  final String? brokerId;
+
+  @JsonKey(name: 'location_id')
+  final String? locationId;
+
+  final ShipperLocationDataModel? location;
+
+  CreateBrokerResponseData({
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.name,
+    this.email,
+    this.phone,
+    this.brokerId,
+    this.locationId,
+    this.location,
+  });
+
+  factory CreateBrokerResponseData.fromJson(Map<String, dynamic> json) =>
+      _$CreateBrokerResponseDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateBrokerResponseDataToJson(this);
+
+  @override
+  String toString() => 'CreateBrokerResponseData${toJson()}';
+}
+
+@JsonSerializable()
 class CreateShipperResponse extends BaseResponse {
   final ShipperLocationItem? data;
 
@@ -263,6 +339,26 @@ class CreateShipperResponse extends BaseResponse {
 }
 
 @JsonSerializable()
+class CreateBrokerResponse extends BaseResponse {
+  final CreateBrokerResponseData? data;
+
+  CreateBrokerResponse({
+    required super.success,
+    required super.message,
+    this.data,
+  });
+
+  factory CreateBrokerResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateBrokerResponseFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$CreateBrokerResponseToJson(this);
+
+  @override
+  String toString() => 'CreateBrokerResponse${toJson()}';
+}
+
+@JsonSerializable()
 class ShipperLocationItem {
   final String? id;
 
@@ -277,6 +373,12 @@ class ShipperLocationItem {
   @JsonKey(name: 'normalized_name')
   final String? normalizedName;
 
+  final String? email;
+  final String? phone;
+
+  @JsonKey(name: 'broker_id')
+  final String? brokerId;
+
   @JsonKey(name: 'location_id')
   final String? locationId;
 
@@ -288,6 +390,9 @@ class ShipperLocationItem {
     this.updatedAt,
     this.name,
     this.normalizedName,
+    this.email,
+    this.phone,
+    this.brokerId,
     this.locationId,
     this.location,
   });

@@ -89,7 +89,7 @@ class ProfileFormStep2 extends StatelessWidget {
           const InputLabel('Mailing Address'),
           SizedBox(height: 8.h),
 
-          const InputLabel('Address Line 1', color: Colors.white70),
+          const InputLabel('Address', color: Colors.white70),
           SizedBox(height: 4.h),
           ReactiveTextField<String>(
             formControl: addressLine1,

@@ -30,6 +30,7 @@ class Routes {
   static const String subscriptionSuccess = '/subscriptionSuccessful';
   static const String createFacility = '/createFacility';
   static const String createFacilityEditMap = '/createFacilityEditMap';
+  static const String createBroker = '/createBroker';
 
   static Uri currentRouteUri(BuildContext context) {
     return GoRouter.of(context).routerDelegate.currentConfiguration.uri;

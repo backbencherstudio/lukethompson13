@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
@@ -15,7 +14,8 @@ import 'package:lukethompson/data/sources/remote/shipper/models/shipper.model.da
 import 'package:lukethompson/data/sources/remote/stoplog/stoplog_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_section.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_and_broker_search_sheet.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/searchable_field_section.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/timeline_section.dart';
 
 class CreateStopLogScreen extends ConsumerStatefulWidget {
@@ -27,6 +27,12 @@ class CreateStopLogScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
+  late final TextEditingController _facilityTextController;
+  late final _facilityFocusNode = FocusNode();
+
+  late final TextEditingController _brokerTextController;
+  late final _brokerFocusNode = FocusNode();
+
   final _timelineKey = GlobalKey<TimelineSectionState>();
   String? _sessionId;
   bool _isActiveSessionLoading = true;
@@ -66,16 +72,124 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
     final activeSession = ref.read(getCurrentActiveStoplog);
     _sessionId = activeSession.value?.id;
     _isActiveSessionLoading = activeSession.isLoading;
+
+    _facilityTextController = TextEditingController(
+      text: ref.read(selectedFacilityProvider)?.choosenShipper?.name ?? '',
+    );
+
+    _brokerTextController = TextEditingController(
+      text: ref.read(selectedFacilityProvider)?.choosenBroker?.name ?? '',
+    );
+
+    ref.listenManual<CurrentStopLogState?>(selectedFacilityProvider, (
+      previous,
+      next,
+    ) {
+      final shipperName = next?.choosenShipper?.name ?? '';
+      if (_facilityTextController.text != shipperName) {
+        _facilityTextController.value = TextEditingValue(
+          text: shipperName,
+          selection: TextSelection.collapsed(offset: shipperName.length),
+        );
+      }
+
+      final brokerName = next?.choosenBroker?.name ?? '';
+      if (_brokerTextController.text != brokerName) {
+        _brokerTextController.value = TextEditingValue(
+          text: brokerName,
+          selection: TextSelection.collapsed(offset: brokerName.length),
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
+    _facilityTextController.dispose();
+    _facilityFocusNode.dispose();
     super.dispose();
+  }
+
+  Future<void> _onFacilityTap() async {
+    final choosenFacility = await showFacilityOrBrokerSearchSheet(context);
+    _facilityFocusNode.unfocus();
+    if (choosenFacility == null) return;
+
+    ref.read(selectedFacilityProvider.notifier).selectFacility(choosenFacility);
+
+    final choosenBroker = ref.read(selectedFacilityProvider)?.choosenBroker;
+    if (choosenBroker == null) return;
+
+    setState(() {
+      _logStarted = true;
+    });
+  }
+
+  Future<void> _onFacilityAction() async {
+    if (!context.mounted) return;
+    final newFacility = await context.push<ShipperLocationItem?>(
+      Routes.createFacility,
+    );
+
+    if (newFacility != null) {
+      final fac = ShipperSearchFacilityItem(
+        id: newFacility.id,
+        name: newFacility.name!,
+        address: newFacility.location?.address,
+        rating: 0,
+        lat: newFacility.location?.lat,
+        lng: newFacility.location?.lng,
+      );
+
+      ref.read(selectedFacilityProvider.notifier).selectFacility(fac);
+    }
+  }
+
+  Future<void> _onBrokerTap() async {
+    final choosenBroker = await showFacilityOrBrokerSearchSheet(
+      context,
+      facilityType: .broker,
+    );
+
+    _brokerFocusNode.unfocus();
+    if (choosenBroker == null) return;
+
+    ref.read(selectedFacilityProvider.notifier).selectBroker(choosenBroker);
+
+    final choosenShipper = ref.read(selectedFacilityProvider)?.choosenShipper;
+    if (choosenShipper == null) return;
+
+    setState(() {
+      _logStarted = true;
+    });
+  }
+
+  Future<void> _onBrokerAction() async {
+    if (!context.mounted) return;
+    final newBroker = await context.push<CreateBrokerResponseData?>(
+      Routes.createBroker,
+    );
+
+    if (newBroker == null) return;
+
+    final broker = ShipperSearchFacilityItem(
+      id: newBroker.id,
+      name: newBroker.name!,
+      address: newBroker.location?.address,
+      rating: 0,
+      lat: newBroker.location?.lat,
+      lng: newBroker.location?.lng,
+      email: newBroker.email,
+      totalShippers: 0,
+    );
+
+    ref.read(selectedFacilityProvider.notifier).selectBroker(broker);
   }
 
   @override
   Widget build(BuildContext context) {
     final selectedFacility = ref.watch(selectedFacilityProvider);
+    print(selectedFacility?.choosenBroker);
     // print("_sessionId $_sessionId");
 
     final session = _sessionId != null && _sessionId!.isNotEmpty
@@ -104,7 +218,7 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
             // TODO: update lat,lon from here
             ref
                 .read(selectedFacilityProvider.notifier)
-                .select(
+                .selectFacility(
                   ShipperSearchFacilityItem(
                     id: data?.id,
                     name: data!.facilityName!,
@@ -158,14 +272,26 @@ class _CreateStopLogScreenState extends ConsumerState<CreateStopLogScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 16.h),
-                      FacilitySection(
-                        disableSearchField: _logStarted && _sessionId != null,
-                        onFacilitySelect: (f) {
-                          final isEmpty = f == null;
-                          setState(() {
-                            _logStarted = !isEmpty;
-                          });
-                        },
+                      SearchableFieldSection(
+                        icon: Icons.business,
+                        title: "Facility Name",
+                        hintText: "Select a facility",
+                        controller: _facilityTextController,
+                        focusNode: _facilityFocusNode,
+                        enabled: !(_logStarted && _sessionId != null),
+                        onTap: _onFacilityTap,
+                        onAction: _onFacilityAction,
+                      ),
+                      SizedBox(height: 8.h),
+                      SearchableFieldSection(
+                        icon: Icons.person,
+                        title: "Broker Name",
+                        hintText: "Select a broker",
+                        controller: _brokerTextController,
+                        focusNode: _brokerFocusNode,
+                        enabled: !(_logStarted && _sessionId != null),
+                        onTap: _onBrokerTap,
+                        onAction: _onBrokerAction,
                       ),
 
                       SizedBox(height: 24.h),

@@ -39,6 +39,11 @@ abstract class ShipperApi {
   Future<CreateShipperResponse> createANewShipperFacility(
     @Body() CreateShippperRequest body,
   );
+
+  @POST(ApiEndpoints.brokers)
+  Future<CreateBrokerResponse> createANewBroker(
+    @Body() CreateBrokerRequest body,
+  );
 }
 
 final shipperApiProvider = Provider<ShipperApi>((ref) {

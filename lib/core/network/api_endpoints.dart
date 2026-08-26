@@ -34,4 +34,6 @@ class ApiEndpoints {
   static const String shippersRatings = "/shippers/ratings";
   static const String searchShipperFacilities = "/shippers/search";
   static const String shippers = "/shippers";
+
+  static const String brokers = "/brokers";
 }

@@ -52,7 +52,10 @@ class SubmitARatingForAShipperFacility extends MutationNotifier<BaseResponse> {
     return mutate(() async {
       return api.submitARatingForAShipperFacility(
         id,
-        SubmitARatingForAShipperFacilityRequest(rate: rate, brokerRate: brokerRate),
+        SubmitARatingForAShipperFacilityRequest(
+          rate: rate,
+          brokerRate: brokerRate,
+        ),
       );
     });
   }
@@ -70,6 +73,21 @@ class CreateANewShipperFacility
 
     return mutate(() async {
       return api.createANewShipperFacility(body);
+    });
+  }
+}
+
+final createANewBrokerMutation =
+    mutationProvider<CreateANewBroker, CreateBrokerResponse>(
+      CreateANewBroker.new,
+    );
+
+class CreateANewBroker extends MutationNotifier<CreateBrokerResponse> {
+  Future<CreateBrokerResponse> create(CreateBrokerRequest body) {
+    final api = ref.read(shipperApiProvider);
+
+    return mutate(() async {
+      return api.createANewBroker(body);
     });
   }
 }

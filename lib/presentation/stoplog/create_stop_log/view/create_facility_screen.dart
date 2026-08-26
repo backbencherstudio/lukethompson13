@@ -24,8 +24,6 @@ import 'package:lukethompson/data/sources/remote/shipper/shipper_queries.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_edit_map_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/location_search_sheet.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/create_broker_section.dart';
-import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/facility_search_sheet.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class CreateFacilityScreen extends ConsumerStatefulWidget {
@@ -192,29 +190,6 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
                             },
                           ),
                   ),
-
-                  SizedBox(height: 8.h),
-                  CreateBrokerSection(
-                    brokerNameControl: brokerName,
-                    brokerEmailControl: brokerEmail,
-                    onSelectPress: () async {
-                      final choosenBroker = await showFacilitySearchSheet(
-                        context,
-                        facilityType: .broker,
-                      );
-
-                      if (choosenBroker == null) return;
-
-                      if (choosenBroker.id?.isNotEmpty == true) {
-                        setState(() {
-                          brokerName.value = choosenBroker.name;
-                          brokerEmail.value = choosenBroker.email;
-                          _existingBrokerId = choosenBroker.id;
-                        });
-                      }
-                    },
-                  ),
-                  SizedBox(height: 8.h),
                 ],
               ),
             ),

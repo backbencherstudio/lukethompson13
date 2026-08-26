@@ -23,6 +23,7 @@ import 'package:lukethompson/presentation/reports/view/screen/reports_screen.dar
 import 'package:lukethompson/presentation/splash_screen/splash_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/choose_subscription_plan_screen.dart';
 import 'package:lukethompson/presentation/start_subscription/view/subscription_success.dart';
+import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_broker_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_edit_map_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/create_facility_screen.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/log_stop_result_screen.dart';
@@ -193,6 +194,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.createFacility,
         builder: (context, state) => CreateFacilityScreen(),
+      ),
+      GoRoute(
+        path: Routes.createBroker,
+        builder: (context, state) => CreateBrokerScreen(),
       ),
       GoRoute(
         path: Routes.createFacilityEditMap,

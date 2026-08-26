@@ -144,7 +144,7 @@ class TimelineSectionState extends ConsumerState<TimelineSection> {
   }
 
   ShipperSearchFacilityItem? getCurrentFacility() {
-    var currentFacility = ref.read(selectedFacilityProvider);
+    final currentFacility = ref.read(selectedFacilityProvider)?.choosenShipper;
 
     if (currentFacility == null) {
       context.showErrorSnackBar("Select a facility");

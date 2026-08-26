@@ -41,7 +41,7 @@ class _FacilitySearchSheetContentState
     _focusNode.requestFocus();
 
     _searchController = TextEditingController(
-      text: ref.read(selectedFacilityProvider)?.name ?? '',
+      text: ref.read(selectedFacilityProvider)?.choosenShipper?.name ?? '',
     );
     _searchController.addListener(_onSearchChanged);
 

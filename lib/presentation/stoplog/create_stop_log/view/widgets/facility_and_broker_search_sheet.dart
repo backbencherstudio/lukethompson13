@@ -12,7 +12,7 @@ import 'package:lukethompson/data/sources/remote/shipper/shipper_queries.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/state/facility_search_state.dart';
 
-Future<ShipperSearchFacilityItem?> showFacilitySearchSheet(
+Future<ShipperSearchFacilityItem?> showFacilityOrBrokerSearchSheet(
   BuildContext context, {
   FacilityType facilityType = FacilityType.shipper,
 }) {
@@ -49,7 +49,7 @@ class _FacilitySearchSheetContentState
 
     _searchController = TextEditingController(
       text: widget.facilityType == .shipper
-          ? ref.read(selectedFacilityProvider)?.name ?? ''
+          ? ref.read(selectedFacilityProvider)?.choosenShipper?.name ?? ''
           : '',
     );
     _searchController.addListener(_onSearchChanged);

@@ -164,6 +164,65 @@ Map<String, dynamic> _$CreateShippperRequestToJson(
   'brokerEmail': instance.brokerEmail,
 };
 
+CreateBrokerRequest _$CreateBrokerRequestFromJson(Map<String, dynamic> json) =>
+    CreateBrokerRequest(
+      name: json['name'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      brokerId: json['brokerId'] as String,
+      address: json['address'] as String,
+      city: json['city'] as String,
+      state: json['state'] as String,
+      zip: json['zip'] as String,
+      country: json['country'] as String,
+    );
+
+Map<String, dynamic> _$CreateBrokerRequestToJson(
+  CreateBrokerRequest instance,
+) => <String, dynamic>{
+  'name': instance.name,
+  'email': instance.email,
+  'phone': instance.phone,
+  'brokerId': instance.brokerId,
+  'address': instance.address,
+  'city': instance.city,
+  'state': instance.state,
+  'zip': instance.zip,
+  'country': instance.country,
+};
+
+CreateBrokerResponseData _$CreateBrokerResponseDataFromJson(
+  Map<String, dynamic> json,
+) => CreateBrokerResponseData(
+  id: json['id'] as String?,
+  createdAt: json['created_at'] as String?,
+  updatedAt: json['updated_at'] as String?,
+  name: json['name'] as String?,
+  email: json['email'] as String?,
+  phone: json['phone'] as String?,
+  brokerId: json['brokerId'] as String?,
+  locationId: json['location_id'] as String?,
+  location: json['location'] == null
+      ? null
+      : ShipperLocationDataModel.fromJson(
+          json['location'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$CreateBrokerResponseDataToJson(
+  CreateBrokerResponseData instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'created_at': instance.createdAt,
+  'updated_at': instance.updatedAt,
+  'name': instance.name,
+  'email': instance.email,
+  'phone': instance.phone,
+  'brokerId': instance.brokerId,
+  'location_id': instance.locationId,
+  'location': instance.location,
+};
+
 CreateShipperResponse _$CreateShipperResponseFromJson(
   Map<String, dynamic> json,
 ) => CreateShipperResponse(
@@ -182,6 +241,24 @@ Map<String, dynamic> _$CreateShipperResponseToJson(
   'data': instance.data,
 };
 
+CreateBrokerResponse _$CreateBrokerResponseFromJson(
+  Map<String, dynamic> json,
+) => CreateBrokerResponse(
+  success: json['success'] as bool,
+  message: json['message'] as String,
+  data: json['data'] == null
+      ? null
+      : CreateBrokerResponseData.fromJson(json['data'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$CreateBrokerResponseToJson(
+  CreateBrokerResponse instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'message': instance.message,
+  'data': instance.data,
+};
+
 ShipperLocationItem _$ShipperLocationItemFromJson(Map<String, dynamic> json) =>
     ShipperLocationItem(
       id: json['id'] as String?,
@@ -189,6 +266,9 @@ ShipperLocationItem _$ShipperLocationItemFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updated_at'] as String?,
       name: json['name'] as String?,
       normalizedName: json['normalized_name'] as String?,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      brokerId: json['broker_id'] as String?,
       locationId: json['location_id'] as String?,
       location: json['location'] == null
           ? null
@@ -205,6 +285,9 @@ Map<String, dynamic> _$ShipperLocationItemToJson(
   'updated_at': instance.updatedAt,
   'name': instance.name,
   'normalized_name': instance.normalizedName,
+  'email': instance.email,
+  'phone': instance.phone,
+  'broker_id': instance.brokerId,
   'location_id': instance.locationId,
   'location': instance.location,
 };
