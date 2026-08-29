@@ -44,7 +44,8 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   Future<void> onClaim(BuildContext context, bool isProSubscription) async {
     if (!isProSubscription) RevenueCatService.showPayWallDialog(context);
 
-    final method = SendMethod.values[sendMethod.value ?? 0];
+    SendMethod method = .email;
+    // SendMethod method = SendMethod.values[sendMethod.value ?? 0];
     final shareService = ShareService();
 
     logger.d(widget.data.id);
@@ -144,8 +145,8 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
           _buildRecipientEmailField(),
           16.height,
           _buildBrokerEmailField(),
-          16.height,
-          _buildSendMethodToggle(),
+          // 16.height,
+          // _buildSendMethodToggle(),
           16.height,
           ReactiveFormConsumer(
             builder: (_, form, _) {

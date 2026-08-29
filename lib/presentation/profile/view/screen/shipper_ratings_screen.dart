@@ -55,8 +55,7 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
   @override
   Widget build(BuildContext context) {
     final isProSubscription = ref.watch(isProSubscriptionProvider);
-    // final isPageLocked = !isProSubscription;
-    final isPageLocked = false;
+    final isPageLocked = !isProSubscription;
     final pagination = isPageLocked
         ? AsyncData(ShipperRatingsPaginationState.empty())
         : ref.watch(shipperRatingsPaginationProvider);

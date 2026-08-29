@@ -8,8 +8,12 @@ class AppConfig {
   static const appName = 'GetDockPay';
   static const bundleId = 'com.lukethompson.getdocpay';
 
+  // Backend **************************************************************
+  static const useProductionServerInDebug = false;
   static final serverBaseUrl = _required(
-    kDebugMode ? 'SERVER_BASE_URL_DEV' : 'SERVER_BASE_URL',
+    kDebugMode && !useProductionServerInDebug
+        ? 'SERVER_BASE_URL_DEV'
+        : 'SERVER_BASE_URL',
   );
 
   // Maps **************************************************************
