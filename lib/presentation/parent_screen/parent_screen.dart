@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/icon_manager.dart';
+import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/services/revenuecat_service.dart';
@@ -89,11 +90,13 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
   @override
   Widget build(BuildContext context) {
     final selectIndex = ref.watch(parentScreenIndexProvider);
+    final bottomPaddingInset = Utils.bottomPaddingInset(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: _buildBody(selectIndex),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.only(top: 10, bottom: 20),
+        padding: EdgeInsets.only(top: 10, bottom: bottomPaddingInset),
         decoration: const BoxDecoration(
           color: ColorManager.primary,
           border: Border(top: BorderSide(color: Colors.white10, width: 0.5)),

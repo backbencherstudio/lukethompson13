@@ -123,6 +123,8 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPaddingInset = Utils.bottomPaddingInset(context);
+
     final addressIsEmpty =
         choosenPosition == null || choosenLocationAddress == null;
     final createMutationState = ref.watch(createANewShipperFacilityMutation);
@@ -130,6 +132,7 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
       formGroup: form,
       child: Scaffold(
         extendBodyBehindAppBar: true,
+        extendBody: true,
         appBar: GlobalAppBar(title: 'Create facility'),
         body: AppGradientBackground(
           child: SafeArea(
@@ -209,45 +212,48 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
           ),
         ),
 
-        bottomNavigationBar: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-            child: ReactiveFormConsumer(
-              builder: (_, form, _) {
-                return GlobalButton(
-                  isLoading: createMutationState.isPending,
-                  isDisabled: addressIsEmpty || !form.valid,
-                  label: 'Create',
-                  onPressed: () async {
-                    form.markAllAsTouched();
-                    if (!form.valid) return;
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 12,
+            right: 12,
+            bottom: bottomPaddingInset,
+          ),
+          child: ReactiveFormConsumer(
+            builder: (_, form, _) {
+              return GlobalButton(
+                isLoading: createMutationState.isPending,
+                isDisabled: addressIsEmpty || !form.valid,
+                label: 'Create',
+                onPressed: () async {
+                  form.markAllAsTouched();
+                  if (!form.valid) return;
 
-                    final (res, err) = await tryCatch(
-                      ref
-                          .read(createANewShipperFacilityMutation.notifier)
-                          .create(
-                            CreateShippperRequest(
-                              name: facilityName.value ?? '',
-                              address: choosenLocationAddress ?? '',
-                              lat: choosenPosition?.latitude,
-                              lng: choosenPosition?.longitude,
-                            ),
+                  final (res, err) = await tryCatch(
+                    ref
+                        .read(createANewShipperFacilityMutation.notifier)
+                        .create(
+                          CreateShippperRequest(
+                            name: facilityName.value ?? '',
+                            address: choosenLocationAddress ?? '',
+                            lat: choosenPosition?.latitude,
+                            lng: choosenPosition?.longitude,
                           ),
+                        ),
+                  );
+                  if (err != null) {
+                    Utils.showErrorToast(
+                      message: ErrorHandle.formatErrorMessage(err),
                     );
-                    if (err != null) {
-                      Utils.showErrorToast(
-                        message: ErrorHandle.formatErrorMessage(err),
-                      );
-                      return;
-                    }
+                    return;
+                  }
 
-                    if (context.mounted) {
-                      context.pop(res?.data);
-                    }
-                  },
-                );
-              },
-            ),
+                  if (context.mounted) {
+                    context.pop(res?.data);
+                  }
+                },
+              );
+            },
           ),
         ),
       ),

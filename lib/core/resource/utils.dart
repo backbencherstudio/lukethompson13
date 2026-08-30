@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,5 +90,10 @@ class Utils {
 
   static bool isKeyboartVisible(BuildContext context) {
     return MediaQuery.viewInsetsOf(context).bottom > 0;
+  }
+
+  static double bottomPaddingInset(BuildContext context) {
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    return bottomInset + (Platform.isAndroid ? 10 : 0);
   }
 }

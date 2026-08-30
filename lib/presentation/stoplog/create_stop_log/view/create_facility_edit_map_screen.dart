@@ -73,20 +73,27 @@ class _CreateFacilityEditMapScreenState
 
   @override
   Widget build(BuildContext context) {
+    final bottomPaddingInset = Utils.bottomPaddingInset(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: GlobalAppBar(
         title: 'Select Location',
         // subTitle: session.value?.address,
       ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: GlobalButton(label: 'Confirm', onPressed: onConfirm),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(
+          top: 10,
+          left: 12,
+          right: 12,
+          bottom: bottomPaddingInset,
         ),
+        child: GlobalButton(label: 'Confirm', onPressed: onConfirm),
       ),
       body: AppGradientBackground(
         child: SafeArea(
+          bottom: false,
           child: FlutterMap(
             mapController: _mapController,
             options: MapOptions(
