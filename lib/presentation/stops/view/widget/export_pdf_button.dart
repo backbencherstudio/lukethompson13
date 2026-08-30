@@ -18,11 +18,13 @@ class _ExportPdfButtonState extends State<ExportPdfButton> {
   bool _isDownloading = false;
 
   Future<void> _handleExportPdf(String? fileUrl, String? fileName) async {
-    if (fileUrl == null) {
+    // logger.d("Download pdf url $fileUrl");
+
+    if (fileUrl == null || fileUrl.isEmpty) {
       context.showWarningSnackBar("Empty fileUrl");
       return;
     }
-    if (fileName == null) {
+    if (fileName == null || fileName.isEmpty) {
       context.showWarningSnackBar("Empty filename");
       return;
     }
@@ -35,7 +37,7 @@ class _ExportPdfButtonState extends State<ExportPdfButton> {
       if (mounted) {
         setState(() => _isDownloading = false);
         if (result.status == TaskStatus.complete) {
-          context.showSuccessSnackBar('PDF downloaded successfully');
+          await FileDownloader().openFile(task: result.task);
         } else {
           context.showErrorSnackBar('Failed to download PDF');
         }

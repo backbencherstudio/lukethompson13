@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
+import 'package:lukethompson/core/utils/error.dart';
 import 'package:lukethompson/core/widgets/attachment_image_viewer.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/core/widgets/link_button.dart';
@@ -46,7 +47,7 @@ class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
       }
       return;
     }
-    final XFile? image = await _picker.pickImage(source: source);
+    final (image, err) = await tryCatch(_picker.pickImage(source: source));
     if (!mounted) return;
 
     if (image == null) {
@@ -78,7 +79,8 @@ class _AttachmentUploadSectionState extends State<AttachmentUploadSection> {
               index: index,
             ),
             onRemoveItem: (index) {
-              final updated = List<XFile>.from(widget.attachments)..removeAt(index);
+              final updated = List<XFile>.from(widget.attachments)
+                ..removeAt(index);
               widget.onAttachmentRemoved?.call(updated, index);
             },
             fineNames: widget.attachments.map((e) => e.name).toList(),
