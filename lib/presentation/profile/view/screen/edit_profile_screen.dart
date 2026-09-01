@@ -119,7 +119,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       appBar: GlobalAppBar(title: 'Edit Profile'),
       body: AppGradientBackground(
         child: SafeArea(
-          minimum: EdgeInsets.only(bottom: 12),
+          bottom: false,
           child: Column(
             children: [
               MultiStepFormTab(

@@ -17,11 +17,12 @@ class FullHeightScrollView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          padding: padding ?? EdgeInsets.zero,
           physics: physics,
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: IntrinsicHeight(child: child),
+            child: IntrinsicHeight(
+              child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
+            ),
           ),
         );
       },

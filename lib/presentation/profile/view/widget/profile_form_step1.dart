@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
@@ -24,7 +25,11 @@ class ProfileFormStep1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FullHeightScrollView(
-      padding: EdgeInsets.symmetric(horizontal: AppPadding.screenPadding),
+      padding: EdgeInsets.only(
+        left: AppPadding.screenPadding,
+        right: AppPadding.screenPadding,
+        bottom: Utils.bottomPaddingInset(context),
+      ),
       child: Column(
         crossAxisAlignment: .start,
         children: [
