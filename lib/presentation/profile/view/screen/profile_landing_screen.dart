@@ -160,8 +160,8 @@ class ProfileScreen extends StatelessWidget {
                 spacing: 12,
                 children: [
                   Expanded(
-                    child: GlobalButton.primary(
-                      label: 'Delete Account',
+                    child: GlobalButton.danger(
+                      label: 'Delete',
                       onPressed: () {
                         context.go(Routes.signIn);
                       },
