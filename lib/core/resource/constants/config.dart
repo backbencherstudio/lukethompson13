@@ -9,6 +9,10 @@ class AppConfig {
   static const bundleId = 'com.lukethompson.getdocpay';
   // com.getdockpay.app
 
+  // Links **************************************************************
+  static const appPrivacyUrl = 'https://getdockpay.com/privacy';
+  static const appContactUrl = 'https://getdockpay.com/contact';
+
   // Backend **************************************************************
   static const useProductionServerInDebug = false;
   static final serverBaseUrl = _required(

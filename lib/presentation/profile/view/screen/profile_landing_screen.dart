@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
+import 'package:lukethompson/core/platform/share_service.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/route/route_names.dart';
@@ -111,12 +112,21 @@ class ProfileScreen extends StatelessWidget {
                       ProfileSettingItem(
                         icon: Icons.lock_outline,
                         title: "Privacy & policy",
-                        onTap: () => context.push(Routes.privacyAndPolicy),
+                        onTap: () => ShareService.openExternalUrl(
+                          AppConfig.appPrivacyUrl,
+                        ),
                       ),
                       ProfileSettingItem(
                         icon: Icons.help_outline,
-                        title: "Help & Support",
+                        title: "FAQ",
                         onTap: () => context.push(Routes.helpAndSupport),
+                      ),
+                      ProfileSettingItem(
+                        icon: Icons.support_agent_outlined,
+                        title: "Contact Us",
+                        onTap: () => ShareService.openExternalUrl(
+                          AppConfig.appContactUrl,
+                        ),
                       ),
                       buildDeleteAccoutItem(),
                       buildLoutItem(),

@@ -36,4 +36,15 @@ class ShareService {
       throw Exception('Could not open map.');
     }
   }
+
+  static Future<void> openExternalUrl(
+    String url, {
+    LaunchMode mode = LaunchMode.inAppBrowserView,
+  }) async {
+    final uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: mode);
+    }
+  }
 }
