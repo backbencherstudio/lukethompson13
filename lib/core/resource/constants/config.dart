@@ -7,6 +7,7 @@ class AppConfig {
   static const minPassLength = 8;
   static const appName = 'GetDockPay';
   static const bundleId = 'com.lukethompson.getdocpay';
+  // com.getdockpay.app
 
   // Backend **************************************************************
   static const useProductionServerInDebug = false;

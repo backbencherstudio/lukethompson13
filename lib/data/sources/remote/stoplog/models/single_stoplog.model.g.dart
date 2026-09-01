@@ -73,7 +73,11 @@ SingleStoplogDetailData _$SingleStoplogDetailDataFromJson(
       ? null
       : Claim.fromJson(json['claim'] as Map<String, dynamic>),
   currentStep: StopLogStep.fromValue(json['current_step'] as String?),
-  gpsCoordinates: json['gps_coordinates'] as String?,
+  gpsCoordinates: json['gps_coordinates'] == null
+      ? null
+      : GpsCoordinates.fromJson(
+          json['gps_coordinates'] as Map<String, dynamic>,
+        ),
   ratePerHour: json['rate_per_hour'] as String?,
   freeWaitTime: json['free_wait_time'] as String?,
   billableTime: json['billable_time'] as String?,
@@ -180,3 +184,12 @@ Map<String, dynamic> _$StopLogBrokerToJson(StopLogBroker instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };
+
+GpsCoordinates _$GpsCoordinatesFromJson(Map<String, dynamic> json) =>
+    GpsCoordinates(
+      lat: (json['lat'] as num?)?.toDouble(),
+      lng: (json['lng'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$GpsCoordinatesToJson(GpsCoordinates instance) =>
+    <String, dynamic>{'lat': instance.lat, 'lng': instance.lng};

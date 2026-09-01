@@ -4,18 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/network/error_handle.dart';
 import 'package:lukethompson/core/platform/gps_service.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
-import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/utils/error.dart';
-import 'package:lukethompson/core/widgets/activity_indicator.dart';
-import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
+import 'package:lukethompson/core/widgets/form_field_map_view.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
@@ -189,7 +186,7 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
                     label: choosenLocationAddress ?? "Select Location",
                     mapController: fieldMapController,
                     labelActtion: addressIsEmpty
-                        ? SizedBox(height: 40)
+                        ? null
                         : TintedOutlinedButton(
                             label: 'Edit',
                             onPressed: () {
@@ -256,97 +253,6 @@ class _CreateFacilityScreenState extends ConsumerState<CreateFacilityScreen> {
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class FormFieldMapView extends StatelessWidget {
-  final MapController mapController;
-  final String label;
-  final Widget? labelActtion;
-  final LatLng? location;
-  final bool isLoading;
-
-  const FormFieldMapView({
-    super.key,
-    required this.label,
-    required this.mapController,
-    required this.location,
-    this.labelActtion,
-    this.isLoading = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      borderRadius: 12.r,
-      padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.r),
-              topRight: Radius.circular(10.r),
-            ),
-            child: SizedBox(
-              height: 300,
-              child: Stack(
-                children: [
-                  FlutterMap(
-                    mapController: mapController,
-                    options: MapOptions(
-                      initialCenter: location ?? const LatLng(50.5, 30.51),
-                      initialZoom: 15,
-                      interactionOptions: const InteractionOptions(
-                        flags: InteractiveFlag.none,
-                      ),
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate: AppConfig.mapProvider,
-                        userAgentPackageName: AppConfig.bundleId,
-                      ),
-                      MarkerLayer(
-                        markers: [
-                          if (location != null)
-                            Marker(
-                              point: location!,
-                              child: Icon(
-                                Icons.location_on,
-                                color: ColorManager.errorColor,
-                                size: 40.sp,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (isLoading) Center(child: ActivityIndicator()),
-                ],
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              spacing: 12,
-              mainAxisAlignment: .spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    label,
-                    style: context.bodyLarge,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                ?labelActtion,
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

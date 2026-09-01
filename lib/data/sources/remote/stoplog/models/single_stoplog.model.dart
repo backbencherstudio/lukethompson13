@@ -97,7 +97,7 @@ class SingleStoplogDetailData {
 
   // Available on stoplog completion
   @JsonKey(name: 'gps_coordinates')
-  final String? gpsCoordinates;
+  final GpsCoordinates? gpsCoordinates;
   @JsonKey(name: 'rate_per_hour')
   final String? ratePerHour;
   @JsonKey(name: 'free_wait_time')
@@ -210,4 +210,17 @@ class StopLogBroker {
       _$StopLogBrokerFromJson(json);
 
   Map<String, dynamic> toJson() => _$StopLogBrokerToJson(this);
+}
+
+@JsonSerializable()
+class GpsCoordinates {
+  final double? lat;
+  final double? lng;
+
+  const GpsCoordinates({this.lat, this.lng});
+
+  factory GpsCoordinates.fromJson(Map<String, dynamic> json) =>
+      _$GpsCoordinatesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GpsCoordinatesToJson(this);
 }

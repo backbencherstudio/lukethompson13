@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:lukethompson/core/extensions/datetime_extension.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/extensions/snackbar_extension.dart';
@@ -11,12 +13,14 @@ import 'package:lukethompson/core/utils/date.dart';
 import 'package:lukethompson/core/widgets/app_card.dart';
 import 'package:lukethompson/core/widgets/app_text_logo.dart';
 import 'package:lukethompson/core/widgets/attachment_image_viewer.dart';
+import 'package:lukethompson/core/widgets/form_field_map_view.dart';
+import 'package:lukethompson/core/widgets/tinted_outlined_button.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
 import 'package:lukethompson/presentation/custom_widget/textField_widget.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/breakdown_card.dart';
 import 'package:lukethompson/presentation/stoplog/create_stop_log/view/widgets/proof_package_list.dart';
 
-class FullClaimPreviewCard extends StatelessWidget {
+class FullClaimPreviewCard extends StatefulWidget {
   final SingleStoplogDetailData? data;
   final bool canEditTimes;
 
@@ -27,6 +31,23 @@ class FullClaimPreviewCard extends StatelessWidget {
   });
 
   @override
+  State<FullClaimPreviewCard> createState() => _FullClaimPreviewCardState();
+
+  static AsyncValue<SingleStoplogDetailData?> getSession(
+    WidgetRef ref,
+    String? steplogId,
+  ) {
+    final session = steplogId != null && steplogId.isNotEmpty
+        ? ref.watch(getSingleLogWithId(steplogId))
+        : const AsyncValue.data(null);
+    return session;
+  }
+}
+
+class _FullClaimPreviewCardState extends State<FullClaimPreviewCard> {
+  late final fieldMapController = MapController();
+
+  @override
   Widget build(BuildContext context) {
     return AppCard(
       child: Column(
@@ -35,7 +56,7 @@ class FullClaimPreviewCard extends StatelessWidget {
           AppIconHorizontal(),
           SizedBox(height: 16.h),
 
-          DetensionInfoBannder(data: data),
+          DetensionInfoBannder(data: widget.data),
 
           16.height,
           InputLabel('CLAIM DETAILS'),
@@ -44,35 +65,41 @@ class FullClaimPreviewCard extends StatelessWidget {
             color: ColorManager.surfaceBacground,
             borderColor: ColorManager.cardBackground,
             items: [
-              BreakdownItem(label: 'Facility', value: data?.facilityName ?? ""),
+              BreakdownItem(
+                label: 'Facility',
+                value: widget.data?.facilityName ?? "",
+              ),
               BreakdownItem(
                 label: "Arrived at",
-                value: "${data?.arrivedAt?.formatTime()}",
+                value: "${widget.data?.arrivedAt?.formatTime()}",
               ),
               BreakdownItem(
                 label: "Docked at",
-                value: "${data?.dockedAt?.formatTime()}",
+                value: "${widget.data?.dockedAt?.formatTime()}",
               ),
               BreakdownItem(
                 label: "Completed at",
-                value: "${data?.completedAt?.formatTime()}",
+                value: "${widget.data?.completedAt?.formatTime()}",
               ),
               BreakdownItem(
                 label: "Departed at",
-                value: "${data?.departedAt?.formatTime()}",
+                value: "${widget.data?.departedAt?.formatTime()}",
               ),
               BreakdownItem(
                 label: "Billable Detention",
-                value: data?.billableTimeText ?? '-',
+                value: widget.data?.billableTimeText ?? '-',
                 valueColor: ColorManager.primaryButton,
               ),
-              BreakdownItem(label: "BOL Number", value: data?.bolNumber ?? "-"),
               BreakdownItem(
-                onPressed: () => _openMap(context),
-                label: "GPS Coordinates",
-                value: data?.gpsCoordinates ?? '-',
-                valueColor: ColorManager.infoColor,
+                label: "BOL Number",
+                value: widget.data?.bolNumber ?? "-",
               ),
+              // BreakdownItem(
+              //   onPressed: () => _openMap(context),
+              //   label: "GPS Coordinates",
+              //   value: data?.gpsCoordinates ?? '-',
+              //   valueColor: ColorManager.infoColor,
+              // ),
             ],
           ),
 
@@ -82,10 +109,27 @@ class FullClaimPreviewCard extends StatelessWidget {
           ProofPackageList(
             onItemPressed: (index) => AttachmentImageViewer.show(
               context,
-              attachments: data?.attachments ?? [],
+              attachments: widget.data?.attachments ?? [],
               index: index,
             ),
-            fineNames: data?.attachments?.map((e) => e.fileName).toList() ?? [],
+            fineNames:
+                widget.data?.attachments?.map((e) => e.fileName).toList() ?? [],
+          ),
+
+          16.height,
+          InputLabel('FACILITY LOCATION'),
+          8.height,
+          FormFieldMapView(
+            backgroundColor: ColorManager.surfaceBacground,
+            height: 228,
+            isLoading:
+                widget.data == null && widget.data?.gpsCoordinates == null,
+            location: LatLng(
+              widget.data?.gpsCoordinates?.lat ?? 0.0,
+              widget.data?.gpsCoordinates?.lng ?? 0.0,
+            ),
+            label: widget.data?.address ?? '',
+            mapController: fieldMapController,
           ),
         ],
       ),
@@ -93,21 +137,16 @@ class FullClaimPreviewCard extends StatelessWidget {
   }
 
   Future<void> _openMap(BuildContext context) async {
-    final coordinates = data?.gpsCoordinates;
-    if (coordinates == null || coordinates.trim().isEmpty) {
+    final coordinates = widget.data?.gpsCoordinates;
+    if (coordinates == null) {
       if (context.mounted) {
         context.showErrorSnackBar('No GPS coordinates available');
       }
       return;
     }
 
-    final parts = coordinates
-        .split(',')
-        .map((part) => double.tryParse(part.trim()))
-        .toList();
-
-    final latitude = parts.isNotEmpty ? parts[0] : null;
-    final longitude = parts.length > 1 ? parts[1] : null;
+    final latitude = coordinates.lat;
+    final longitude = coordinates.lng;
 
     if (latitude == null || longitude == null) {
       if (context.mounted) {
@@ -126,16 +165,6 @@ class FullClaimPreviewCard extends StatelessWidget {
         context.showErrorSnackBar('Unable to open map. Please try again.');
       }
     }
-  }
-
-  static AsyncValue<SingleStoplogDetailData?> getSession(
-    WidgetRef ref,
-    String? steplogId,
-  ) {
-    final session = steplogId != null && steplogId.isNotEmpty
-        ? ref.watch(getSingleLogWithId(steplogId))
-        : const AsyncValue.data(null);
-    return session;
   }
 }
 
