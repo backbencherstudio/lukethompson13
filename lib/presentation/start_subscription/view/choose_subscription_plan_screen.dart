@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/resource/utils.dart';
 import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
@@ -82,7 +83,9 @@ class _ChooseSubscriptionPlanScreenState
           ),
           body: SafeArea(
             child: Center(
-              child: StatusDisplay.muted('Subscriptions are not available right now'),
+              child: StatusDisplay.muted(
+                'Subscriptions are not available right now',
+              ),
             ),
           ),
         ),
@@ -102,6 +105,8 @@ class _ChooseSubscriptionPlanScreenState
     if (packagesAsync.hasError) {
       logger.e(packagesAsync.error.toString());
     }
+
+    final bottomPaddingInset = Utils.bottomPaddingInset(context);
 
     return AppGradientBackground(
       child: Scaffold(
@@ -131,8 +136,13 @@ class _ChooseSubscriptionPlanScreenState
           ],
         ),
         body: SafeArea(
+          bottom: false,
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.only(
+              left: AppPadding.screenPadding,
+              right: AppPadding.screenPadding,
+              bottom: bottomPaddingInset,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -206,8 +216,8 @@ class _ChooseSubscriptionPlanScreenState
                 PlanCardsRow(
                   selectedPlanId: state.selectedPlanId,
                   packagesAsync: packagesAsync,
-                  monthlyPrice: monthlyPrice,
-                  yearlyPrice: yearlyPrice,
+                  monthlyPrice: '19.99',
+                  yearlyPrice: '179.00',
                   onSelectPlan: _selectPlan,
                 ),
 
@@ -229,9 +239,6 @@ class _ChooseSubscriptionPlanScreenState
                     _purchase(_selectedPackage(packages), isTrial: true);
                   },
                 ),
-                12.height,
-
-                // SizedBox(height: 20),
               ],
             ),
           ),

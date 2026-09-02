@@ -6,8 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AppConfig {
   static const minPassLength = 8;
   static const appName = 'GetDockPay';
-  static const bundleId = 'com.lukethompson.getdocpay';
-  // com.getdockpay.app
+  static const bundleId = 'com.getdockpay.app'; // com.lukethompson.getdocpay
 
   // Links **************************************************************
   static const appPrivacyUrl = 'https://getdockpay.com/privacy';
@@ -32,8 +31,8 @@ class AppConfig {
   // static final isRevenueCatEnabled = !Platform.isAndroid;
 
   static const revenueCatProEntitlementId = 'GetDockPay Pro';
-  static const revenueCatProMonthlyPackageId = 'getdocpay_pro';
-  static const revenueCatProYearlyPackageId = 'getdocpay_pro_yearly';
+  static const revenueCatProMonthlyPackageId = 'getdockpay_pro_1m';
+  static const revenueCatProYearlyPackageId = 'getdockpay_pro_1y';
 
   static final revenueCatApiKey = _required(
     Platform.isIOS ? 'REVENUECAT_API_KEY_IOS' : 'REVENUECAT_API_KEY_ANDROID',
