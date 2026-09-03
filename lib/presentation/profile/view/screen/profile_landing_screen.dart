@@ -18,6 +18,7 @@ import 'package:lukethompson/core/widgets/profile_header.dart';
 import 'package:lukethompson/core/widgets/profile_setting_item.dart';
 import 'package:lukethompson/core/widgets/section_header.dart';
 import 'package:lukethompson/data/sources/remote/remote.dart';
+import 'package:lukethompson/presentation/profile/view/screen/account_delete_setting_item.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -128,8 +129,8 @@ class ProfileScreen extends StatelessWidget {
                           AppConfig.appContactUrl,
                         ),
                       ),
-                      buildDeleteAccoutItem(),
-                      buildLoutItem(),
+                      AccountDeleteSettingItem(),
+                      buildLogOutItem(),
 
                       const SizedBox(height: 30),
                     ],
@@ -143,46 +144,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Consumer buildDeleteAccoutItem() {
-    return Consumer(
-      builder: (context, ref, _) => ProfileSettingItem(
-        icon: Icons.person,
-        title: "Delete Account",
-        titleColor: Colors.redAccent,
-        iconColor: Colors.redAccent,
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => CustomDialog(
-              title: 'Delete Account',
-              subtitle: 'Are you sure you want to delete your account?',
-              bottomWidget: Row(
-                spacing: 12,
-                children: [
-                  Expanded(
-                    child: GlobalButton.danger(
-                      label: 'Delete',
-                      onPressed: () {
-                        context.go(Routes.signIn);
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GlobalButton.outlined(
-                      label: 'Cancel',
-                      onPressed: () => context.pop(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Consumer buildLoutItem() {
+  Consumer buildLogOutItem() {
     return Consumer(
       builder: (context, ref, _) => ProfileSettingItem(
         icon: Icons.logout,

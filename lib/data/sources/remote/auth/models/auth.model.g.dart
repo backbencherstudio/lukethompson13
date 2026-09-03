@@ -54,6 +54,14 @@ LoginRequest _$LoginRequestFromJson(Map<String, dynamic> json) => LoginRequest(
 Map<String, dynamic> _$LoginRequestToJson(LoginRequest instance) =>
     <String, dynamic>{'email': instance.email, 'password': instance.password};
 
+DeleteAccountRequest _$DeleteAccountRequestFromJson(
+  Map<String, dynamic> json,
+) => DeleteAccountRequest(password: json['password'] as String);
+
+Map<String, dynamic> _$DeleteAccountRequestToJson(
+  DeleteAccountRequest instance,
+) => <String, dynamic>{'password': instance.password};
+
 RegisterRequest _$RegisterRequestFromJson(Map<String, dynamic> json) =>
     RegisterRequest(
       name: json['name'] as String,

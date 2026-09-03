@@ -12,6 +12,7 @@ class ApiEndpoints {
   static const String verifyUserEmailAddress = '/auth/verify-email';
   static const String resendRegistrationVerificationOTP =
       '/auth/resend-verification-email';
+  static const String deleteAccount = '/auth/delete-account';
 
   static const String forgotPassword = '/auth/forgot-password';
   static const String checkOtp = '/auth/check-otp';

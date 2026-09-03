@@ -42,6 +42,9 @@ class AuthRepository {
     ResetPasswordRequest(email: email, token: token, password: password),
   );
 
+  Future<BaseResponse> deleteAccount({required String password}) =>
+      _authApi.deleteAccount(DeleteAccountRequest(password: password));
+
   Future<GetMeResponse> getMe() => _authApi.getMe();
 
   Future<BaseResponse> register({

@@ -1,3 +1,4 @@
+import 'package:lukethompson/core/utils/mutation.dart';
 import 'package:lukethompson/data/models/models.dart';
 import 'package:lukethompson/data/sources/remote/auth/auth_repository.dart';
 import 'package:zenquery/zenquery.dart';
@@ -63,3 +64,18 @@ final resetForgottenPasswordMutation =
         password: params.password,
       );
     });
+
+final deleteAccountMutation =
+    mutationProvider<DeleteAccountMutationNotifire, BaseResponse>(
+      DeleteAccountMutationNotifire.new,
+    );
+
+class DeleteAccountMutationNotifire extends MutationNotifier<BaseResponse> {
+  Future<BaseResponse> delete(String password) {
+    final repo = ref.read(authRepositoryProvider);
+
+    return mutate(() async {
+      return repo.deleteAccount(password: password);
+    });
+  }
+}

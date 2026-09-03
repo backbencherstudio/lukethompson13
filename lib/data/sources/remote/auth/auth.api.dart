@@ -18,6 +18,9 @@ abstract class AuthApi {
   @POST(ApiEndpoints.register)
   Future<BaseResponse> register(@Body() RegisterRequest body);
 
+  @DELETE(ApiEndpoints.deleteAccount)
+  Future<BaseResponse> deleteAccount(@Body() DeleteAccountRequest body);
+
   @POST(ApiEndpoints.verifyUserEmailAddress)
   Future<BaseResponse> verifyUserEmailAddress(@Body() VerifyEmailRequest body);
 

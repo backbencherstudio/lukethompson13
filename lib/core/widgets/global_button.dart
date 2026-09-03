@@ -70,8 +70,8 @@ class GlobalButton extends StatelessWidget {
     this.isLoading = false,
   }) : backgroundColor = ColorManager.errorColor,
        foregroundColor = Colors.white,
-       disabledBackgroundColor = ColorManager.secondary,
-       disabledForegroundColor = ColorManager.disabledText,
+       disabledBackgroundColor = ColorManager.errorDarkerColor,
+       disabledForegroundColor = const Color(0xFFD6D6D6),
        disabledBorderSide = null;
 
   const GlobalButton.primaryOutlined({

@@ -78,6 +78,7 @@ class ColorManager {
 
   // ===== Feedback Colors =====
   static const Color errorColor = Color(0xFFFF5C6C);
+  static const Color errorDarkerColor = Color(0xFFE99AA3);
   static const Color successColor = Color(0xFF00E676);
   static const Color warningColor = Color(0xFFFFB547);
   static const Color infoColor = Color(0xFF1976D2);

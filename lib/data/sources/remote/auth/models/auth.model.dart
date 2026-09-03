@@ -73,6 +73,18 @@ class LoginRequest {
 }
 
 @JsonSerializable()
+class DeleteAccountRequest {
+  final String password;
+
+  DeleteAccountRequest({required this.password});
+
+  factory DeleteAccountRequest.fromJson(Map<String, dynamic> json) =>
+      _$DeleteAccountRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteAccountRequestToJson(this);
+}
+
+@JsonSerializable()
 class RegisterRequest {
   final String name;
   final String email;
