@@ -79,8 +79,21 @@ class RevenueCatService {
     }
   }
 
-  static Future<T?> showPayWallDialog<T>(BuildContext context) async {
-    if (!AppConfig.isRevenueCatEnabled) return null;
+  static Future<T?> showPayWallDialog<T>(
+    BuildContext context, {
+    required bool isSubscribed,
+  }) async {
+    if (!AppConfig.isRevenueCatEnabled || isSubscribed) return null;
+
+    final dialogRestictedPaths = {
+      Routes.chooseSubscriptionPlan,
+      Routes.subscriptionSuccess,
+      Routes.manageSubscription,
+    };
+
+    final currentPath = Routes.currentRouteUri(context).path;
+    if (dialogRestictedPaths.contains(currentPath)) return null;
+
     return showDialog(
       context: context,
       barrierDismissible: true,

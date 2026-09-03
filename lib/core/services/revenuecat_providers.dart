@@ -90,7 +90,12 @@ class CustomerInfoNotifier extends AsyncNotifier<CustomerInfo> {
 
 final isProSubscriptionProvider = Provider<bool>((ref) {
   if (!AppConfig.isRevenueCatEnabled) return true;
-  final customerInfo = ref.watch(customerInfoProvider).value;
-  if (customerInfo == null) return false;
-  return ref.watch(revenueCatServiceProvider).isEntitled(customerInfo);
+
+  try {
+    final customerInfo = ref.watch(customerInfoProvider).value;
+    if (customerInfo == null) return false;
+    return ref.watch(revenueCatServiceProvider).isEntitled(customerInfo);
+  } catch (_) {
+    return false;
+  }
 });

@@ -42,7 +42,10 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   FormControl<int> get sendMethod => form.sendMethod;
 
   Future<void> onClaim(BuildContext context, bool isProSubscription) async {
-    if (!isProSubscription) RevenueCatService.showPayWallDialog(context);
+    RevenueCatService.showPayWallDialog(
+      context,
+      isSubscribed: isProSubscription,
+    );
 
     SendMethod method = .email;
     // SendMethod method = SendMethod.values[sendMethod.value ?? 0];

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/extensions/text_style_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/font_manager.dart';
+import 'package:lukethompson/core/resource/constants/values_manager.dart';
+import 'package:lukethompson/core/resource/utils.dart';
+import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/widgets/app_gradient_background.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
@@ -28,8 +30,13 @@ class _SubscriptionSuccessState extends State<SubscriptionSuccess> {
         backgroundColor: Colors.transparent,
         appBar: GlobalAppBar(hideBackButton: true),
         body: SafeArea(
+          bottom: false,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.only(
+              left: AppPadding.screenPadding,
+              right: AppPadding.screenPadding,
+              bottom: Utils.bottomPaddingInset(context),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

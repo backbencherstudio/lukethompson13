@@ -71,6 +71,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      // Splash & Onboarding -------------------------------------------------
       GoRoute(
         path: Routes.splash,
         builder: (context, state) => const SplashScreen(),
@@ -89,6 +90,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
+
+      // Authentication -------------------------------------------------
       GoRoute(
         path: Routes.signUp,
         builder: (context, state) => const SingupScreen(),
@@ -112,10 +115,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           argument: state.extra as ResetPasswordArgument?,
         ),
       ),
+
+      // Main App -------------------------------------------------
       GoRoute(
         path: Routes.parent,
         builder: (context, state) => const ParentScreen(),
       ),
+
+      // Stops & Claims -------------------------------------------------
       GoRoute(
         path: Routes.claimNow,
         builder: (context, state) =>
@@ -141,10 +148,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           argument: state.extra as LogStopResultScreenArg,
         ),
       ),
+
+      // Reports -------------------------------------------------
       GoRoute(
         path: Routes.reports,
         builder: (context, state) => const ReportsScreen(),
       ),
+
+      // Profile -------------------------------------------------
       GoRoute(
         path: Routes.profile,
         builder: (context, state) => const ProfileScreen(),
@@ -183,14 +194,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: Routes.privacyAndPolicy,
         builder: (context, state) => const PrivacyAndPolicyScreen(),
       ),
-      GoRoute(
-        path: Routes.chooseSubscriptionPlan,
-        pageBuilder: (context, state) => SlideUpPage(
-          key: state.pageKey,
-          child: const ChooseSubscriptionPlanScreen(),
-        ),
-        // builder: (context, state) => const ChooseSubscriptionPlanScreen(),
-      ),
+
+      // Stop Log Creation --------------------------------------------------
       GoRoute(
         path: Routes.createFacility,
         builder: (context, state) => CreateFacilityScreen(),
@@ -205,13 +210,25 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           args: state.extra as CurrentLocationArgs,
         ),
       ),
+
+      // Subscription --------------------------------------------------
+      GoRoute(
+        path: Routes.chooseSubscriptionPlan,
+        pageBuilder: (context, state) => SlideUpPage(
+          key: state.pageKey,
+          child: const ChooseSubscriptionPlanScreen(),
+        ),
+      ),
       GoRoute(
         path: Routes.subscriptionSuccess,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final isFree = state.extra is Map
               ? (state.extra as Map)['isFree'] as bool? ?? false
               : false;
-          return SubscriptionSuccess(isFree: isFree);
+          return SlideUpPage(
+            key: state.pageKey,
+            child: SubscriptionSuccess(isFree: isFree),
+          );
         },
       ),
     ],

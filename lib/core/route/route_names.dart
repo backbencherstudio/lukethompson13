@@ -33,6 +33,6 @@ class Routes {
   static const String createBroker = '/createBroker';
 
   static Uri currentRouteUri(BuildContext context) {
-    return GoRouter.of(context).routerDelegate.currentConfiguration.uri;
+    return GoRouter.of(context).state.uri;
   }
 }

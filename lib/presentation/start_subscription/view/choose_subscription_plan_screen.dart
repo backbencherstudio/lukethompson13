@@ -216,8 +216,8 @@ class _ChooseSubscriptionPlanScreenState
                 PlanCardsRow(
                   selectedPlanId: state.selectedPlanId,
                   packagesAsync: packagesAsync,
-                  monthlyPrice: '19.99',
-                  yearlyPrice: '179.00',
+                  monthlyPrice: monthlyPrice,
+                  yearlyPrice: yearlyPrice,
                   onSelectPlan: _selectPlan,
                 ),
 
@@ -270,7 +270,7 @@ class _ChooseSubscriptionPlanScreenState
       setState(() => _purchaseAction = null);
 
       if (service.isEntitled(result.customerInfo)) {
-        context.push(Routes.subscriptionSuccess, extra: {'isFree': isTrial});
+        context.pushReplacement(Routes.subscriptionSuccess, extra: {'isFree': isTrial});
       } else {
         Utils.showErrorToast(
           message: 'Subscription not active yet. Please try again.',

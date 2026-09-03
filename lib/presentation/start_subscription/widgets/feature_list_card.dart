@@ -28,19 +28,24 @@ class FeatureListCard extends StatelessWidget {
             (index) => Padding(
               padding: EdgeInsets.only(top: index == 0 ? 0 : 12),
               child: Row(
+                crossAxisAlignment: .start,
                 children: [
                   Icon(
                     Icons.check_circle_outlined,
                     color: ColorManager.primaryButton,
                   ),
                   8.width,
-                  Text(
-                    features[index],
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: .w700,
-                      letterSpacing: 0.2,
-                      color: ColorManager.subtextColor,
+                  Expanded(
+                    child: Text(
+                      features[index],
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: .w700,
+                        letterSpacing: 0.2,
+                        color: ColorManager.subtextColor,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

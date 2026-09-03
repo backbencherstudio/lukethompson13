@@ -48,26 +48,13 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
       () async {
         if (!mounted) return;
 
-        final isPro = await _isProSubscriber();
-        if (!mounted || isPro) return;
-        if (Routes.currentRouteUri(context).path ==
-            Routes.chooseSubscriptionPlan) {
-          return;
-        }
-
-        RevenueCatService.showPayWallDialog(context);
+        final isProSubscription = ref.read(isProSubscriptionProvider);
+        RevenueCatService.showPayWallDialog(
+          context,
+          isSubscribed: isProSubscription,
+        );
       },
     );
-  }
-
-  Future<bool> _isProSubscriber() async {
-    if (!AppConfig.isRevenueCatEnabled) return true;
-    try {
-      final info = await ref.read(customerInfoProvider.future);
-      return ref.read(revenueCatServiceProvider).isEntitled(info);
-    } catch (_) {
-      return false;
-    }
   }
 
   Widget _buildBody(int index) {
