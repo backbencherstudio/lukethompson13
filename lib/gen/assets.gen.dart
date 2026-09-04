@@ -28,6 +28,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/building.svg
   String get building => 'assets/icons/building.svg';
 
+  /// File path: assets/icons/check_badge.svg
+  String get checkBadge => 'assets/icons/check_badge.svg';
+
   /// File path: assets/icons/client_review_logo.png
   AssetGenImage get clientReviewLogo =>
       const AssetGenImage('assets/icons/client_review_logo.png');
@@ -112,6 +115,7 @@ class $AssetsIconsGen {
     arrowLeft,
     backArrow,
     building,
+    checkBadge,
     clientReviewLogo,
     clock,
     crownAlt,
@@ -164,11 +168,13 @@ class $AssetsImagesGen {
   ];
 }
 
-class Assets {
-  const Assets._();
-
+abstract final class Assets {
+  static const String aEnv = '.env';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+
+  /// List of all assets
+  static List<String> get values => [aEnv];
 }
 
 class AssetGenImage {

@@ -31,6 +31,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
   company: json['company'] == null
       ? null
       : Company.fromJson(json['company'] as Map<String, dynamic>),
+  foundingMember: json['founding_member'] as bool?,
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -43,6 +44,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'type': instance.type,
   'rate_per_hour': instance.ratePerHour,
   'free_wait_time': instance.freeWaitTime,
+  'founding_member': instance.foundingMember,
   'company': instance.company,
 };
 

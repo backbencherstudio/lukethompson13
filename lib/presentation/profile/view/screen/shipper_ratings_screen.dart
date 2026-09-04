@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/services/revenuecat_service.dart';
 import 'package:lukethompson/core/widgets/activity_indicator.dart';
@@ -55,7 +53,10 @@ class _ShipperRatingsScreenState extends ConsumerState<ShipperRatingsScreen> {
   @override
   Widget build(BuildContext context) {
     final isProSubscription = ref.watch(isProSubscriptionProvider);
-    final isPageLocked = !isProSubscription;
+    final isFoundingMember = ref.watch(isFoundingMemberProvider);
+    final isSubscribed = isProSubscription || isFoundingMember;
+
+    final isPageLocked = !isSubscribed;
     final pagination = isPageLocked
         ? AsyncData(ShipperRatingsPaginationState.empty())
         : ref.watch(shipperRatingsPaginationProvider);

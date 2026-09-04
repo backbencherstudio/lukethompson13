@@ -7,7 +7,7 @@ import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/unlock_dialog.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-const _monthlyProFeatures = [
+const monthlyProFeatures = [
   'Unlimited stop logging',
   'Proof package / invoice export & send',
   'Auto follow-ups until paid',
@@ -16,7 +16,7 @@ const _monthlyProFeatures = [
   'Ad-free experience',
 ];
 
-const _yearlyFeatures = [
+const yearlyFeatures = [
   'Unlimited stop logging',
   'Proof package / invoice export & send',
   'Auto follow-ups until paid',
@@ -71,9 +71,9 @@ class RevenueCatService {
   static List<String> getFeaturedPlanItems(String? selectedPlanId) {
     switch (selectedPlanId) {
       case AppConfig.revenueCatProYearlyPackageId || 'monthly':
-        return _yearlyFeatures;
+        return yearlyFeatures;
       case AppConfig.revenueCatProMonthlyPackageId || 'yearly':
-        return _monthlyProFeatures;
+        return monthlyProFeatures;
       default:
         return [];
     }

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/services/revenuecat_service.dart';
+import 'package:lukethompson/data/sources/remote/auth/auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 final revenueCatServiceProvider = Provider<RevenueCatService>((ref) {
@@ -95,6 +96,18 @@ final isProSubscriptionProvider = Provider<bool>((ref) {
     final customerInfo = ref.watch(customerInfoProvider).value;
     if (customerInfo == null) return false;
     return ref.watch(revenueCatServiceProvider).isEntitled(customerInfo);
+  } catch (_) {
+    return false;
+  }
+});
+
+final isFoundingMemberProvider = Provider<bool>((ref) {
+  if (!AppConfig.isRevenueCatEnabled) return true;
+
+  try {
+    final user = ref.watch(userQuery).value;
+    if (user == null) return false;
+    return user.foundingMember ?? false;
   } catch (_) {
     return false;
   }

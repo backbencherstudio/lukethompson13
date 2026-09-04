@@ -49,9 +49,10 @@ class _ParentScreenState extends ConsumerState<ParentScreen> {
         if (!mounted) return;
 
         final isProSubscription = ref.read(isProSubscriptionProvider);
+        final isFoundingMember = ref.read(isFoundingMemberProvider);
         RevenueCatService.showPayWallDialog(
           context,
-          isSubscribed: isProSubscription,
+          isSubscribed: isProSubscription || isFoundingMember,
         );
       },
     );

@@ -35,6 +35,8 @@ class User {
   final int? ratePerHour;
   @JsonKey(name: 'free_wait_time')
   final int? freeWaitTime;
+  @JsonKey(name: 'founding_member')
+  final bool? foundingMember;
 
   final Company? company;
 
@@ -49,6 +51,7 @@ class User {
     this.ratePerHour,
     this.freeWaitTime,
     this.company,
+    this.foundingMember,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

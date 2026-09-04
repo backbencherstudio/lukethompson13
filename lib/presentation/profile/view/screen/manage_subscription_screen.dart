@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lukethompson/core/extensions/sizedbox_extension.dart';
 import 'package:lukethompson/core/resource/constants/color_manager.dart';
 import 'package:lukethompson/core/resource/constants/config.dart';
 import 'package:lukethompson/core/resource/constants/values_manager.dart';
 import 'package:lukethompson/core/resource/utils.dart';
-import 'package:lukethompson/core/route/route_names.dart';
 import 'package:lukethompson/core/services/revenuecat_providers.dart';
 import 'package:lukethompson/core/services/revenuecat_service.dart';
 import 'package:lukethompson/core/utils/date.dart';
@@ -16,6 +15,7 @@ import 'package:lukethompson/core/widgets/app_switch.dart';
 import 'package:lukethompson/core/widgets/full_height_scroll_view.dart';
 import 'package:lukethompson/core/widgets/global_app_bar.dart';
 import 'package:lukethompson/core/widgets/global_button.dart';
+import 'package:lukethompson/gen/assets.gen.dart';
 import 'package:lukethompson/presentation/home_screen/view/widget/status_display.dart';
 import 'package:lukethompson/presentation/profile/view/widget/subscription_info_card.dart';
 import 'package:lukethompson/presentation/start_subscription/widgets/feature_list_card.dart';
@@ -45,6 +45,7 @@ class ManageSubscriptionScreen extends ConsumerWidget {
 
     final customerInfoAsync = ref.watch(customerInfoProvider);
     final isProSubscription = ref.watch(isProSubscriptionProvider);
+    final isFoundingMember = ref.watch(isFoundingMemberProvider);
     final offeringsAsync = ref.watch(offeringPackagesProvider);
 
     return Scaffold(
@@ -74,6 +75,8 @@ class ManageSubscriptionScreen extends ConsumerWidget {
                         customerInfo,
                         offeringsAsync,
                       )
+                    : isFoundingMember
+                    ? _foundingMemberContent(context, ref)
                     : _freeContent(context, ref),
               ),
             ),
@@ -81,6 +84,45 @@ class ManageSubscriptionScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _foundingMemberContent(BuildContext context, WidgetRef ref) {
+    return [
+      24.height,
+      SubscriptionInfoCard.subscriptionType(
+        titileLeading: SvgPicture.asset(
+          Assets.icons.checkBadge,
+          colorFilter: ColorFilter.mode(
+            ColorManager.primaryButton,
+            BlendMode.srcIn,
+          ),
+          width: 24,
+          height: 24,
+        ),
+        title: 'GetDockPay Pro - Founding Member',
+        subtitle:
+            'Enjoy all Pro features for life with your exclusive Founding Member access.',
+      ),
+      16.height,
+
+      SubscriptionInfoCard.featureList(
+        titileLeading: Icon(
+          Icons.verified,
+          color: ColorManager.whiteColor,
+          size: 20,
+        ),
+        title: 'What You Get with Pro:',
+        items: monthlyProFeatures,
+      ),
+      16.height,
+      Spacer(),
+      GlobalButton(
+        label: 'Subscribe Now',
+        onPressed: () => RevenueCatService.showPayWall(context),
+      ),
+      16.height,
+      _restoreButton(ref),
+    ];
   }
 
   List<Widget> _freeContent(BuildContext context, WidgetRef ref) {
@@ -93,6 +135,23 @@ class ManageSubscriptionScreen extends ConsumerWidget {
             'stop logging, PDF export, and advanced analytics.',
       ),
       16.height,
+      // SubscriptionInfoCard.memberShipType(
+      //   title: 'Member Type',
+      //   subtitle: 'Free Trial',
+      //   logsRemaining: ,
+      // ),
+
+      SubscriptionInfoCard.featureList(
+        titileLeading: Icon(
+          Icons.verified,
+          color: ColorManager.whiteColor,
+          size: 20,
+        ),
+        title: 'What You Get with Pro:',
+        items: monthlyProFeatures,
+      ),
+      16.height,
+      Spacer(),
       GlobalButton(
         label: 'Subscribe Now',
         onPressed: () => RevenueCatService.showPayWall(context),
@@ -121,6 +180,15 @@ class ManageSubscriptionScreen extends ConsumerWidget {
     return [
       24.height,
       SubscriptionInfoCard.subscriptionType(
+        titileLeading: SvgPicture.asset(
+          Assets.icons.checkBadge,
+          colorFilter: ColorFilter.mode(
+            ColorManager.primaryButton,
+            BlendMode.srcIn,
+          ),
+          width: 24,
+          height: 24,
+        ),
         title: subscription?.displayName ?? 'GetDockPay Pro',
         subtitle: subscription?.willRenew == true
             ? 'Your subscription will renew automatically'
@@ -135,10 +203,6 @@ class ManageSubscriptionScreen extends ConsumerWidget {
         ),
       // 16.height,
       // TODO: Implement local notification
-      // SubscriptionInfoCard.yourPlanIncludes(
-      //   items: ['Notify me 2 days before renewal'],
-      //   trailing: AppSwitch(value: true, onChanged: (value) {}),
-      // ),
       16.height,
       FeatureListCard(
         features: RevenueCatService.getFeaturedPlanItems(productId),

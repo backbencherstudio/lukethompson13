@@ -57,13 +57,15 @@ class SubscriptionInfoCard extends StatelessWidget {
     Key? key,
     required String title,
     required String subtitle,
+    Widget? titileLeading,
   }) {
     return SubscriptionInfoCard(
       key: key,
       borderColor: ColorManager.primaryButton,
       titleWidget: Row(
         children: [
-          Icon(Icons.access_time, color: ColorManager.primaryButton),
+          titileLeading ??
+              Icon(Icons.access_time, color: ColorManager.primaryButton),
           SizedBox(width: 8),
           Text(title),
         ],
@@ -123,18 +125,21 @@ class SubscriptionInfoCard extends StatelessWidget {
     );
   }
 
-  factory SubscriptionInfoCard.yourPlanIncludes({
+  factory SubscriptionInfoCard.featureList({
     Key? key,
+    Widget? titileLeading,
+    required String title,
     required List<String> items,
-    required Widget? trailing,
+    Widget? trailing,
   }) {
     return SubscriptionInfoCard(
       key: key,
       titleWidget: Row(
         children: [
-          Icon(Icons.notifications, color: ColorManager.whiteColor, size: 20),
+          ?titileLeading,
+          // Icon(Icons.notifications, color: ColorManager.whiteColor, size: 20),
           SizedBox(width: 8),
-          Text('Your Plan Includes:'),
+          Text(title),
         ],
       ),
       subtitleWidget: Column(

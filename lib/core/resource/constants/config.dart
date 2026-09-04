@@ -23,6 +23,9 @@ class AppConfig {
   // Maps **************************************************************
   static const mapProvider = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
+  // Membership Access Control ***********************************************
+  static const freeMemberCanLogUpto = 5;
+
   // RevenueCat **************************************************************
   static const revenueCatOfferingId = 'default';
   static const subscriptionDialogDelay = 30;

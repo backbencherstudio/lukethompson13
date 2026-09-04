@@ -41,11 +41,9 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   FormControl<String> get brokerEmail => form.brokerEmail;
   FormControl<int> get sendMethod => form.sendMethod;
 
-  Future<void> onClaim(BuildContext context, bool isProSubscription) async {
-    RevenueCatService.showPayWallDialog(
-      context,
-      isSubscribed: isProSubscription,
-    );
+  Future<void> onClaim(BuildContext context, bool isSubscribed) async {
+    RevenueCatService.showPayWallDialog(context, isSubscribed: isSubscribed);
+    if (!isSubscribed) return;
 
     SendMethod method = .email;
     // SendMethod method = SendMethod.values[sendMethod.value ?? 0];
@@ -136,6 +134,8 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
   @override
   Widget build(BuildContext context) {
     final isProSubscription = ref.watch(isProSubscriptionProvider);
+    final isFoundingMember = ref.watch(isFoundingMemberProvider);
+    final isSubscribed = isProSubscription || isFoundingMember;
 
     return ReactiveForm(
       formGroup: form,
@@ -156,7 +156,7 @@ class _ClaimSendToState extends ConsumerState<ClaimSendTo> {
               return GlobalButton(
                 label: 'Claim Now',
                 isDisabled: !form.valid,
-                onPressed: () => onClaim(context, isProSubscription),
+                onPressed: () => onClaim(context, isSubscribed),
               );
             },
           ),
